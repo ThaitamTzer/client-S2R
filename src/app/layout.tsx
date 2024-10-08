@@ -6,18 +6,13 @@ import {
   MantineProvider,
   mergeMantineTheme,
 } from "@mantine/core";
-import localFont from "next/font/local";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
+import "@mantine/carousel/styles.css";
+import Header from "@/partials/header";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const montserrat = Montserrat({
+  subsets: ["latin", "vietnamese"],
 });
 
 export const metadata: Metadata = {
@@ -28,8 +23,8 @@ export const metadata: Metadata = {
 const theme = mergeMantineTheme(
   DEFAULT_THEME,
   createTheme({
-    fontFamily: geistSans.style.fontFamily,
-    fontFamilyMonospace: geistMono.style.fontFamily,
+    fontFamily: montserrat.style.fontFamily,
+    fontFamilyMonospace: montserrat.style.fontFamily,
   }),
 );
 
@@ -43,8 +38,11 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className="antialiased">
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+      <body className="antialiased relative h-[2000px]">
+        <MantineProvider theme={theme}>
+          <Header />
+          <main className="relative mt-12">{children}</main>
+        </MantineProvider>
       </body>
     </html>
   );
