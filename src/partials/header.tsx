@@ -20,18 +20,13 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useLoginModal } from "@/zustand/loginModal";
-
-const user = {
-  name: "Jane Spoonfighter",
-  email: "janspoon@fighter.dev",
-  image:
-    "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-5.png",
-};
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Header() {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { openModal } = useLoginModal();
+  const { logout, user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,57 +103,63 @@ export default function Header() {
                 }}
               />
             </UnstyledButton>
-            {/* <Menu shadow="md" width={250}>
-              <Menu.Target>
-                <div className="flex flex-row items-center cursor-pointer">
-                  <Avatar
-                    src={user.image}
-                    alt={user.name}
-                    radius={rem(24)}
-                    size={rem(35)}
-                  />
-                  <Text className="ml-3" size="xl" fw={500}>
-                    Lê Trần Thái Tâm
-                  </Text>
-                </div>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Link href="/view-profile">
+            {user ? (
+              <Menu shadow="md" width={250}>
+                <Menu.Target>
+                  <div className="flex flex-row items-center cursor-pointer">
+                    <Avatar
+                      src={user.avatar}
+                      alt={user.firstname}
+                      radius={rem(24)}
+                      size={rem(35)}
+                    />
+                    <Text className="ml-3" size="xl" fw={500}>
+                      {user.firstname + " " + user.lastname}
+                    </Text>
+                  </div>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Link href="/view-profile">
+                    <Menu.Item
+                      leftSection={
+                        <IconSettings
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                    >
+                      Thông tin tài khoản
+                    </Menu.Item>
+                  </Link>
+                  <Link href="/orders">
+                    <Menu.Item
+                      leftSection={
+                        <IconTruck
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                    >
+                      Quản lý đơn hàng
+                    </Menu.Item>
+                  </Link>
                   <Menu.Item
+                    onClick={() => logout()}
+                    color="red"
                     leftSection={
-                      <IconSettings
-                        style={{ width: rem(14), height: rem(14) }}
-                      />
+                      <IconLogout style={{ width: rem(14), height: rem(14) }} />
                     }
                   >
-                    Thông tin tài khoản
+                    Đăng xuất
                   </Menu.Item>
-                </Link>
-                <Link href="/orders">
-                  <Menu.Item
-                    leftSection={
-                      <IconTruck style={{ width: rem(14), height: rem(14) }} />
-                    }
-                  >
-                    Quản lý đơn hàng
-                  </Menu.Item>
-                </Link>
-                <Menu.Item
-                  color="red"
-                  leftSection={
-                    <IconLogout style={{ width: rem(14), height: rem(14) }} />
-                  }
-                >
-                  Đăng xuất
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu> */}
-            <Text
-              className="font-bold text-green-800 cursor-pointer"
-              onClick={() => openModal()}
-            >
-              Đăng nhập/Đăng ký
-            </Text>
+                </Menu.Dropdown>
+              </Menu>
+            ) : (
+              <Text
+                className="font-bold text-green-800 cursor-pointer"
+                onClick={() => openModal()}
+              >
+                Đăng nhập/Đăng ký
+              </Text>
+            )}
           </Group>
         </Group>
       </div>

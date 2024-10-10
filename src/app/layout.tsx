@@ -13,13 +13,19 @@ import Header from "@/partials/header";
 import ScrollingUp from "@/partials/up";
 import Footer from "@/partials/footer";
 import LoginModal from "@/partials/loginModal";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ConfigProvider } from "antd";
+import { themeAntProvider } from "@/components/themeProvider";
 const montserrat = Montserrat({
   subsets: ["latin", "vietnamese"],
 });
 
 export const metadata: Metadata = {
-  title: "Next App Mantine Tailwind Template",
-  description: "Next App Mantine Tailwind Template",
+  title: {
+    default: "Share2Receive",
+    template: "%s | Share2Receive",
+  },
 };
 
 const theme = mergeMantineTheme(
@@ -45,16 +51,22 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className="antialiased relative h-[2000px]">
-        <MantineProvider theme={theme}>
-          <Header />
-          <main className="relative mt-12 scroll-smooth">
-            <LoginModal />
-            {children}
-            <ScrollingUp />
-          </main>
-          <Footer />
-        </MantineProvider>
+      <body className="antialiased relative">
+        <AuthProvider>
+          <ConfigProvider theme={themeAntProvider}>
+            <AntdRegistry>
+              <MantineProvider theme={theme}>
+                <Header />
+                <main className="relative mt-12 min-h-screen scroll-smooth">
+                  <LoginModal />
+                  {children}
+                  <ScrollingUp />
+                </main>
+                <Footer />
+              </MantineProvider>
+            </AntdRegistry>
+          </ConfigProvider>
+        </AuthProvider>
       </body>
     </html>
   );
