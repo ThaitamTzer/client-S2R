@@ -10,7 +10,9 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import "@mantine/carousel/styles.css";
 import Header from "@/partials/header";
-
+import ScrollingUp from "@/partials/up";
+import Footer from "@/partials/footer";
+import LoginModal from "@/partials/loginModal";
 const montserrat = Montserrat({
   subsets: ["latin", "vietnamese"],
 });
@@ -34,14 +36,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      className="scroll-smooth [&::-webkit-scrollbar]:w-1
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-green-700"
+      lang="en"
+    >
       <head>
         <ColorSchemeScript />
       </head>
       <body className="antialiased relative h-[2000px]">
         <MantineProvider theme={theme}>
           <Header />
-          <main className="relative mt-12">{children}</main>
+          <main className="relative mt-12 scroll-smooth">
+            <LoginModal />
+            {children}
+            <ScrollingUp />
+          </main>
+          <Footer />
         </MantineProvider>
       </body>
     </html>

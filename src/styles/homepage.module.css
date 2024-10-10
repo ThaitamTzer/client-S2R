@@ -92,3 +92,21 @@
   transform: translate(15%);
   background-size: contain;
 }
+
+.container {
+  height: inherit;
+}
+
+.viewport {
+  height: 100%;
+}
+
+.together_content {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 55%;
+  text-align: center;
+  flex-direction: column;
+  box-shadow: 2px 2px 9px #8cdbaa;
+}

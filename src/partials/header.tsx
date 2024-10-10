@@ -8,7 +8,6 @@ import {
   Text,
   Title,
   UnstyledButton,
-  useMantineTheme,
 } from "@mantine/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,6 +19,7 @@ import {
   IconShoppingCart,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { useLoginModal } from "@/zustand/loginModal";
 
 const user = {
   name: "Jane Spoonfighter",
@@ -31,6 +31,7 @@ const user = {
 export default function Header() {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const { openModal } = useLoginModal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,8 +51,6 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
-
-  const theme = useMantineTheme();
 
   const pathName = usePathname();
 
@@ -109,7 +108,7 @@ export default function Header() {
                 }}
               />
             </UnstyledButton>
-            <Menu shadow="md" width={250}>
+            {/* <Menu shadow="md" width={250}>
               <Menu.Target>
                 <div className="flex flex-row items-center cursor-pointer">
                   <Avatar
@@ -153,7 +152,13 @@ export default function Header() {
                   Đăng xuất
                 </Menu.Item>
               </Menu.Dropdown>
-            </Menu>
+            </Menu> */}
+            <Text
+              className="font-bold text-green-800 cursor-pointer"
+              onClick={() => openModal()}
+            >
+              Đăng nhập/Đăng ký
+            </Text>
           </Group>
         </Group>
       </div>
