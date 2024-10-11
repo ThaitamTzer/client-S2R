@@ -47,7 +47,7 @@ export default function UsersLayout({
                 <div className="infor flex flex-col justify-start items-start">
                   <p className="text-lg">Tài khoản</p>
                   <p className="text-lg">Share2Receive của</p>
-                  <h2 className="text-center text-2xl font-semibold">
+                  <h2 className="text-left text-2xl font-semibold">
                     {user?.firstname + " " + user?.lastname}
                   </h2>
                 </div>

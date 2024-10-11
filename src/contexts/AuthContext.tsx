@@ -27,7 +27,7 @@ import {
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   user: null,
-  loading: true,
+  loading: false,
   setUser: () => null,
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
@@ -35,6 +35,7 @@ const defaultProvider: AuthValuesType = {
   register: () => Promise.resolve(),
   forgetPassword: () => Promise.resolve(),
   resetPassword: () => Promise.resolve(),
+  getProfile: () => Promise.resolve(),
 };
 
 const AuthContext = createContext(defaultProvider);
@@ -163,6 +164,16 @@ const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const res = await axiosClient.get("/api/users/view-profile");
+      setUser(res.data);
+      return res.data;
+    } catch {
+      setLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("userData");
@@ -183,6 +194,7 @@ const AuthProvider = ({ children }: Props) => {
     register: handleRegister,
     forgetPassword: handleForgetPassword,
     resetPassword: handleResetPassword,
+    getProfile: getProfile,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

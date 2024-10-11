@@ -56,4 +56,5 @@ export type AuthValuesType = {
     code: string;
     newPassword: string;
   }) => Promise<void>;
+  getProfile: () => Promise<void>;
 };
