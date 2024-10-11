@@ -8,6 +8,7 @@ import {
   Text,
   Title,
   UnstyledButton,
+  TextInput,
 } from "@mantine/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +18,8 @@ import {
   IconTruck,
   IconLogout,
   IconShoppingCart,
+  IconBell,
+  IconSearch,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useLoginModal } from "@/zustand/loginModal";
@@ -49,8 +52,6 @@ export default function Header() {
 
   const pathName = usePathname();
 
-  // const [opened, { toggle }] = useDisclosure(false);
-  // const [userMenuOpened, setUserMenuOpened] = useState(false);
   return (
     <header
       id="header"
@@ -63,13 +64,14 @@ export default function Header() {
       )}
     >
       <div className="main-nav container mx-auto px-24 pt-0">
-        <Group align="center" justify="space-between">
-          <Group>
+        <div className="flex items-center justify-between">
+          {/* Phần trái: Logo và Navigation */}
+          <div className="flex items-center">
             <Title className="text-green-800">
               <Link href="/">Share2Receive</Link>
             </Title>
-            <div className="nav">
-              <ul className="nav-list w-full flex flex-row ">
+            <div className="nav ml-6">
+              <ul className="nav-list flex flex-row">
                 <li
                   className={clsx(
                     "nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200",
@@ -92,8 +94,36 @@ export default function Header() {
                 </li>
               </ul>
             </div>
-          </Group>
-          <Group>
+          </div>
+
+          {/* Phần giữa: Thanh tìm kiếm */}
+          <div className="flex-1 mx-4">
+            <TextInput
+              placeholder="Tìm kiếm..."
+              rightSection={<IconSearch size={16} />}
+              size="md"
+              styles={(theme) => ({
+                input: {
+                  borderColor: theme.colors.green[7], // Màu xanh lá đậm
+                  "&:focus": {
+                    borderColor: theme.colors.green[7], // Màu viền khi focus
+                  },
+                },
+              })}
+            />
+          </div>
+
+          {/* Phần phải: Icon và User Menu */}
+          <div className="flex items-center space-x-4">
+            <UnstyledButton>
+              <IconBell
+                className="text-green-900"
+                style={{
+                  width: rem(30),
+                  height: rem(30),
+                }}
+              />
+            </UnstyledButton>
             <UnstyledButton>
               <IconShoppingCart
                 className="text-green-900"
@@ -106,7 +136,7 @@ export default function Header() {
             {user ? (
               <Menu shadow="md" width={250}>
                 <Menu.Target>
-                  <div className="flex flex-row items-center cursor-pointer">
+                  <div className="flex items-center cursor-pointer">
                     <Avatar
                       src={user.avatar}
                       alt={user.firstname}
@@ -160,8 +190,8 @@ export default function Header() {
                 Đăng nhập/Đăng ký
               </Text>
             )}
-          </Group>
-        </Group>
+          </div>
+        </div>
       </div>
     </header>
   );

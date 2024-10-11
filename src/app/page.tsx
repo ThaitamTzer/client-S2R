@@ -18,22 +18,22 @@ const spaceGrotesk = Space_Grotesk({
 const banner = [
   {
     id: 1,
-    src: "/images/home-banner-2.png",
+    src: "/images/home-banner-9.jpg",
     alt: "Home banner 2",
   },
   {
     id: 2,
-    src: "/images/home-banner-4.jpg",
+    src: "/images/home-banner-9.jpg",
     alt: "Home banner 4",
   },
   {
     id: 3,
-    src: "/images/home-banner-7.jpg",
+    src: "/images/home-banner-9.jpg",
     alt: "Home banner 7",
   },
   {
     id: 4,
-    src: "/images/home-banner-8.jpg",
+    src: "/images/home-banner-9.jpg",
     alt: "Home banner 8",
   },
   {
@@ -294,11 +294,10 @@ export default function Home() {
       <div className="container mx-auto px-20 mt-10">
         <div className="discount mb-10">
           <p className="text-2xl font-bold text-center mb-2">
-            Tiết kiệm hơn <span className="text-orange-600">90%</span> khi chi
-            tiêu
+            Đồng giá <span className="text-orange-600">19k</span> khi mua sản phẩm
           </p>
           <p className="text-lg font-medium text-center">
-            Luôn luôn đi kèm các chương trình giảm giá theo dịp
+            Tiết kiệm hơn khi mua sắm !
           </p>
         </div>
         <div
@@ -365,10 +364,10 @@ export default function Home() {
           <div className="mt-4 mr-5">
             <Link href="/discount" className="text-end">
               <h2 className="font-bold text-3xl">
-                Giảm <span className="text-green-500">50%</span> Các loại đầm
+                Tất cả đồng giá <span className="text-green-500">19k</span> các loại
               </h2>
               <p>
-                &#40;Xem ngay để nhận ưu đãi lớn nhất từ Share2Receive &#41;
+                &#40;Xem ngay các sản phẩm đồng giá &#41;
               </p>
             </Link>
           </div>
@@ -492,7 +491,8 @@ export default function Home() {
                 />
               </div>
               <p className="together-card-desc font-medium text-sm ">
-                Đồ cũ không có nghĩa là phải vứt đi
+              “Cũ người, mới ta”
+              hãy cho đồ cũ cuộc đời mới
               </p>
             </div>
             <div className="together-card flex flex-col justify-center items-center w-[13%] text-center">
@@ -507,7 +507,8 @@ export default function Home() {
                 />
               </div>
               <p className="together-card-desc font-medium text-sm ">
-                Đồ cũ không có nghĩa là phải vứt đi
+              Giảm thiểu được lượng lớn
+              rác thải ra môi trường
               </p>
             </div>
           </div>
