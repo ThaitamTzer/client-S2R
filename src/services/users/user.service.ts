@@ -17,6 +17,14 @@ const userService = {
 
     return res.data;
   },
+  changePassword: async (data: {
+    oldPassword: string;
+    newPassword: string;
+  }) => {
+    const res = await axiosClient.patch("/api/users/change-password", data);
+
+    return res.data;
+  },
 };
 
 export default userService;
