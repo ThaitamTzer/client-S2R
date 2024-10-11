@@ -451,7 +451,7 @@ export default function Home() {
         </div>
       </div>
       <div
-        className="together-section relative mt-10 w-full h-[250px] bg-contain bg-[center_96px] bg-no-repeat "
+        className="together-section relative mt-10 mb-20 w-full h-[250px] bg-contain bg-[center_96px] bg-no-repeat "
         style={{
           backgroundImage: 'url("/images/choose-price-bg.png")',
         }}

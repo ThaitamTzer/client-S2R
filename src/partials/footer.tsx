@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <>
-      <div className="px-20 w-full mt-20 h-[400px] bg-slate-100">
+      <div className="px-20 w-full h-[400px] bg-slate-100 overflow-hidden">
         <div className="container mx-auto px-32 pt-10 w-full flex">
           <div className="footer-info w-1/4 mr-6">
             <div className="w-full grid gap-3">
@@ -19,14 +19,6 @@ export default function Footer() {
                 </div>
                 <div className="infor-content pl-2 text-lg">
                   15 Đường số 6, phường 15, quận Gò Vấp, Tp.HCM
-                </div>
-              </div>
-              <div className="infor-section flex flex-row">
-                <div className="icon h-full">
-                  <IconMapPin size={24} />
-                </div>
-                <div className="infor-content pl-2 text-lg font-bold italic">
-                  Kho xử lý - 234/6 Tô Ngọc Vân, P. Linh Đông, Thủ Đức, Tp HCM
                 </div>
               </div>
               <div className="infor-section flex flex-row">

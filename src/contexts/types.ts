@@ -6,6 +6,13 @@ export type LoginParams = {
   rememberMe?: boolean;
 };
 
+export type RegisterParams = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+};
+
 // export type UserDataType = {
 //   id: number
 //   role: string
@@ -29,6 +36,11 @@ export type UserDataType = {
   userStyle: null;
   createdAt: Date | string;
   updatedAt: Date | string;
+  address: string;
+  dateOfBirth: string | Date;
+  description: string;
+  gender: string;
+  phone: string;
 };
 
 export type AuthValuesType = {
@@ -38,4 +50,10 @@ export type AuthValuesType = {
   setLoading: (value: boolean) => void;
   setUser: (value: UserDataType | null) => void;
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void;
+  register: (params: RegisterParams) => Promise<void>;
+  forgetPassword: (params: { email: string }) => Promise<void>;
+  resetPassword: (params: {
+    code: string;
+    newPassword: string;
+  }) => Promise<void>;
 };

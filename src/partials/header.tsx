@@ -119,7 +119,7 @@ export default function Header() {
                   </div>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Link href="/view-profile">
+                  <Link href="/profile">
                     <Menu.Item
                       leftSection={
                         <IconSettings
@@ -163,23 +163,6 @@ export default function Header() {
           </Group>
         </Group>
       </div>
-      {/* <div
-        className={clsx("sub-nav w-full h-14 bg-green-100", {
-          hidden: pathName === "/" || pathName === "/",
-        })}
-      >
-        <div className="container mx-auto h-full px-24">
-          <ul className="sub-nav_nav-list h-full flex items-center">
-            <li className="sub-nav_nav-item mx-2 text-green-900 font-semibold relative cursor-pointer transition-all ease-in-out before:transition-[width] before:ease-in-out before:duration-600 before:absolute before:bg-green-700 before:origin-center before:h-[3px] before:w-0 hover:before:w-[50%] before:bottom-0 before:left-[50%] after:transition-[width] after:ease-in-out after:duration-600 after:absolute after:bg-green-700 after:origin-center after:h-[3px] after:w-0 hover:after:w-[50%] after:bottom-0 after:right-[50%]">
-              Danh mục 1
-            </li>
-            <li className="sub-nav_nav-item">Danh mục 2</li>
-            <li className="sub-nav_nav-item">Danh mục 3</li>
-            <li className="sub-nav_nav-item">Danh mục 4</li>
-            <li className="sub-nav_nav-item">Danh mục 5</li>
-          </ul>
-        </div>
-      </div> */}
     </header>
   );
 }

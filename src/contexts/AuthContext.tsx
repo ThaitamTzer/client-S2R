@@ -21,6 +21,7 @@ import {
   LoginParams,
   ErrCallbackType,
   UserDataType,
+  RegisterParams,
 } from "@/contexts/types";
 
 // ** Defaults
@@ -31,6 +32,9 @@ const defaultProvider: AuthValuesType = {
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
+  register: () => Promise.resolve(),
+  forgetPassword: () => Promise.resolve(),
+  resetPassword: () => Promise.resolve(),
 };
 
 const AuthContext = createContext(defaultProvider);
@@ -128,6 +132,37 @@ const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const handleRegister = async (params: RegisterParams) => {
+    setLoading(true);
+    try {
+      const res = await axiosClient.post(authConfig.registerEndpoint, params);
+      setUser(res.data);
+      setLoading(false);
+      router.push("/");
+    } catch {
+      setLoading(false);
+    }
+  };
+
+  const handleForgetPassword = async (params: { email: string }) => {
+    try {
+      await axiosClient.post("/api/auth/forgot-password", params);
+    } catch {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (params: {
+    code: string;
+    newPassword: string;
+  }) => {
+    try {
+      await axiosClient.put("/api/auth/reset-password", params);
+    } catch {
+      setLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("userData");
@@ -145,6 +180,9 @@ const AuthProvider = ({ children }: Props) => {
     setLoading,
     login: handleLogin,
     logout: handleLogout,
+    register: handleRegister,
+    forgetPassword: handleForgetPassword,
+    resetPassword: handleResetPassword,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
