@@ -16,7 +16,6 @@ export const themeAntProvider: ThemeConfig = {
     },
     Menu: {
       itemActiveBg: "#dffae6",
-      itemColor: "#179d49",
     },
   },
 };

@@ -55,6 +55,7 @@ const ProfilePage = () => {
 
   const handlePreview = async (file: File) => {
     const reader = new FileReader();
+    setFile(file);
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreview(reader.result as string);
@@ -67,21 +68,22 @@ const ProfilePage = () => {
     }
     const formData = new FormData();
     formData.append("avatar", file);
-    setFile(file);
     userService
       .updateAvatar(formData)
       .then(() => {
         getProfile();
         toast.success("Cập nhật ảnh đại diện thành công!");
+        setFile(null);
       })
       .catch(() => {
         toast.error("Cập nhật ảnh đại diện thất bại!");
+        setFile(null);
       });
   };
 
   return (
     <>
-      <div className="container px-10 my-20 mx-auto">
+      <div className="container px-10 mx-auto">
         <div className="title text-black text-2xl font-semibold">
           <h2>Thông tin tài khoản</h2>
         </div>
@@ -91,7 +93,7 @@ const ProfilePage = () => {
               <Avatar src={preview || user?.avatar} alt="avatar" size={80} />
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-1/3">
             <Upload
               beforeUpload={(file) => {
                 handlePreview(file); // Preview the selected image
@@ -105,6 +107,8 @@ const ProfilePage = () => {
               type="primary"
               onClick={() => onUpload(file as File)}
               loading={loading}
+              className="mt-3"
+              disabled={!file}
             >
               Cập nhật ảnh đại diện
             </Button>

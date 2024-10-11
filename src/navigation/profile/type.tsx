@@ -22,6 +22,15 @@ export const profileLinks: MenuItem[] = [
           </Link>
         ),
       },
+      {
+        key: "changePassword",
+        icon: <IconUserFilled size={26} color="#000" />,
+        label: (
+          <Link href="/change-password" className="text-lg font-thin">
+            Thay đổi mật khẩu
+          </Link>
+        ),
+      },
     ],
   },
 ];

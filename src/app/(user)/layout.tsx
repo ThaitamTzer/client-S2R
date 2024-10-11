@@ -27,13 +27,20 @@ export default function UsersLayout({
     <>
       <Navigation navLink={navLinks} />
       <Layout className="container mx-auto px-32 bg-white mt-32">
-        <Content style={{ padding: "0 48px" }}>
+        <Content style={{ padding: "0 48px", backgroundColor: "white" }}>
           <Layout
             style={{
               padding: "24px 0",
+              backgroundColor: "white",
             }}
           >
-            <Sider width={350}>
+            <Sider
+              width={350}
+              style={{
+                backgroundColor: "white",
+                borderRight: "1px solid #f0f0f0",
+              }}
+            >
               <div className="profile-avatar bg-white flex items-center gap-3 justify-start pb-6">
                 <div className="avatar ">
                   <Avatar
@@ -54,7 +61,7 @@ export default function UsersLayout({
               <Menu
                 mode="inline"
                 defaultSelectedKeys={["profile"]}
-                style={{ height: "90%" }}
+                style={{ height: "auto", backgroundColor: "white" }}
                 items={profileLinks}
               />
             </Sider>
