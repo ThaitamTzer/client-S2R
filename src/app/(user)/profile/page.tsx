@@ -1,21 +1,23 @@
 "use client";
 
-import { Input, Form, Button, Select } from "antd";
+import { useState } from "react";
+import { Input, Form, Button, Select, Upload, Avatar } from "antd";
 import { UpdateProfile } from "@/types/users/userTypes";
 import { useAuth } from "@/hooks/useAuth";
 import moment from "moment";
 import userService from "@/services/users/user.service";
 import toast from "react-hot-toast";
 import MyDatePicker from "@/components/DatePicker";
-
+import { IconUpload } from "@tabler/icons-react";
 const ProfilePage = () => {
   const { user, setLoading, loading, getProfile } = useAuth();
+  const [form] = Form.useForm();
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   if (!user) {
     return <div>Loading...</div>;
   }
-
-  const [form] = Form.useForm();
 
   const onFinish = (values: UpdateProfile) => {
     setLoading(true);
@@ -46,9 +48,35 @@ const ProfilePage = () => {
         .finally(() => {
           setLoading(false);
         });
-    } catch (error) {
+    } catch {
       setLoading(false);
     }
+  };
+
+  const handlePreview = async (file: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+    };
+  };
+
+  const onUpload = (file: File) => {
+    if (!file) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("avatar", file);
+    setFile(file);
+    userService
+      .updateAvatar(formData)
+      .then(() => {
+        getProfile();
+        toast.success("Cập nhật ảnh đại diện thành công!");
+      })
+      .catch(() => {
+        toast.error("Cập nhật ảnh đại diện thất bại!");
+      });
   };
 
   return (
@@ -56,6 +84,31 @@ const ProfilePage = () => {
       <div className="container px-10 my-20 mx-auto">
         <div className="title text-black text-2xl font-semibold">
           <h2>Thông tin tài khoản</h2>
+        </div>
+        <div className="mt-10">
+          <div className="profile-avatar bg-white flex items-center gap-3 justify-start pb-6">
+            <div className="avatar w-25 h-25 overflow-hidden">
+              <Avatar src={preview || user?.avatar} alt="avatar" size={80} />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <Upload
+              beforeUpload={(file) => {
+                handlePreview(file); // Preview the selected image
+                return false; // Prevent default upload behavior
+              }}
+              showUploadList={false}
+            >
+              <Button icon={<IconUpload />}>Tải hình ảnh lên</Button>
+            </Upload>
+            <Button
+              type="primary"
+              onClick={() => onUpload(file as File)}
+              loading={loading}
+            >
+              Cập nhật ảnh đại diện
+            </Button>
+          </div>
         </div>
         <div className="profile-desc container mx-auto px-1 mt-5">
           <div className="card bg-white shadow-2xl rounded-md w-full h-auto">
@@ -99,7 +152,7 @@ const ProfilePage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập email!",
+                        message: "Vui lòng nhập tên!",
                       },
                     ]}
                   >

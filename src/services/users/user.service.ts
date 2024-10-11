@@ -1,4 +1,4 @@
-import axiosClient from "@/lib/axios";
+import axiosClient, { axiosUpload } from "@/lib/axios";
 import { UpdateProfile } from "@/types/users/userTypes";
 
 const userService = {
@@ -9,6 +9,11 @@ const userService = {
   },
   getProfile: async () => {
     const res = await axiosClient.get("/api/users/view-profile");
+
+    return res.data;
+  },
+  updateAvatar: async (data: FormData) => {
+    const res = await axiosUpload.patch("/api/users/update-avatar", data);
 
     return res.data;
   },

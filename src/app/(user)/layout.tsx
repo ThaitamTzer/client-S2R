@@ -3,7 +3,6 @@
 import Navigation from "@/components/authpage/nav";
 import { navLink } from "@/types/navTypes";
 import { Avatar, Layout, Menu } from "antd";
-import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import { IconUserCircle } from "@tabler/icons-react";
 import { profileLinks } from "@/navigation/profile/type";
