@@ -14,9 +14,9 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import {
   IconSettings,
-  IconTruck,
   IconLogout,
   IconShoppingCart,
+  IconArchiveFilled,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useLoginModal } from "@/zustand/loginModal";
@@ -130,15 +130,15 @@ export default function Header() {
                       Thông tin tài khoản
                     </Menu.Item>
                   </Link>
-                  <Link href="/orders">
+                  <Link href="/product-management">
                     <Menu.Item
                       leftSection={
-                        <IconTruck
+                        <IconArchiveFilled
                           style={{ width: rem(14), height: rem(14) }}
                         />
                       }
                     >
-                      Quản lý đơn hàng
+                      Quản lý sản phẩm
                     </Menu.Item>
                   </Link>
                   <Menu.Item

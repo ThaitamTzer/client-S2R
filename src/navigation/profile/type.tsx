@@ -1,7 +1,11 @@
 import React from "react";
 import type { MenuProps } from "antd";
 import Link from "next/link";
-import { IconUserFilled, IconLockPassword } from "@tabler/icons-react";
+import {
+  IconUserFilled,
+  IconLockPassword,
+  IconArchiveFilled,
+} from "@tabler/icons-react";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -23,11 +27,27 @@ export const profileLinks: MenuItem[] = [
         ),
       },
       {
-        key: "changePassword",
+        key: "change-password",
         icon: <IconLockPassword size={26} color="#000" />,
         label: (
           <Link href="/change-password" className="text-lg font-thin">
             Thay đổi mật khẩu
+          </Link>
+        ),
+      },
+    ],
+  },
+  {
+    key: "product-management",
+    label: <p className="font-semibold text-lg text-black">Quản lý</p>,
+    type: "group",
+    children: [
+      {
+        key: "product-management",
+        icon: <IconArchiveFilled size={26} color="#000" />,
+        label: (
+          <Link href="/product-management" className="text-lg font-thin">
+            Quản lý sản phẩm
           </Link>
         ),
       },

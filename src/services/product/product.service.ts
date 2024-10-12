@@ -1,0 +1,78 @@
+import axiosClient, { axiosUpload } from "@/lib/axios";
+import { ProductType, Product } from "@/types/users/productTypes";
+
+const productService = {
+  getAll: async (
+    page?: number,
+    limit?: number,
+    searchKey?: string,
+    sortField?: string,
+    sortOrder?: string,
+  ): Promise<ProductType> => {
+    const params = {
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(searchKey && { searchKey }),
+      ...(sortField && { sortField }),
+      ...(sortOrder && { sortOrder }),
+    };
+    const res: ProductType = await axiosClient.get("/api/product/list", {
+      params,
+    });
+
+    return res;
+  },
+
+  addProduct: async (data: Product) => {
+    const res = await axiosUpload.post("/api/product", data);
+
+    return res.data;
+  },
+
+  editProduct: async (productId: string, values: Product) => {
+    const res = await axiosUpload.put(`/api/product/${productId}`, values);
+
+    return res.data;
+  },
+
+  editStatus: async (productId: string, status: boolean) => {
+    const res = await axiosUpload.patch(
+      `/api/product/update-status/${productId}`,
+      {
+        status,
+      },
+    );
+
+    return res.data;
+  },
+
+  deleteProduct: async (productId: string) => {
+    const res = await axiosUpload.delete(`/api/product/${productId}`);
+
+    return res.data;
+  },
+
+  // ** Upload Image
+  uploadImage: async (productId: string, data: FormData) => {
+    const res = await axiosUpload.post(
+      `/api/product/upload-images/${productId}`,
+      data,
+    );
+
+    return res.data;
+  },
+
+  // ** Delete Image
+  deleteImage: async (productId: string, publicIds: string[]) => {
+    const res = await axiosUpload.patch(
+      `/api/product/delete-images/${productId}`,
+      {
+        publicIds,
+      },
+    );
+
+    return res.data;
+  },
+};
+
+export default productService;

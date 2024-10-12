@@ -6,6 +6,7 @@ import { Avatar, Layout, Menu } from "antd";
 import { useAuth } from "@/hooks/useAuth";
 import { IconUserCircle } from "@tabler/icons-react";
 import { profileLinks } from "@/navigation/profile/type";
+import { usePathname } from "next/navigation";
 
 const { Content, Sider } = Layout;
 
@@ -22,11 +23,13 @@ export default function UsersLayout({
   children: React.ReactNode;
 }>) {
   const { user } = useAuth();
+  const pathname = usePathname();
+  const selectedKey = pathname.split("/")[1] || "profile";
 
   return (
     <>
       <Navigation navLink={navLinks} />
-      <Layout className="container mx-auto px-32 bg-white mt-32">
+      <Layout className="container mx-auto px-20 bg-white mt-32">
         <Content style={{ padding: "0 48px", backgroundColor: "white" }}>
           <Layout
             style={{
@@ -62,6 +65,7 @@ export default function UsersLayout({
                 mode="inline"
                 defaultSelectedKeys={["profile"]}
                 style={{ height: "auto", backgroundColor: "white" }}
+                selectedKeys={[selectedKey]}
                 items={profileLinks}
               />
             </Sider>
