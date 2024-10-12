@@ -3,7 +3,8 @@
 import { Button, type TableProps } from "antd";
 import Image from "next/image";
 import { Product } from "@/types/users/productTypes";
-import { EditFilled, DeleteFilled } from "@ant-design/icons";
+
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 
 type CellProps = {
   row: Product;
@@ -63,13 +64,13 @@ export const columns: TableProps<Product>["columns"] = [
       <>
         <Button
           onClick={() => console.log("Edit product: ", record)}
-          icon={<EditFilled />}
+          icon={<IconEdit />}
           variant="text"
           color="default"
         />
         <Button
           onClick={() => console.log("Delete product: ", record)}
-          icon={<DeleteFilled />}
+          icon={<IconTrash />}
           variant="text"
           color="default"
         />

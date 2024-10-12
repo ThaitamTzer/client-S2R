@@ -1,4 +1,5 @@
 import Navigation from "@/components/authpage/nav";
+import { Suspense } from "react";
 
 const navLinks = [
   {
@@ -22,8 +23,10 @@ export default function AuthLayout({
 }>) {
   return (
     <>
-      <Navigation navLink={navLinks} />
-      <div className="mt-24">{children}</div>
+      <Suspense>
+        <Navigation navLink={navLinks} />
+        <div className="mt-24">{children}</div>
+      </Suspense>
     </>
   );
 }

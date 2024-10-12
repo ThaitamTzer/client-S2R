@@ -1,6 +1,7 @@
 import React from "react";
 import { DataTable } from "@/components/product-management/dataTable";
 import { AddProduct } from "@/components/product-management/addProduct";
+import { Suspense } from "react";
 
 const ProductManagementPage = () => {
   return (
@@ -12,7 +13,9 @@ const ProductManagementPage = () => {
         <AddProduct />
       </div>
       <div className="mt-5 bg-white p-2 shadow-lg rounded-md">
-        <DataTable />
+        <Suspense>
+          <DataTable />
+        </Suspense>
       </div>
     </div>
   );

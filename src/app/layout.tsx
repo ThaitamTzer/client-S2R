@@ -18,6 +18,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
 import { themeAntProvider } from "@/components/themeProvider";
 import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 const montserrat = Montserrat({
   subsets: ["latin", "vietnamese"],
 });
@@ -53,22 +54,24 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
-        <AuthProvider>
-          <ConfigProvider theme={themeAntProvider}>
-            <AntdRegistry>
-              <MantineProvider theme={theme}>
-                <Header />
-                <main className="relative mt-12 h-full min-h-screen scroll-smooth">
-                  <LoginModal />
-                  <Toaster position="top-right" />
-                  {children}
-                  <ScrollingUp />
-                </main>
-                <Footer />
-              </MantineProvider>
-            </AntdRegistry>
-          </ConfigProvider>
-        </AuthProvider>
+        <Suspense>
+          <AuthProvider>
+            <ConfigProvider theme={themeAntProvider}>
+              <AntdRegistry>
+                <MantineProvider theme={theme}>
+                  <Header />
+                  <main className="relative mt-12 h-full min-h-screen scroll-smooth">
+                    <LoginModal />
+                    <Toaster position="top-right" />
+                    {children}
+                    <ScrollingUp />
+                  </main>
+                  <Footer />
+                </MantineProvider>
+              </AntdRegistry>
+            </ConfigProvider>
+          </AuthProvider>
+        </Suspense>
       </body>
     </html>
   );
