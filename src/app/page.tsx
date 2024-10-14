@@ -11,37 +11,43 @@ import Autoplay from "embla-carousel-autoplay";
 import { IconDiamond, IconRefresh, IconTag } from "@tabler/icons-react";
 import Link from "next/link";
 
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: any;
+  }
+}
+
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin", "vietnamese"],
 });
 
-const banner = [
-  {
-    id: 1,
-    src: "/images/home-banner-2.png",
-    alt: "Home banner 2",
-  },
-  {
-    id: 2,
-    src: "/images/home-banner-4.jpg",
-    alt: "Home banner 4",
-  },
-  {
-    id: 3,
-    src: "/images/home-banner-7.jpg",
-    alt: "Home banner 7",
-  },
-  {
-    id: 4,
-    src: "/images/home-banner-8.jpg",
-    alt: "Home banner 8",
-  },
-  {
-    id: 5,
-    src: "/images/home-banner-9.jpg",
-    alt: "Home banner 9",
-  },
-];
+// const banner = [
+//   {
+//     id: 1,
+//     src: "/images/home-banner-2.png",
+//     alt: "Home banner 2",
+//   },
+//   {
+//     id: 2,
+//     src: "/images/home-banner-4.jpg",
+//     alt: "Home banner 4",
+//   },
+//   {
+//     id: 3,
+//     src: "/images/home-banner-7.jpg",
+//     alt: "Home banner 7",
+//   },
+//   {
+//     id: 4,
+//     src: "/images/home-banner-8.jpg",
+//     alt: "Home banner 8",
+//   },
+//   {
+//     id: 5,
+//     src: "/images/home-banner-9.jpg",
+//     alt: "Home banner 9",
+//   },
+// ];
 
 const discountCard = [
   {
@@ -129,6 +135,53 @@ export default function Home() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const autoplay2 = useRef(Autoplay({ delay: 2000 }));
   const autoplay3 = useRef(Autoplay({ delay: 5000 }));
+  const playerRef = useRef<YT.Player | null>(null);
+
+  // useEffect(() => {
+  //   const onPlayerReady = (event: YT.PlayerEvent) => {
+  //     (event.target as YT.Player).playVideo();
+  //   };
+
+  //   const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
+  //     if (event.data === YT.PlayerState.ENDED) {
+  //       console.log("Video has ended");
+  //       playerRef.current?.playVideo();
+  //     }
+  //   };
+
+  //   const loadYouTubeAPI = () => {
+  //     if (!window.YT) {
+  //       const tag = document.createElement("script");
+  //       tag.src = "https://www.youtube.com/iframe_api";
+  //       const firstScriptTag = document.getElementsByTagName("script")[0];
+  //       firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+  //       window.onYouTubeIframeAPIReady = () => {
+  //         playerRef.current = new YT.Player("youtube-player", {
+  //           width: "100%",
+  //           // videoId: "NHBfy03JSDY",
+  //           videoId: "uyHgY2O__fY",
+  //           playerVars: {
+  //             autoplay: 1,
+  //             mute: 1,
+  //             disablekb: 1,
+
+  //             end: "244",
+  //             showinfo: 0,
+  //             loop: 1,
+  //             controls: 0,
+  //           },
+  //           events: {
+  //             onReady: onPlayerReady,
+  //             onStateChange: onPlayerStateChange,
+  //           },
+  //         });
+  //       };
+  //     }
+  //   };
+
+  //   loadYouTubeAPI();
+  // }, []);
 
   return (
     <>
@@ -152,26 +205,22 @@ export default function Home() {
             tương lai bền vững hơn.” - Xuân Nguyễn, Founder
           </Title>
         </div>
-        <div className="relative slider">
-          <Carousel
-            withIndicators
-            loop
-            align="center"
-            height={380}
-            plugins={[autoplay.current]}
-            onMouseEnter={autoplay.current.stop}
-            onMouseLeave={autoplay.current.reset}
-            classNames={{
-              ...homepage,
-              indicators: homepage.indicators,
+      </div>
+      <div className="relative h-[630px] mt-5">
+        <div className="h-full w-full relative overflow-hidden">
+          <iframe
+            src="https://www.youtube.com/embed/uyHgY2O__fY?autoplay=1&mute=1&loop=1&start=0&end=200&controls=0&showinfo=0&disablekb=1"
+            title="[20240906] New Collection | LÀ EM | K&amp;K Fashion"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "919px",
+              left: 0,
+              top: "-200px",
             }}
-          >
-            {banner.map((item) => (
-              <Carousel.Slide key={item.id}>
-                <img src={item.src} alt={item.alt} />
-              </Carousel.Slide>
-            ))}
-          </Carousel>
+          ></iframe>
         </div>
       </div>
       <div
@@ -204,7 +253,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="container relative mx-auto px-36 pt-14 ">
+      <div className="container relative mx-auto px-24 pt-14 ">
         <div className="banner-home mt-3 mb-10 relative flex">
           <div className="banner-home_left relative w-[60%] px-[100px] py-[50px]">
             <img
@@ -236,12 +285,12 @@ export default function Home() {
           ></div>
         </div>
       </div>
-      <div className="container mx-auto px-28">
+      <div className="relative">
         <div className="fashion-brand">
           <p className="text-2xl font-bold text-center mb-5">
             Thương hiệu bạn <span className="text-orange-600">yêu thích</span>
           </p>
-          <div className="fashion-subtext container px-16 grid grid-cols-3 mb-7">
+          <div className="fashion-subtext container mx-auto px-16 grid grid-cols-3 mb-7">
             <div className="subtext_content flex items-center justify-center text-green-700 font-semibold text-lg">
               <IconRefresh
                 className="mr-2"
@@ -265,40 +314,56 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <Carousel
-          classNames={{
-            slide: homepage.slidecard,
-            control: homepage.controlCard,
-          }}
-          withControls
-          slideSize="25%"
-          slideGap="md"
-          loop
-          align="start"
-          plugins={[autoplay2.current]}
-          onMouseEnter={autoplay2.current.stop}
-          onMouseLeave={autoplay2.current.reset}
-        >
-          {Array.from({ length: 13 }).map((_, i) => (
-            <Carousel.Slide key={i}>
-              <img
-                className={homepage.slidecontent}
-                loading="lazy"
-                src={`/images/image_brand_${i + 1}.jpg`}
-                alt={`Brand ${i + 1}`}
-              />
-            </Carousel.Slide>
-          ))}
-        </Carousel>
+        <div className="absolute h-[400px] w-full overflow-hidden">
+          <iframe
+            src="https://www.youtube.com/embed/Rzf6yipAD7s?autoplay=1&mute=1&loop=1&start=600"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "919px",
+              left: 0,
+              top: "-300px",
+            }}
+          ></iframe>
+        </div>
+        <div className="container mx-auto px-24">
+          <Carousel
+            classNames={{
+              slide: homepage.slidecard,
+              control: homepage.controlCard,
+            }}
+            withControls
+            slideSize="25%"
+            slideGap="md"
+            loop
+            align="start"
+            plugins={[autoplay2.current]}
+            onMouseEnter={autoplay2.current.stop}
+            onMouseLeave={autoplay2.current.reset}
+          >
+            {Array.from({ length: 13 }).map((_, i) => (
+              <Carousel.Slide key={i}>
+                <img
+                  className={homepage.slidecontent}
+                  loading="lazy"
+                  src={`/images/image_brand_${i + 1}.jpg`}
+                  alt={`Brand ${i + 1}`}
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </div>
       </div>
-      <div className="container mx-auto px-20 mt-10">
+      <div className="container mx-auto px-24 mt-10">
         <div className="discount mb-10">
           <p className="text-2xl font-bold text-center mb-2">
-            Tiết kiệm hơn <span className="text-orange-600">90%</span> khi chi
-            tiêu
+            Các sản phẩm đồng giá <span className="text-orange-600">19k</span>
           </p>
           <p className="text-lg font-medium text-center">
-            Luôn luôn đi kèm các chương trình giảm giá theo dịp
+            Luôn có những sản phẩm đồng giá dành cho bạn
           </p>
         </div>
         <div
@@ -353,7 +418,7 @@ export default function Home() {
                         className="w-full relative overflow-clip"
                       />
                       <div className="discount-price absolute flex flex-col items-center justify-center z-10 top-[-22px] right-0 bg-[#f25ae3] w-24 h-24 rounded-full text-white">
-                        <span className="text-sm">Chỉ từ</span>
+                        <span className="text-sm">Đồng giá</span>
                         <p className="text-2xl font-bold">19k</p>
                       </div>
                     </div>
@@ -365,7 +430,8 @@ export default function Home() {
           <div className="mt-4 mr-5">
             <Link href="/discount" className="text-end">
               <h2 className="font-bold text-3xl">
-                Giảm <span className="text-green-500">50%</span> Các loại đầm
+                Đồng giá <span className="text-green-500">19k</span> Các loại
+                sản phẩm
               </h2>
               <p>
                 &#40;Xem ngay để nhận ưu đãi lớn nhất từ Share2Receive &#41;
@@ -381,7 +447,7 @@ export default function Home() {
         </h1>
       </div>
       <div className="category-section mt-8 bg-green-100 w-full h-full">
-        <div className="container mx-auto px-52 py-10">
+        <div className="container mx-auto px-24 py-10">
           <div className="text-center">
             <h1 className="text-3xl font-semibold">
               Hàng trăm trăm sản phẩm các loại

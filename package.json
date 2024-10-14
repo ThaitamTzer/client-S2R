@@ -20,6 +20,7 @@
     "@tabler/icons-react": "^3.19.0",
     "@types/js-cookie": "^3.0.6",
     "@types/uuid": "^10.0.0",
+    "@types/youtube": "^0.1.0",
     "antd": "^5.21.3",
     "antd-style": "^3.7.0",
     "axios": "^1.7.7",

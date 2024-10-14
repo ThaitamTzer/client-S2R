@@ -5,10 +5,12 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { navLink } from "@/types/navTypes";
+import { usePathname } from "next/navigation";
 
 const Navigation = ({ navLink }: { navLink: navLink[] }) => {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +30,8 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
+
+  const isActive = (path: string) => pathname === path;
 
   return (
     <>
@@ -50,7 +54,8 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
                 >
                   <p
                     className={clsx(
-                      "before:absolute before:left-0 before:right-0 text-green-800 before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[3px] before:bg-green-900 relative ",
+                      "before:none before:left-0 before:right-0  before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[3px] before:bg-green-900 relative ",
+                      { "before:absolute text-green-800": isActive(link.href) },
                     )}
                   >
                     {link.label}

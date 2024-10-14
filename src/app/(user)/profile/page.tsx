@@ -132,7 +132,7 @@ const ProfilePage = () => {
                   description: user?.description || "",
                   dateOfBirth: user?.dateOfBirth
                     ? moment(user.dateOfBirth)
-                    : new Date(),
+                    : undefined,
                 }}
               >
                 <div className="w-full flex gap-3">

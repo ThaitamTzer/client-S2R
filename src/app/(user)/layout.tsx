@@ -30,7 +30,9 @@ export default function UsersLayout({
   return (
     <>
       <Suspense>
-        <Navigation navLink={navLinks} />
+        <Suspense>
+          <Navigation navLink={navLinks} />
+        </Suspense>
         <Layout className="container mx-auto px-20 bg-white mt-32">
           <Content style={{ padding: "0 48px", backgroundColor: "white" }}>
             <Layout

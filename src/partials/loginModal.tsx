@@ -58,25 +58,6 @@ const LoginModal = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="flex flex-col justify-center items-center">
-            <div className="login-with-google">
-              <Link href="https://share2receive-server.onrender.com/api/auth/google">
-                <button className="w-fit bg-white border px-6 py-4 rounded-md flex items-center justify-center">
-                  <Image
-                    src={"/images/gmail-icon.png"}
-                    alt="Google"
-                    width={30}
-                    height={30}
-                    loading="lazy"
-                  />
-                  <span className="ml-3">Đăng nhập với Google</span>
-                </button>
-              </Link>
-            </div>
-            <div className="flex items-center mt-2 w-10/12">
-              <div className="border-t border border-gray-400 flex-grow"></div>
-              <div className="px-3 text-gray-800 font-bold">Hoặc</div>
-              <div className="border-t border border-gray-400 flex-grow"></div>
-            </div>
             <p>Đăng nhập với email</p>
             <div className="login-with-email container px-32">
               <Form form={form} onFinish={onFinish} layout="vertical">
@@ -143,6 +124,25 @@ const LoginModal = () => {
                   Đăng ký ngay
                 </Link>
               </p>
+            </div>
+            <div className="flex items-center mt-2 w-10/12">
+              <div className="border-t border border-gray-400 flex-grow"></div>
+              <div className="px-3 text-gray-800 font-bold">Hoặc</div>
+              <div className="border-t border border-gray-400 flex-grow"></div>
+            </div>
+            <div className="login-with-google">
+              <Link href="https://share2receive-server.onrender.com/api/auth/google">
+                <button className="w-fit bg-white border px-6 py-4 rounded-md flex items-center justify-center">
+                  <Image
+                    src={"/images/gmail-icon.png"}
+                    alt="Google"
+                    width={30}
+                    height={30}
+                    loading="lazy"
+                  />
+                  <span className="ml-3">Đăng nhập với Google</span>
+                </button>
+              </Link>
             </div>
           </div>
         </Modal.Body>

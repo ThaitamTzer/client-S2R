@@ -56,7 +56,7 @@ const LoginPage = () => {
             <div className="login-form-content mt-5">
               <div className="login-with-gg">
                 <Link
-                  href="/"
+                  href="https://share2receive-server.onrender.com/api/auth/google"
                   className="bg-white w-1/2 mx-auto px-6 py-4 rounded-md border block"
                 >
                   <div className="flex items-center justify-center">
