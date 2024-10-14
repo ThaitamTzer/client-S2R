@@ -15,15 +15,15 @@ type ChangePassword = {
 };
 
 const ChangePasswordPage = () => {
+  const { user, setLoading, loading } = useAuth();
+  const router = useRouter();
+  const [form] = Form.useForm();
+
   useEffect(() => {
     if (!user) {
       router.push("/login");
     }
   }, []);
-
-  const { user, setLoading, loading } = useAuth();
-  const router = useRouter();
-  const [form] = Form.useForm();
 
   const onFinish = (values: ChangePassword) => {
     setLoading(true);

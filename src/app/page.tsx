@@ -11,12 +11,6 @@ import Autoplay from "embla-carousel-autoplay";
 import { IconDiamond, IconRefresh, IconTag } from "@tabler/icons-react";
 import Link from "next/link";
 
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady: any;
-  }
-}
-
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin", "vietnamese"],
 });
@@ -132,10 +126,8 @@ const category = [
 ];
 
 export default function Home() {
-  const autoplay = useRef(Autoplay({ delay: 2000 }));
   const autoplay2 = useRef(Autoplay({ delay: 2000 }));
   const autoplay3 = useRef(Autoplay({ delay: 5000 }));
-  const playerRef = useRef<YT.Player | null>(null);
 
   // useEffect(() => {
   //   const onPlayerReady = (event: YT.PlayerEvent) => {

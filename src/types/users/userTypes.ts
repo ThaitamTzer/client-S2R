@@ -6,4 +6,7 @@ export type UpdateProfile = {
   gender: string;
   phone: string;
   description: string;
+  typeUser: string;
+  role: string;
+  userStyle: string;
 };

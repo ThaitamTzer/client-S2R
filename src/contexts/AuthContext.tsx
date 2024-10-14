@@ -58,29 +58,29 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
-      const storedToken = window.localStorage.getItem(
-        authConfig.storageTokenKeyName,
-      )!;
-      if (storedToken) {
-        await axiosClient
-          .get(authConfig.meEndpoint)
-          .then(async (response) => {
-            setUser({ ...response.data });
-          })
-          .catch(() => {
-            Cookies.remove("accessToken");
-            Cookies.remove("refreshToken");
-            setUser(null);
-            if (
-              authConfig.onTokenExpiration === "logout" &&
-              !pathName.includes("login")
-            ) {
-              router.replace("/login");
-            }
-          });
-      } else {
-        setLoading(false);
-      }
+      // const storedToken = window.localStorage.getItem(
+      //   authConfig.storageTokenKeyName,
+      // )!;
+      // if (storedToken) {
+      await axiosClient
+        .get(authConfig.meEndpoint)
+        .then(async (response) => {
+          setUser({ ...response.data });
+        })
+        .catch(() => {
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
+          setUser(null);
+          if (
+            authConfig.onTokenExpiration === "logout" &&
+            !pathName.includes("login")
+          ) {
+            router.replace("/login");
+          }
+        });
+      // } else {
+      //   setLoading(false);
+      // }
     };
 
     initAuth();
@@ -175,11 +175,19 @@ const AuthProvider = ({ children }: Props) => {
   };
 
   const handleLogout = () => {
-    setUser(null);
-    window.localStorage.removeItem("userData");
-    window.localStorage.removeItem(authConfig.storageTokenKeyName);
-    window.localStorage.removeItem(authConfig.onTokenExpiration);
-    router.push("/");
+    try {
+      axiosClient.patch(authConfig.logoutEndpoint).then(() => {
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+        setUser(null);
+        router.push("/");
+      });
+    } catch (error) {
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      setUser(null);
+      router.push("/");
+    }
   };
 
   console.log("user", user);
