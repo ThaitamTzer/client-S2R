@@ -1,34 +1,35 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next'
 import {
   ColorSchemeScript,
   createTheme,
   DEFAULT_THEME,
   MantineProvider,
   mergeMantineTheme,
-} from "@mantine/core";
-import { Montserrat } from "next/font/google";
-import "./globals.css";
-import "@mantine/carousel/styles.css";
-import Header from "@/partials/header";
-import ScrollingUp from "@/partials/up";
-import Footer from "@/partials/footer";
-import LoginModal from "@/partials/loginModal";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider } from "antd";
-import { themeAntProvider } from "@/components/themeProvider";
-import { Toaster } from "react-hot-toast";
-import { Suspense } from "react";
+} from '@mantine/core'
+import { Montserrat } from 'next/font/google'
+import './globals.css'
+import '@mantine/carousel/styles.css'
+import Header from '@/partials/header'
+import ScrollingUp from '@/partials/up'
+import Footer from '@/partials/footer'
+import LoginModal from '@/partials/loginModal'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
+import { ConfigProvider } from 'antd'
+import { themeAntProvider } from '@/components/themeProvider'
+import { Toaster } from 'react-hot-toast'
+import { Suspense } from 'react'
+
 const montserrat = Montserrat({
-  subsets: ["latin", "vietnamese"],
-});
+  subsets: ['latin', 'vietnamese'],
+})
 
 export const metadata: Metadata = {
   title: {
-    default: "Share2Receive",
-    template: "%s | Share2Receive",
+    default: 'Share2Receive',
+    template: '%s | Share2Receive',
   },
-};
+}
 
 const theme = mergeMantineTheme(
   DEFAULT_THEME,
@@ -36,12 +37,12 @@ const theme = mergeMantineTheme(
     fontFamily: montserrat.style.fontFamily,
     fontFamilyMonospace: montserrat.style.fontFamily,
   }),
-);
+)
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html
@@ -74,5 +75,5 @@ export default function RootLayout({
         </Suspense>
       </body>
     </html>
-  );
+  )
 }
