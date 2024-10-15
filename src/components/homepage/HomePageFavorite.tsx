@@ -1,19 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
+'use client'
 
-import { rem } from "@mantine/core";
-import { IconDiamond, IconRefresh, IconTag } from "@tabler/icons-react";
-import { Carousel } from "@mantine/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { useRef } from "react";
-import homepage from "@/styles/homepage.module.css";
+import { rem } from '@mantine/core'
+import { IconDiamond, IconRefresh, IconTag } from '@tabler/icons-react'
+import { Carousel } from '@mantine/carousel'
+import Autoplay from 'embla-carousel-autoplay'
+import { useRef } from 'react'
+import homepage from '@/styles/homepage.module.css'
 
 export const HomePageFavorate = () => {
-  const autoplay2 = useRef(Autoplay({ delay: 2000 }));
+  const autoplay2 = useRef(Autoplay({ delay: 2000 }))
 
   return (
     <>
-      <div className="relative mt-10">
+      <div className="relative mt-6 wrapper pointer-events-none">
         <div className="fashion-brand">
           <p className="text-2xl font-bold text-center mb-5">
             Thương hiệu bạn <span className="text-orange-600">yêu thích</span>
@@ -42,49 +42,66 @@ export const HomePageFavorate = () => {
             </div>
           </div>
         </div>
-        <div className="absolute h-[400px] w-full overflow-hidden">
-          <iframe
-            src="https://www.youtube.com/embed/2hDQMGys4Wg?autoplay=1&mute=1&loop=1"
-            title="Timelapse  Clouds Travel Across Sky on Green Screen Background | HD"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
-            allowFullScreen
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "919px",
-              left: 0,
-              top: "-300px",
-            }}
-          ></iframe>
-        </div>
-        <div className="container mx-auto px-24">
-          <Carousel
-            classNames={{
-              slide: homepage.slidecard,
-              control: homepage.controlCard,
-            }}
-            withControls
-            slideSize="25%"
-            slideGap="md"
-            loop
-            align="start"
-            plugins={[autoplay2.current]}
-            onMouseEnter={autoplay2.current.stop}
-            onMouseLeave={autoplay2.current.reset}
-          >
-            {Array.from({ length: 13 }).map((_, i) => (
-              <Carousel.Slide key={i}>
-                <img
-                  className={homepage.slidecontent}
-                  loading="lazy"
-                  src={`/images/image_brand_${i + 1}.jpg`}
-                  alt={`Brand ${i + 1}`}
-                />
-              </Carousel.Slide>
-            ))}
-          </Carousel>
-        </div>
+        <section className="relative w-full h-[400px] bg-transparent">
+          <div className="wrapper z-[999] absolute top-0 w-full h-full bg-transparent pointer-events:none ">
+            <div className="w-full relative left-0 top-0  opacity-100 before:absolute before:top-0 before:left-0 h-full bg-transparent overflow-hidden">
+              <div className="relative h-full bg-transparent">
+                <div className="absolute w-full h-full block bg-transparent overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full overflow-hidden flex items-center justify-center">
+                    <div className="relative w-full h-full">
+                      <div className="absolute w-screen h-screen -top-[25%] -bottom-[10%]">
+                        <iframe
+                          src="https://www.youtube.com/embed/2hDQMGys4Wg?autoplay=1&mute=1&loop=1&start=0&end=200&disablekb=1"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          className="absolute w-full h-full z-[995]"
+                          style={{
+                            top: '0',
+                            left: '0',
+                            width: '100vw', // Đặt chiều rộng của video là toàn bộ viewport
+                            height: '100vh',
+                            border: 'none',
+                            objectFit: 'cover', // Kéo dãn video để bao phủ toàn bộ khung chứa
+                          }}
+                        ></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute top-0 left-0 right-0 bottom-0 z-[999]">
+            <div className="container mx-auto px-24">
+              <Carousel
+                classNames={{
+                  slide: homepage.slidecard,
+                  control: homepage.controlCard,
+                }}
+                withControls
+                slideSize="25%"
+                slideGap="md"
+                loop
+                align="start"
+                plugins={[autoplay2.current]}
+                onMouseEnter={autoplay2.current.stop}
+                onMouseLeave={autoplay2.current.reset}
+              >
+                {Array.from({ length: 13 }).map((_, i) => (
+                  <Carousel.Slide key={i}>
+                    <img
+                      className={homepage.slidecontent}
+                      loading="lazy"
+                      src={`/images/image_brand_${i + 1}.jpg`}
+                      alt={`Brand ${i + 1}`}
+                    />
+                  </Carousel.Slide>
+                ))}
+              </Carousel>
+            </div>
+          </div>
+        </section>
       </div>
     </>
-  );
-};
+  )
+}
