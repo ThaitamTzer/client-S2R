@@ -182,7 +182,7 @@ const AuthProvider = ({ children }: Props) => {
         setUser(null);
         router.push("/");
       });
-    } catch (error) {
+    } catch {
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
       setUser(null);
