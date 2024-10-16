@@ -1,11 +1,13 @@
-"use client";
+'use client'
 
-import { Title } from "@mantine/core";
-import { Space_Grotesk } from "next/font/google";
+import { Title } from '@mantine/core'
+import { Space_Grotesk } from 'next/font/google'
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin", "vietnamese"],
-});
+  subsets: ['latin', 'vietnamese'],
+  preload: true,
+  display: 'swap',
+})
 
 export const HomePageTitle = () => {
   return (
@@ -15,12 +17,12 @@ export const HomePageTitle = () => {
           <Title
             style={{
               fontFamily: spaceGrotesk.style.fontFamily,
-              fontSmooth: "auto",
-              textTransform: "uppercase",
-              textAlign: "center",
-              fontSize: "20px",
-              lineHeight: "30px",
-              letterSpacing: ".9px",
+              fontSmooth: 'auto',
+              textTransform: 'uppercase',
+              textAlign: 'center',
+              fontSize: '20px',
+              lineHeight: '30px',
+              letterSpacing: '.9px',
             }}
             className="text-green-800 "
             fw={500}
@@ -32,5 +34,5 @@ export const HomePageTitle = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

@@ -1,17 +1,16 @@
-"use client";
+'use client'
 
 import {
   Avatar,
   Menu,
   rem,
   Text,
-  Title,
   UnstyledButton,
   TextInput,
-} from "@mantine/core";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import clsx from "clsx";
+} from '@mantine/core'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import clsx from 'clsx'
 import {
   IconSettings,
   IconTruck,
@@ -19,46 +18,47 @@ import {
   IconShoppingCart,
   IconBell,
   IconSearch,
-} from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import { useLoginModal } from "@/zustand/loginModal";
-import { useAuth } from "@/hooks/useAuth";
+} from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
+import { useLoginModal } from '@/zustand/loginModal'
+import { useAuth } from '@/hooks/useAuth'
+import Image from 'next/image'
 
 export default function Header() {
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const { openModal } = useLoginModal();
-  const { logout, user } = useAuth();
+  const [showHeader, setShowHeader] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const { openModal } = useLoginModal()
+  const { logout, user } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
         // Scrolling down
-        setShowHeader(false);
+        setShowHeader(false)
       } else {
         // Scrolling up
-        setShowHeader(true);
+        setShowHeader(true)
       }
-      setLastScrollY(window.scrollY);
-    };
+      setLastScrollY(window.scrollY)
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll)
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [lastScrollY])
 
-  const pathName = usePathname();
+  const pathName = usePathname()
 
   return (
     <header
       id="header"
       className={clsx(
-        "fixed top-0 z-modal bg-white w-full transition-transform duration-300",
+        'fixed top-0 z-50 bg-white w-full transition-transform duration-300 ',
         {
-          "-translate-y-full": !showHeader,
-          "translate-y-0": showHeader,
+          '-translate-y-full': !showHeader,
+          'translate-y-0': showHeader,
         },
       )}
     >
@@ -66,16 +66,24 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Phần trái: Logo và Navigation */}
           <div className="flex items-center">
-            <Title className="text-green-800">
+            <Image
+              src="/logo.png"
+              width={50}
+              height={50}
+              alt="Share2Receive"
+              loading="lazy"
+              className="mr-1 p-1"
+            />
+            <div className="text-green-800 text-3xl font-semibold">
               <Link href="/">Share2Receive</Link>
-            </Title>
+            </div>
             <div className="nav ml-6">
               <ul className="nav-list flex flex-row">
                 <li
                   className={clsx(
-                    "nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200",
+                    'nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200',
                     {
-                      "bg-green-100": pathName === "/",
+                      'bg-green-100': pathName === '/',
                     },
                   )}
                 >
@@ -83,9 +91,9 @@ export default function Header() {
                 </li>
                 <li
                   className={clsx(
-                    "nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200",
+                    'nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200',
                     {
-                      "bg-green-100": pathName === "/shop",
+                      'bg-green-100': pathName === '/shop',
                     },
                   )}
                 >
@@ -104,7 +112,7 @@ export default function Header() {
               styles={(theme) => ({
                 input: {
                   borderColor: theme.colors.green[7], // Màu xanh lá đậm
-                  "&:focus": {
+                  '&:focus': {
                     borderColor: theme.colors.green[7], // Màu viền khi focus
                   },
                 },
@@ -143,7 +151,7 @@ export default function Header() {
                       size={rem(35)}
                     />
                     <Text className="ml-3" size="xl" fw={500}>
-                      {user.firstname + " " + user.lastname}
+                      {user.firstname + ' ' + user.lastname}
                     </Text>
                   </div>
                 </Menu.Target>
@@ -159,7 +167,7 @@ export default function Header() {
                       Thông tin tài khoản
                     </Menu.Item>
                   </Link>
-                  <Link href="/orders">
+                  <Link href="/product-management">
                     <Menu.Item
                       leftSection={
                         <IconTruck
@@ -167,7 +175,7 @@ export default function Header() {
                         />
                       }
                     >
-                      Quản lý đơn hàng
+                      Quản lý sản phẩm
                     </Menu.Item>
                   </Link>
                   <Menu.Item
@@ -193,5 +201,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  );
+  )
 }

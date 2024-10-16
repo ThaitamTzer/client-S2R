@@ -1,50 +1,50 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
 const category = [
   {
     id: 1,
-    title: "Đầm nữ",
-    src: "/images/dress-icon-v2.png",
+    title: 'Đầm nữ',
+    src: '/images/dress-icon-v2.png',
   },
   {
     id: 2,
-    title: "Áo thun",
-    src: "/images/tshirt-icon-v2.png",
+    title: 'Áo thun',
+    src: '/images/tshirt-icon-v2.png',
   },
   {
     id: 3,
-    title: "Chân váy",
-    src: "/images/skirt-icon-v2.png",
+    title: 'Chân váy',
+    src: '/images/skirt-icon-v2.png',
   },
   {
     id: 4,
-    title: "Giày các loại",
-    src: "/images/shoes-icon-v2.png",
+    title: 'Giày các loại',
+    src: '/images/shoes-icon-v2.png',
   },
   {
     id: 5,
-    title: "Quần jeans",
-    src: "/images/jean-icon-v2.png",
+    title: 'Quần jeans',
+    src: '/images/jean-icon-v2.png',
   },
   {
     id: 6,
-    title: "Áo sơ mi",
-    src: "/images/shirt-icon-v2.png",
+    title: 'Áo sơ mi',
+    src: '/images/shirt-icon-v2.png',
   },
   {
     id: 7,
-    title: "Áo khoác",
-    src: "/images/coat-icon-v2.png",
+    title: 'Áo khoác',
+    src: '/images/coat-icon-v2.png',
   },
   {
     id: 8,
-    title: "Túi xách",
-    src: "/images/hand-bag-v2.png",
+    title: 'Túi xách',
+    src: '/images/hand-bag-v2.png',
   },
-];
+]
 export const HomePageCategory = () => {
   return (
     <>
@@ -52,7 +52,7 @@ export const HomePageCategory = () => {
         <div className="container mx-auto px-24 py-10">
           <div className="text-center">
             <h1 className="text-3xl font-semibold">
-              Hàng trăm trăm sản phẩm các loại
+              Hàng trăm sản phẩm các loại
             </h1>
             <p className="text-base font-medium mt-3">
               Được kiểm duyệt kỹ càng sẵn sàng đến tay bạn!
@@ -97,9 +97,9 @@ export const HomePageCategory = () => {
           style={{
             backgroundImage:
               'url("/images/crystal-ball-on-moss-in-green-forest-environment-2023-11-27-05-05-51-utc.jpg")',
-            backgroundSize: "cover",
-            backgroundPosition: "center -120px",
-            backgroundRepeat: "no-repeat",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center -120px',
+            backgroundRepeat: 'no-repeat',
           }}
         >
           <div className="overlay-statistic relative w-[38%] ml-72 my-20">
@@ -111,7 +111,7 @@ export const HomePageCategory = () => {
                 1200 <span>Kilogram</span>
               </p>
               <p className="mb-1 text-2xl font-semibold ">
-                Rác thải thời trang,{" "}
+                Rác thải thời trang,{' '}
                 <span className="text-white text-2xl">
                   tính đến ngày 27/11/2024
                 </span>
@@ -121,5 +121,5 @@ export const HomePageCategory = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

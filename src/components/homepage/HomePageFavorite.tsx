@@ -43,7 +43,7 @@ export const HomePageFavorate = () => {
           </div>
         </div>
         <section className="relative w-full h-[400px] bg-transparent">
-          <div className="wrapper z-[999] absolute top-0 w-full h-full bg-transparent pointer-events:none ">
+          <div className="wrapper z-40 absolute top-0 w-full h-full bg-transparent pointer-events:none ">
             <div className="w-full relative left-0 top-0  opacity-100 before:absolute before:top-0 before:left-0 h-full bg-transparent overflow-hidden">
               <div className="relative h-full bg-transparent">
                 <div className="absolute w-full h-full block bg-transparent overflow-hidden">
@@ -51,15 +51,16 @@ export const HomePageFavorate = () => {
                     <div className="relative w-full h-full">
                       <div className="absolute w-screen h-screen -top-[25%] -bottom-[10%]">
                         <iframe
-                          src="https://www.youtube.com/embed/2hDQMGys4Wg?autoplay=1&mute=1&loop=1&start=0&end=200&disablekb=1"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+                          src="https://www.youtube.com/embed/i-S9dcmegZo?playlist=i-S9dcmegZo&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share; loop;"
                           referrerPolicy="strict-origin-when-cross-origin"
-                          className="absolute w-full h-full z-[995]"
+                          className="absolute w-full h-full z-[39]"
                           style={{
                             top: '0',
                             left: '0',
+                            right: '0',
                             width: '100vw', // Đặt chiều rộng của video là toàn bộ viewport
-                            height: '100vh',
+                            height: '101vh',
                             border: 'none',
                             objectFit: 'cover', // Kéo dãn video để bao phủ toàn bộ khung chứa
                           }}
@@ -71,7 +72,7 @@ export const HomePageFavorate = () => {
               </div>
             </div>
           </div>
-          <div className="absolute top-0 left-0 right-0 bottom-0 z-[999]">
+          <div className="absolute top-0 left-0 right-0 bottom-0 z-40">
             <div className="container mx-auto px-24">
               <Carousel
                 classNames={{

@@ -51,7 +51,17 @@ export const HomePageManFashion = () => {
 
   return (
     <div className="relative mt-10">
-      <h2 className="text-2xl font-bold text-center">Đồ Nam</h2>
+      <div className="text-center flex justify-center">
+        <div className="flex w-[50%] items-center rounded-full">
+          <div className="flex-1 border-b border-gray-300"></div>
+          <h2 className="m-6 group relative w-max text-black text-2xl font-bold leading-3 px-8 py-3 uppercase">
+            Thời trang dành cho nam
+            <span className="absolute -bottom-1 left-1/2 w-0 transition-all h-0.5 bg-green-600 group-hover:w-3/6"></span>
+            <span className="absolute -bottom-1 right-1/2 w-0 transition-all h-0.5 bg-green-600 group-hover:w-3/6"></span>
+          </h2>
+          <div className="flex-1 border-b border-gray-300"></div>
+        </div>
+      </div>
       <div
         className="overflow-hidden relative mx-auto w-full h-full min-h-[500px] bg-cover bg-no-repeat rounded-md flex justify-between mt-4"
         style={{

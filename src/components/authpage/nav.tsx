@@ -1,46 +1,46 @@
 // src/components/authpage/nav.tsx
-"use client";
+'use client'
 
-import clsx from "clsx";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { navLink } from "@/types/navTypes";
-import { usePathname } from "next/navigation";
+import clsx from 'clsx'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { navLink } from '@/types/navTypes'
+import { usePathname } from 'next/navigation'
 
 const Navigation = ({ navLink }: { navLink: navLink[] }) => {
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const pathname = usePathname();
+  const [showHeader, setShowHeader] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
         // Scrolling down
-        setShowHeader(false);
+        setShowHeader(false)
       } else {
         // Scrolling up
-        setShowHeader(true);
+        setShowHeader(true)
       }
-      setLastScrollY(window.scrollY);
-    };
+      setLastScrollY(window.scrollY)
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll)
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [lastScrollY])
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => pathname === path
 
   return (
     <>
       <nav
         className={clsx(
-          "fixed top-0 z-modal bg-green-100 text-black text-lg font-medium w-full transition-transform duration-300 overflow-hidden",
+          'fixed top-0 z-modal bg-green-100 text-black text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
           {
-            "-translate-y-0": !showHeader,
-            "translate-y-11": showHeader,
+            '-translate-y-0': !showHeader,
+            'translate-y-12': showHeader,
           },
         )}
       >
@@ -54,8 +54,8 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
                 >
                   <p
                     className={clsx(
-                      "before:none before:left-0 before:right-0  before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[3px] before:bg-green-900 relative ",
-                      { "before:absolute text-green-800": isActive(link.href) },
+                      'before:none before:left-0 before:right-0  before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[3px] before:bg-green-900 relative ',
+                      { 'before:absolute text-green-800': isActive(link.href) },
                     )}
                   >
                     {link.label}
@@ -67,7 +67,7 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
         </div>
       </nav>
     </>
-  );
-};
+  )
+}
 
-export default Navigation;
+export default Navigation

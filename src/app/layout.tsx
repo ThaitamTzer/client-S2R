@@ -22,6 +22,8 @@ import { Suspense } from 'react'
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
+  preload: true,
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -61,7 +63,9 @@ export default function RootLayout({
               <AntdRegistry>
                 <MantineProvider theme={theme}>
                   <Header />
-                  <main className="relative mt-12 h-full min-h-screen scroll-smooth">
+                  <main
+                    className={`relative mt-16 h-full min-h-screen scroll-smooth  ${montserrat.className}`}
+                  >
                     <LoginModal />
                     <Toaster position="top-right" />
                     {children}
