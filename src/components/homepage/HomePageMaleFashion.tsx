@@ -69,7 +69,7 @@ export const HomePageManFashion = () => {
                     height={500}
                     translate="yes"
                     slideGap="sm"
-                    slideSize="45%"
+                    slideSize="40%"
                     loop
                     align="start"
                     plugins={[autoplay.current]}
@@ -80,7 +80,7 @@ export const HomePageManFashion = () => {
                       <>
                         <Carousel.Slide key={item.id}>
                           <div className="card w-full h-full bg-white shadow-md rounded-md">
-                            <div className="relative card-image w-full h-[340px] overflow-hidden">
+                            <div className="relative card-image w-full h-[340px] overflow-hidden rounded-t-md">
                               {item?.tag === 'Trao đổi' && (
                                 <div className="absolute top-5 right-5 z-overlay">
                                   <Badge color="blue">{item.tag}</Badge>
@@ -105,7 +105,6 @@ export const HomePageManFashion = () => {
                               <div className="text-base font-medium">
                                 Kích thước: {item.size}
                               </div>
-                              <div className="text-base font-medium"></div>
                               <div className="text-xl font-semibold text-green-800">
                                 {item.tag === 'Trao đổi' ? (
                                   <>

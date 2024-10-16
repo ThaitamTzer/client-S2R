@@ -8,6 +8,7 @@ const nextConfig = {
       'res.cloudinary.com',
       'lh3.googleusercontent.com',
       'raw.githubusercontent.com',
+      'minio.theciu.vn',
     ],
   },
 }
