@@ -11,18 +11,20 @@ import { HomePageFemale } from '@/components/homepage/HomePageFemale'
 import Navigation from '@/components/authpage/nav'
 import { TypeCategory } from '@/metadata/category'
 import { HomePageUnisex } from '@/components/homepage/HomePageUnisex'
+import FormStyleUser from '@/components/homepage/FormStyle'
 
 export default function Home() {
   return (
     <>
+      <FormStyleUser />
       <Navigation navLink={TypeCategory} />
       <HomePageTitle />
-      <HomePageHero />
+      {/* <HomePageHero /> */}
       <HomePagePickPrice />
       <HomePageManFashion />
       <HomePageFemale />
       <HomePageUnisex />
-      <HomePageFavorate />
+      {/* <HomePageFavorate /> */}
       <HomePageSamePrice />
       <div className="container mx-auto px-32 text-center text-2xl font-medium text-green-800 uppercase mt-8">
         <h1>

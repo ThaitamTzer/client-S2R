@@ -1,38 +1,38 @@
-"use client";
-import { Modal } from "@mantine/core";
-import { useLoginModal } from "@/zustand/loginModal";
-import Image from "next/image";
-import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
-import { Button, Form, Input, Checkbox } from "antd";
+'use client'
+import { Modal } from '@mantine/core'
+import { useLoginModal } from '@/zustand/loginModal'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useAuth } from '@/hooks/useAuth'
+import { Button, Form, Input, Checkbox } from 'antd'
 
 interface formData {
-  account: string;
-  password: string;
-  rememberMe: boolean;
+  account: string
+  password: string
+  rememberMe: boolean
 }
 
 const LoginModal = () => {
-  const { isOpen, closeModal } = useLoginModal();
-  const { login, loading } = useAuth();
+  const { isOpen, closeModal } = useLoginModal()
+  const { login, loading } = useAuth()
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
 
   const onFinish = (values: formData) => {
-    console.log("Received values of form: ", values);
+    console.log('Received values of form: ', values)
     login(values, () => {
       form.setFields([
         {
-          name: "account",
-          errors: ["Email hoặc mật khẩu không chính xác"],
+          name: 'account',
+          errors: ['Email hoặc mật khẩu không chính xác'],
         },
         {
-          name: "password",
-          errors: ["Email hoặc mật khẩu không chính xác"],
+          name: 'password',
+          errors: ['Email hoặc mật khẩu không chính xác'],
         },
-      ]);
-    });
-  };
+      ])
+    })
+  }
 
   return (
     <Modal.Root opened={isOpen} onClose={closeModal} centered size="lg">
@@ -46,7 +46,7 @@ const LoginModal = () => {
           <Modal.Title>
             <div className="text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center">
               <Image
-                src={"/images/lock.svg"}
+                src={'/images/lock.svg'}
                 alt="Lock"
                 width={80}
                 height={80}
@@ -67,11 +67,11 @@ const LoginModal = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Email không được để trống",
+                      message: 'Email không được để trống',
                     },
                     {
-                      type: "email",
-                      message: "Email không hợp lệ",
+                      type: 'email',
+                      message: 'Email không hợp lệ',
                     },
                   ]}
                 >
@@ -87,7 +87,7 @@ const LoginModal = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Mật khẩu không được để trống",
+                      message: 'Mật khẩu không được để trống',
                     },
                   ]}
                 >
@@ -115,7 +115,7 @@ const LoginModal = () => {
             </div>
             <div className="mb-3">
               <p>
-                Bạn chưa có tài khoản?{" "}
+                Bạn chưa có tài khoản?{' '}
                 <Link
                   href="/register"
                   className="text-green-800 font-bold"
@@ -134,7 +134,7 @@ const LoginModal = () => {
               <Link href="https://share2receive-server.onrender.com/api/auth/google">
                 <button className="w-fit bg-white border px-6 py-4 rounded-md flex items-center justify-center">
                   <Image
-                    src={"/images/gmail-icon.png"}
+                    src={'/images/gmail-icon.png'}
                     alt="Google"
                     width={30}
                     height={30}
@@ -148,7 +148,7 @@ const LoginModal = () => {
         </Modal.Body>
       </Modal.Content>
     </Modal.Root>
-  );
-};
+  )
+}
 
-export default LoginModal;
+export default LoginModal

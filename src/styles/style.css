@@ -1,0 +1,132 @@
+.display-flex {
+  display: flex !important;
+}
+
+.display-grid {
+  display: grid !important;
+}
+
+.display-block {
+  display: block !important;
+}
+
+.display-inlineblock {
+  display: inline-block !important;
+}
+
+/* .radio-custom .dotuoi1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin-right: 10px;
+} */
+
+.ant-radio-wrapper {
+  display: block;
+}
+
+.radio-custom .faded {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.radio-custom .ant-radio-wrapper {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  display: block;
+  /* width: 100px;
+  height: 40px; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-custom .ant-radio-wrapper-checked {
+  border: 2px solid green;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.radio-custom .ant-radio {
+  position: absolute;
+  left: -9999px;
+  overflow: hidden;
+  display: none !important;
+}
+
+.radio-custom .ant-radio + * {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.checkbox-custom .card-checkbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkbox-custom .card-checkbox:hover {
+  border-color: green;
+}
+
+.checkbox-custom .card-checkbox .card-content p {
+  margin: 0;
+}
+
+.checkbox-custom .ant-checkbox-checked .card-checkbox {
+  border-color: green;
+  background-color: #e6ffe6;
+}
+
+.ant-checkbox-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.ant-checkbox-wrapper .ant-checkbox {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 5;
+}
+
+.ant-checkbox-wrapper .card-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.checkbox-material .ant-checkbox {
+  display: none;
+}
+
+.checkbox-material .ant-checkbox-wrapper {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  padding: 8px 0 !important;
+}
+.checkbox-material .ant-checkbox-wrapper-checked {
+  border-color: green;
+  background-color: #e6ffe6;
+}

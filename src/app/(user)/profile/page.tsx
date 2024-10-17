@@ -1,33 +1,34 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Input, Form, Button, Select, Upload, Avatar } from "antd";
-import { UpdateProfile } from "@/types/users/userTypes";
-import { useAuth } from "@/hooks/useAuth";
-import moment from "moment";
-import userService from "@/services/users/user.service";
-import toast from "react-hot-toast";
-import MyDatePicker from "@/components/DatePicker";
-import { IconUpload } from "@tabler/icons-react";
+import { useState } from 'react'
+import { Input, Form, Button, Select, Upload, Avatar } from 'antd'
+import { UpdateProfile } from '@/types/users/userTypes'
+import { useAuth } from '@/hooks/useAuth'
+import moment from 'moment'
+import userService from '@/services/users/user.service'
+import toast from 'react-hot-toast'
+import MyDatePicker from '@/components/DatePicker'
+import { IconUpload } from '@tabler/icons-react'
+import { Group } from '@mantine/core'
 const ProfilePage = () => {
-  const { user, setLoading, loading, getProfile } = useAuth();
-  const [form] = Form.useForm();
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const { user, setLoading, loading, getProfile } = useAuth()
+  const [form] = Form.useForm()
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   const onFinish = (values: UpdateProfile) => {
-    setLoading(true);
+    setLoading(true)
     try {
       userService
         .updateProfile(values)
         .then((res) => {
-          getProfile();
-          setLoading(false);
-          toast.success("Cập nhật thông tin thành công!");
+          getProfile()
+          setLoading(false)
+          toast.success('Cập nhật thông tin thành công!')
           if (res) {
             form.setFieldsValue({
               firstname: res.firstname,
@@ -37,49 +38,49 @@ const ProfilePage = () => {
               email: res.email,
               description: res.description,
               dateOfBirth: moment(res.dateOfBirth),
-            });
+            })
           }
         })
         .catch((error) => {
-          console.log(error);
-          toast.error("Cập nhật thông tin thất bại!");
-          setLoading(false);
+          console.log(error)
+          toast.error('Cập nhật thông tin thất bại!')
+          setLoading(false)
         })
         .finally(() => {
-          setLoading(false);
-        });
+          setLoading(false)
+        })
     } catch {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handlePreview = async (file: File) => {
-    const reader = new FileReader();
-    setFile(file);
-    reader.readAsDataURL(file);
+    const reader = new FileReader()
+    setFile(file)
+    reader.readAsDataURL(file)
     reader.onloadend = () => {
-      setPreview(reader.result as string);
-    };
-  };
+      setPreview(reader.result as string)
+    }
+  }
 
   const onUpload = (file: File) => {
     if (!file) {
-      return;
+      return
     }
-    const formData = new FormData();
-    formData.append("avatar", file);
+    const formData = new FormData()
+    formData.append('avatar', file)
     userService
       .updateAvatar(formData)
       .then(() => {
-        getProfile();
-        toast.success("Cập nhật ảnh đại diện thành công!");
-        setFile(null);
+        getProfile()
+        toast.success('Cập nhật ảnh đại diện thành công!')
+        setFile(null)
       })
       .catch(() => {
-        toast.error("Cập nhật ảnh đại diện thất bại!");
-        setFile(null);
-      });
-  };
+        toast.error('Cập nhật ảnh đại diện thất bại!')
+        setFile(null)
+      })
+  }
 
   return (
     <>
@@ -96,8 +97,8 @@ const ProfilePage = () => {
           <div className="flex flex-col w-1/3">
             <Upload
               beforeUpload={(file) => {
-                handlePreview(file); // Preview the selected image
-                return false; // Prevent default upload behavior
+                handlePreview(file) // Preview the selected image
+                return false // Prevent default upload behavior
               }}
               showUploadList={false}
             >
@@ -123,13 +124,13 @@ const ProfilePage = () => {
                 layout="vertical"
                 size="large"
                 initialValues={{
-                  firstname: user?.firstname || "",
-                  lastname: user?.lastname || "",
-                  phone: user?.phone || "",
-                  address: user?.address || "",
-                  email: user?.email || "",
-                  gender: user?.gender || "none",
-                  description: user?.description || "",
+                  firstname: user?.firstname || '',
+                  lastname: user?.lastname || '',
+                  phone: user?.phone || '',
+                  address: user?.address || '',
+                  email: user?.email || '',
+                  gender: user?.gender || 'none',
+                  description: user?.description || '',
                   dateOfBirth: user?.dateOfBirth
                     ? moment(user.dateOfBirth)
                     : undefined,
@@ -143,7 +144,7 @@ const ProfilePage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập họ!",
+                        message: 'Vui lòng nhập họ!',
                       },
                     ]}
                   >
@@ -156,7 +157,7 @@ const ProfilePage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập tên!",
+                        message: 'Vui lòng nhập tên!',
                       },
                     ]}
                   >
@@ -170,7 +171,7 @@ const ProfilePage = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Vui lòng nhập email!",
+                      message: 'Vui lòng nhập email!',
                     },
                   ]}
                 >
@@ -201,13 +202,13 @@ const ProfilePage = () => {
                     className="w-full"
                     options={[
                       {
-                        value: "none",
-                        label: "Chọn giới tính",
+                        value: 'none',
+                        label: 'Chọn giới tính',
                         disabled: true,
                       },
-                      { value: "male", label: "Nam" },
-                      { value: "female", label: "Nữ" },
-                      { value: "other", label: "Khác" },
+                      { value: 'male', label: 'Nam' },
+                      { value: 'female', label: 'Nữ' },
+                      { value: 'other', label: 'Khác' },
                     ]}
                   />
                 </Form.Item>
@@ -218,9 +219,11 @@ const ProfilePage = () => {
                   <Input.TextArea placeholder="Mô tả" />
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit" loading={loading}>
-                    Cập nhật
-                  </Button>
+                  <Group justify="end">
+                    <Button type="primary" htmlType="submit" loading={loading}>
+                      Cập nhật
+                    </Button>
+                  </Group>
                 </Form.Item>
               </Form>
             </div>
@@ -228,7 +231,7 @@ const ProfilePage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage

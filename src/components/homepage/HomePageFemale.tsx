@@ -37,7 +37,7 @@ export const HomePageFemale = () => {
         'https://api.theciu.vn/api/products/paginate?pageSize=12&type=on_sale',
       )
       .then((res) => {
-        setDonus(res.data.data.items)
+        setDonus(res.data.data?.items)
       })
   }, ['https://api.theciu.vn/api/products/paginate?pageSize=12&type=on_sale'])
 
