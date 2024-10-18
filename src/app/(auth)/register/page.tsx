@@ -1,63 +1,63 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { Form, Button, Input, Flex } from "antd";
-import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+'use client'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Form, Button, Input, Flex } from 'antd'
+import { useAuth } from '@/hooks/useAuth'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 interface formData {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
+  firstname: string
+  lastname: string
+  email: string
+  password: string
 }
 
 const RegisterPage = () => {
-  const [form] = Form.useForm();
-  const { register, user } = useAuth();
-  const router = useRouter();
+  const [form] = Form.useForm()
+  const { register, user } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.push('/')
     }
-  }, [user, router]);
+  }, [user, router])
 
   const onFinish = (values: formData) => {
     register(values)
       .then(() => {
-        router.push("/");
-        toast.success("Đăng ký thành công");
+        router.push('/')
+        toast.success('Đăng ký thành công')
       })
       .catch(() => {
         form.setFields([
           {
-            name: "email",
-            errors: ["Email đã tồn tại"],
+            name: 'email',
+            errors: ['Email đã tồn tại'],
           },
-        ]);
-      });
-  };
+        ])
+      })
+  }
 
   return (
     <>
       <div
         className="bg-cover bg-no-repeat w-full h-screen"
         style={{
-          backgroundImage: "url(/images/forest-bg.jpg)",
+          backgroundImage: 'url(/images/forest-bg.jpg)',
         }}
       >
         <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
-          <div className="w-full max-w-[590px] p-5 backdrop-blur-sm bg-white/50 shadow-xl rounded-md">
+          <div className="w-full max-w-[590px] p-5  bg-white shadow-xl rounded-md">
             <div className="login-form-title text-white">
-              <h1 className="text-5xl pt-2 font-semibold text-white text-center ">
+              <h1 className="text-5xl pt-2 font-semibold text-green-800 text-center ">
                 Tham gia cùng Share2Receive
               </h1>
             </div>
             <div className="login-form-content mt-5">
-              <div className="w-[70%] mx-auto">
+              <div className="w-[70%] mx-auto form-register">
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Flex gap={10}>
                     <Form.Item
@@ -66,7 +66,7 @@ const RegisterPage = () => {
                       rules={[
                         {
                           required: true,
-                          message: "Họ không được để trống",
+                          message: 'Họ không được để trống',
                         },
                       ]}
                     >
@@ -78,7 +78,7 @@ const RegisterPage = () => {
                       rules={[
                         {
                           required: true,
-                          message: "Tên không được để trống",
+                          message: 'Tên không được để trống',
                         },
                       ]}
                     >
@@ -91,11 +91,11 @@ const RegisterPage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Email không được để trống",
+                        message: 'Email không được để trống',
                       },
                       {
-                        type: "email",
-                        message: "Email không hợp lệ",
+                        type: 'email',
+                        message: 'Email không hợp lệ',
                       },
                     ]}
                   >
@@ -107,7 +107,7 @@ const RegisterPage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Mật khẩu không được để trống",
+                        message: 'Mật khẩu không được để trống',
                       },
                     ]}
                   >
@@ -131,7 +131,7 @@ const RegisterPage = () => {
               <div className="divider flex justify-center my-4">
                 <div className="flex items-center w-[70%]">
                   <div className="border-t border border-gray-400 flex-grow"></div>
-                  <div className="px-3 font-bold text-white">Hoặc</div>
+                  <div className="px-3 font-bold ">Hoặc</div>
                   <div className="border-t border border-gray-400 flex-grow"></div>
                 </div>
               </div>
@@ -156,7 +156,7 @@ const RegisterPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage

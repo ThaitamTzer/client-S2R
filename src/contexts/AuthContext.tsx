@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
 // ** React Imports
-import { createContext, useEffect, useState, ReactNode } from "react";
-import Cookies from "js-cookie";
+import { createContext, useEffect, useState, ReactNode } from 'react'
+import Cookies from 'js-cookie'
 
 // ** Next Import
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 // ** Axios
-import axiosClient from "@/lib/axios";
+import axiosClient from '@/lib/axios'
 
 // ** Config
-import authConfig from "@/config/auth";
+import authConfig from '@/config/auth'
 
-import { useLoginModal } from "@/zustand/loginModal";
+import { useLoginModal } from '@/zustand/loginModal'
 
 // ** Types
 import {
@@ -22,7 +22,7 @@ import {
   ErrCallbackType,
   UserDataType,
   RegisterParams,
-} from "@/contexts/types";
+} from '@/contexts/types'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -36,25 +36,25 @@ const defaultProvider: AuthValuesType = {
   forgetPassword: () => Promise.resolve(),
   resetPassword: () => Promise.resolve(),
   getProfile: () => Promise.resolve(),
-};
+}
 
-const AuthContext = createContext(defaultProvider);
+const AuthContext = createContext(defaultProvider)
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 const AuthProvider = ({ children }: Props) => {
   // ** States
-  const [user, setUser] = useState<UserDataType | null>(defaultProvider.user);
-  const [loading, setLoading] = useState<boolean>(defaultProvider.loading);
+  const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
+  const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
-  const { closeModal } = useLoginModal();
+  const { closeModal } = useLoginModal()
 
   // ** Hooks
-  const router = useRouter();
-  const pathName = usePathname();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const pathName = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
@@ -65,132 +65,133 @@ const AuthProvider = ({ children }: Props) => {
       await axiosClient
         .get(authConfig.meEndpoint)
         .then(async (response) => {
-          setUser({ ...response.data });
+          setUser({ ...response.data })
         })
         .catch(() => {
-          Cookies.remove("accessToken");
-          Cookies.remove("refreshToken");
-          setUser(null);
+          Cookies.remove('accessToken')
+          Cookies.remove('refreshToken')
+          setUser(null)
           if (
-            authConfig.onTokenExpiration === "logout" &&
-            !pathName.includes("login")
+            authConfig.onTokenExpiration === 'logout' &&
+            !pathName.includes('login')
           ) {
-            router.replace("/login");
+            router.replace('/login')
           }
-        });
+        })
       // } else {
       //   setLoading(false);
       // }
-    };
+    }
 
-    initAuth();
+    initAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const handleLogin = (
     params: LoginParams,
     errorCallback?: ErrCallbackType,
   ) => {
-    setLoading(true);
+    setLoading(true)
     try {
       axiosClient
         .post(authConfig.loginEndpoint, params)
         .then(async (response) => {
-          setLoading(false);
+          setLoading(false)
           if (params.rememberMe) {
             window.localStorage.setItem(
               authConfig.storageTokenKeyName,
               response.data.accessToken,
-            );
+            )
             window.localStorage.setItem(
               authConfig.onTokenExpiration,
               response.data.refreshToken,
-            );
+            )
           }
-          const returnUrl = searchParams.get("returnUrl");
+          const returnUrl = searchParams.get('returnUrl')
 
-          setUser({ ...response.data.user });
+          setUser({ ...response.data.user })
           if (params.rememberMe) {
             window.localStorage.setItem(
-              "userData",
+              'userData',
               JSON.stringify(response.data.user),
-            );
+            )
           }
 
-          const redirectURL = returnUrl && returnUrl !== "/" ? returnUrl : "/";
+          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
-          router.replace(redirectURL as string);
-          closeModal();
+          router.replace(redirectURL as string)
+          closeModal()
         })
 
         .catch((err) => {
-          setLoading(false);
-          if (errorCallback) errorCallback(err);
-        });
+          setLoading(false)
+          if (errorCallback) errorCallback(err)
+        })
     } catch (error) {
-      console.log("error", error);
-      setLoading(false);
+      console.log('error', error)
+      setLoading(false)
     }
-  };
+  }
 
   const handleRegister = async (params: RegisterParams) => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const res = await axiosClient.post(authConfig.registerEndpoint, params);
-      setUser(res.data);
-      setLoading(false);
-      router.push("/");
+      const res = await axiosClient.post(authConfig.registerEndpoint, params)
+      setUser(res.data.user)
+      console.log('res', res.data.user)
+      setLoading(false)
+      router.push('/')
     } catch {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleForgetPassword = async (params: { email: string }) => {
     try {
-      await axiosClient.post("/api/auth/forgot-password", params);
+      await axiosClient.post('/api/auth/forgot-password', params)
     } catch {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleResetPassword = async (params: {
-    code: string;
-    newPassword: string;
+    code: string
+    newPassword: string
   }) => {
     try {
-      await axiosClient.put("/api/auth/reset-password", params);
+      await axiosClient.put('/api/auth/reset-password', params)
     } catch {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const getProfile = async () => {
     try {
-      const res = await axiosClient.get("/api/users/view-profile");
-      setUser(res.data);
-      return res.data;
+      const res = await axiosClient.get('/api/users/view-profile')
+      setUser(res.data)
+      return res.data
     } catch {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleLogout = () => {
     try {
       axiosClient.patch(authConfig.logoutEndpoint).then(() => {
-        Cookies.remove("accessToken");
-        Cookies.remove("refreshToken");
-        setUser(null);
-        router.push("/");
-      });
+        Cookies.remove('accessToken')
+        Cookies.remove('refreshToken')
+        setUser(null)
+        router.push('/')
+      })
     } catch {
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      setUser(null);
-      router.push("/");
+      Cookies.remove('accessToken')
+      Cookies.remove('refreshToken')
+      setUser(null)
+      router.push('/')
     }
-  };
+  }
 
-  console.log("user", user);
+  console.log('user', user)
 
   const values = {
     user,
@@ -203,9 +204,9 @@ const AuthProvider = ({ children }: Props) => {
     forgetPassword: handleForgetPassword,
     resetPassword: handleResetPassword,
     getProfile: getProfile,
-  };
+  }
 
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
-};
+  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
+}
 
-export { AuthContext, AuthProvider };
+export { AuthContext, AuthProvider }

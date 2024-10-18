@@ -96,9 +96,6 @@ const LoginModal = () => {
                     placeholder="Nhập vào mật khẩu"
                   />
                 </Form.Item>
-                <Form.Item name="rememberMe" valuePropName="checked">
-                  <Checkbox>Ghi nhớ đăng nhập</Checkbox>
-                </Form.Item>
                 <Form.Item>
                   <Button
                     block
@@ -125,12 +122,23 @@ const LoginModal = () => {
                 </Link>
               </p>
             </div>
-            <div className="flex items-center mt-2 w-10/12">
+            <div className="mb-3">
+              <p>
+                <Link
+                  href="/forgot-password"
+                  className="text-green-800 font-bold"
+                  onClick={closeModal}
+                >
+                  Quên mật khẩu?
+                </Link>
+              </p>
+            </div>
+            <div className="flex items-center w-10/12">
               <div className="border-t border border-gray-400 flex-grow"></div>
               <div className="px-3 text-gray-800 font-bold">Hoặc</div>
               <div className="border-t border border-gray-400 flex-grow"></div>
             </div>
-            <div className="login-with-google">
+            <div className="login-with-google my-2">
               <Link href="https://share2receive-server.onrender.com/api/auth/google">
                 <button className="w-fit bg-white border px-6 py-4 rounded-md flex items-center justify-center">
                   <Image

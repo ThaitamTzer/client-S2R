@@ -1,64 +1,64 @@
-"use client";
-import { Form, Button, Input } from "antd";
-import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
-import Cookies from "js-cookie";
+'use client'
+import { Form, Button, Input } from 'antd'
+import { useAuth } from '@/hooks/useAuth'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { v4 as uuidv4 } from 'uuid'
+import Cookies from 'js-cookie'
 
 interface formData {
-  email: string;
+  email: string
 }
 
 const ForgotPage = () => {
-  const [form] = Form.useForm();
-  const { forgetPassword, user, setLoading, loading } = useAuth();
-  const router = useRouter();
+  const [form] = Form.useForm()
+  const { forgetPassword, user, setLoading, loading } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.push('/')
     }
-  }, [user, router]);
+  }, [user, router])
 
   const onFinish = (values: formData) => {
-    setLoading(true);
+    setLoading(true)
     try {
       forgetPassword(values)
         .then(() => {
-          Cookies.set("resetPasswordAllowed", uuidv4());
-          setLoading(false);
+          Cookies.set('resetPasswordAllowed', uuidv4())
+          setLoading(false)
           setTimeout(() => {
-            router.push("/reset-password");
-          }, 1000);
+            router.push('/reset-password')
+          }, 1000)
         })
         .catch(() => {
-          setLoading(false);
+          setLoading(false)
           form.setFields([
             {
-              name: "email",
-              errors: ["Email không tồn tại"],
+              name: 'email',
+              errors: ['Email không tồn tại'],
             },
-          ]);
-        });
+          ])
+        })
     } catch (error) {
-      console.log("error", error);
-      setLoading(false);
+      console.log('error', error)
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <>
       <div
         className="bg-cover bg-no-repeat w-full h-screen"
         style={{
-          backgroundImage: "url(/images/forest-bg.jpg)",
+          backgroundImage: 'url(/images/forest-bg.jpg)',
         }}
       >
         <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
-          <div className="w-full max-w-[590px] p-5 backdrop-blur-sm bg-white/50 shadow-xl rounded-md">
-            <div className="login-form-title text-white">
-              <h1 className="text-5xl pt-2 font-semibold text-white text-center ">
+          <div className="w-full max-w-[590px] p-5 bg-white shadow-xl rounded-md">
+            <div className="login-form-title">
+              <h1 className="text-5xl pt-2 font-semibold text-center ">
                 Quên mật khẩu
               </h1>
               <p className="text-center mt-4">
@@ -74,11 +74,11 @@ const ForgotPage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Email không được để trống",
+                        message: 'Email không được để trống',
                       },
                       {
-                        type: "email",
-                        message: "Email không hợp lệ",
+                        type: 'email',
+                        message: 'Email không hợp lệ',
                       },
                     ]}
                   >
@@ -102,7 +102,7 @@ const ForgotPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ForgotPage;
+export default ForgotPage
