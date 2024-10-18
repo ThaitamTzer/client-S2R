@@ -3,9 +3,8 @@ import { IconPlus, IconTrash } from '@tabler/icons-react'
 import { Button, Modal, Form, Input, Select, Radio, Image, Upload } from 'antd'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-
 import { useProductManagement } from '@/zustand/productManagement'
-import { addProduct, Product } from '@/types/users/productTypes'
+import { addProduct } from '@/types/users/productTypes'
 import { Grid, Group, Stepper } from '@mantine/core'
 import { sizes } from '@/metadata/sizeData'
 import { colorData } from '@/metadata/colorData'
@@ -67,43 +66,76 @@ export const AddProduct = () => {
 
   const onFinishCreate = () => {
     form.validateFields().then(() => {
-      const values: addProduct = {
-        ...form.getFieldsValue(),
-        status: 'active',
-        tags: form.getFieldValue('tags').split(' '),
-        price: Number(form.getFieldValue('price').replace(/\D/g, '')),
-        sizeVariants: form.getFieldValue('sizeVariants').map((sizeVariant: any) => ({
-          size: sizeVariant.size,
-          colors: sizeVariant.colors,
-          amount: sizeVariant.amount,
-        })),
-      }
-      productService
-        .addProduct(values)
-        .then((res) => {
-          toast.success('Thêm sản phẩm thành công!')
-          setActiveStep(1)
-          setProductId(res._id)
-          console.log(res)
-        })
-        .catch(() => {
-          toast.error('Thêm sản phẩm thất bại!')
-          setActiveStep(0)
-        })
+      setActiveStep(1)
     })
   }
 
   const onUploadImages = async () => {
+    const values: addProduct = {
+      ...form.getFieldsValue([
+        'productName',
+        'material',
+        'style',
+        'condition',
+        'categoryId',
+        'brandId',
+        'description',
+        'type',
+      ]),
+      status: 'active',
+      tags: form.getFieldValue('tags').split(' '),
+      price: Number(form.getFieldValue('price')?.replace(/\D/g, '')) || 0,
+      sizeVariants: form
+        .getFieldValue('sizeVariants')
+        .map((sizeVariant: { size: string; colors: string; amount: number }) => ({
+          size: sizeVariant.size,
+          colors: sizeVariant.colors,
+          amount: sizeVariant.amount,
+        })),
+    }
+    delete values.images
+
     const formData = new FormData()
     fileList.forEach((file) => {
       formData.append('images', file.originFileObj as File)
     })
 
+    console.log('values', values)
+
     try {
-      const response = await productService.uploadImage(productId, formData)
-      toast.success('Đăng tải hình ảnh thành công!')
-    } catch {
-      toast.error('Đăng tải hình ảnh thất bại!')
+      productService
+        .addProduct(values)
+        .then(async (res) => {
+          toast.success('Thêm sản phẩm thành công!')
+          setActiveStep(1)
+          setProductId(res._id)
+          try {
+            await productService.uploadImage(res._id, formData).then(() => {
+              setFileList([])
+              setActiveStep(0)
+              form.resetFields()
+              toggleAddProductModal()
+              toast.success('Đăng tải hình ảnh thành công!')
+            })
+          } catch {
+            toast.error('Đăng tải hình ảnh thất bại!')
+          }
+        })
+        .catch(async () => {
+          toast.error('Thêm sản phẩm thất bại!')
+          setActiveStep(0)
+          setTimeout(() => {
+            form.setFields([
+              {
+                name: 'productName',
+                errors: ['Tên sản phẩm đã tồn tại!'],
+              },
+            ])
+          }, 500)
+        })
+    } catch (error) {
+      console.log(error)
+      toast.error('Đã có lỗi xảy ra vui lòng thử lại sau!')
     }
   }
 
@@ -130,14 +162,17 @@ export const AddProduct = () => {
           iconSize={30}
           active={activeStep}
           onStepClick={setActiveStep}
-          // allowNextStepsSelect={false}
+          allowNextStepsSelect={false}
         >
           <Stepper.Step label="Thông tin sản phẩm" description="Thông tin về sản phẩm đăng tải">
             <Form
               form={form}
               layout="vertical"
-              validateTrigger="onBlur"
+              validateTrigger={['onBlur', 'onChange']}
               size="middle"
+              onChange={() => {
+                console.log('product', form.getFieldsValue())
+              }}
               initialValues={{
                 type: 'sale',
               }}
@@ -335,7 +370,7 @@ export const AddProduct = () => {
                   defaultValue={typeCheck}
                 >
                   <Radio value="sale">Bán</Radio>
-                  <Radio value="bater">Trao đổi</Radio>
+                  <Radio value="barter">Trao đổi</Radio>
                 </Radio.Group>
               </Form.Item>
               {typeCheck === 'sale' && (
@@ -345,8 +380,9 @@ export const AddProduct = () => {
                   rules={[
                     { required: true, message: 'Vui lòng nhập giá sản phẩm!' },
                     {
-                      validator: (_, value) => {
+                      validator: (_, value = '') => {
                         const numericPrice = Number(value.replace(/\D/g, ''))
+                        console.log(numericPrice)
                         if (numericPrice > 5000000) {
                           return Promise.reject(
                             new Error('Giá sản phẩm không được vượt quá 5 triệu!'),
@@ -413,11 +449,16 @@ export const AddProduct = () => {
                 <Input.TextArea placeholder="Nhập mô tả sản phẩm" />
               </Form.Item>
               <Grid justify="end" mt={15}>
-                <Button onClick={() => {
-                  toggleAddProductModal()
-                  setActiveStep(0)
-                  form.resetFields()
-                }} className="mr-2">Hủy</Button>
+                <Button
+                  onClick={() => {
+                    toggleAddProductModal()
+                    setActiveStep(0)
+                    form.resetFields()
+                  }}
+                  className="mr-2"
+                >
+                  Hủy
+                </Button>
 
                 <Button type="primary" onClick={onFinishCreate}>
                   Tiếp tục
@@ -462,6 +503,7 @@ export const AddProduct = () => {
                   </Upload>
                   {previewImage && (
                     <Image
+                      alt="preview"
                       wrapperStyle={{ display: 'none' }}
                       preview={{
                         visible: previewOpen,
@@ -474,7 +516,9 @@ export const AddProduct = () => {
                 </>
               </Form.Item>
               <Grid justify="end" mt={15}>
-                <Button className='mr-1' onClick={prevStep}>Quay lại</Button>
+                <Button className="mr-1" onClick={prevStep}>
+                  Quay lại
+                </Button>
                 <Button type="primary" htmlType="submit">
                   Hoàn tất
                 </Button>

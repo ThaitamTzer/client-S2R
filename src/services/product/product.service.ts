@@ -2,7 +2,7 @@ import axiosClient, { axiosUpload } from '@/lib/axios'
 import { ProductType, Product, addProduct } from '@/types/users/productTypes'
 
 const productService = {
-  getAll: async (
+  getAllProductUser: async (
     page?: number,
     limit?: number,
     searchKey?: string,
@@ -16,7 +16,7 @@ const productService = {
       ...(sortField && { sortField }),
       ...(sortOrder && { sortOrder }),
     }
-    const res: ProductType = await axiosClient.get('/api/product/list', {
+    const res: ProductType = await axiosClient.get('/api/product/list-product-of-user', {
       params,
     })
 
@@ -36,12 +36,9 @@ const productService = {
   },
 
   editStatus: async (productId: string, status: boolean) => {
-    const res = await axiosUpload.patch(
-      `/api/product/update-status/${productId}`,
-      {
-        status,
-      },
-    )
+    const res = await axiosUpload.patch(`/api/product/update-status/${productId}`, {
+      status,
+    })
 
     return res.data
   },
@@ -54,22 +51,16 @@ const productService = {
 
   // ** Upload Image
   uploadImage: async (productId: string, data: FormData) => {
-    const res = await axiosUpload.post(
-      `/api/product/upload-images/${productId}`,
-      data,
-    )
+    const res = await axiosUpload.post(`/api/product/upload-images/${productId}`, data)
 
     return res.data
   },
 
   // ** Delete Image
   deleteImage: async (productId: string, publicIds: string[]) => {
-    const res = await axiosUpload.patch(
-      `/api/product/delete-images/${productId}`,
-      {
-        publicIds,
-      },
-    )
+    const res = await axiosUpload.patch(`/api/product/delete-images/${productId}`, {
+      publicIds,
+    })
 
     return res.data
   },

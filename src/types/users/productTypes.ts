@@ -119,6 +119,7 @@ export type addProduct = {
   priceNew: number
   tags: string[]
   description: string
+  images?: string[]
 }
 
 export type ProductType = {
