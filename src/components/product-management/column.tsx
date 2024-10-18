@@ -4,6 +4,7 @@ import { Button, type TableProps } from 'antd'
 import Image from 'next/image'
 import { Product } from '@/types/users/productTypes'
 import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { useProductManagement } from '@/zustand/productManagement'
 
 export const columns: TableProps<Product>['columns'] = [
   {
@@ -51,14 +52,17 @@ export const columns: TableProps<Product>['columns'] = [
     render: (_, record: Product) => (
       <>
         <Button
-          onClick={() => console.log('Edit product: ', record)}
-          icon={<IconEdit />}
+          onClick={() => (
+            useProductManagement.getState().toggleEditProductModal(),
+            useProductManagement.getState().setProduct(record)
+          )}
+          icon={<IconEdit size={20} />}
           variant="text"
           color="default"
         />
         <Button
           onClick={() => console.log('Delete product: ', record)}
-          icon={<IconTrash />}
+          icon={<IconTrash size={20} />}
           variant="text"
           color="default"
         />

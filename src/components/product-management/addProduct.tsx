@@ -14,6 +14,8 @@ import { useState } from 'react'
 import { useClient } from '@/hooks/useClient'
 import productService from '@/services/product/product.service'
 import toast from 'react-hot-toast'
+import { mutate } from 'swr'
+import { useSearchParams } from 'next/navigation'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -26,6 +28,14 @@ const getBase64 = (file: FileType): Promise<string> =>
   })
 
 export const AddProduct = () => {
+  const param = useSearchParams()
+
+  const page = Number(param.get('page')) || 1
+  const limit = Number(param.get('limit')) || 10
+  const searchKey = param.get('searchKey') || ''
+  const sortField = param.get('sortField') || ''
+  const sortOrder = param.get('sortOrder') || ''
+
   const { categories, loading, brands } = useClient()
 
   const { openAddProductModal, toggleAddProductModal } = useProductManagement()
@@ -35,9 +45,6 @@ export const AddProduct = () => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [productId, setProductId] = useState('')
-
-  console.log('productId', productId)
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -108,7 +115,6 @@ export const AddProduct = () => {
         .then(async (res) => {
           toast.success('Thêm sản phẩm thành công!')
           setActiveStep(1)
-          setProductId(res._id)
           try {
             await productService.uploadImage(res._id, formData).then(() => {
               setFileList([])
@@ -116,6 +122,7 @@ export const AddProduct = () => {
               form.resetFields()
               toggleAddProductModal()
               toast.success('Đăng tải hình ảnh thành công!')
+              mutate(['/api/product', page, limit, searchKey, sortField, sortOrder])
             })
           } catch {
             toast.error('Đăng tải hình ảnh thất bại!')
@@ -214,72 +221,79 @@ export const AddProduct = () => {
                           Thêm size
                         </Button>
                       </Form.Item>
-                      {fields.map((field) => (
-                        <Group key={field.key}>
-                          <Form.Item
-                            {...field}
-                            name={[field.name, 'size']}
-                            fieldKey={['size']}
-                            label="Size"
-                            rules={[
-                              {
-                                required: true,
-                                message: 'Vui lòng nhập size!',
-                              },
-                            ]}
-                          >
-                            <Select
-                              placeholder="Chọn size"
-                              options={sizes.map((size) => ({
-                                label: size.name,
-                                value: size.value,
-                              }))}
-                            />
-                          </Form.Item>
+                      {fields.map((field, index) => (
+                        <>
+                          <div className="grid gap-2 grid-cols-5 items-center" key={field.key}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, 'size']}
+                              fieldKey={['size']}
+                              label={
+                                index === 0 ? 'Size' : '' // Ẩn label của size đầu tiên
+                              }
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập size!',
+                                },
+                              ]}
+                            >
+                              <Select
+                                placeholder="Chọn size"
+                                options={sizes.map((size) => ({
+                                  label: size.name,
+                                  value: size.value,
+                                }))}
+                              />
+                            </Form.Item>
 
-                          <Form.Item
-                            {...field}
-                            name={[field.name, 'colors']}
-                            fieldKey={['colors']}
-                            label="Màu sắc"
-                            rules={[
-                              {
-                                required: true,
-                                message: 'Vui lòng chọn màu sắc!',
-                              },
-                            ]}
-                          >
-                            <Select
-                              placeholder="Chọn màu sắc"
-                              options={colorData.map((color) => ({
-                                label: color.name,
-                                value: color.value,
-                              }))}
-                            />
-                          </Form.Item>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, 'colors']}
+                              fieldKey={['colors']}
+                              label={index === 0 ? 'Màu sắc' : ''}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn màu sắc!',
+                                },
+                              ]}
+                            >
+                              <Select
+                                placeholder="Chọn màu sắc"
+                                options={colorData.map((color) => ({
+                                  label: color.name,
+                                  value: color.value,
+                                }))}
+                              />
+                            </Form.Item>
 
-                          <Form.Item
-                            {...field}
-                            name={[field.name, 'amount']}
-                            fieldKey={['amount']}
-                            label="Số lượng"
-                            rules={[
-                              {
-                                required: true,
-                                message: 'Vui lòng nhập số lượng!',
-                              },
-                            ]}
-                          >
-                            <Input type="number" />
-                          </Form.Item>
-                          <Button
-                            type="link"
-                            onClick={() => remove(field.name)}
-                            icon={<IconTrash />}
-                          >
-                            Xóa
-                          </Button>
-                        </Group>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, 'amount']}
+                              fieldKey={['amount']}
+                              label={index === 0 ? 'Số lượng' : ''}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập số lượng!',
+                                },
+                              ]}
+                            >
+                              <Input type="number" />
+                            </Form.Item>
+                            {fields.length > 1 && (
+                              <Button
+                                className={`justify-self-start justify-items-start ${index !== 0 ? 'mb-5' : ''}`}
+                                type="link"
+                                onClick={() => remove(field.name)}
+                                icon={<IconTrash />}
+                              >
+                                Xóa
+                              </Button>
+                            )}
+                          </div>
+                        </>
                       ))}
 
                       <Form.ErrorList className="text-red" errors={errors} />
@@ -494,10 +508,28 @@ export const AddProduct = () => {
                     //     console.error(err)
                     //   }
                     // }}
-                    listType="picture"
+                    listType="picture-card"
+                    multiple
                     fileList={fileList}
                     onPreview={handlePreview}
                     onChange={handleChange}
+                    beforeUpload={(file) => {
+                      if (fileList.length >= 10) {
+                        toast.error('Bạn chỉ có thể tải lên tối đa 10 hình ảnh!')
+                        return Upload.LIST_IGNORE // Ngăn upload thêm ảnh mà không hiển thị lỗi mặc định
+                      }
+                      if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+                        toast.error('Chỉ được phép upload ảnh định dạng JPG hoặc PNG!')
+                        return Upload.LIST_IGNORE
+                      }
+                      if (file.size > 2 * 1024 * 1024) {
+                        toast.error('Hình ảnh không được vượt quá 2MB!')
+                        return Upload.LIST_IGNORE
+                      }
+                      return true // Cho phép upload nếu đạt điều kiện
+                    }}
+                    accept=".jpg,.jpeg,.png"
+                    maxCount={10}
                   >
                     {fileList.length >= 10 ? null : uploadButton}
                   </Upload>
