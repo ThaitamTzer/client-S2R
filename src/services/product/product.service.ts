@@ -1,5 +1,5 @@
-import axiosClient, { axiosUpload } from "@/lib/axios";
-import { ProductType, Product } from "@/types/users/productTypes";
+import axiosClient, { axiosUpload } from '@/lib/axios'
+import { ProductType, Product, addProduct } from '@/types/users/productTypes'
 
 const productService = {
   getAll: async (
@@ -15,24 +15,24 @@ const productService = {
       ...(searchKey && { searchKey }),
       ...(sortField && { sortField }),
       ...(sortOrder && { sortOrder }),
-    };
-    const res: ProductType = await axiosClient.get("/api/product/list", {
+    }
+    const res: ProductType = await axiosClient.get('/api/product/list', {
       params,
-    });
+    })
 
-    return res;
+    return res
   },
 
-  addProduct: async (data: Product) => {
-    const res = await axiosUpload.post("/api/product", data);
+  addProduct: async (data: addProduct) => {
+    const res = await axiosClient.post('/api/product', data)
 
-    return res.data;
+    return res.data
   },
 
   editProduct: async (productId: string, values: Product) => {
-    const res = await axiosUpload.put(`/api/product/${productId}`, values);
+    const res = await axiosUpload.put(`/api/product/${productId}`, values)
 
-    return res.data;
+    return res.data
   },
 
   editStatus: async (productId: string, status: boolean) => {
@@ -41,15 +41,15 @@ const productService = {
       {
         status,
       },
-    );
+    )
 
-    return res.data;
+    return res.data
   },
 
   deleteProduct: async (productId: string) => {
-    const res = await axiosUpload.delete(`/api/product/${productId}`);
+    const res = await axiosUpload.delete(`/api/product/${productId}`)
 
-    return res.data;
+    return res.data
   },
 
   // ** Upload Image
@@ -57,9 +57,9 @@ const productService = {
     const res = await axiosUpload.post(
       `/api/product/upload-images/${productId}`,
       data,
-    );
+    )
 
-    return res.data;
+    return res.data
   },
 
   // ** Delete Image
@@ -69,10 +69,10 @@ const productService = {
       {
         publicIds,
       },
-    );
+    )
 
-    return res.data;
+    return res.data
   },
-};
+}
 
-export default productService;
+export default productService

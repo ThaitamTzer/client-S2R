@@ -20,6 +20,7 @@ import { ConfigProvider } from 'antd'
 import { themeAntProvider } from '@/components/themeProvider'
 import { Toaster } from 'react-hot-toast'
 import { Suspense } from 'react'
+import { ClientProvider } from '@/contexts/ClientContext'
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -60,22 +61,24 @@ export default function RootLayout({
       <body className={`antialiased relative ${montserrat.className}`}>
         <Suspense>
           <AuthProvider>
-            <ConfigProvider theme={themeAntProvider}>
-              <AntdRegistry>
-                <MantineProvider theme={theme}>
-                  <Header />
-                  <main
-                    className={`relative mt-16 h-full min-h-screen scroll-smooth  ${montserrat.className}`}
-                  >
-                    <LoginModal />
-                    <Toaster position="top-right" />
-                    {children}
-                    <ScrollingUp />
-                  </main>
-                  <Footer />
-                </MantineProvider>
-              </AntdRegistry>
-            </ConfigProvider>
+            <ClientProvider>
+              <ConfigProvider theme={themeAntProvider}>
+                <AntdRegistry>
+                  <MantineProvider theme={theme}>
+                    <Header />
+                    <main
+                      className={`relative mt-16 h-full min-h-screen scroll-smooth  ${montserrat.className}`}
+                    >
+                      <LoginModal />
+                      <Toaster position="top-right" />
+                      {children}
+                      <ScrollingUp />
+                    </main>
+                    <Footer />
+                  </MantineProvider>
+                </AntdRegistry>
+              </ConfigProvider>
+            </ClientProvider>
           </AuthProvider>
         </Suspense>
       </body>
