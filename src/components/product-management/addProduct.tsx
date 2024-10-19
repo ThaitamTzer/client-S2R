@@ -174,7 +174,7 @@ export const AddProduct = () => {
           <Stepper.Step label="Thông tin sản phẩm" description="Thông tin về sản phẩm đăng tải">
             <Form
               form={form}
-              layout="vertical"
+              layout="horizontal"
               validateTrigger={['onBlur', 'onChange']}
               size="middle"
               onChange={() => {
@@ -372,21 +372,33 @@ export const AddProduct = () => {
                   />
                 </Form.Item>
               </div>
-              <Form.Item
-                name="type"
-                label="Loại sản phẩm"
-                rules={[{ required: true, message: 'Vui lòng chọn loại sản phẩm!' }]}
-              >
-                <Radio.Group
-                  onChange={(e) => {
-                    setTypeCheck(e.target.value)
-                  }}
-                  defaultValue={typeCheck}
+              <div className="w-full grid grid-flow-col ">
+                <Form.Item
+                  name="type"
+                  label="Loại sản phẩm"
+                  rules={[{ required: true, message: 'Vui lòng chọn loại sản phẩm!' }]}
                 >
-                  <Radio value="sale">Bán</Radio>
-                  <Radio value="barter">Trao đổi</Radio>
-                </Radio.Group>
-              </Form.Item>
+                  <Radio.Group
+                    onChange={(e) => {
+                      setTypeCheck(e.target.value)
+                    }}
+                  >
+                    <Radio value="sale">Bán</Radio>
+                    <Radio value="barter">Trao đổi</Radio>
+                  </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                  name="status"
+                  label="Trạng thái"
+                  rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
+                >
+                  <Radio.Group>
+                    <Radio value="active">Kích hoạt</Radio>
+                    <Radio value="inactive">Không kích hoạt</Radio>
+                    <Radio value="suspend">Tạm dừng</Radio>
+                  </Radio.Group>
+                </Form.Item>
+              </div>
               {typeCheck === 'sale' && (
                 <Form.Item
                   name="price"
