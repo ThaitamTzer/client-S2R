@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button, Checkbox, Form, Input, Radio } from 'antd'
+import { Button, Checkbox, Form, Radio } from 'antd'
 import { Modal, Stepper, Group } from '@mantine/core'
 import { zodiacData } from '@/metadata/zodiacData'
 import { clothingStylesData } from '@/metadata/styleData'
@@ -67,7 +67,7 @@ const FormStyleUser = () => {
     setDisabled(true)
   }
 
-  const onFinishSurvey = (values: string) => {
+  const onFinishSurvey = () => {
     form.validateFields().then(() => {
       try {
         userService
@@ -119,9 +119,7 @@ const FormStyleUser = () => {
           <Modal.Header className="w-full block pt-0">
             <Modal.Title>
               <div className="text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center text-center">
-                <h1 className="uppercase">
-                  Hãy cho chúng tôi biết sở thích của bạn.
-                </h1>
+                <h1 className="uppercase">Hãy cho chúng tôi biết sở thích của bạn.</h1>
               </div>
             </Modal.Title>
           </Modal.Header>
@@ -133,21 +131,12 @@ const FormStyleUser = () => {
               layout="vertical"
               initialValues={{ age: '', email: '', color: [] }}
             >
-              <Stepper
-                active={activeStep}
-                onStepClick={setActiveStep}
-                allowNextStepsSelect={false}
-              >
-                <Stepper.Step
-                  label="Tìm hiểu vể bạn"
-                  description="Một số thông tin cơ bản"
-                >
+              <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
+                <Stepper.Step label="Tìm hiểu vể bạn" description="Một số thông tin cơ bản">
                   <Form.Item
                     label="Độ tuổi của bạn"
                     name="age"
-                    rules={[
-                      { required: true, message: 'Vui lòng chọn 1 độ tuổi!' },
-                    ]}
+                    rules={[{ required: true, message: 'Vui lòng chọn 1 độ tuổi!' }]}
                   >
                     <Radio.Group className="radio-custom display-flex">
                       <Radio className="w-[100px] h-[40px]" value="16-20">
@@ -249,11 +238,7 @@ const FormStyleUser = () => {
                       },
                     ]}
                   >
-                    <Button
-                      variant="text"
-                      className="border-none mb-3"
-                      onClick={handleResetColors}
-                    >
+                    <Button variant="text" className="border-none mb-3" onClick={handleResetColors}>
                       Làm mới
                     </Button>
                     <Checkbox.Group
@@ -262,11 +247,7 @@ const FormStyleUser = () => {
                       onChange={handleColorSelect}
                     >
                       {colorData.map((color) => (
-                        <Checkbox
-                          key={color.value}
-                          value={color.value}
-                          className="card-checkbox"
-                        >
+                        <Checkbox key={color.value} value={color.value} className="card-checkbox">
                           <div className="card-content flex items-center">
                             <div className="w-1/2 ml-1">
                               <p className="text-black">{color.name}</p>
@@ -335,11 +316,7 @@ const FormStyleUser = () => {
                   >
                     <Checkbox.Group className="checkbox-custom checkbox-material display-flex flex-wrap gap-2">
                       {sizes.map((size) => (
-                        <Checkbox
-                          key={size.id}
-                          value={size.value}
-                          className="card-checkbox"
-                        >
+                        <Checkbox key={size.id} value={size.value} className="card-checkbox">
                           <div className="">
                             <div className="w-full">
                               <p className="text-black mx-3">{size.name}</p>
@@ -361,11 +338,7 @@ const FormStyleUser = () => {
                   >
                     <Checkbox.Group className="checkbox-custom checkbox-material display-flex flex-wrap gap-2">
                       {hobbies.map((hobby) => (
-                        <Checkbox
-                          key={hobby.id}
-                          value={hobby.value}
-                          className="card-checkbox"
-                        >
+                        <Checkbox key={hobby.id} value={hobby.value} className="card-checkbox">
                           <div className="">
                             <div className="w-full">
                               <p className="text-black">{hobby.name}</p>

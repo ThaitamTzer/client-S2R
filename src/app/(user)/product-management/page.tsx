@@ -32,6 +32,7 @@ const ProductManagementPage = () => {
         .then(() => {
           toast.success('Xóa sản phẩm thành công')
           toggleDeleteProductModal()
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setProduct({} as any)
           mutate(['/api/product', page, limit, searchKey, sortField, sortOrder])
         })

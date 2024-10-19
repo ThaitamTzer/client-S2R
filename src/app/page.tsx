@@ -19,12 +19,12 @@ export default function Home() {
       <FormStyleUser />
       <Navigation navLink={TypeCategory} />
       <HomePageTitle />
-      {/* <HomePageHero /> */}
+      <HomePageHero />
       <HomePagePickPrice />
       <HomePageManFashion />
       <HomePageFemale />
       <HomePageUnisex />
-      {/* <HomePageFavorate /> */}
+      <HomePageFavorate />
       <HomePageSamePrice />
       <div className="container mx-auto px-32 text-center text-2xl font-medium text-green-800 uppercase mt-8">
         <h1>
