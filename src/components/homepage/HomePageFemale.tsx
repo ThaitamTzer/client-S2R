@@ -72,46 +72,48 @@ export const HomePageFemale = () => {
                   onMouseEnter={autoplay.current.stop}
                   onMouseLeave={autoplay.current.reset}
                 >
-                  {donus.map((item) => (
-                    <>
-                      <Carousel.Slide key={item._id}>
-                        <div className="card w-full h-full bg-white shadow-md rounded-md">
-                          <div className="relative card-image w-full h-[340px] overflow-hidden rounded-t-md">
-                            {item?.type === 'barter' && (
-                              <div className="absolute top-5 right-5 z-overlay">
-                                <Badge color="blue">Trao đổi</Badge>
-                              </div>
-                            )}
-                            <div className="absolute w-full h-full">
-                              <Image
-                                src={item.imgUrls[0]}
-                                alt={item.imgUrls[0]}
-                                width={500}
-                                height={350}
-                                className="object-cover w-full h-full"
-                              />
-                            </div>
-                          </div>
-                          <div className="container p-3 mx-auto">
-                            <div className="card-title w-full">
-                              <h1 className="text-xl font-semibold text-wrap hover:text-green-800 transition-all hover:">
-                                {item?.productName.split(' THE C.I.U')[0]}
-                              </h1>
-                            </div>
-                            <div className="text-base font-medium">Kích thước: S</div>
-                            <div className="text-xl font-semibold text-green-800">
-                              {item.type === 'sale' ? (
-                                <span>{formatter.format(item.price)} đ</span>
-                              ) : (
-                                <p>Trao đổi</p>
+                  {donus.map((item) => {
+                    return (
+                      <>
+                        <Carousel.Slide key={item._id}>
+                          <div className="card w-full h-full bg-white shadow-md rounded-md">
+                            <div className="relative card-image w-full h-[340px] overflow-hidden rounded-t-md">
+                              {item?.type === 'barter' && (
+                                <div className="absolute top-5 right-5 z-overlay">
+                                  <Badge color="blue">Trao đổi</Badge>
+                                </div>
                               )}
-                              <p className="text-sm underline">Xem ngay</p>
+                              <div className="absolute w-full h-full">
+                                <Image
+                                  src={item.imgUrls[0]}
+                                  alt={item.imgUrls[0]}
+                                  width={500}
+                                  height={350}
+                                  className="object-cover w-full h-full"
+                                />
+                              </div>
+                            </div>
+                            <div className="container p-3 mx-auto">
+                              <div className="card-title w-full">
+                                <h1 className="text-xl font-semibold text-wrap hover:text-green-800 transition-all hover:">
+                                  {item?.productName.split(' THE C.I.U')[0]}
+                                </h1>
+                              </div>
+                              <div className="text-base font-medium">Kích thước: S</div>
+                              <div className="text-xl font-semibold text-green-800">
+                                {item.type === 'sale' ? (
+                                  <span>{formatter.format(item.price)} đ</span>
+                                ) : (
+                                  <p>Trao đổi</p>
+                                )}
+                                <p className="text-sm underline">Xem ngay</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </Carousel.Slide>
-                    </>
-                  ))}
+                        </Carousel.Slide>
+                      </>
+                    )
+                  })}
                 </Carousel>
               </div>
             </div>
