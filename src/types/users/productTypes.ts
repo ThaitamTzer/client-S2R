@@ -128,3 +128,36 @@ export type ProductType = {
   data: Product[]
   total: 1
 }
+
+export type ProductsClient = {
+  _id: string
+  productName: string
+  imgUrls: string[]
+  material: string
+  userId: {
+    _id: string
+    firstname: string
+    lastname: string
+  }
+  categoryId: {
+    _id: string
+    name: string
+  }
+  brandId: {
+    _id: string
+    name: string
+  }
+  status: string
+  type: 'sale' | 'barter'
+  price: number
+  tags: string[]
+  condition: string
+  style: string
+  description: string
+  slug: string
+}
+
+export type ProductSClientList = {
+  data: ProductsClient[]
+  total: 1
+}

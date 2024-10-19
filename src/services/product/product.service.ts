@@ -1,5 +1,5 @@
 import axiosClient, { axiosUpload } from '@/lib/axios'
-import { ProductType, Product, addProduct } from '@/types/users/productTypes'
+import { ProductType, Product, addProduct, ProductSClientList } from '@/types/users/productTypes'
 
 const productService = {
   getAllProductUser: async (
@@ -17,6 +17,18 @@ const productService = {
       ...(sortOrder && { sortOrder }),
     }
     const res: ProductType = await axiosClient.get('/api/product/list-product-of-user', {
+      params,
+    })
+
+    return res
+  },
+
+  getAllProdClient: async (page?: number, limit?: number): Promise<ProductSClientList> => {
+    const params = {
+      ...(page && { page }),
+      ...(limit && { limit }),
+    }
+    const res: ProductSClientList = await axiosClient.get('/api/product/list-product-for-client', {
       params,
     })
 

@@ -1,45 +1,33 @@
+'use client'
+
 import { Carousel } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import style from '@/styles/card.module.css'
-import axios from 'axios'
-
-type Image = {
-  small: string
-  large: string
-}
-
-type Item = {
-  id: number
-  name: string
-  image: string
-  lazy_image: string
-  promotion_price: number
-  images: Image[]
-  original_price: number
-  slug: string
-  discount_percent: number
-  discount_amount: number
-}
+import productService from '@/services/product/product.service'
+import useSWR from 'swr'
+import { useSearchParams } from 'next/navigation'
+import { ProductsClient } from '@/types/users/productTypes'
+import { Badge } from '@mantine/core'
 
 export const HomePageFemale = () => {
+  const param = useSearchParams()
+  const [donus, setDonus] = useState<ProductsClient[]>([])
+
+  const page = Number(param.get('page')) || 1
+  const limit = Number(param.get('limit')) || 10
+
+  useSWR(['productsClient', page, limit], () => productService.getAllProdClient(page, limit), {
+    revalidateOnFocus: false,
+    onSuccess: (data) => setDonus(data.data || []),
+  })
+
   const formatter = new Intl.NumberFormat('vi-VN', {
     style: 'decimal',
     minimumFractionDigits: 0,
   })
-  const [donus, setDonus] = useState<Item[]>([])
-
-  useEffect(() => {
-    axios
-      .get(
-        'https://api.theciu.vn/api/products/paginate?pageSize=12&type=on_sale',
-      )
-      .then((res) => {
-        setDonus(res.data.data?.items)
-      })
-  }, ['https://api.theciu.vn/api/products/paginate?pageSize=12&type=on_sale'])
 
   const autoplay = useRef(Autoplay({ delay: 2000 }))
 
@@ -86,13 +74,18 @@ export const HomePageFemale = () => {
                 >
                   {donus.map((item) => (
                     <>
-                      <Carousel.Slide key={item.id}>
+                      <Carousel.Slide key={item._id}>
                         <div className="card w-full h-full bg-white shadow-md rounded-md">
                           <div className="relative card-image w-full h-[340px] overflow-hidden rounded-t-md">
+                            {item?.type === 'barter' && (
+                              <div className="absolute top-5 right-5 z-overlay">
+                                <Badge color="blue">Trao đổi</Badge>
+                              </div>
+                            )}
                             <div className="absolute w-full h-full">
                               <Image
-                                src={item.image}
-                                alt={item.slug}
+                                src={item.imgUrls[0]}
+                                alt={item.imgUrls[0]}
                                 width={500}
                                 height={350}
                                 className="object-cover w-full h-full"
@@ -102,14 +95,16 @@ export const HomePageFemale = () => {
                           <div className="container p-3 mx-auto">
                             <div className="card-title w-full">
                               <h1 className="text-xl font-semibold text-wrap hover:text-green-800 transition-all hover:">
-                                {item?.name.split(' THE C.I.U')[0]}
+                                {item?.productName.split(' THE C.I.U')[0]}
                               </h1>
                             </div>
-                            <div className="text-base font-medium">
-                              Kích thước: S
-                            </div>
+                            <div className="text-base font-medium">Kích thước: S</div>
                             <div className="text-xl font-semibold text-green-800">
-                              <p>{formatter.format(item.original_price)}đ</p>
+                              {item.type === 'sale' ? (
+                                <span>{formatter.format(item.price)} đ</span>
+                              ) : (
+                                <p>Trao đổi</p>
+                              )}
                               <p className="text-sm underline">Xem ngay</p>
                             </div>
                           </div>
