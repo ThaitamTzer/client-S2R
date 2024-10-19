@@ -28,11 +28,11 @@ const LoginPage = () => {
       form.setFields([
         {
           name: 'account',
-          errors: ['Email hoặc mật khẩu không chính xác'],
+          errors: ['Email hoặc mật khẩu không chính xác!'],
         },
         {
           name: 'password',
-          errors: ['Email hoặc mật khẩu không chính xác'],
+          errors: ['Email hoặc mật khẩu không chính xác!'],
         },
       ])
     })
@@ -49,9 +49,7 @@ const LoginPage = () => {
         <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
           <div className="w-full max-w-[590px] p-5 bg-white shadow-xl rounded-md">
             <div className="login-form-title">
-              <h1 className="text-5xl pt-5 font-semibold text-center">
-                Đăng nhập
-              </h1>
+              <h1 className="text-5xl pt-5 font-semibold text-center">Đăng nhập</h1>
             </div>
             <div className="login-form-content mt-5">
               <div className="w-[60%] mx-auto form-login">
@@ -82,18 +80,10 @@ const LoginPage = () => {
                       },
                     ]}
                   >
-                    <Input.Password
-                      size="large"
-                      placeholder="Nhập vào mật khẩu"
-                    />
+                    <Input.Password size="large" placeholder="Nhập vào mật khẩu" />
                   </Form.Item>
                   <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="w-full"
-                      size="large"
-                    >
+                    <Button type="primary" htmlType="submit" className="w-full" size="large">
                       Đăng nhập
                     </Button>
                   </Form.Item>
@@ -125,12 +115,7 @@ const LoginPage = () => {
                 className="bg-white w-1/2 mx-auto px-6 py-4 rounded-md border block"
               >
                 <div className="flex items-center justify-center">
-                  <Image
-                    src="/images/gmail-icon.png"
-                    alt="google-icon"
-                    width={30}
-                    height={30}
-                  />
+                  <Image src="/images/gmail-icon.png" alt="google-icon" width={30} height={30} />
                   <span className="ml-2">Đăng nhập với Google</span>
                 </div>
               </Link>
