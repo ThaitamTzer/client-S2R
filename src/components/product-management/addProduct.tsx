@@ -5,7 +5,7 @@ import type { GetProp, UploadFile, UploadProps } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useProductManagement } from '@/zustand/productManagement'
 import { addProduct } from '@/types/users/productTypes'
-import { Grid, Group, Stepper } from '@mantine/core'
+import { Grid, Stepper } from '@mantine/core'
 import { sizes } from '@/metadata/sizeData'
 import { colorData } from '@/metadata/colorData'
 import { materialData } from '@/metadata/materialData'
@@ -490,24 +490,6 @@ export const AddProduct = () => {
               >
                 <>
                   <Upload
-                    // customRequest={async ({ file, onSuccess, onError }) => {
-                    //   try {
-                    //     const formData = new FormData()
-                    //     formData.append('images', file as File)
-                    //     const response = await productService.uploadImage(productId, formData)
-                    //     onSuccess?.(response) // Call success if upload was successful
-                    //   } catch (err) {
-                    //     console.error(err)
-                    //   }
-                    // }}
-                    // onRemove={async (file) => {
-                    //   try {
-                    //     const response = await productService.deleteImage(productId, [file.uid])
-                    //     console.log(response)
-                    //   } catch (err) {
-                    //     console.error(err)
-                    //   }
-                    // }}
                     listType="picture-card"
                     multiple
                     fileList={fileList}

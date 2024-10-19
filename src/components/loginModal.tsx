@@ -4,7 +4,7 @@ import { useLoginModal } from '@/zustand/loginModal'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
-import { Button, Form, Input, Checkbox } from 'antd'
+import { Button, Form, Input } from 'antd'
 
 interface formData {
   account: string
@@ -45,13 +45,7 @@ const LoginModal = () => {
         <Modal.Header className="w-full block">
           <Modal.Title>
             <div className="text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center">
-              <Image
-                src={'/images/lock.svg'}
-                alt="Lock"
-                width={80}
-                height={80}
-                loading="lazy"
-              />
+              <Image src={'/images/lock.svg'} alt="Lock" width={80} height={80} loading="lazy" />
               <h1 className="uppercase">Tham gia cùng Share2Recive</h1>
             </div>
           </Modal.Title>
@@ -75,11 +69,7 @@ const LoginModal = () => {
                     },
                   ]}
                 >
-                  <Input
-                    name="account"
-                    size="large"
-                    placeholder="Nhập vào email"
-                  />
+                  <Input name="account" size="large" placeholder="Nhập vào email" />
                 </Form.Item>
                 <Form.Item
                   name="password"
@@ -91,10 +81,7 @@ const LoginModal = () => {
                     },
                   ]}
                 >
-                  <Input.Password
-                    size="large"
-                    placeholder="Nhập vào mật khẩu"
-                  />
+                  <Input.Password size="large" placeholder="Nhập vào mật khẩu" />
                 </Form.Item>
                 <Form.Item>
                   <Button
@@ -113,11 +100,7 @@ const LoginModal = () => {
             <div className="mb-3">
               <p>
                 Bạn chưa có tài khoản?{' '}
-                <Link
-                  href="/register"
-                  className="text-green-800 font-bold"
-                  onClick={closeModal}
-                >
+                <Link href="/register" className="text-green-800 font-bold" onClick={closeModal}>
                   Đăng ký ngay
                 </Link>
               </p>

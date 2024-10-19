@@ -1,10 +1,20 @@
 'use client'
 
-import { Button, type TableProps } from 'antd'
+import { Button, Popover, type TableProps } from 'antd'
 import Image from 'next/image'
 import { Product } from '@/types/users/productTypes'
 import { IconEdit, IconTrash } from '@tabler/icons-react'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import { useProductManagement } from '@/zustand/productManagement'
+
+const formatDate = (date: string | Date) => {
+  const d = new Date(date)
+  return d.toLocaleDateString('vi-VN')
+}
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'decimal' }).format(price)
+}
 
 export const columns: TableProps<Product>['columns'] = [
   {
@@ -38,13 +48,94 @@ export const columns: TableProps<Product>['columns'] = [
     dataIndex: 'price',
     key: 'price',
     sorter: true,
+    render: (_, record: Product) => <>{formatPrice(record.price)} VNĐ</>,
   },
   {
     title: 'Trạng thái',
     dataIndex: 'status',
     key: 'status',
     sorter: true,
-    render: (_, record: Product) => <>{record?.status === 'active' ? 'Đang bán' : 'Ngừng bán'}</>,
+    render: (_, record: Product) => (
+      <>
+        {record.status === 'active' && 'Hoạt động'}
+        {record.status === 'inactive' && 'Không hoạt động'}
+        {record.status === 'suspend' && 'Tạm ngưng'}
+      </>
+    ),
+  },
+  {
+    title: 'Phê duyệt',
+    dataIndex: 'approved',
+    key: 'approved',
+    render: (_, record: Product) => (
+      <>
+        {record.approved.approveStatus === 'approved' && (
+          <>
+            <div className="flex items-center">
+              <span className="text-green-900">Đã duyệt</span>
+              <Popover
+                title="Thông tin phê duyệt"
+                placement="bottom"
+                content={
+                  <>
+                    <p>
+                      <span className="font-semibold">Ngày duyệt:</span>{' '}
+                      {formatDate(record.approved.date)}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Người duyệt:</span>{' '}
+                      {record.approved.decisionBy}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Mô tả:</span> {record.approved.description}
+                    </p>
+                  </>
+                }
+              >
+                <Button size="small" type="text" shape="circle" icon={<InfoCircleOutlined />} />
+              </Popover>
+            </div>
+          </>
+        )}
+
+        {record.approved.approveStatus === 'pending' && (
+          <>
+            <div className="flex items-center">
+              <span className="text-yellow-500">Chờ duyệt</span>
+            </div>
+          </>
+        )}
+
+        {record.approved.approveStatus === 'rejected' && (
+          <>
+            <div className="flex items-center">
+              <span className="text-red-900">Từ chối</span>
+              <Popover
+                title="Thông tin phê duyệt"
+                placement="bottom"
+                content={
+                  <>
+                    <p>
+                      <span className="font-semibold">Ngày duyệt:</span>{' '}
+                      {formatDate(record.approved.date)}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Người duyệt:</span>{' '}
+                      {record.approved.decisionBy}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Mô tả:</span> {record.approved.description}
+                    </p>
+                  </>
+                }
+              >
+                <Button size="small" type="text" shape="circle" icon={<InfoCircleOutlined />} />
+              </Popover>
+            </div>
+          </>
+        )}
+      </>
+    ),
   },
   {
     dataIndex: 'action',
@@ -61,7 +152,10 @@ export const columns: TableProps<Product>['columns'] = [
           color="default"
         />
         <Button
-          onClick={() => console.log('Delete product: ', record)}
+          onClick={() => (
+            useProductManagement.getState().toggleDeleteProductModal(),
+            useProductManagement.getState().setProduct(record)
+          )}
           icon={<IconTrash size={20} />}
           variant="text"
           color="default"

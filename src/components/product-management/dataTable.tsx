@@ -84,7 +84,7 @@ export const DataTable = () => {
   const { data: products, isLoading } = useSWR(
     ['/api/product', page, limit, searchKey, sortField, sortOrder],
     () => productService.getAllProductUser(page, limit, searchKey, sortField, sortOrder),
-    { keepPreviousData: true, onSuccess: () => preloadPages(page) },
+    { onSuccess: () => preloadPages(page) },
   )
 
   return (
@@ -109,6 +109,7 @@ export const DataTable = () => {
         scroll={{ y: 100 * 5 }}
         onChange={handleTableChange} // Kết hợp cả phân trang và sắp xếp
         pagination={{
+          locale: { items_per_page: '/ 1 Trang' },
           current: page,
           pageSize: limit,
           total: products?.total,

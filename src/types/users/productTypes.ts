@@ -67,14 +67,14 @@ export type SizeVariant = {
 }
 
 export type Approved = {
-  approveStatus: ApproveStatusE
+  approveStatus: 'pending' | 'approved' | 'rejected'
   date: Date | string
   decisionBy: string
   description: string
   _id: string
 }
 
-export type Status = 'active' | 'inactive'
+export type Status = 'active' | 'inactive' | 'suspend'
 
 export type Product = {
   _id: string
@@ -84,7 +84,9 @@ export type Product = {
   material: MaterialE
   userId: string
   categoryId: string
+  condition: string
   brandId: string
+  description: string
   isDeleted: boolean
   approved: Approved
   status: Status

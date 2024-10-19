@@ -30,7 +30,7 @@ const productService = {
   },
 
   editProduct: async (productId: string, values: Product) => {
-    const res = await axiosUpload.put(`/api/product/${productId}`, values)
+    const res = await axiosClient.put(`/api/product/${productId}`, values)
 
     return res.data
   },
@@ -52,13 +52,12 @@ const productService = {
   // ** Upload Image
   uploadImage: async (productId: string, data: FormData) => {
     const res = await axiosUpload.post(`/api/product/upload-images/${productId}`, data)
-
     return res.data
   },
 
   // ** Delete Image
   deleteImage: async (productId: string, publicIds: string[]) => {
-    const res = await axiosUpload.patch(`/api/product/delete-images/${productId}`, {
+    const res = await axiosClient.patch(`/api/product/delete-images/${productId}`, {
       publicIds,
     })
 
