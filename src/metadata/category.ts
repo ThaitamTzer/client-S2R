@@ -2,11 +2,11 @@ import { navLink } from '@/types/navTypes'
 export const TypeCategory: navLink[] = [
   {
     href: '/shop/women',
-    label: 'Đồ nữ',
+    label: 'Thời trang nữ',
   },
   {
     href: '/shop/man',
-    label: 'Đồ nam',
+    label: 'Thời trang nam',
   },
   {
     href: '/shop/unisex',
