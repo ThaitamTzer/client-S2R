@@ -1,11 +1,12 @@
 'use client'
 
-import { Button, Popover, type TableProps } from 'antd'
+import { Button, Popover, type TableProps, Dropdown } from 'antd'
 import Image from 'next/image'
 import { Product } from '@/types/users/productTypes'
-import { IconEdit, IconTrash } from '@tabler/icons-react'
-import { InfoCircleOutlined } from '@ant-design/icons'
+import { IconEdit, IconTrash, IconLock, IconEye } from '@tabler/icons-react'
+import { EllipsisOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { useProductManagement } from '@/zustand/productManagement'
+import { useCategory } from '@/zustand/category'
 
 const formatDate = (date: string | Date) => {
   const d = new Date(date)
@@ -42,13 +43,28 @@ export const columns: TableProps<Product>['columns'] = [
     dataIndex: 'productName',
     key: 'name',
     sorter: true,
+    width: '30%',
+    render: (_, record: Product) => (
+      <>
+        <div className="flex items-center">
+          <span>{record.productName}</span>
+          {record.isBlock && (
+            <Popover title="Thông báo" placement="bottom" content="Sản phẩm đã bị khóa">
+              <Button size="small" type="text" shape="circle" icon={<IconLock size={20} />} />
+            </Popover>
+          )}
+        </div>
+      </>
+    ),
   },
   {
     title: 'Giá/Loại',
     dataIndex: 'price',
     key: 'price',
     sorter: true,
-    render: (_, record: Product) => <>{record.price > 0 ? formatPrice(record.price) + ' VNĐ' : 'Trao đổi'}</>,
+    render: (_, record: Product) => (
+      <>{record.price > 0 ? formatPrice(record.price) + ' VNĐ' : 'Trao đổi'}</>
+    ),
   },
   {
     title: 'Trạng thái',
@@ -64,15 +80,32 @@ export const columns: TableProps<Product>['columns'] = [
     ),
   },
   {
+    title: 'Danh mục',
+    dataIndex: 'categoryId',
+    key: 'category',
+    sorter: true,
+    render: (_, record: Product) => (
+      <>{useCategory.getState().categories?.find((cate) => cate._id === record.categoryId)?.name}</>
+    ),
+  },
+  {
     title: 'Phê duyệt',
     dataIndex: 'approved',
     key: 'approved',
+    sorter: true,
     render: (_, record: Product) => (
-      console.log(record.approved),
       <>
         {record.approved.approveStatus === 'approved' && (
           <div className="flex items-center">
-            <span className="text-green-900">Đã duyệt</span>
+            <span
+              className="rounded-sm px-1"
+              style={{
+                backgroundColor: '#34D3992D',
+                color: '#34D399',
+              }}
+            >
+              Đã duyệt
+            </span>
             <Popover
               title="Thông tin phê duyệt"
               placement="bottom"
@@ -83,8 +116,7 @@ export const columns: TableProps<Product>['columns'] = [
                     {formatDate(record.approved.date)}
                   </p>
                   <p>
-                    <span className="font-semibold">Người duyệt:</span>{' '}
-                    {record.approved.decisionBy}
+                    <span className="font-semibold">Người duyệt:</span> {record.approved.decisionBy}
                   </p>
                   <p>
                     <span className="font-semibold">Mô tả:</span> {record.approved.description}
@@ -98,12 +130,28 @@ export const columns: TableProps<Product>['columns'] = [
         )}
         {record.approved.approveStatus === 'pending' && (
           <div className="flex items-center">
-            <span className="text-yellow-500">Chờ duyệt</span>
+            <span
+              className="rounded-sm px-1"
+              style={{
+                backgroundColor: '#FFD7002D',
+                color: '#FFD700',
+              }}
+            >
+              Chờ duyệt
+            </span>
           </div>
         )}
         {record.approved.approveStatus === 'rejected' && (
           <div className="flex items-center">
-            <span className="text-red-900">Từ chối</span>
+            <span
+              className="rounded-sm px-1"
+              style={{
+                backgroundColor: '#FF00002D',
+                color: '#FF0000',
+              }}
+            >
+              Từ chối
+            </span>
             <Popover
               title="Thông tin phê duyệt"
               placement="bottom"
@@ -114,8 +162,7 @@ export const columns: TableProps<Product>['columns'] = [
                     {formatDate(record.approved.date)}
                   </p>
                   <p>
-                    <span className="font-semibold">Người duyệt:</span>{' '}
-                    {record.approved.decisionBy}
+                    <span className="font-semibold">Người duyệt:</span> {record.approved.decisionBy}
                   </p>
                   <p>
                     <span className="font-semibold">Mô tả:</span> {record.approved.description}
@@ -130,31 +177,57 @@ export const columns: TableProps<Product>['columns'] = [
       </>
     ),
   },
-
   {
     dataIndex: 'action',
     key: 'action',
+    align: 'end',
+    width: '6%',
     render: (_, record: Product) => (
-      <div className="flex space-x-2">
-        <Button
-          onClick={() => {
-            useProductManagement.getState().toggleEditProductModal()
-            useProductManagement.getState().setProduct(record)
+      <>
+        <Dropdown
+          arrow
+          placement="bottomCenter"
+          trigger={['click']}
+          menu={{
+            items: [
+              {
+                key: 'view',
+                label: 'Xem chi tiết',
+                icon: <IconEye size={20} />,
+                onClick: () => {
+                  useProductManagement.getState().toggleViewProductModal()
+                  useProductManagement.getState().setProduct(record)
+                },
+              },
+              {
+                key: 'edit',
+                label: 'Chỉnh sửa',
+                icon: <IconEdit size={20} />,
+                onClick: () => {
+                  useProductManagement.getState().toggleEditProductModal()
+                  useProductManagement.getState().setProduct(record)
+                },
+              },
+              {
+                key: 'delete',
+                label: 'Xóa',
+                icon: <IconTrash size={20} />,
+                onClick: () => {
+                  useProductManagement.getState().toggleDeleteProductModal()
+                  useProductManagement.getState().setProduct(record)
+                },
+              },
+            ],
           }}
-          icon={<IconEdit size={20} />}
-          variant="text"
-          color="default"
-        />
-        <Button
-          onClick={() => {
-            useProductManagement.getState().toggleDeleteProductModal()
-            useProductManagement.getState().setProduct(record)
-          }}
-          icon={<IconTrash size={20} />}
-          variant="text"
-          color="default"
-        />
-      </div>
+        >
+          <Button
+            icon={<EllipsisOutlined size={20} />}
+            variant="text"
+            shape="circle"
+            color="default"
+          />
+        </Dropdown>
+      </>
     ),
   },
 ]

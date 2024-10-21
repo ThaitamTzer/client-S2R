@@ -1,48 +1,48 @@
-"use client";
+'use client'
 
-import { useEffect } from "react";
-import { Input, Form, Button } from "antd";
-import userService from "@/services/users/user.service";
-import toast from "react-hot-toast";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
-import { Suspense } from "react";
+import { useEffect } from 'react'
+import { Input, Form, Button } from 'antd'
+import userService from '@/services/users/user.service'
+import toast from 'react-hot-toast'
+import { useAuth } from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
+import { Suspense } from 'react'
 
 type ChangePassword = {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};
+  oldPassword: string
+  newPassword: string
+  confirmPassword: string
+}
 
 const ChangePasswordPage = () => {
-  const { user, setLoading, loading } = useAuth();
-  const router = useRouter();
-  const [form] = Form.useForm();
+  const { user, setLoading, loading } = useAuth()
+  const router = useRouter()
+  const [form] = Form.useForm()
 
   useEffect(() => {
     if (!user) {
-      router.push("/login");
+      router.push('/login')
     }
-  }, []);
+  }, [])
 
   const onFinish = (values: ChangePassword) => {
-    setLoading(true);
+    setLoading(true)
     userService
       .changePassword({
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
       })
       .then(() => {
-        setLoading(false);
-        toast.success("Cập nhật mật khẩu thành công!");
-        form.resetFields();
+        setLoading(false)
+        toast.success('Cập nhật mật khẩu thành công!')
+        form.resetFields()
       })
       .catch((error) => {
-        console.log(error);
-        toast.error("Cập nhật mật khẩu thất bại!");
-        setLoading(false);
-      });
-  };
+        console.log(error)
+        toast.error('Cập nhật mật khẩu thất bại!')
+        setLoading(false)
+      })
+  }
 
   return (
     <>
@@ -56,12 +56,7 @@ const ChangePasswordPage = () => {
           <div className="card bg-white shadow-2xl rounded-md w-full h-auto">
             <div className="form p-8">
               <Suspense>
-                <Form
-                  form={form}
-                  layout="vertical"
-                  size="large"
-                  onFinish={onFinish}
-                >
+                <Form form={form} layout="vertical" size="large" onFinish={onFinish}>
                   <Form.Item
                     className="w-full"
                     label="Mật khẩu hiện tại"
@@ -69,7 +64,7 @@ const ChangePasswordPage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập mật khẩu hiện tại!",
+                        message: 'Vui lòng nhập mật khẩu hiện tại!',
                       },
                     ]}
                   >
@@ -82,15 +77,15 @@ const ChangePasswordPage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập mật khẩu mới!",
+                        message: 'Vui lòng nhập mật khẩu mới!',
                       },
                       {
                         min: 6,
-                        message: "Mật khẩu phải có ít nhất 6 ký tự!",
+                        message: 'Mật khẩu phải có ít nhất 6 ký tự!',
                       },
                       {
                         max: 80,
-                        message: "Mật khẩu không được quá 80 ký tự!",
+                        message: 'Mật khẩu không được quá 80 ký tự!',
                       },
                     ]}
                   >
@@ -103,27 +98,19 @@ const ChangePasswordPage = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập lại mật khẩu mới!",
+                        message: 'Vui lòng nhập lại mật khẩu mới!',
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (
-                            !value ||
-                            getFieldValue("newPassword") === value
-                          ) {
-                            return Promise.resolve();
+                          if (!value || getFieldValue('newPassword') === value) {
+                            return Promise.resolve()
                           }
-                          return Promise.reject(
-                            new Error("Mật khẩu không khớp!"),
-                          );
+                          return Promise.reject(new Error('Mật khẩu không khớp!'))
                         },
                       }),
                     ]}
                   >
-                    <Input.Password
-                      placeholder="Nhập lại mật khẩu mới"
-                      size="large"
-                    />
+                    <Input.Password placeholder="Nhập lại mật khẩu mới" size="large" />
                   </Form.Item>
                   <Form.Item>
                     <Button
@@ -143,7 +130,7 @@ const ChangePasswordPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ChangePasswordPage;
+export default ChangePasswordPage

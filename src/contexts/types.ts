@@ -1,17 +1,17 @@
-export type ErrCallbackType = (err: { [key: string]: string }) => void;
+export type ErrCallbackType = (err: { [key: string]: string }) => void
 
 export type LoginParams = {
-  account: string;
-  password: string;
-  rememberMe?: boolean;
-};
+  account: string
+  password: string
+  rememberMe?: boolean
+}
 
 export type RegisterParams = {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-};
+  firstname: string
+  lastname: string
+  email: string
+  password: string
+}
 
 // export type UserDataType = {
 //   id: number
@@ -24,37 +24,34 @@ export type RegisterParams = {
 // }
 
 export type UserDataType = {
-  typeUser: null;
-  _id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: string;
-  avatar: string;
-  status: string;
-  isBlock: boolean;
-  userStyle: null;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-  address: string;
-  dateOfBirth: string | Date;
-  description: string;
-  gender: string;
-  phone: string;
-};
+  typeUser: string
+  _id: string
+  firstname: string
+  lastname: string
+  email: string
+  role: string
+  avatar: string
+  status: string
+  isBlock: boolean
+  userStyle: null
+  createdAt: Date | string
+  updatedAt: Date | string
+  address: string
+  dateOfBirth: string | Date
+  description: string
+  gender: string
+  phone: string
+}
 
 export type AuthValuesType = {
-  loading: boolean;
-  logout: () => void;
-  user: UserDataType | null;
-  setLoading: (value: boolean) => void;
-  setUser: (value: UserDataType | null) => void;
-  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void;
-  register: (params: RegisterParams) => Promise<void>;
-  forgetPassword: (params: { email: string }) => Promise<void>;
-  resetPassword: (params: {
-    code: string;
-    newPassword: string;
-  }) => Promise<void>;
-  getProfile: () => Promise<void>;
-};
+  loading: boolean
+  logout: () => void
+  user: UserDataType | null
+  setLoading: (value: boolean) => void
+  setUser: (value: UserDataType | null) => void
+  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
+  register: (params: RegisterParams) => Promise<void>
+  forgetPassword: (params: { email: string }) => Promise<void>
+  resetPassword: (params: { code: string; newPassword: string }) => Promise<void>
+  getProfile: () => Promise<void>
+}

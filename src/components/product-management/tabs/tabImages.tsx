@@ -17,9 +17,10 @@ export const TabUploadImages = ({
   previewOpen,
   previewImage,
   handlePreview,
+  disabled,
 }: {
   form: any
-  onUploadImages: any
+  onUploadImages?: any
   fileList: any
   productId: any
   product: any
@@ -29,6 +30,7 @@ export const TabUploadImages = ({
   previewOpen: any
   previewImage: any
   handlePreview: any
+  disabled?: any
 }) => {
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -45,6 +47,7 @@ export const TabUploadImages = ({
         size="large"
         layout="vertical"
         initialValues={{ images: fileList }}
+        disabled={disabled || false}
       >
         <Form.Item
           name="images"
@@ -118,12 +121,14 @@ export const TabUploadImages = ({
             )}
           </>
         </Form.Item>
-        <Grid justify="end" mt={15}>
-          <Button className="mr-2">Hủy</Button>
-          <Button type="primary" htmlType="submit">
-            Hoàn tất
-          </Button>
-        </Grid>
+        {!disabled && (
+          <Grid justify="end" mt={15}>
+            <Button className="mr-2">Hủy</Button>
+            <Button type="primary" htmlType="submit">
+              Lưu
+            </Button>
+          </Grid>
+        )}
       </Form>
     </>
   )

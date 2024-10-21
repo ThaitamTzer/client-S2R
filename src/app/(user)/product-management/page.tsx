@@ -12,6 +12,7 @@ import productService from '@/services/product/product.service'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import { useSearchParams } from 'next/navigation'
+import { ViewProductModal } from '@/components/product-management/viewProduct'
 
 const ProductManagementPage = () => {
   const param = useSearchParams()
@@ -53,6 +54,7 @@ const ProductManagementPage = () => {
       <div className="flex justify-end">
         <AddProduct />
         <EditProduct />
+        <ViewProductModal />
         <Alert
           title="Xác nhận xóa"
           content="Bạn có chắc chắn muốn xóa sản phẩm này không?"

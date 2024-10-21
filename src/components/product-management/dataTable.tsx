@@ -107,6 +107,7 @@ export const DataTable = () => {
         columns={columns}
         dataSource={products?.data || []}
         scroll={{ y: 100 * 5 }}
+        showSorterTooltip={false}
         onChange={handleTableChange} // Kết hợp cả phân trang và sắp xếp
         pagination={{
           locale: { items_per_page: '/ 1 Trang' },

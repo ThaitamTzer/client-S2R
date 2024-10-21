@@ -4,12 +4,13 @@ import { createContext, useState } from 'react'
 import useSWR from 'swr'
 import categoryService from '@/services/category/category.service'
 import brandService from '@/services/brand/brand.service'
+import { useCategory } from '@/zustand/category'
 
 type ClientValuesType = {
   loading: boolean
   setLoading: (value: boolean) => void
   categories: Category[] | null
-  setCategories: (value: Category[] | null) => void
+  setCates: (value: Category[] | null) => void
   brands: Brand[] | null
   setBrands: (value: Brand[] | null) => void
 }
@@ -18,7 +19,7 @@ const defaultProvider: ClientValuesType = {
   loading: false,
   setLoading: () => Boolean,
   categories: null,
-  setCategories: () => null,
+  setCates: () => null,
   brands: null,
   setBrands: () => null,
 }
@@ -30,25 +31,21 @@ type Props = {
 }
 
 const ClientProvider = ({ children }: Props) => {
-  const [categories, setCategories] = useState<Category[] | null>(
-    defaultProvider.categories,
-  )
+  const [categories, setCates] = useState<Category[] | null>(defaultProvider.categories)
   const [brands, setBrands] = useState<Brand[] | null>(defaultProvider.brands)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
+  const { setCategories } = useCategory()
 
-  useSWR(
-    '/api/category/list-category-client',
-    categoryService.gellClientCategories,
-    {
-      onLoadingSlow: () => {
-        setLoading(true)
-      },
-      onSuccess: (data) => {
-        setCategories(data)
-        setLoading(false)
-      },
+  useSWR('/api/category/list-category-client', categoryService.gellClientCategories, {
+    onLoadingSlow: () => {
+      setLoading(true)
     },
-  )
+    onSuccess: (data) => {
+      setCates(data)
+      setCategories(data)
+      setLoading(false)
+    },
+  })
 
   useSWR('/api/brand/list-brand-client', brandService.getBrands, {
     onLoadingSlow: () => {
@@ -64,14 +61,12 @@ const ClientProvider = ({ children }: Props) => {
     loading,
     setLoading,
     categories,
-    setCategories,
+    setCates,
     brands,
     setBrands,
   }
 
-  return (
-    <ClientContext.Provider value={value}>{children}</ClientContext.Provider>
-  )
+  return <ClientContext.Provider value={value}>{children}</ClientContext.Provider>
 }
 
 export { ClientContext, ClientProvider }

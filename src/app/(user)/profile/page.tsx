@@ -131,9 +131,7 @@ const ProfilePage = () => {
                   email: user?.email || '',
                   gender: user?.gender || 'none',
                   description: user?.description || '',
-                  dateOfBirth: user?.dateOfBirth
-                    ? moment(user.dateOfBirth)
-                    : undefined,
+                  dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth) : undefined,
                 }}
               >
                 <div className="w-full flex gap-3">
@@ -178,22 +176,11 @@ const ProfilePage = () => {
                   <Input disabled />
                 </Form.Item>
                 <div className="w-full flex gap-3">
-                  <Form.Item
-                    className="w-full"
-                    label="Số điện thoại"
-                    name="phone"
-                  >
+                  <Form.Item className="w-full" label="Số điện thoại" name="phone">
                     <Input placeholder="Số điện thoại" />
                   </Form.Item>
-                  <Form.Item
-                    label="Ngày sinh"
-                    name="dateOfBirth"
-                    className="w-full"
-                  >
-                    <MyDatePicker
-                      className="w-full"
-                      placeholder="Chọn ngày sinh"
-                    />
+                  <Form.Item label="Ngày sinh" name="dateOfBirth" className="w-full">
+                    <MyDatePicker className="w-full" placeholder="Chọn ngày sinh" />
                   </Form.Item>
                 </div>
                 <Form.Item label="Giới tính" name="gender" className="w-1/2">

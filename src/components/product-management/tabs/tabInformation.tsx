@@ -19,6 +19,7 @@ export const TabInformation = ({
   loading,
   categories,
   brands,
+  disabled,
 }: {
   form: any
   product: Product
@@ -26,10 +27,11 @@ export const TabInformation = ({
   setTypeCheck: any
   typeCheck: any
   toggleEditProductModal: any
-  onFinishCreate: any
+  onFinishCreate?: any
   loading: any
   categories: any
   brands: any
+  disabled?: any
 }) => {
   return (
     <>
@@ -38,6 +40,7 @@ export const TabInformation = ({
         layout="horizontal"
         validateTrigger={['onBlur', 'onChange']}
         size="large"
+        disabled={disabled || false}
         onFinish={onFinishCreate}
         initialValues={
           product && {
@@ -284,7 +287,8 @@ export const TabInformation = ({
               { required: true, message: 'Vui lòng nhập giá sản phẩm!' },
               {
                 validator: (_, value) => {
-                  if (!value) return Promise.reject(new Error('Vui lòng nhập giá!'))
+                  if (value < 1000)
+                    return Promise.reject(new Error('Giá sản phẩm phải lớn hơn 1 nghìn đồng!'))
                   if (value > 5000000) {
                     return Promise.reject(new Error('Giá sản phẩm không được vượt quá 5 triệu!'))
                   }
@@ -329,22 +333,24 @@ export const TabInformation = ({
         >
           <Input.TextArea placeholder="Nhập mô tả sản phẩm" />
         </Form.Item>
-        <Grid justify="end" mt={15}>
-          <Button
-            onClick={() => {
-              toggleEditProductModal()
-              form.resetFields()
-              setProduct({} as Product)
-            }}
-            className="mr-2"
-          >
-            Hủy
-          </Button>
+        {!disabled && (
+          <Grid justify="end" mt={15}>
+            <Button
+              onClick={() => {
+                toggleEditProductModal()
+                form.resetFields()
+                setProduct({} as Product)
+              }}
+              className="mr-2"
+            >
+              Hủy
+            </Button>
 
-          <Button type="primary" htmlType="submit">
-            Lưu
-          </Button>
-        </Grid>
+            <Button type="primary" htmlType="submit">
+              Lưu
+            </Button>
+          </Grid>
+        )}
       </Form>
     </>
   )
