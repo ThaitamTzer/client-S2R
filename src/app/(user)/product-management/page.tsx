@@ -48,13 +48,13 @@ const ProductManagementPage = () => {
 
   return (
     <div>
+      <EditProduct />
+      <ViewProductModal />
       <div className="title text-black text-2xl font-semibold">
         <h2>Quản lý sản phẩm</h2>
       </div>
       <div className="flex justify-end">
         <AddProduct />
-        <EditProduct />
-        <ViewProductModal />
         <Alert
           title="Xác nhận xóa"
           content="Bạn có chắc chắn muốn xóa sản phẩm này không?"

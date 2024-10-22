@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Checkbox, Form, Radio } from 'antd'
 import { Modal, Stepper, Group } from '@mantine/core'
 import { zodiacData } from '@/metadata/zodiacData'
@@ -10,15 +10,15 @@ import { sizes, hobbies } from '@/metadata/sizeData'
 import userService from '@/services/users/user.service'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/hooks/useAuth'
+import { useUserStyle } from '@/zustand/userStyle'
 
-const FormStyleUser = () => {
+export const UpdateFormStyle = () => {
   const { user, getProfile } = useAuth()
-  const [open, setOpen] = useState(true)
   const [activeStep, setActiveStep] = useState(0)
-  const [disabled, setDisabled] = useState(true)
   const [form] = Form.useForm()
   const [selectedZodiac, setSelectedZodiac] = useState<string | null>(null)
   const [selectedColors, setSelectedColors] = useState<string[]>([])
+  const { toogleUpdateFormStyle, openUpdateFormStyle } = useUserStyle()
 
   const handleZodiacSelect = (value: string) => {
     setSelectedZodiac(value)
@@ -46,11 +46,11 @@ const FormStyleUser = () => {
   }
 
   const onFinishStep2 = () => {
+    // Validate fields for Step 2 (color and material), then move to the next step without sending a request
     form
       .validateFields(['color', 'material'])
       .then(() => {
-        setActiveStep(2)
-        setDisabled(false)
+        setActiveStep(2) // Go to Step 3
       })
       .catch((info) => {
         console.log('Validation failed:', info)
@@ -59,10 +59,28 @@ const FormStyleUser = () => {
 
   const prevStep = () => {
     setActiveStep((current) => current - 1)
-    setDisabled(true)
   }
 
+  useEffect(() => {
+    if (user?.userStyle) {
+      form.setFieldsValue({
+        age: user.userStyle.age || '',
+        zodiacSign: user.userStyle.zodiacSign || '',
+        style: user.userStyle.style || [],
+        color: user.userStyle.color || [], // setting initial colors
+        material: user.userStyle.material || [],
+        size: user.userStyle.size || [],
+        hobby: user.userStyle.hobby || [],
+      })
+
+      // Set the selected colors when userStyle is loaded
+      setSelectedColors(user.userStyle.color || [])
+      setSelectedZodiac(user.userStyle.zodiacSign || null)
+    }
+  }, [user?.userStyle])
+
   const onFinishSurvey = () => {
+    // Trigger form submission only when all steps are complete (i.e., Step 3 is finished)
     form.validateFields().then(() => {
       try {
         userService
@@ -79,8 +97,9 @@ const FormStyleUser = () => {
           )
           .then(() => {
             toast.success('Cập nhật phong cách thành công!')
-            getProfile()
-            setOpen(false)
+            getProfile() // Refresh user profile data
+            toogleUpdateFormStyle() // Close the modal after success
+            setActiveStep(0) // Reset the stepper to the first step
           })
           .catch((error) => {
             console.log('Error updating user style:', error)
@@ -92,15 +111,11 @@ const FormStyleUser = () => {
     })
   }
 
-  if (!user || user?.userStyle) {
-    return null
-  }
-
   return (
     <>
       <Modal.Root
-        opened={open}
-        onClose={() => setOpen(false)} // Đóng modal khi click ra ngoài hoặc click vào nút đóng ở góc phải
+        opened={openUpdateFormStyle}
+        onClose={toogleUpdateFormStyle}
         centered
         size="90%"
         className="w-full"
@@ -122,7 +137,6 @@ const FormStyleUser = () => {
             <Form
               form={form}
               name="form"
-              onFinish={onFinishSurvey} // Gọi hàm này khi hoàn thành tất cả các bước
               layout="vertical"
               initialValues={{ age: '', email: '', color: [] }}
             >
@@ -342,9 +356,9 @@ const FormStyleUser = () => {
                     </Button>
                     <Button
                       size="large"
-                      disabled={disabled}
                       type="primary"
                       htmlType="submit" // Bắt đầu submit form
+                      onClick={onFinishSurvey}
                     >
                       Hoàn thành
                     </Button>
@@ -358,5 +372,3 @@ const FormStyleUser = () => {
     </>
   )
 }
-
-export default FormStyleUser

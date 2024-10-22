@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 
 const Navigation = ({ navLink }: { navLink: navLink[] }) => {
   const [showHeader, setShowHeader] = useState(true)
+  const [showBg, setShowBg] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
   const pathname = usePathname()
 
@@ -17,6 +18,7 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
       if (window.scrollY > lastScrollY) {
         // Scrolling down
         setShowHeader(false)
+        setShowBg(true)
       } else {
         // Scrolling up
         setShowHeader(true)
@@ -24,10 +26,18 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
       setLastScrollY(window.scrollY)
     }
 
+    const handleScrollTop = () => {
+      if (pathname === '/' && window.scrollY === 0) {
+        setShowBg(false)
+      }
+    }
+
     window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScrollTop)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScrollTop)
     }
   }, [lastScrollY])
 
@@ -37,10 +47,12 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
     <>
       <nav
         className={clsx(
-          'fixed top-0 z-modal bg-green-100 text-black text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
+          'fixed top-0 z-modal text-green-500 text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
           {
             '-translate-y-0': !showHeader,
-            'translate-y-12': showHeader,
+            'translate-y-16': showHeader,
+            'bg-green-100': showBg,
+            'text-white': !showBg,
           },
         )}
       >

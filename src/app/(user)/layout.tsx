@@ -1,6 +1,6 @@
 'use client'
 
-import Navigation from '@/components/authpage/nav'
+import Navigation from '@/components/nav'
 import { navLink } from '@/types/navTypes'
 import { Avatar, Layout, Menu } from 'antd'
 import { useAuth } from '@/hooks/useAuth'

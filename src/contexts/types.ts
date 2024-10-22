@@ -33,7 +33,16 @@ export type UserDataType = {
   avatar: string
   status: string
   isBlock: boolean
-  userStyle: null
+  userStyle: {
+    color: string[]
+    material: string[]
+    size: string[]
+    hobby: string[]
+    age: string
+    zodiacSign: string
+    style: string[]
+    _id?: string[]
+  }
   createdAt: Date | string
   updatedAt: Date | string
   address: string

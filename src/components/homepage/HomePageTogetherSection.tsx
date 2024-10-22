@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 export const HomePageTogetherSection = () => {
   return (
@@ -10,12 +10,21 @@ export const HomePageTogetherSection = () => {
         }}
       >
         <div className="container mx-auto h-full w-[1200px] md:w-[1000px]">
-          <div className="together_title text-2xl font-bold text-green-800 uppercase text-center ">
-            <h1>Hãy cùng Share2Receive</h1>
+          <div className="together_title text-2xl font-bold text-green-900 uppercase text-center ">
+            <h1>
+              Hãy cùng Share
+              <span
+                style={{
+                  color: 'salmon',
+                }}
+              >
+                2
+              </span>
+              Receive
+            </h1>
           </div>
           <div className="together_desc text-sm font-bold text-center mt-2 mb-10">
-            Tuần hoàn và kéo dài vòng đời của các sản phẩm thời trang đã qua sử
-            dụng.
+            Tuần hoàn và kéo dài vòng đời của các sản phẩm thời trang đã qua sử dụng.
           </div>
           <div className="card-container flex justify-evenly items-center">
             <div className="together-card flex flex-col justify-center items-center w-[15%] text-center">
@@ -67,5 +76,5 @@ export const HomePageTogetherSection = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

@@ -20,24 +20,15 @@ export const HomePageFavorate = () => {
           </p>
           <div className="fashion-subtext container mx-auto px-16 grid grid-cols-3 mb-7">
             <div className="subtext_content flex items-center justify-center text-green-700 font-semibold text-lg">
-              <IconRefresh
-                className="mr-2"
-                style={{ width: rem(26), height: rem(26) }}
-              />
+              <IconRefresh className="mr-2" style={{ width: rem(26), height: rem(26) }} />
               <p>Cập nhật mỗi ngày</p>
             </div>
             <div className="subtext_content flex items-center justify-center text-green-700 font-semibold text-lg">
-              <IconDiamond
-                className="mr-2"
-                style={{ width: rem(26), height: rem(26) }}
-              />
+              <IconDiamond className="mr-2" style={{ width: rem(26), height: rem(26) }} />
               <p>Hàng trăm thương hiệu</p>
             </div>
             <div className="subtext_content flex items-center justify-center text-green-700 font-semibold text-lg">
-              <IconTag
-                className="mr-2"
-                style={{ width: rem(26), height: rem(26) }}
-              />
+              <IconTag className="mr-2" style={{ width: rem(26), height: rem(26) }} />
               <p>Giá cả hấp dẫn</p>
             </div>
           </div>
@@ -50,21 +41,13 @@ export const HomePageFavorate = () => {
                   <div className="absolute top-0 left-0 w-full h-full overflow-hidden flex items-center justify-center">
                     <div className="relative w-full h-full">
                       <div className="absolute w-screen h-screen -top-[25%] -bottom-[10%]">
-                        <iframe
-                          src="https://www.youtube.com/embed/i-S9dcmegZo?playlist=i-S9dcmegZo&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share; loop;"
-                          referrerPolicy="strict-origin-when-cross-origin"
-                          className="absolute w-full h-full z-[39]"
-                          style={{
-                            top: '0',
-                            left: '0',
-                            right: '0',
-                            width: '100vw', // Đặt chiều rộng của video là toàn bộ viewport
-                            height: '101vh',
-                            border: 'none',
-                            objectFit: 'cover', // Kéo dãn video để bao phủ toàn bộ khung chứa
-                          }}
-                        ></iframe>
+                        <div className="responsive-iframe">
+                          <iframe
+                            src="https://www.youtube.com/embed/i-S9dcmegZo?playlist=i-S9dcmegZo&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share; loop;"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                          ></iframe>
+                        </div>
                       </div>
                     </div>
                   </div>

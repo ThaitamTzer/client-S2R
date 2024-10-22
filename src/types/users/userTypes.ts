@@ -28,5 +28,5 @@ export type UpdateUserStyle = {
   hobby: string[]
   age: string
   zodiacSign: string
-  style: string
+  style: string[]
 }

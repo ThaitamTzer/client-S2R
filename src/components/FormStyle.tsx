@@ -10,10 +10,11 @@ import { sizes, hobbies } from '@/metadata/sizeData'
 import userService from '@/services/users/user.service'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/hooks/useAuth'
+import { useUserStyle } from '@/zustand/userStyle'
 
-const FormStyleUser = () => {
+const FormStyleUserNull = () => {
+  const { openUpdateFormStyle, toogleUpdateFormStyle } = useUserStyle()
   const { user, getProfile } = useAuth()
-  const [open, setOpen] = useState(true)
   const [activeStep, setActiveStep] = useState(0)
   const [disabled, setDisabled] = useState(true)
   const [form] = Form.useForm()
@@ -80,7 +81,7 @@ const FormStyleUser = () => {
           .then(() => {
             toast.success('Cập nhật phong cách thành công!')
             getProfile()
-            setOpen(false)
+            toogleUpdateFormStyle()
           })
           .catch((error) => {
             console.log('Error updating user style:', error)
@@ -99,9 +100,11 @@ const FormStyleUser = () => {
   return (
     <>
       <Modal.Root
-        opened={open}
-        onClose={() => setOpen(false)} // Đóng modal khi click ra ngoài hoặc click vào nút đóng ở góc phải
+        opened={openUpdateFormStyle}
+        onClose={toogleUpdateFormStyle} // Đóng modal khi click ra ngoài hoặc click vào nút đóng ở góc phải
         centered
+        closeOnClickOutside={false}
+        closeOnEscape={false}
         size="90%"
         className="w-full"
       >
@@ -359,4 +362,4 @@ const FormStyleUser = () => {
   )
 }
 
-export default FormStyleUser
+export default FormStyleUserNull

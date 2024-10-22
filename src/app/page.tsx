@@ -8,7 +8,7 @@ import { HomePageCategory } from '@/components/homepage/HomePageCategory'
 import { HomePageTogetherSection } from '@/components/homepage/HomePageTogetherSection'
 import { HomePageManFashion } from '@/components/homepage/HomePageMaleFashion'
 import { HomePageFemale } from '@/components/homepage/HomePageFemale'
-import Navigation from '@/components/authpage/nav'
+import Navigation from '@/components/nav'
 import { TypeCategory } from '@/metadata/category'
 import { HomePageUnisex } from '@/components/homepage/HomePageUnisex'
 import FormStyleUser from '@/components/homepage/FormStyle'
@@ -18,8 +18,8 @@ export default function Home() {
     <>
       <FormStyleUser />
       <Navigation navLink={TypeCategory} />
-      <HomePageTitle />
       <HomePageHero />
+      <HomePageTitle />
       <HomePagePickPrice />
       <HomePageManFashion />
       <HomePageFemale />

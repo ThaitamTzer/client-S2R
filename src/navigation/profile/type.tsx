@@ -1,7 +1,7 @@
 import React from 'react'
 import type { MenuProps } from 'antd'
 import Link from 'next/link'
-import { IconUserFilled, IconLockPassword, IconArchiveFilled } from '@tabler/icons-react'
+import { IconUserFilled, IconLockPassword, IconArchiveFilled, IconAccessibleFilled } from '@tabler/icons-react'
 import { useAuth } from '@/hooks/useAuth'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -38,6 +38,16 @@ export const useProfileLinks = () => {
               },
             ]
           : []),
+
+        {
+          key: 'userStyle',
+          icon: <IconAccessibleFilled size={26} color="#000" />,
+          label: (
+            <Link href="/user-style" className="text-lg font-thin">
+              Phong cách của bạn
+            </Link>
+          ),
+        },
       ],
     },
     {

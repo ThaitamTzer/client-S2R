@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  Avatar,
-  Menu,
-  rem,
-  Text,
-  UnstyledButton,
-  TextInput,
-} from '@mantine/core'
+import { Avatar, Menu, rem, Text, UnstyledButton, TextInput } from '@mantine/core'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
@@ -54,15 +47,12 @@ export default function Header() {
   return (
     <header
       id="header"
-      className={clsx(
-        'fixed top-0 z-50 bg-white w-full transition-transform duration-300 ',
-        {
-          '-translate-y-full': !showHeader,
-          'translate-y-0': showHeader,
-        },
-      )}
+      className={clsx('fixed top-0 z-50 bg-white w-full transition-transform duration-300 ', {
+        '-translate-y-full': !showHeader,
+        'translate-y-0': showHeader,
+      })}
     >
-      <div className="main-nav container mx-auto px-24 pt-0">
+      <div className="main-nav container mx-auto px-24 pt-0 ">
         <div className="flex items-center justify-between">
           {/* Phần trái: Logo và Navigation */}
           <div className="flex items-center">
@@ -75,13 +65,23 @@ export default function Header() {
               className="mr-1 p-1"
             />
             <div className="text-green-800 text-3xl font-semibold">
-              <Link href="/">Share2Receive</Link>
+              <Link href="/">
+                Share
+                <span
+                  style={{
+                    color: 'salmon',
+                  }}
+                >
+                  2
+                </span>
+                Receive
+              </Link>
             </div>
             <div className="nav ml-6">
-              <ul className="nav-list flex flex-row">
+              <ul className="nav-list flex flex-row uppercase">
                 <li
                   className={clsx(
-                    'nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200',
+                    'nav-item px-4 py-5 font-bold text-green-900 cursor-pointer hover:bg-green-200',
                     {
                       'bg-green-100': pathName === '/',
                     },
@@ -91,7 +91,7 @@ export default function Header() {
                 </li>
                 <li
                   className={clsx(
-                    'nav-item px-4 py-3 font-bold text-green-900 cursor-pointer hover:bg-green-200',
+                    'nav-item px-4 py-5 font-bold text-green-900 cursor-pointer hover:bg-green-200',
                     {
                       'bg-green-100': pathName === '/shop',
                     },
@@ -158,22 +158,14 @@ export default function Header() {
                 <Menu.Dropdown>
                   <Link href="/profile">
                     <Menu.Item
-                      leftSection={
-                        <IconSettings
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
+                      leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
                     >
                       Thông tin tài khoản
                     </Menu.Item>
                   </Link>
                   <Link href="/product-management">
                     <Menu.Item
-                      leftSection={
-                        <IconTruck
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
+                      leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}
                     >
                       Quản lý sản phẩm
                     </Menu.Item>
@@ -181,19 +173,14 @@ export default function Header() {
                   <Menu.Item
                     onClick={() => logout()}
                     color="red"
-                    leftSection={
-                      <IconLogout style={{ width: rem(14), height: rem(14) }} />
-                    }
+                    leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
                   >
                     Đăng xuất
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             ) : (
-              <Text
-                className="font-bold text-green-800 cursor-pointer"
-                onClick={() => openModal()}
-              >
+              <Text className="font-bold text-green-900 cursor-pointer" onClick={() => openModal()}>
                 Đăng nhập/Đăng ký
               </Text>
             )}
