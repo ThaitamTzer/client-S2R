@@ -30,7 +30,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Share2Receive',
+    default: 'Trang chủ',
     template: '%s | Share2Receive',
   },
 }

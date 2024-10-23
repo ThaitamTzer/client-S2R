@@ -1,4 +1,3 @@
-'use client'
 import { HomePageTitle } from '@/components/homepage/HomepageTitle'
 import { HomePageHero } from '@/components/homepage/HomepageHero'
 import { HomePageFavorate } from '@/components/homepage/HomePageFavorite'
@@ -12,6 +11,12 @@ import Navigation from '@/components/nav'
 import { TypeCategory } from '@/metadata/category'
 import { HomePageUnisex } from '@/components/homepage/HomePageUnisex'
 import FormStyleUser from '@/components/homepage/FormStyle'
+import { Metadata } from 'next'
+import { HomePageYouLike } from '@/components/homepage/HomePageYouLike'
+
+export const metadata: Metadata = {
+  title: 'Trang chủ',
+}
 
 export default function Home() {
   return (
@@ -20,6 +25,7 @@ export default function Home() {
       <Navigation navLink={TypeCategory} />
       <HomePageHero />
       <HomePageTitle />
+      <HomePageYouLike />
       <HomePagePickPrice />
       <HomePageManFashion />
       <HomePageFemale />

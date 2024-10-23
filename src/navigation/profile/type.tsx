@@ -1,7 +1,12 @@
 import React from 'react'
 import type { MenuProps } from 'antd'
 import Link from 'next/link'
-import { IconUserFilled, IconLockPassword, IconArchiveFilled, IconAccessibleFilled } from '@tabler/icons-react'
+import {
+  IconUserFilled,
+  IconLockPassword,
+  IconArchiveFilled,
+  IconAccessibleFilled,
+} from '@tabler/icons-react'
 import { useAuth } from '@/hooks/useAuth'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -40,7 +45,7 @@ export const useProfileLinks = () => {
           : []),
 
         {
-          key: 'userStyle',
+          key: 'user-style',
           icon: <IconAccessibleFilled size={26} color="#000" />,
           label: (
             <Link href="/user-style" className="text-lg font-thin">

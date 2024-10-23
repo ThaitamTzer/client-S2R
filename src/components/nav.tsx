@@ -39,7 +39,7 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('scroll', handleScrollTop)
     }
-  }, [lastScrollY])
+  }, [lastScrollY, pathname])
 
   const isActive = (path: string) => pathname === path
 

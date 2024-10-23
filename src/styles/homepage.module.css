@@ -110,3 +110,8 @@
   flex-direction: column;
   box-shadow: 2px 2px 9px #8cdbaa;
 }
+
+
+.product_body {
+  padding: 0 !important;
+}

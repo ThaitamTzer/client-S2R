@@ -105,6 +105,7 @@ type sizeVariants = {
   size: string
   colors: string
   amount: number
+  _id: string
 }
 
 export type addProduct = {
@@ -124,6 +125,13 @@ export type addProduct = {
   images?: string[]
 }
 
+export type ProductsPropose = {
+  data: {
+    data: Product[]
+  }
+  total: 1
+}
+
 export type ProductType = {
   data: Product[]
   total: 1
@@ -138,7 +146,9 @@ export type ProductsClient = {
     _id: string
     firstname: string
     lastname: string
+    avatar: string
   }
+  sizeVariants: sizeVariants[]
   categoryId: {
     _id: string
     name: string

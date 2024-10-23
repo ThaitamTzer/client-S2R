@@ -1,5 +1,5 @@
-import { IconMail, IconMapPin } from "@tabler/icons-react";
-import Image from "next/image";
+import { IconMail, IconMapPin } from '@tabler/icons-react'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -10,7 +10,15 @@ export default function Footer() {
             <div className="w-full grid gap-3">
               <div>
                 <h1 className="text-4xl font-bold text-green-800 -ml-4">
-                  Share2Receive
+                  Share
+                  <span
+                    style={{
+                      color: 'salmon',
+                    }}
+                  >
+                    2
+                  </span>
+                  Receive
                 </h1>
               </div>
               <div className="infor-section flex">
@@ -25,9 +33,7 @@ export default function Footer() {
                 <div className="icon">
                   <IconMail size={24} />
                 </div>
-                <div className="infor-content pl-2 text-lg">
-                  share2recieve.support@gmail.com
-                </div>
+                <div className="infor-content pl-2 text-lg">share2recieve.support@gmail.com</div>
               </div>
             </div>
           </div>
@@ -111,5 +117,5 @@ export default function Footer() {
         </div>
       </div>
     </>
-  );
+  )
 }

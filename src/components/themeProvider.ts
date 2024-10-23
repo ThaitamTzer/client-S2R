@@ -16,6 +16,9 @@ export const themeAntProvider: ThemeConfig = {
     Layout: {
       bodyBg: '#ffff',
     },
+    Collapse: {
+      headerPadding: '12px 0px',
+    },
     Menu: {
       itemActiveBg: '#dffae6',
     },

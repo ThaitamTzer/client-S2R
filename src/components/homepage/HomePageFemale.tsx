@@ -11,10 +11,15 @@ import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { ProductsClient } from '@/types/users/productTypes'
 import { Badge } from '@mantine/core'
+import { useProductClient } from '@/zustand/productClient'
+
 
 export const HomePageFemale = () => {
   const param = useSearchParams()
   const [donus, setDonus] = useState<ProductsClient[]>([])
+  const {
+
+  } = useProductClient()
 
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10

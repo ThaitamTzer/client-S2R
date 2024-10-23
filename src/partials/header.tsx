@@ -79,25 +79,31 @@ export default function Header() {
             </div>
             <div className="nav ml-6">
               <ul className="nav-list flex flex-row uppercase">
-                <li
-                  className={clsx(
-                    'nav-item px-4 py-5 font-bold text-green-900 cursor-pointer hover:bg-green-200',
-                    {
-                      'bg-green-100': pathName === '/',
-                    },
-                  )}
-                >
-                  <Link href="/">Trang chủ</Link>
+                <li>
+                  <Link
+                    className={clsx(
+                      'block nav-item px-4 py-5 font-bold text-green-900 cursor-pointer hover:bg-green-200',
+                      {
+                        'bg-green-100': pathName === '/',
+                      },
+                    )}
+                    href="/"
+                  >
+                    Trang chủ
+                  </Link>
                 </li>
-                <li
-                  className={clsx(
-                    'nav-item px-4 py-5 font-bold text-green-900 cursor-pointer hover:bg-green-200',
-                    {
-                      'bg-green-100': pathName === '/shop',
-                    },
-                  )}
-                >
-                  <Link href="/shop">Cửa hàng</Link>
+                <li>
+                  <Link
+                    className={clsx(
+                      'block nav-item px-4 py-5 font-bold text-green-900 cursor-pointer hover:bg-green-200',
+                      {
+                        'bg-green-100': pathName === '/shop',
+                      },
+                    )}
+                    href="/shop"
+                  >
+                    Cửa hàng
+                  </Link>
                 </li>
               </ul>
             </div>
