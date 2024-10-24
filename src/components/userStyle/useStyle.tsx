@@ -136,7 +136,6 @@ const UserStyle = () => {
                 <div className="grid gap-3 grid-cols-8">
                   {user?.userStyle.color.map((color, index) => {
                     const backgroundColor = colorData.find((item) => item.value === color)?.color
-                    const textColor = backgroundColor === '#FFFFFF' ? '#000000' : backgroundColor
 
                     return (
                       <div

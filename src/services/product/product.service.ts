@@ -29,16 +29,53 @@ const productService = {
     return res
   },
 
-  getAllProdClient: async (page?: number, limit?: number): Promise<ProductSClientList> => {
+  getAllProdClient: async (
+    page?: number,
+    limit?: number,
+    filterCategory?: string,
+    filterBrand?: string,
+    filterStartPrice?: number,
+    filterEndPrice?: number,
+    filterSize?: string,
+    filterColor?: string,
+    filterMaterial?: string,
+    filterCondition?: string,
+    filterType?: string,
+    filterStyle?: string,
+  ): Promise<ProductSClientList> => {
     const params = {
       ...(page && { page }),
       ...(limit && { limit }),
+      ...(filterCategory && { filterCategory }),
+      ...(filterBrand && { filterBrand }),
+      ...(filterStartPrice && { filterStartPrice }),
+      ...(filterEndPrice && { filterEndPrice }),
+      ...(filterSize && { filterSize }),
+      ...(filterColor && { filterColor }),
+      ...(filterMaterial && { filterMaterial }),
+      ...(filterCondition && { filterCondition }),
+      ...(filterType && { filterType }),
+      ...(filterStyle && { filterStyle }),
     }
     const res: ProductSClientList = await axiosClient.get('/api/product/list-product-for-client', {
       params,
     })
 
     return res
+  },
+
+  // ** Get a product by id
+  getProductById: async (id: string): Promise<Product> => {
+    const res = await axiosClient.get(`/api/product/${id}`)
+
+    return res?.data
+  },
+
+  // ** Get product by slug
+  getProductBySlug: async (slug: string): Promise<Product> => {
+    const res = await axiosClient.get(`/api/product/get-product-by-slug/${slug}`)
+
+    return res?.data
   },
 
   // ** Get Product user will like

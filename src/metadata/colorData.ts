@@ -84,12 +84,6 @@ export const colorData = [
     color: '#00A86B',
   },
   {
-    id: 17,
-    name: 'Xanh lam đậm',
-    value: 'navy',
-    color: '#000080',
-  },
-  {
     id: 18,
     name: 'Xanh lơ',
     value: 'cyan',

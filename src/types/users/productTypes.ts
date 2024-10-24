@@ -123,6 +123,7 @@ export type addProduct = {
   tags: string[]
   description: string
   images?: string[]
+  weight: number
 }
 
 export type ProductsPropose = {

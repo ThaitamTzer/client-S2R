@@ -98,7 +98,7 @@
   overflow: hidden;
 }
 
-.ant-checkbox-wrapper .ant-checkbox {
+.checkbox-custom .ant-checkbox-wrapper .ant-checkbox {
   position: absolute;
   right: 5px;
   top: 5px;
@@ -124,11 +124,11 @@
   align-items: center;
   position: relative;
   cursor: pointer;
-  padding: 8px 0 !important;
+  padding: 8px !important;
 }
 .checkbox-material .ant-checkbox-wrapper-checked {
-  border-color: green;
-  background-color: #e6ffe6;
+  border-color: green !important;
+  background-color: green !important;
 }
 
 /* .form-login .ant-form-item-required {
@@ -145,10 +145,200 @@
   height: 0;
   overflow: hidden;
   iframe {
-      position: absolute;
-      top:0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 }
+
+.filter_checkbox .ant-checkbox .ant-checkbox-inner {
+  width: 30px;
+  height: 30px;
+}
+
+.filter_checkbox .ant-checkbox .ant-checkbox-inner::after {
+  transform: rotate(45deg) scale(1.5) translate(-22%, -56%);
+}
+
+.filter_checkbox .card-checkbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter_checkbox .card-checkbox:hover {
+  border-color: green;
+}
+
+.filter_checkbox .card-checkbox .card-content p {
+  margin: 0;
+}
+
+.filter_checkbox .ant-checkbox-checked .card-checkbox {
+  border-color: green;
+  background-color: green;
+}
+
+.filter_checkbox-material .ant-checkbox-wrapper {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  padding: 8px !important;
+}
+
+/* jasjckacs */
+.filter_color {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+}
+
+.filter_color .card-checkbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter_color .card-checkbox:hover {
+  border-color: green;
+}
+
+.filter_color .card-checkbox .card-content p {
+  margin: 0;
+}
+
+.filter_color .ant-checkbox-checked .card-checkbox {
+  border-color: green;
+  background-color: #e6ffe6 !important;
+}
+
+.filter_color .ant-checkbox-checked {
+  color: green; /* Change text color to green when selected */
+}
+
+.filter_color .card-content .w-10.h-10 {
+  /* Optional customization for color circle */
+  border-radius: 50%;
+}
+
+.filter_color .ant-checkbox-wrapper {
+  width: 70px;
+  height: 90px;
+  border: none !important;
+}
+
+/* .filter_checkbox .ant-checkbox-wrapper-checked {
+  border-color: transparent !important;
+  background-color: transparent !important;
+} */
+body
+  > main
+  > div.container.mx-auto.px-10.mt-40
+  > div
+  > div.w-\[22\%\].h-full
+  > div
+  > div.ant-collapse-item.ant-collapse-item-active
+  > div.ant-collapse-content.ant-collapse-content-active
+  > div
+  > div
+  > label.ant-checkbox-wrapper.ant-checkbox-wrapper-checked.card-checkbox.css-dev-only-do-not-override-lnst2u {
+  border-color: transparent !important;
+  background-color: transparent !important;
+}
+
+body
+  > main
+  > div.container.mx-auto.px-10.mt-40
+  > div
+  > div.w-\[22\%\].h-full
+  > div
+  > div.ant-collapse-item.ant-collapse-item-active
+  > div.ant-collapse-content.ant-collapse-content-active
+  > div
+  > div
+  > label.ant-checkbox-wrapper.ant-checkbox-wrapper-checked.card-checkbox.css-dev-only-do-not-override-lnst2u
+  > span:nth-child(2)
+  > div
+  > div.w-full.text-center
+  > p {
+  color: green;
+}
+
+body
+  > main
+  > div.container.mx-auto.px-10.mt-40
+  > div
+  > div.w-\[22\%\].h-full
+  > div
+  > div.ant-collapse-item.ant-collapse-item-active
+  > div.ant-collapse-content.ant-collapse-content-active
+  > div
+  > div
+  > label.ant-checkbox-wrapper.ant-checkbox-wrapper-checked.card-checkbox.css-dev-only-do-not-override-lnst2u
+  > span:nth-child(2)
+  > div
+  > div.shadow-sm.rounded-full {
+  border: 2px solid green;
+}
+
+.card-content:hover > div.color {
+  border: 2px solid green;
+}
+
+.card-content:hover .color-name {
+  color: green;
+}
+
+input.search-box:focus {
+  outline: none;
+}
+
+/* .filter_color .card-checkbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter_color .card-checkbox:hover {
+  color: green;
+}
+
+.filter_color .card-checkbox .card-content p {
+  margin: 0;
+}
+
+.filter_color .ant-checkbox-checked .card-checkbox {
+  border-color: green;
+  background-color: #e6ffe6 !important;
+}
+
+.filter_color .ant-checkbox-wrapper {
+  border: none !important;
+}
+
+.filter_checkbox .card-content {
+  width: 30px;
+  height: 30px;
+} */

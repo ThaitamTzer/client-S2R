@@ -92,6 +92,7 @@ export const AddProduct = () => {
       status: 'active',
       tags: form.getFieldValue('tags').split(' '),
       price: Number(form.getFieldValue('price')?.replace(/\D/g, '')) || 0,
+      weight: Number(form.getFieldValue('weight')) || 0,
       sizeVariants: form
         .getFieldValue('sizeVariants')
         .map((sizeVariant: { size: string; colors: string; amount: number }) => ({
@@ -106,8 +107,6 @@ export const AddProduct = () => {
     fileList.forEach((file) => {
       formData.append('images', file.originFileObj as File)
     })
-
-    console.log('values', values)
 
     try {
       productService
@@ -370,6 +369,15 @@ export const AddProduct = () => {
                       value: brand._id,
                     }))}
                   />
+                </Form.Item>
+              </div>
+              <div className="grid grid-cols-2">
+                <Form.Item
+                  name="weight"
+                  label="Trọng lượng (gram)"
+                  rules={[{ required: true, message: 'Vui lòng nhập trọng lượng!' }]}
+                >
+                  <Input type="number" />
                 </Form.Item>
               </div>
               <div className="w-full grid grid-flow-col ">
