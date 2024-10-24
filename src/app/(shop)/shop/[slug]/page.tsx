@@ -11,7 +11,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = await productService.getProductById(params.slug)
+  const product = await productService.getProductBySlug(params.slug)
 
   if (!product) {
     return {
