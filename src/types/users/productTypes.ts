@@ -99,6 +99,7 @@ export type Product = {
   createdAt: string | Date
   updatedAt: string | Date
   slug: string
+  weight: number
 }
 
 type sizeVariants = {
@@ -166,6 +167,7 @@ export type ProductsClient = {
   style: string
   description: string
   slug: string
+  weight: number
 }
 
 export type ProductSClientList = {

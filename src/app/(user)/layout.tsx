@@ -1,6 +1,5 @@
 'use client'
 
-import Navigation from '@/components/nav'
 import { navLink } from '@/types/navTypes'
 import { Avatar, Layout, Menu } from 'antd'
 import { useAuth } from '@/hooks/useAuth'
@@ -8,6 +7,7 @@ import { IconUserCircle } from '@tabler/icons-react'
 import { useProfileLinks } from '@/navigation/profile/type'
 import { usePathname } from 'next/navigation'
 import { Suspense } from 'react'
+import NavigationWithBg from '@/components/navWithBg'
 
 const { Content, Sider } = Layout
 
@@ -32,7 +32,7 @@ export default function UsersLayout({
     <>
       <Suspense>
         <Suspense>
-          <Navigation navLink={navLinks} />
+          <NavigationWithBg navLink={navLinks} />
         </Suspense>
         {/* <Layout className="container mx-auto  bg-white mt-32">
           <Content style={{ padding: '0 48px', backgroundColor: 'white' }}>

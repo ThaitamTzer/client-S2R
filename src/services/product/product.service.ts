@@ -5,6 +5,7 @@ import {
   addProduct,
   ProductSClientList,
   ProductsPropose,
+  ProductsClient,
 } from '@/types/users/productTypes'
 
 const productService = {
@@ -42,6 +43,7 @@ const productService = {
     filterCondition?: string,
     filterType?: string,
     filterStyle?: string,
+    filterTypeCategory?: string,
   ): Promise<ProductSClientList> => {
     const params = {
       ...(page && { page }),
@@ -56,6 +58,7 @@ const productService = {
       ...(filterCondition && { filterCondition }),
       ...(filterType && { filterType }),
       ...(filterStyle && { filterStyle }),
+      ...(filterTypeCategory && { filterTypeCategory }),
     }
     const res: ProductSClientList = await axiosClient.get('/api/product/list-product-for-client', {
       params,
@@ -72,7 +75,7 @@ const productService = {
   },
 
   // ** Get product by slug
-  getProductBySlug: async (slug: string): Promise<Product> => {
+  getProductBySlug: async (slug: string): Promise<ProductsClient> => {
     const res = await axiosClient.get(`/api/product/get-product-by-slug/${slug}`)
 
     return res?.data

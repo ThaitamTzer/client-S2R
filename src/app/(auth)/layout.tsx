@@ -1,4 +1,4 @@
-import Navigation from '@/components/nav'
+import NavigationWithBg from '@/components/navWithBg'
 import { Suspense } from 'react'
 
 const navLinks = [
@@ -24,7 +24,7 @@ export default function AuthLayout({
   return (
     <>
       <Suspense>
-        <Navigation navLink={navLinks} />
+        <NavigationWithBg navLink={navLinks} />
         <div className="mt-24">{children}</div>
       </Suspense>
     </>

@@ -128,7 +128,11 @@
 }
 .checkbox-material .ant-checkbox-wrapper-checked {
   border-color: green !important;
-  background-color: green !important;
+  background-color: #179d49 !important;
+}
+
+.checkbox-material .ant-checkbox-wrapper-checked .text-color {
+  color: #fff;
 }
 
 /* .form-login .ant-form-item-required {
@@ -184,7 +188,7 @@
 
 .filter_checkbox .ant-checkbox-checked .card-checkbox {
   border-color: green;
-  background-color: green;
+  background-color: #179d49;
 }
 
 .filter_checkbox-material .ant-checkbox-wrapper {
@@ -243,6 +247,13 @@
   border: none !important;
 }
 
+.filter_color .ant-checkbox-wrapper-checked .card-content .color-bg {
+  border: 3px solid green;
+}
+.filter_color .ant-checkbox-wrapper-checked .card-content .color-name {
+  color: green;
+}
+
 /* .filter_checkbox .ant-checkbox-wrapper-checked {
   border-color: transparent !important;
   background-color: transparent !important;
@@ -262,7 +273,7 @@ body
   background-color: transparent !important;
 }
 
-body
+/* body
   > main
   > div.container.mx-auto.px-10.mt-40
   > div
@@ -295,7 +306,7 @@ body
   > div
   > div.shadow-sm.rounded-full {
   border: 2px solid green;
-}
+} */
 
 .card-content:hover > div.color {
   border: 2px solid green;

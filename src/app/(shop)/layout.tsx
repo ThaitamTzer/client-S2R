@@ -1,4 +1,4 @@
-import Navigation from '@/components/nav'
+import NavigationWithBg from '@/components/navWithBg'
 import { TypeCategory } from '@/metadata/category'
 import { Suspense } from 'react'
 
@@ -9,7 +9,7 @@ export default function ShopLayout({
 }>) {
   return (
     <Suspense>
-      <Navigation navLink={TypeCategory} />
+      <NavigationWithBg navLink={TypeCategory} />
       {children}
     </Suspense>
   )

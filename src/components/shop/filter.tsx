@@ -1,12 +1,11 @@
 'use client'
 
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
-import { Collapse, Checkbox, Button } from 'antd'
+import { Collapse, Checkbox } from 'antd'
 import { useClient } from '@/hooks/useClient'
 import { sizes } from '@/metadata/sizeData'
 import { colorData } from '@/metadata/colorData'
 import { clothingStylesData } from '@/metadata/styleData'
-import { SearchOutlined } from '@ant-design/icons'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { materialData } from '@/metadata/materialData'
@@ -172,7 +171,7 @@ export const FilterSide = () => {
                 >
                   <div className="">
                     <div className="w-full">
-                      <p className="text-black uppercase">{size.name}</p>
+                      <p className="text-black uppercase text-color">{size.name}</p>
                     </div>
                   </div>
                 </Checkbox>
@@ -203,7 +202,7 @@ export const FilterSide = () => {
               >
                 <div className="card-content flex items-center flex-col justify-start w-full h-full">
                   <div
-                    className="shadow-sm color rounded-full"
+                    className="color-bg shadow-sm color rounded-full"
                     style={{
                       backgroundColor: `${color.color}CC`,
                       width: '1.7rem',
@@ -388,37 +387,6 @@ export const FilterSide = () => {
                 <p className="text-xl font-medium">
                   Theo thương hiệu ({countCheckedFilters('filterBrand')})
                 </p>
-                <form action="" className="relative">
-                  <input
-                    type="text"
-                    placeholder="Tìm kiếm thương hiệu"
-                    className="search-box w-full py-5 px-3  focus:outline-none focus:ring-0"
-                    style={{
-                      border: '1.5px solid green',
-                      borderRadius: '5px',
-                    }}
-                  />
-                  <div className="icon absolute right-0 h-full top-0">
-                    <Button
-                      htmlType="submit"
-                      icon={
-                        <SearchOutlined
-                          style={{
-                            fontSize: '1.5rem',
-                            color: '#000',
-                          }}
-                        />
-                      }
-                      style={{
-                        border: 'none',
-                        background: 'transparent',
-                        color: '#000',
-                        boxShadow: 'none',
-                        height: '100%',
-                      }}
-                    />
-                  </div>
-                </form>
               </div>
             </>
           }

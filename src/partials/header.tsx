@@ -2,7 +2,7 @@
 
 import { Avatar, Menu, rem, Text, UnstyledButton, TextInput } from '@mantine/core'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import {
   IconSettings,
@@ -20,17 +20,17 @@ import Image from 'next/image'
 export default function Header() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [searchKey, setSearchKey] = useState('')
   const { openModal } = useLoginModal()
   const { logout, user } = useAuth()
+  const router = useRouter() // Using the router to handle navigation
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        // Scrolling down
-        setShowHeader(false)
+        setShowHeader(false) // Scrolling down
       } else {
-        // Scrolling up
-        setShowHeader(true)
+        setShowHeader(true) // Scrolling up
       }
       setLastScrollY(window.scrollY)
     }
@@ -44,17 +44,27 @@ export default function Header() {
 
   const pathName = usePathname()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSearchSubmit = (event: any) => {
+    event.preventDefault()
+    if (searchKey.trim()) {
+      // Redirect to a search results page or handle the search
+      router.push(`/shop?searchKey=${searchKey}`)
+      setSearchKey('')
+    }
+  }
+
   return (
     <header
       id="header"
-      className={clsx('fixed top-0 z-50 bg-white w-full transition-transform duration-300 ', {
+      className={clsx('fixed top-0 z-50 bg-white w-full transition-transform duration-300', {
         '-translate-y-full': !showHeader,
         'translate-y-0': showHeader,
       })}
     >
       <div className="main-nav container mx-auto px-24 pt-0 ">
         <div className="flex items-center justify-between">
-          {/* Phần trái: Logo và Navigation */}
+          {/* Left section: Logo and Navigation */}
           <div className="flex items-center">
             <Image
               src="/logo.png"
@@ -67,13 +77,7 @@ export default function Header() {
             <div className="text-green-800 text-3xl font-semibold">
               <Link href="/">
                 Share
-                <span
-                  style={{
-                    color: 'salmon',
-                  }}
-                >
-                  2
-                </span>
+                <span style={{ color: 'salmon' }}>2</span>
                 Receive
               </Link>
             </div>
@@ -109,24 +113,33 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Phần giữa: Thanh tìm kiếm */}
+          {/* Middle section: Search bar */}
           <div className="flex-1 mx-4">
-            <TextInput
-              placeholder="Tìm kiếm..."
-              rightSection={<IconSearch size={16} />}
-              size="md"
-              styles={(theme) => ({
-                input: {
-                  borderColor: theme.colors.green[7], // Màu xanh lá đậm
-                  '&:focus': {
-                    borderColor: theme.colors.green[7], // Màu viền khi focus
+            <form onSubmit={handleSearchSubmit}>
+              <TextInput
+                value={searchKey}
+                onChange={(event) => setSearchKey(event.currentTarget.value)}
+                placeholder="Tìm kiếm..."
+                rightSection={<IconSearch size={16} />}
+                size="md"
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSearchSubmit(event)
+                  }
+                }}
+                styles={(theme) => ({
+                  input: {
+                    borderColor: theme.colors.green[7], // Dark green border
+                    '&:focus': {
+                      borderColor: theme.colors.green[7], // Border color on focus
+                    },
                   },
-                },
-              })}
-            />
+                })}
+              />
+            </form>
           </div>
 
-          {/* Phần phải: Icon và User Menu */}
+          {/* Right section: Icons and User Menu */}
           <div className="flex items-center space-x-4">
             <UnstyledButton>
               <IconBell

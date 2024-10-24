@@ -8,8 +8,8 @@ import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FilterFilled } from '@ant-design/icons'
-import { FilterTag } from '@/layout/shop/filterTag'
-import { FilterSide } from '@/layout/shop/filter'
+import { FilterTag } from '@/components/shop/filterTag'
+import { FilterSide } from '@/components/shop/filter'
 
 export const Shop = () => {
   const { products, setProducts } = useProductClient()
@@ -34,6 +34,7 @@ export const Shop = () => {
   const filterCondition = param.get('filterCondition') || undefined
   const filterType = param.get('filterType') || undefined
   const filterStyle = param.get('filterStyle') || undefined
+  const filterTypeCategory = param.get('filterTypeCategory') || undefined
 
   const { isLoading } = useSWR(
     [
@@ -50,6 +51,7 @@ export const Shop = () => {
       filterCondition,
       filterType,
       filterStyle,
+      filterTypeCategory,
     ],
     () =>
       productService.getAllProdClient(
@@ -65,6 +67,7 @@ export const Shop = () => {
         filterCondition,
         filterType,
         filterStyle,
+        filterTypeCategory,
       ),
     {
       onLoadingSlow: () => {
@@ -154,8 +157,19 @@ export const Shop = () => {
                               width: '100%', // Fixed width for the image container
                               height: '300px', // Fixed height for the image container
                               overflow: 'hidden', // Ensures the image fits the container without overflow
+                              position: 'relative',
                             }}
                           >
+                            {product.type === 'barter' && (
+                              <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1">
+                                Trao đổi
+                              </div>
+                            )}
+                            {product.condition === 'new' && (
+                              <div className="absolute top-0 right-0 text-white bg-red-500 px-2 py-1">
+                                Mới
+                              </div>
+                            )}
                             <Image
                               src={product.imgUrls[0]}
                               alt={product.productName}
@@ -175,9 +189,13 @@ export const Shop = () => {
                           title={
                             <p className="text-lg font-normal">
                               Kích thước:{' '}
-                              {product.sizeVariants.map((size) => {
-                                return size.size
-                              })}{' '}
+                              {product.sizeVariants.slice(0, 3).map((size, index) => (
+                                <span key={size._id}>
+                                  {size.size}
+                                  {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
+                                </span>
+                              ))}
+                              {product.sizeVariants.length > 3 && ',...'}
                             </p>
                           }
                         />
@@ -186,7 +204,7 @@ export const Shop = () => {
                             <p className="text-xl font-semibold text-green-800">
                               {product.type === 'barter' ? (
                                 <>
-                                  <p>Trao đổi</p>
+                                  <p>Liên hệ</p>
                                   <p className="text-sm underline">Xem ngay</p>
                                 </>
                               ) : (

@@ -1,23 +1,23 @@
 import { navLink } from '@/types/navTypes'
 export const TypeCategory: navLink[] = [
   {
-    href: '/shop/women',
+    href: '/shop?filterTypeCategory=female',
     label: 'Thời trang nữ',
   },
   {
-    href: '/shop/man',
+    href: '/shop?filterTypeCategory=male',
     label: 'Thời trang nam',
   },
   {
-    href: '/shop/unisex',
+    href: '/shop?filterTypeCategory=unisex',
     label: 'Unisex',
   },
   {
-    href: '/shop/item',
+    href: '/shop?filterTypeCategory=item',
     label: 'Phụ kiện',
   },
   {
-    href: '/shop/khac',
+    href: '/shop?filterTypeCategory=other',
     label: 'Khác',
   },
 ]
