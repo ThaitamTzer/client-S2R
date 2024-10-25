@@ -32,6 +32,7 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                   alt={product.productName}
                   width={500}
                   height={500}
+                  loading="lazy"
                   className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
                 />
               </div>
@@ -158,39 +159,79 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                   </div>
                 </div>
                 <div className="flex flex-row">
-                  <Button
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: '20px',
-                      marginRight: '16px',
-                      width: '200px',
-                      height: '55px',
-                      fontSize: '16px',
-                      fontWeight: 'bold',
-                      backgroundColor: '#b2e5be',
-                      color: '#179d49',
-                    }}
-                  >
-                    Thêm vào giỏ hàng
-                  </Button>
+                  {product.type === 'barter' ? (
+                    <>
+                      <Button
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '20px',
+                          marginRight: '16px',
+                          width: '200px',
+                          height: '55px',
+                          fontSize: '16px',
+                          fontWeight: 'bold',
+                          backgroundColor: '#b2e5be',
+                          color: '#179d49',
+                        }}
+                      >
+                        Liên hệ ngay
+                      </Button>
 
-                  <Button
-                    variant="outlined"
-                    type="primary"
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: '20px',
-                      marginRight: '16px',
-                      width: '200px',
-                      height: '55px',
-                      fontSize: '16px',
-                      fontWeight: 'bold',
-                      backgroundColor: '#179d49',
-                      color: '#fff',
-                    }}
-                  >
-                    Mua ngay
-                  </Button>
+                      <Button
+                        variant="outlined"
+                        type="primary"
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '20px',
+                          marginRight: '16px',
+                          width: '200px',
+                          height: '55px',
+                          fontSize: '16px',
+                          fontWeight: 'bold',
+                          backgroundColor: '#179d49',
+                          color: '#fff',
+                        }}
+                      >
+                        Trao đổi ngay
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '20px',
+                          marginRight: '16px',
+                          width: '200px',
+                          height: '55px',
+                          fontSize: '16px',
+                          fontWeight: 'bold',
+                          backgroundColor: '#b2e5be',
+                          color: '#179d49',
+                        }}
+                      >
+                        Thêm vào giỏ hàng
+                      </Button>
+
+                      <Button
+                        variant="outlined"
+                        type="primary"
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '20px',
+                          marginRight: '16px',
+                          width: '200px',
+                          height: '55px',
+                          fontSize: '16px',
+                          fontWeight: 'bold',
+                          backgroundColor: '#179d49',
+                          color: '#fff',
+                        }}
+                      >
+                        Mua ngay
+                      </Button>
+                    </>
+                  )}
                 </div>
                 <div className="flex flex-row items-center">
                   <p className="mr-2">Hashtag: </p>

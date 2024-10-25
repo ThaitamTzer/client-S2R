@@ -44,6 +44,7 @@ const productService = {
     filterType?: string,
     filterStyle?: string,
     filterTypeCategory?: string,
+    searchKey?: string,
   ): Promise<ProductSClientList> => {
     const params = {
       ...(page && { page }),
@@ -59,6 +60,7 @@ const productService = {
       ...(filterType && { filterType }),
       ...(filterStyle && { filterStyle }),
       ...(filterTypeCategory && { filterTypeCategory }),
+      ...(searchKey && { searchKey }),
     }
     const res: ProductSClientList = await axiosClient.get('/api/product/list-product-for-client', {
       params,

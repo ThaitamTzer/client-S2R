@@ -35,6 +35,7 @@ export const Shop = () => {
   const filterType = param.get('filterType') || undefined
   const filterStyle = param.get('filterStyle') || undefined
   const filterTypeCategory = param.get('filterTypeCategory') || undefined
+  const searchKey = param.get('searchKey') || undefined
 
   const { isLoading } = useSWR(
     [
@@ -52,6 +53,7 @@ export const Shop = () => {
       filterType,
       filterStyle,
       filterTypeCategory,
+      searchKey,
     ],
     () =>
       productService.getAllProdClient(
@@ -68,6 +70,7 @@ export const Shop = () => {
         filterType,
         filterStyle,
         filterTypeCategory,
+        searchKey,
       ),
     {
       onLoadingSlow: () => {
@@ -171,7 +174,7 @@ export const Shop = () => {
                               </div>
                             )}
                             <Image
-                              src={product.imgUrls[0]}
+                              src={product.imgUrls?.[0]}
                               alt={product.productName}
                               width={240} // Matches the container width
                               height={200} // Matches the container height
@@ -224,8 +227,8 @@ export const Shop = () => {
                             <div className="flex">
                               <div className="w-5 h-5 overflow-hidden rounded-full mr-2">
                                 <Image
-                                  src={product.userId.avatar}
-                                  alt={product.userId.firstname + ' ' + product.userId.lastname}
+                                  src={product.userId?.avatar}
+                                  alt={product.userId?.firstname + ' ' + product.userId?.lastname}
                                   width={50}
                                   height={50}
                                   className="object-cover "
@@ -233,7 +236,7 @@ export const Shop = () => {
                               </div>
                               <div className="flex justify-center items-center">
                                 <p className="text-sm font-semibold">
-                                  {product.userId.firstname + ' ' + product.userId.lastname}
+                                  {product.userId?.firstname + ' ' + product.userId?.lastname}
                                 </p>
                               </div>
                             </div>

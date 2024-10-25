@@ -159,6 +159,8 @@ export default function Header() {
                 }}
               />
             </UnstyledButton>
+            <UnstyledButton>
+            </UnstyledButton>
             {user ? (
               <Menu shadow="md" width={250}>
                 <Menu.Target>

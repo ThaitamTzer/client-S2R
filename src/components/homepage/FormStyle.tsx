@@ -36,7 +36,7 @@ const FormStyleUser = () => {
 
   const onFinishStep1 = () => {
     form
-      .validateFields(['age', 'zodiacSign', 'style'])
+      .validateFields(['age', 'zodiacSign', 'style', 'gender'])
       .then(() => {
         setActiveStep(1)
       })
@@ -72,6 +72,7 @@ const FormStyleUser = () => {
               'zodiacSign',
               'style',
               'color',
+              'gender',
               'material',
               'size',
               'hobby',
@@ -204,6 +205,20 @@ const FormStyleUser = () => {
                         </Checkbox>
                       ))}
                     </Checkbox.Group>
+                  </Form.Item>
+                  <Form.Item
+                    name="gender"
+                    label="Giới tính"
+                    rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]} // Bắt buộc chọn giới tính
+                  >
+                    <Radio.Group className="radio-custom display-flex">
+                      <Radio className="w-[100px] h-[40px]" value="male">
+                        <p className="text-black">Nam</p>
+                      </Radio>
+                      <Radio className="w-[100px] h-[40px]" value="female">
+                        <p className="text-black">Nữ</p>
+                      </Radio>
+                    </Radio.Group>
                   </Form.Item>
                   <Group justify="end" mt="lg">
                     <Button size="large" type="primary" onClick={onFinishStep1}>
