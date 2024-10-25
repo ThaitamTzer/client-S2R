@@ -4,18 +4,108 @@ import Image from 'next/image'
 import { Carousel } from '@mantine/carousel'
 import classes from '@/styles/product.module.css'
 import { formatPrice } from '@/helper/format'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { useGetName } from '@/helper/getName'
+import toast from 'react-hot-toast'
+import { useExchange } from '@/zustand/exchange'
+import { CreateExchangeModal } from '../exchange/openCreateExchange'
 
 export const ProductDetail = ({ product }: { product: ProductsClient }) => {
   const [count, setCount] = useState(1)
   const [mainImage, setMainImage] = useState(product.imgUrls[0]) // New state for the main image
   const { getMaterialName, getConditionName } = useGetName()
+  const { setOpenCreateExchangeModal, setData } = useExchange()
+
+  const uniqueSizes = Array.from(new Set(product.sizeVariants.map((v) => v.size)))
+  const uniqueColors = Array.from(new Set(product.sizeVariants.map((v) => v.colors)))
+
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [maxQuantity, setMaxQuantity] = useState<number>(1)
+  const [totalQuantity, setTotalQuantity] = useState<number>(0)
+
+  const validColors = selectedSize
+    ? product.sizeVariants
+        .filter((variant) => variant.size === selectedSize)
+        .map((variant) => variant.colors)
+    : uniqueColors
+
+  const validSizes = selectedColor
+    ? product.sizeVariants
+        .filter((variant) => variant.colors === selectedColor)
+        .map((variant) => variant.size)
+    : uniqueSizes
+
+  // Function to update the max quantity based on selected size and color
+  const updateMaxQuantity = () => {
+    const selectedVariant = product.sizeVariants.find(
+      (variant) => variant.size === selectedSize && variant.colors === selectedColor,
+    )
+    if (selectedVariant) {
+      setMaxQuantity(selectedVariant.amount)
+    } else {
+      setMaxQuantity(1)
+    }
+  }
+
+  // Function to update max quantity and total quantity
+  const updateQuantities = () => {
+    if (selectedSize && selectedColor) {
+      const selectedVariant = product.sizeVariants.find(
+        (variant) => variant.size === selectedSize && variant.colors === selectedColor,
+      )
+      if (selectedVariant) {
+        setMaxQuantity(selectedVariant.amount)
+        setTotalQuantity(selectedVariant.amount)
+      } else {
+        setMaxQuantity(1)
+        setTotalQuantity(0)
+      }
+    } else {
+      // If no specific size or color is selected, sum all quantities
+      const total = product.sizeVariants.reduce((sum, variant) => sum + variant.amount, 0)
+      setTotalQuantity(total)
+      setMaxQuantity(total) // Assuming maxQuantity is total for the initial view
+    }
+  }
+
+  // Call updateMaxQuantity whenever selectedSize or selectedColor changes
+  useEffect(() => {
+    updateQuantities()
+    updateMaxQuantity()
+    setCount(1) // Reset count to 1 whenever the selection changes
+  }, [selectedSize, selectedColor])
+
+  const handleSizeToggle = (size: string) => {
+    setSelectedSize(selectedSize === size ? null : size)
+  }
+
+  const handleColorToggle = (color: string) => {
+    setSelectedColor(selectedColor === color ? null : color)
+  }
+
+  const onCreateExchange = async () => {
+    if (!selectedSize || !selectedColor) {
+      toast.error('Vui lòng chọn kích cỡ và màu sắc trước khi tạo yêu cầu trao đổi')
+      return
+    }
+
+    const exchangeData = {
+      productId: product._id,
+      size: selectedSize,
+      colors: selectedColor,
+      amount: count.toString(), // Convert amount to string
+    }
+
+    setData(exchangeData)
+    setOpenCreateExchangeModal(true)
+  }
 
   return (
     <>
+      <CreateExchangeModal />
       <div className="container mx-auto px-24 mt-48">
         <div className="product-overview">
           <div className="flex flex-row justify-between">
@@ -84,41 +174,73 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                     </p>
                   </div>
                 )}
-                <div className="flex flex-row justify-start items-center">
+                {/* Color Selection */}
+                <div className="flex flex-row items-center">
                   <p className="text-lg">Màu sắc: </p>
                   <div className="flex flex-row ml-2">
-                    {product.sizeVariants.map((variant) => (
-                      <div
-                        key={variant._id}
-                        className="mr-2 w-8 h-8 rounded-full bg-[color]"
-                        style={{ backgroundColor: variant.colors }}
-                      ></div>
+                    {uniqueColors.map((color) => (
+                      <div key={color} className="w-full h-full mr-2">
+                        <input
+                          type="checkbox"
+                          id={`color-${color}`}
+                          name="color"
+                          value={color}
+                          className="hidden peer"
+                          onChange={() => handleColorToggle(color)}
+                          checked={selectedColor === color}
+                          disabled={!validColors.includes(color)}
+                        />
+                        <label
+                          htmlFor={`color-${color}`}
+                          className={`inline-flex items-center justify-between w-full text-gray-500 bg-white border-2 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:border-2 ${
+                            validColors.includes(color)
+                              ? 'border-gray-200 hover:bg-gray-50'
+                              : 'opacity-50 cursor-not-allowed border-gray-300'
+                          }`}
+                        >
+                          <div
+                            className="w-8 h-8 rounded-full border-2"
+                            style={{ backgroundColor: color }}
+                          ></div>
+                        </label>
+                      </div>
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-row justify-start items-center">
+
+                {/* Size Selection */}
+                <div className="flex flex-row items-center">
                   <p className="text-lg">Kích cỡ: </p>
                   <div className="flex flex-row ml-2">
-                    {product.sizeVariants.slice(0, 3).map((variant, index) => (
-                      <div
-                        key={variant._id}
-                        className="rounded-full text-lg font-semibold flex justify-center items-center"
-                      >
-                        {variant.size}
-                        {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
+                    {uniqueSizes.map((size) => (
+                      <div key={size} className="w-full h-full mr-2">
+                        <input
+                          type="checkbox"
+                          id={`size-${size}`}
+                          name="size"
+                          value={size}
+                          className="hidden peer"
+                          onChange={() => handleSizeToggle(size)}
+                          checked={selectedSize === size}
+                          disabled={!validSizes.includes(size)}
+                        />
+                        <label
+                          htmlFor={`size-${size}`}
+                          className={`inline-flex items-center justify-between w-full bg-white border-2 rounded-lg cursor-pointer peer-checked:border-green-500 peer-checked:border-2 ${
+                            validSizes.includes(size)
+                              ? 'border-gray-200 hover:bg-gray-50'
+                              : 'opacity-50 cursor-not-allowed border-gray-300'
+                          }`}
+                        >
+                          <div className="text-lg font-semibold p-5 flex justify-center items-center w-5 h-5">
+                            {size}
+                          </div>
+                        </label>
                       </div>
                     ))}
-                    {product.sizeVariants.length > 3 && (
-                      <div className="rounded-full text-lg font-semibold flex justify-center items-center">
-                        ...
-                      </div>
-                    )}
                   </div>
                 </div>
-                <div className="flex flex-row justify-start items-center">
-                  <p className="text-lg">Khối lượng: </p>
-                  <p className="text-lg ml-2">{product.weight} (gram)</p>
-                </div>
+
                 <div className="flex flex-row justify-start items-center">
                   <p className="text-lg">Chất liệu: </p>
                   <p className="text-lg ml-2">{getMaterialName(product.material)}</p>
@@ -128,35 +250,23 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                   <p className="text-lg ml-2">{getConditionName(product.condition)}</p>
                 </div>
 
-                {/* add amount */}
+                {/* Quantity Selector */}
                 <div className="flex flex-row justify-start items-center">
                   <p className="text-lg">Số lượng: </p>
                   <div className="flex flex-row items-center ml-2">
                     <Button
-                      icon={
-                        <PlusOutlined
-                          style={{
-                            fontSize: '16px',
-                            color: '#000',
-                          }}
-                        />
-                      }
+                      icon={<MinusOutlined style={{ fontSize: '16px', color: '#000' }} />}
                       onClick={() => setCount(count - 1)}
                       disabled={count === 1}
                     />
-                    <p className="text-lg bg-white px-6 py-2 rounded-xl  text-center">{count}</p>
+                    <p className="text-lg bg-white px-6 py-2 rounded-xl text-center">{count}</p>
                     <Button
-                      icon={
-                        <MinusOutlined
-                          style={{
-                            fontSize: '16px',
-                            color: '#000',
-                          }}
-                        />
-                      }
+                      icon={<PlusOutlined style={{ fontSize: '16px', color: '#000' }} />}
                       onClick={() => setCount(count + 1)}
+                      disabled={count >= maxQuantity}
                     />
                   </div>
+                  <p className="ml-4 text-sm text-gray-600">Còn lại: {totalQuantity} sản phẩm</p>
                 </div>
                 <div className="flex flex-row">
                   {product.type === 'barter' ? (
@@ -178,6 +288,7 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                       </Button>
 
                       <Button
+                        onClick={onCreateExchange}
                         variant="outlined"
                         type="primary"
                         style={{

@@ -8,6 +8,7 @@ import {
   IconAccessibleFilled,
 } from '@tabler/icons-react'
 import { useAuth } from '@/hooks/useAuth'
+import IconifyIcon from '@/components/icons'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -66,6 +67,20 @@ export const useProfileLinks = () => {
           label: (
             <Link href="/product-management" className="text-lg font-thin">
               Quản lý sản phẩm
+            </Link>
+          ),
+        },
+        {
+          key: 'exchange-management',
+          icon: (
+            <IconifyIcon
+              icon="carbon:ibm-data-product-exchange"
+              style={{ fontSize: '1.5rem', color: '#000' }}
+            />
+          ),
+          label: (
+            <Link href="/exchange-management" className="text-lg font-thin">
+              Quản lý trao đổi
             </Link>
           ),
         },

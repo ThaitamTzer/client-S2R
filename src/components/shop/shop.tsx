@@ -192,12 +192,16 @@ export const Shop = () => {
                           title={
                             <p className="text-lg font-normal">
                               Kích thước:{' '}
-                              {product.sizeVariants.slice(0, 3).map((size, index) => (
-                                <span key={size._id}>
-                                  {size.size}
-                                  {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
-                                </span>
-                              ))}
+                              {Array.from(
+                                new Set(product.sizeVariants.map((variant) => variant.size)),
+                              )
+                                .slice(0, 3)
+                                .map((size, index) => (
+                                  <span key={index}>
+                                    {size}
+                                    {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
+                                  </span>
+                                ))}
                               {product.sizeVariants.length > 3 && ',...'}
                             </p>
                           }

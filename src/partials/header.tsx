@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react'
 import { useLoginModal } from '@/zustand/loginModal'
 import { useAuth } from '@/hooks/useAuth'
 import Image from 'next/image'
+import IconifyIcon from '@/components/icons'
+import { useExchange } from '@/zustand/exchange'
 
 export default function Header() {
   const [showHeader, setShowHeader] = useState(true)
@@ -24,6 +26,7 @@ export default function Header() {
   const { openModal } = useLoginModal()
   const { logout, user } = useAuth()
   const router = useRouter() // Using the router to handle navigation
+  const { toogleExchangeModal } = useExchange()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -159,7 +162,15 @@ export default function Header() {
                 }}
               />
             </UnstyledButton>
-            <UnstyledButton>
+            <UnstyledButton onClick={() => toogleExchangeModal()}>
+              <IconifyIcon
+                icon="carbon:ibm-data-product-exchange"
+                className="text-green-900"
+                style={{
+                  width: rem(30),
+                  height: rem(30),
+                }}
+              />
             </UnstyledButton>
             {user ? (
               <Menu shadow="md" width={250}>

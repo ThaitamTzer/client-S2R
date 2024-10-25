@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 interface formData {
   account: string
   password: string
-  rememberMe: boolean
 }
 
 const LoginPage = () => {

@@ -5,6 +5,8 @@ import useSWR from 'swr'
 import categoryService from '@/services/category/category.service'
 import brandService from '@/services/brand/brand.service'
 import { useCategory } from '@/zustand/category'
+import { Product } from '@/types/users/productTypes'
+import productService from '@/services/product/product.service'
 
 type ClientValuesType = {
   loading: boolean
@@ -13,6 +15,7 @@ type ClientValuesType = {
   setCates: (value: Category[] | null) => void
   brands: Brand[] | null
   setBrands: (value: Brand[] | null) => void
+  productsUser: Product[] | null
 }
 
 const defaultProvider: ClientValuesType = {
@@ -22,6 +25,7 @@ const defaultProvider: ClientValuesType = {
   setCates: () => null,
   brands: null,
   setBrands: () => null,
+  productsUser: null,
 }
 
 const ClientContext = createContext(defaultProvider)
@@ -34,6 +38,7 @@ const ClientProvider = ({ children }: Props) => {
   const [categories, setCates] = useState<Category[] | null>(defaultProvider.categories)
   const [brands, setBrands] = useState<Brand[] | null>(defaultProvider.brands)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
+  const [productsUser, setProductsUser] = useState<Product[] | null>(defaultProvider.productsUser)
   const { setCategories } = useCategory()
 
   useSWR('/api/category/list-category-client', categoryService.gellClientCategories, {
@@ -57,6 +62,16 @@ const ClientProvider = ({ children }: Props) => {
     },
   })
 
+  useSWR('productsUser', () => productService.getAllProductUser(1, 999, '', '', ''), {
+    onLoadingSlow: () => {
+      setLoading(true)
+    },
+    onSuccess: (data) => {
+      setProductsUser(data.data)
+      setLoading(false)
+    },
+  })
+
   const value = {
     loading,
     setLoading,
@@ -64,6 +79,8 @@ const ClientProvider = ({ children }: Props) => {
     setCates,
     brands,
     setBrands,
+    productsUser,
+    setProductsUser,
   }
 
   return <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

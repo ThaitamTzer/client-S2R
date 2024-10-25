@@ -21,6 +21,7 @@ import { themeAntProvider } from '@/components/themeProvider'
 import { Toaster } from 'react-hot-toast'
 import { Suspense } from 'react'
 import { ClientProvider } from '@/contexts/ClientContext'
+import ExChangeDrawer from '@/components/exchange/exchange'
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -66,6 +67,7 @@ export default function RootLayout({
                 <AntdRegistry>
                   <MantineProvider theme={theme}>
                     <Header />
+                    <ExChangeDrawer />
                     <main
                       className={`relative mt-16 h-full min-h-screen scroll-smooth  ${montserrat.className}`}
                     >
