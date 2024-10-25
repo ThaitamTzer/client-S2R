@@ -128,7 +128,7 @@
 }
 .checkbox-material .ant-checkbox-wrapper-checked {
   border-color: green !important;
-  background-color: #179d49 !important;
+  background-color: #179d49;
 }
 
 .checkbox-material .ant-checkbox-wrapper-checked .text-color {
