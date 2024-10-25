@@ -131,6 +131,10 @@
   background-color: #179d49;
 }
 
+.filter_color .ant-checkbox-wrapper-checked {
+  background-color: transparent !important;
+}
+
 .checkbox-material .ant-checkbox-wrapper-checked .text-color {
   color: #fff;
 }
