@@ -14,6 +14,7 @@ export const ExchangePage = () => {
   useSWR('exchanges', exChangeService.getAll, {
     onSuccess: (data) => {
       setExchanges(data)
+      console.log(data)
     },
     revalidateOnFocus: true,
   })

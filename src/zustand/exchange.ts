@@ -11,6 +11,8 @@ type State = {
   openCreateExchangeModal: boolean
   data: { productId: string; size: string; colors: string; amount: string }
   product: ProductsClient
+  openPopconfirmShipping: boolean
+  openPopconfirmDelivered: boolean
 }
 
 type Actions = {
@@ -22,6 +24,8 @@ type Actions = {
   setOpenCreateExchangeModal: (openCreateExchangeModal: boolean) => void
   setData: (data: { productId: string; size: string; colors: string; amount: string }) => void
   setProduct: (product: ProductsClient) => void
+  setOpenPopconfirmShipping: (openPopconfirmShipping: boolean) => void
+  setOpenPopconfirmDelivered: (openPopconfirmDelivered: boolean) => void
 }
 
 export const useExchange = create<State & Actions>((set) => ({
@@ -33,6 +37,8 @@ export const useExchange = create<State & Actions>((set) => ({
   openCreateExchangeModal: false,
   product: {} as ProductsClient,
   data: { productId: '', size: '', colors: '', amount: '' },
+  openPopconfirmShipping: false,
+  openPopconfirmDelivered: false,
   toogleExchangeModal: () => set((state) => ({ openExchangeModal: !state.openExchangeModal })),
   toogleLogin: () => set((state) => ({ openLogin: !state.openLogin })),
   setExchange: (exchange) => set({ exchange }),
@@ -41,4 +47,6 @@ export const useExchange = create<State & Actions>((set) => ({
   setOpenViewExchangeModal: (openViewExchangeModal) => set({ openViewExchangeModal }),
   setData: (data) => set({ data }),
   setProduct: (product) => set({ product }),
+  setOpenPopconfirmShipping: (openPopconfirmShipping) => set({ openPopconfirmShipping }),
+  setOpenPopconfirmDelivered: (openPopconfirmDelivered) => set({ openPopconfirmDelivered }),
 }))

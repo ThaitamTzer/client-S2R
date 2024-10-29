@@ -11,6 +11,7 @@ import { useGetName } from '@/helper/getName'
 import toast from 'react-hot-toast'
 import { useExchange } from '@/zustand/exchange'
 import { CreateExchangeModal } from '../exchange/openCreateExchange'
+import { useAuth } from '@/hooks/useAuth'
 
 export const ProductDetail = ({ product }: { product: ProductsClient }) => {
   const [count, setCount] = useState(1)
@@ -102,6 +103,8 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
     setData(exchangeData)
     setOpenCreateExchangeModal(true)
   }
+
+  const { user } = useAuth()
 
   return (
     <>
@@ -272,6 +275,7 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                   {product.type === 'barter' ? (
                     <>
                       <Button
+                        disabled={!user || user._id === product.userId._id}
                         style={{
                           padding: '8px 16px',
                           borderRadius: '20px',
@@ -288,6 +292,7 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                       </Button>
 
                       <Button
+                        disabled={!user}
                         onClick={onCreateExchange}
                         variant="outlined"
                         type="primary"
@@ -305,6 +310,9 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                       >
                         Trao đổi ngay
                       </Button>
+                      {!user && (
+                        <p className="text-sm text-red-500">Đăng nhập để tạo yêu cầu trao đổi</p>
+                      )}
                     </>
                   ) : (
                     <>

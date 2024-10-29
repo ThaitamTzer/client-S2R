@@ -7,6 +7,7 @@ import { IconEdit, IconTrash, IconLock, IconEye } from '@tabler/icons-react'
 import { EllipsisOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { useProductManagement } from '@/zustand/productManagement'
 import { useCategory } from '@/zustand/category'
+import { truncateText } from '@/helper/format'
 
 const formatDate = (date: string | Date) => {
   const d = new Date(date)
@@ -47,7 +48,7 @@ export const columns: TableProps<Product>['columns'] = [
     render: (_, record: Product) => (
       <>
         <div className="flex items-center">
-          <span>{record.productName}</span>
+          <span>{truncateText(record.productName, 20)}</span>
           {record.isBlock && (
             <Popover title="Thông báo" placement="bottom" content="Sản phẩm đã bị khóa">
               <Button size="small" type="text" shape="circle" icon={<IconLock size={20} />} />

@@ -117,7 +117,7 @@ const ExChangeDrawer = () => {
                         <p className="mt-3">Sản phẩm muốn trao đổi: </p>
                         <div className="flex justify-between items-center w-full">
                           <div className="flex flex-row items-start justify-between gap-3">
-                            <div className="relative w-full h-full min-h-[120px] max-h-[120px] my-2 overflow-hidden ">
+                            <div className="relative h-full min-h-[120px] max-h-[120px] my-2 overflow-hidden ">
                               <AntdImage
                                 src={exchange?.requestProduct?.requesterProductId.imgUrls[0]}
                                 alt={exchange?.requestProduct?.requesterProductId.productName}
@@ -164,7 +164,7 @@ const ExChangeDrawer = () => {
                               </div>
                             </div>
                           </div>
-                          {exchange?.exchangeStatus === 'pending' && (
+                          {exchange?.allExchangeStatus === 'pending' && (
                             <div className="flex flex-col gap-2">
                               <Tooltip title="Chấp nhận">
                                 <Button
@@ -182,14 +182,14 @@ const ExChangeDrawer = () => {
                               </Tooltip>
                             </div>
                           )}
-                          {exchange?.exchangeStatus === 'accepted' && (
+                          {exchange?.allExchangeStatus === 'accepted' && (
                             <div className="">
                               <p className="text-green-800 font-medium text-base py-1 px-2 bg-green-200 rounded-sm">
                                 Đã chấp nhận
                               </p>
                             </div>
                           )}
-                          {exchange?.exchangeStatus === 'rejected' && (
+                          {exchange?.allExchangeStatus === 'rejected' && (
                             <div className="">
                               <p className="text-red font-medium text-base py-1 px-2 bg-red-200 rounded-sm">
                                 Đã từ chối
