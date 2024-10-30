@@ -3,36 +3,15 @@ import { rem, Avatar, Divider } from '@mantine/core'
 import { truncateText } from '@/helper/format'
 import { Exchange } from '@/types/exchangeTypes'
 import { Image, Tooltip, Button, Popconfirm, Steps } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import exChangeService from '@/services/exchange/exchange.service'
 import toast from 'react-hot-toast'
 import { useExchange } from '@/zustand/exchange'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
 
 export const Requester = ({ exchange }: { exchange: Exchange }) => {
-  const [active, setActive] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const { setExchange } = useExchange()
-
-  useEffect(() => {
-    // Set active step based on status
-    switch (exchange?.requestStatus?.exchangeStatus) {
-      case 'pending':
-        setActive(0)
-        break
-      case 'shipping':
-        setActive(1)
-        break
-      case 'completed':
-        setActive(2)
-        break
-      case 'canceled':
-        setActive(3) // Hoặc có thể tạo step riêng cho trạng thái canceled
-        break
-      default:
-        setActive(0)
-    }
-  }, [exchange?.requestStatus?.exchangeStatus])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdateStatus = async (id: string, status: any) => {
@@ -382,7 +361,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                       <p className="text-base font-medium">Hoàn thành trao đổi</p>
                       <div className="flex items-center justify-between gap-1 mt-2">
                         <p className="text-sm ">Mời bạn đánh giá đối phương</p>
-                        <Button variant="solid" color="primary" onClick={() => setActive(3)}>
+                        <Button variant="solid" color="primary">
                           Đánh giá
                         </Button>
                       </div>
