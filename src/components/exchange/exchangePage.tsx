@@ -6,6 +6,8 @@ import { ViewExchangeModal } from './viewExchange'
 import { TableDataReq } from './component/tableDataReq'
 import toast from 'react-hot-toast'
 import { useEffect } from 'react'
+import { TableDataRev } from './component/tableDataRev'
+import { ViewExchangeModalRev } from './viewExchangeRev'
 
 export const ExchangePage = () => {
   const { setExchange, exchangeId, setLoading } = useExchange()
@@ -31,6 +33,7 @@ export const ExchangePage = () => {
   return (
     <>
       <ViewExchangeModal />
+      <ViewExchangeModalRev />
       <div className="container mx-auto px-10">
         <div className="title text-black text-2xl font-semibold">
           <h2>Quản lý trao đổi</h2>
@@ -49,7 +52,11 @@ export const ExchangePage = () => {
             {
               key: '2',
               label: 'Yêu cầu trao đổi từ người khác',
-              children: <></>,
+              children: (
+                <>
+                  <TableDataRev />
+                </>
+              ),
             },
           ]}
         />

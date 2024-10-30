@@ -169,118 +169,6 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
         {exchange?.allExchangeStatus !== 'pending' && (
           <div className="flex flex-col justify-start items-center gap-4 max-w-[900px]">
             {exchange?.allExchangeStatus !== 'canceled' && (
-              // <Stepper
-              //   active={active}
-              //   onStepClick={setActive}
-              //   size="sm"
-              //   iconSize={25}
-              //   style={{
-              //     maxWidth: '900px',
-              //   }}
-              // >
-              //   <Stepper.Step
-              //     label="Đang xử lý"
-              //     disabled={
-              //       exchange?.requestStatus?.exchangeStatus === 'canceled' ||
-              //       exchange?.requestStatus?.exchangeStatus === 'completed' ||
-              //       exchange?.requestStatus?.exchangeStatus === 'shipping'
-              //     }
-              //     icon={<IconifyIcon icon="system-uicons:box-open" />}
-              //     completedIcon={<IconifyIcon icon="system-uicons:box" />}
-              //     title="Đang xử lý"
-              //   >
-              //     <div className="w-full h-full bg-white shadow-sm rounded-sm">
-              //       <div className="container mx-auto p-3 flex flex-col justify-start">
-              //         <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
-              //         <div className="flex items-center gap-3 mt-2">
-              //           <p className="text-xs ">
-              //             (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
-              //           </p>
-              //           <Button
-              //             variant="solid"
-              //             color="primary"
-              //             onClick={() => handleUpdateStatus(exchange._id, 'shipping')}
-              //             loading={isLoading}
-              //           >
-              //             Cập nhật
-              //           </Button>
-              //         </div>
-              //         <Divider my="sm" />
-              //         <div className="flex items-center justify-start gap-1 mt-2">
-              //           <p className="text-sm ">Bạn muốn dừng trao đổi ?</p>
-              //           <Popconfirm
-              //             title="Bạn muốn dừng trao đổi ?"
-              //             onConfirm={() => handleUpdateStatus(exchange._id, 'canceled')}
-              //             showCancel={false}
-              //             okText="Đồng ý"
-              //           >
-              //             <span className="text-sm underline text-red-500 cursor-pointer">Hủy</span>
-              //           </Popconfirm>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   </Stepper.Step>
-              //   <Stepper.Step
-              //     label="Đang giao"
-              //     title="Đang giao"
-              //     disabled={
-              //       exchange?.requestStatus?.exchangeStatus === 'pending' ||
-              //       exchange?.requestStatus?.exchangeStatus === 'canceled' ||
-              //       exchange?.requestStatus?.exchangeStatus === 'completed'
-              //     }
-              //   >
-              //     <div className="w-full h-full bg-white shadow-sm rounded-sm">
-              //       <div className="container mx-auto p-3 flex flex-col justify-start gap-2">
-              //         <p className="text-base font-medium">Bạn đã giao hàng cho người trao đổi ?</p>
-              //         <div className="flex items-center gap-3 mt-2">
-              //           <p className="text-xs ">
-              //             (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
-              //           </p>
-              //           <Button
-              //             variant="solid"
-              //             color="primary"
-              //             onClick={() => handleUpdateStatus(exchange._id, 'completed')}
-              //             loading={isLoading}
-              //           >
-              //             Cập nhật
-              //           </Button>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   </Stepper.Step>
-              //   <Stepper.Step
-              //     label="Hoàn thành"
-              //     title="Đã hoàn thành"
-              //     disabled={
-              //       exchange?.requestStatus?.exchangeStatus === 'pending' ||
-              //       exchange?.requestStatus?.exchangeStatus === 'shipping' ||
-              //       exchange?.requestStatus?.exchangeStatus === 'canceled'
-              //     }
-              //   >
-              //     <div className="container mx-auto p-3 w-full h-full bg-white shadow-sm rounded-sm flex justify-between items-center">
-              //       <div className=" flex justify-start items-center gap-2">
-              //         <p className="text-base font-medium">Hoàn thành trao đổi</p>
-              //         <IconifyIcon
-              //           icon="ic:round-check-box"
-              //           style={{
-              //             color: 'green',
-              //           }}
-              //         />
-              //       </div>
-              //       <p className="text-sm font-medium">Mời bạn đánh giá đối phương</p>
-              //       <Button variant="solid" color="primary" onClick={() => setActive(3)}>
-              //         Đánh giá
-              //       </Button>
-              //     </div>
-              //   </Stepper.Step>
-              //   <Stepper.Step label="Đánh giá">
-              //     <div className="container mx-auto p-3 w-full h-full bg-white shadow-sm rounded-sm">
-              //       <div className="flex flex-col justify-start gap-2">
-              //         <p className="text-base font-medium">Đánh giá trao đổi</p>
-              //       </div>
-              //     </div>
-              //   </Stepper.Step>
-              // </Stepper>
               <>
                 <Steps
                   direction="horizontal"
@@ -307,67 +195,74 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                     },
                   ]}
                 />
-                <div className="w-full h-full bg-white shadow-sm rounded-sm container mx-auto p-3 flex flex-col justify-start">
-                  {exchange?.requestStatus?.exchangeStatus === 'pending' && (
-                    <>
-                      <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
-                      <div className="flex items-center gap-3 mt-2">
-                        <p className="text-xs ">
-                          (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
-                        </p>
-                        <Button
-                          variant="solid"
-                          color="primary"
-                          onClick={() => handleUpdateStatus(exchange._id, 'shipping')}
-                          loading={isLoading}
-                        >
-                          Cập nhật
-                        </Button>
-                      </div>
-                      <Divider my="sm" />
-                      <div className="flex items-center justify-start gap-1 mt-2">
-                        <p className="text-sm ">Bạn muốn dừng trao đổi ?</p>
-                        <Popconfirm
-                          title="Bạn muốn dừng trao đổi ?"
-                          onConfirm={() => handleUpdateStatus(exchange._id, 'canceled')}
-                          showCancel={false}
-                          okText="Đồng ý"
-                        >
-                          <span className="text-sm underline text-red-500 cursor-pointer">Hủy</span>
-                        </Popconfirm>
-                      </div>
-                    </>
-                  )}
-                  {exchange?.requestStatus?.exchangeStatus === 'shipping' && (
-                    <>
-                      <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
-                      <div className="flex items-center gap-3 mt-2">
-                        <p className="text-xs ">
-                          (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
-                        </p>
-                        <Button
-                          variant="solid"
-                          color="primary"
-                          onClick={() => handleUpdateStatus(exchange._id, 'completed')}
-                          loading={isLoading}
-                        >
-                          Cập nhật
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                  {exchange?.requestStatus?.exchangeStatus === 'completed' && (
-                    <>
-                      <p className="text-base font-medium">Hoàn thành trao đổi</p>
-                      <div className="flex items-center justify-between gap-1 mt-2">
-                        <p className="text-sm ">Mời bạn đánh giá đối phương</p>
-                        <Button variant="solid" color="primary">
+                {exchange.role === 'requester' && (
+                  <div className="w-full h-full bg-white shadow-sm rounded-sm container mx-auto p-3 flex flex-col justify-start">
+                    {exchange?.requestStatus?.exchangeStatus === 'pending' && (
+                      <>
+                        <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <p className="text-xs ">
+                            (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
+                          </p>
+                          <Button
+                            variant="solid"
+                            color="primary"
+                            onClick={() => handleUpdateStatus(exchange._id, 'shipping')}
+                            loading={isLoading}
+                          >
+                            Cập nhật
+                          </Button>
+                        </div>
+                        <Divider my="sm" />
+                        <div className="flex items-center justify-start gap-1 mt-2">
+                          <p className="text-sm ">Bạn muốn dừng trao đổi ?</p>
+                          <Popconfirm
+                            title="Bạn muốn dừng trao đổi ?"
+                            onConfirm={() => handleUpdateStatus(exchange._id, 'canceled')}
+                            showCancel={false}
+                            okText="Đồng ý"
+                          >
+                            <span className="text-sm underline text-red-500 cursor-pointer">
+                              Hủy
+                            </span>
+                          </Popconfirm>
+                        </div>
+                      </>
+                    )}
+                    {exchange?.requestStatus?.exchangeStatus === 'shipping' && (
+                      <>
+                        <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <p className="text-xs ">
+                            (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
+                          </p>
+                          <Button
+                            variant="solid"
+                            color="primary"
+                            onClick={() => handleUpdateStatus(exchange._id, 'completed')}
+                            loading={isLoading}
+                          >
+                            Cập nhật
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                    {exchange?.requestStatus?.exchangeStatus === 'completed' && (
+                      <>
+                        <p className="text-base font-medium">Hoàn thành trao đổi</p>
+                        <div className="flex items-center justify-between gap-1 mt-2">
+                          <p className="text-sm ">
+                            Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và
+                            bạn xác nhận đã nhận được hàng của nhau
+                          </p>
+                        </div>
+                        <Button variant="solid" color="primary" disabled>
                           Đánh giá
                         </Button>
-                      </div>
-                    </>
-                  )}
-                </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </>
             )}
             {exchange?.requestStatus?.exchangeStatus === 'canceled' && (

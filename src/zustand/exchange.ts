@@ -8,6 +8,7 @@ type State = {
   exchanges: Exchange[]
   exchange: Exchange
   openViewExchangeModal: boolean
+  openViewExchangeModalRev: boolean
   openCreateExchangeModal: boolean
   data: { productId: string; size: string; colors: string; amount: string }
   product: ProductsClient
@@ -23,6 +24,7 @@ type Actions = {
   setExchange: (exchange: Exchange) => void
   setExchanges: (exchanges: Exchange[]) => void
   setOpenViewExchangeModal: (openViewExchangeModal: boolean) => void
+  setOpenViewExchangeModalRev: (openViewExchangeModalRev: boolean) => void
   setOpenCreateExchangeModal: (openCreateExchangeModal: boolean) => void
   setData: (data: { productId: string; size: string; colors: string; amount: string }) => void
   setProduct: (product: ProductsClient) => void
@@ -43,6 +45,7 @@ export const useExchange = create<State & Actions>((set) => ({
   product: {} as ProductsClient,
   data: { productId: '', size: '', colors: '', amount: '' },
   openPopconfirmShipping: false,
+  openViewExchangeModalRev: false,
   openPopconfirmDelivered: false,
   exchangeId: '',
   loading: false,
@@ -59,4 +62,5 @@ export const useExchange = create<State & Actions>((set) => ({
   updateExchange: (exchange) => set({ exchange }),
   setExchangeId: (exchangeId) => set({ exchangeId }),
   setLoading: (loading) => set({ loading }),
+  setOpenViewExchangeModalRev: (openViewExchangeModalRev) => set({ openViewExchangeModalRev }),
 }))

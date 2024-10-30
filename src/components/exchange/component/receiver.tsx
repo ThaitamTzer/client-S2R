@@ -1,11 +1,18 @@
 'use client'
-import { rem, Avatar } from '@mantine/core'
+import { rem, Avatar, Divider } from '@mantine/core'
 import { truncateText } from '@/helper/format'
 import { Exchange } from '@/types/exchangeTypes'
-import { Image, Tooltip, Steps } from 'antd'
+import { Image, Tooltip, Steps, Button, Popconfirm } from 'antd'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
+import { useExchange } from '@/zustand/exchange'
+import { useState } from 'react'
+import exChangeService from '@/services/exchange/exchange.service'
+import toast from 'react-hot-toast'
 
 export const Receiver = ({ exchange }: { exchange: Exchange }) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const { setExchange } = useExchange()
+
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
     const statusOrder = ['pending', 'shipping', 'completed', 'canceled']
     const currentIndex = statusOrder.indexOf(currentStatus)
@@ -29,6 +36,29 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
         return 3
       default:
         return 0
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdateStatus = async (id: string, status: any) => {
+    setIsLoading(true)
+    try {
+      await exChangeService
+        .update(id, status)
+        .then(() => {
+          exChangeService.getById(id).then((res) => {
+            setExchange(res)
+          })
+          toast.success('Cập nhật trạng thái thành công')
+          setIsLoading(false)
+        })
+        .catch(() => {
+          toast.error('Cập nhật trạng thái thất bại')
+          setIsLoading(false)
+        })
+    } catch {
+      toast.error('Cập nhật trạng thái thất bại')
+      setIsLoading(false)
     }
   }
 
@@ -99,36 +129,100 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
         </div>
         {exchange?.allExchangeStatus === 'accepted' && (
           <div className="flex flex-col justify-center items-center gap-4">
-            {exchange?.allExchangeStatus !== 'accepted' && (
-              <Steps
-                direction="horizontal"
-                current={getCurrentStep(exchange?.receiverStatus?.exchangeStatus)}
-                size="small"
-                status={
-                  exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined
-                }
-                items={[
-                  {
-                    title: 'Chờ xử lý',
-                    icon: <IconCircleDot />,
-                    status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'pending'),
-                  },
-                  {
-                    title: 'Đang giao',
-                    icon: <IconTruckDelivery />,
-                    status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'shipping'),
-                  },
-                  {
-                    title: 'Hoàn thành',
-                    icon: <IconCircleCheck />,
-                    status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'completed'),
-                  },
-                ]}
-              />
+            <Steps
+              direction="horizontal"
+              current={getCurrentStep(exchange?.receiverStatus?.exchangeStatus)}
+              size="small"
+              status={exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined}
+              items={[
+                {
+                  title: 'Chờ xử lý',
+                  icon: <IconCircleDot />,
+                  status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'pending'),
+                },
+                {
+                  title: 'Đang giao',
+                  icon: <IconTruckDelivery />,
+                  status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'shipping'),
+                },
+                {
+                  title: 'Hoàn thành',
+                  icon: <IconCircleCheck />,
+                  status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'completed'),
+                },
+              ]}
+            />
+            {exchange.role === 'receiver' && (
+              <div className="w-full h-full bg-white shadow-sm rounded-sm container mx-auto p-3 flex flex-col justify-start">
+                {exchange?.requestStatus?.exchangeStatus === 'pending' && (
+                  <>
+                    <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
+                    <div className="flex items-center gap-3 mt-2">
+                      <p className="text-xs ">
+                        (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
+                      </p>
+                      <Button
+                        variant="solid"
+                        color="primary"
+                        onClick={() => handleUpdateStatus(exchange._id, 'shipping')}
+                        loading={isLoading}
+                      >
+                        Cập nhật
+                      </Button>
+                    </div>
+                    <Divider my="sm" />
+                    <div className="flex items-center justify-start gap-1 mt-2">
+                      <p className="text-sm ">Bạn muốn dừng trao đổi ?</p>
+                      <Popconfirm
+                        title="Bạn muốn dừng trao đổi ?"
+                        onConfirm={() => handleUpdateStatus(exchange._id, 'canceled')}
+                        showCancel={false}
+                        okText="Đồng ý"
+                      >
+                        <span className="text-sm underline text-red-500 cursor-pointer">Hủy</span>
+                      </Popconfirm>
+                    </div>
+                  </>
+                )}
+                {exchange?.requestStatus?.exchangeStatus === 'shipping' && (
+                  <>
+                    <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
+                    <div className="flex items-center gap-3 mt-2">
+                      <p className="text-xs ">
+                        (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
+                      </p>
+                      <Button
+                        variant="solid"
+                        color="primary"
+                        onClick={() => handleUpdateStatus(exchange._id, 'completed')}
+                        loading={isLoading}
+                      >
+                        Cập nhật
+                      </Button>
+                    </div>
+                  </>
+                )}
+                {exchange?.requestStatus?.exchangeStatus === 'completed' && (
+                  <>
+                    <p className="text-base font-medium">Hoàn thành trao đổi</p>
+                    <div className="flex items-center justify-between gap-1 mt-2">
+                      <p className="text-sm ">
+                        Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và bạn
+                        xác nhận đã nhận được hàng của nhau
+                      </p>
+                    </div>
+                    <Button variant="solid" color="primary" disabled>
+                      Đánh giá
+                    </Button>
+                  </>
+                )}
+              </div>
             )}
-            {exchange?.receiverStatus?.exchangeStatus === 'canceled' && (
-              <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>
-            )}
+          </div>
+        )}
+        {exchange?.receiverStatus?.exchangeStatus === 'canceled' && (
+          <div className="flex flex-col justify-center items-center gap-4">
+            <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>
           </div>
         )}
       </div>
