@@ -128,3 +128,20 @@ export const useGetName = () => {
     clearAll,
   }
 }
+
+export const getAllExchangeStatusName = (string: string) => {
+  switch (string) {
+    case 'pending':
+      return 'Chờ xử lý'
+    case 'accepted':
+      return 'Đã duyệt'
+    case 'canceled':
+      return 'Đã hủy'
+    case 'completed':
+      return 'Đã hoàn thành'
+    case 'rejected':
+      return 'Đã bị từ chối'
+    default:
+      return string
+  }
+}

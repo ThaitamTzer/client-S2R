@@ -14,7 +14,7 @@ const ExChangeDrawer = () => {
 
   const { mutate } = useSWR('/api/Exchange/get-list-exchange', exChangeService.getAll, {
     onSuccess: (data) => {
-      setExchanges(data)
+      setExchanges(data.data)
     },
   })
 

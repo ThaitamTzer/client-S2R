@@ -1,13 +1,13 @@
 'use client'
 import { rem, Avatar } from '@mantine/core'
 import { truncateText } from '@/helper/format'
-import { ExchangeType } from '@/types/exchangeTypes'
+import { Exchange } from '@/types/exchangeTypes'
 import { Image, Tooltip, Steps } from 'antd'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
 
-export const Receiver = ({ exchange }: { exchange: ExchangeType }) => {
+export const Receiver = ({ exchange }: { exchange: Exchange }) => {
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
-    const statusOrder = ['pending', 'shipping', 'delivered', 'canceled']
+    const statusOrder = ['pending', 'shipping', 'completed', 'canceled']
     const currentIndex = statusOrder.indexOf(currentStatus)
     const targetIndex = statusOrder.indexOf(targetStatus)
 
@@ -17,9 +17,26 @@ export const Receiver = ({ exchange }: { exchange: ExchangeType }) => {
     return 'wait'
   }
 
+  const getCurrentStep = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 0
+      case 'shipping':
+        return 1
+      case 'completed':
+        return 2
+      case 'canceled':
+        return 3
+      default:
+        return 0
+    }
+  }
+
+  console.log(exchange)
+
   return (
     <>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 max-w-[500px]">
         <div className="flex flex-row items-center">
           <Avatar
             size={rem(50)}
@@ -80,69 +97,40 @@ export const Receiver = ({ exchange }: { exchange: ExchangeType }) => {
             </div>
           </div>
         </div>
-        {exchange?.receiverExchangeStatus === 'pending' && (
-          <div className="flex flex-row items-center gap-3">
-            <h1 className="text-lg font-medium">Trạng thái:</h1>
-            <p className="text-base px-2 py-1 bg-yellow-500 text-white capitalize rounded-md shadow-sm">
-              Đang chờ xử lý
-            </p>
-          </div>
-        )}
-        {exchange?.receiverExchangeStatus === 'canceled' && (
-          <div className="flex flex-row items-center gap-3">
-            <h1 className="text-lg font-medium">Trạng thái:</h1>
-            <p className="text-base px-2 py-1 bg-red-500 text-white capitalize rounded-md shadow-sm">
-              Đã hủy
-            </p>
-          </div>
-        )}
-        {exchange?.receiverExchangeStatus === 'shipping' && (
-          <div className="flex flex-row items-center gap-3">
-            <h1 className="text-lg font-medium">Trạng thái:</h1>
-            <p className="text-base px-2 py-1 bg-blue-500 text-white capitalize rounded-md shadow-sm">
-              Đang giao hàng
-            </p>
-          </div>
-        )}
-        {exchange?.receiverExchangeStatus === 'delivered' && (
-          <div className="flex flex-row items-center gap-3">
-            <h1 className="text-lg font-medium">Trạng thái:</h1>
-            <p className="text-base px-2 py-1 bg-green-500 text-white capitalize rounded-md shadow-sm">
-              Đã hoàn thành
-            </p>
-          </div>
-        )}
-        <div className="flex flex-col justify-center items-center gap-4">
-          <Steps
-            direction="horizontal"
-            current={['pending', 'shipping', 'delivered', 'canceled'].indexOf(
-              exchange?.receiverExchangeStatus || 'pending',
+        {exchange?.allExchangeStatus === 'accepted' && (
+          <div className="flex flex-col justify-center items-center gap-4">
+            {exchange?.allExchangeStatus !== 'accepted' && (
+              <Steps
+                direction="horizontal"
+                current={getCurrentStep(exchange?.receiverStatus?.exchangeStatus)}
+                size="small"
+                status={
+                  exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined
+                }
+                items={[
+                  {
+                    title: 'Chờ xử lý',
+                    icon: <IconCircleDot />,
+                    status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'pending'),
+                  },
+                  {
+                    title: 'Đang giao',
+                    icon: <IconTruckDelivery />,
+                    status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'shipping'),
+                  },
+                  {
+                    title: 'Hoàn thành',
+                    icon: <IconCircleCheck />,
+                    status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'completed'),
+                  },
+                ]}
+              />
             )}
-            size="small"
-            status={exchange?.receiverExchangeStatus === 'canceled' ? 'error' : 'process'}
-            items={[
-              {
-                title: 'Chờ xử lý',
-                icon: <IconCircleDot />,
-                status: getStepStatus(exchange?.receiverExchangeStatus || 'pending', 'pending'),
-              },
-              {
-                title: <span className="cursor-pointer">Đang giao</span>,
-                icon: <IconTruckDelivery />,
-                status: getStepStatus(exchange?.receiverExchangeStatus || 'pending', 'shipping'),
-              },
-              {
-                title: <span className="cursor-pointer">Hoàn thành</span>,
-                icon: <IconCircleCheck />,
-                status: getStepStatus(exchange?.receiverExchangeStatus || 'pending', 'delivered'),
-              },
-            ]}
-            style={{ maxWidth: 400 }}
-          />
-          {exchange?.receiverExchangeStatus === 'canceled' && (
-            <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>
-          )}
-        </div>
+            {exchange?.receiverStatus?.exchangeStatus === 'canceled' && (
+              <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>
+            )}
+          </div>
+        )}
       </div>
     </>
   )

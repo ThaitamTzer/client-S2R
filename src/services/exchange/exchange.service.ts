@@ -1,10 +1,23 @@
 import axiClient from '@/lib/axios'
-import { CreateExchangeType, ExchangeType } from '@/types/exchangeTypes'
+import { CreateExchangeType, ExchangeType, Exchange } from '@/types/exchangeTypes'
 
 const exChangeService = {
   //  ** Get all exchange
-  getAll: async (): Promise<ExchangeType[]> => {
-    const res: ExchangeType[] = await axiClient.get('/api/Exchange/get-list-exchange')
+  getAll: async (page?: number, limit?: number, filterUserId?: string): Promise<ExchangeType> => {
+    const queryParams = new URLSearchParams()
+
+    if (page) queryParams.append('page', page.toString())
+    if (limit) queryParams.append('limit', limit.toString())
+
+    if (filterUserId) {
+      filterUserId.split(',').forEach((id) => {
+        if (id) queryParams.append('filterUserId', id)
+      })
+    }
+
+    const res: ExchangeType = await axiClient.get('/api/Exchange/get-list-exchange', {
+      params: queryParams,
+    })
 
     return res
   },
@@ -31,6 +44,13 @@ const exChangeService = {
     const res = await axiClient.patch(`/api/Exchange/update-status-exchange/${id}?status=${status}`)
 
     return res?.data
+  },
+
+  // ** Get exchange by id
+  getById: async (id: string): Promise<Exchange> => {
+    const res: Exchange = await axiClient.get(`/api/Exchange/get-exchange-detail/${id}`)
+
+    return res
   },
 }
 

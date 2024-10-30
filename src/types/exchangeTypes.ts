@@ -14,7 +14,18 @@ export type CreateExchangeType = {
   note?: string
 }
 
-export type ExchangeType = {
+type Rating = {
+  _id: string
+  userId: string
+  targetId: string
+  targetType: string
+  rating: number
+  comment: string
+  createdAt: string | Date
+  updatedAt: string | Date
+}
+
+export type Exchange = {
   _id: string
   requesterId: {
     _id: string
@@ -70,4 +81,13 @@ export type ExchangeType = {
   createdAt: string | Date
   updatedAt: string | Date
   role: string
+  ratings?: {
+    requesterRating: Rating | null
+    receiverRating: Rating | null
+  }
+}
+
+export type ExchangeType = {
+  total: number
+  data: Exchange[]
 }
