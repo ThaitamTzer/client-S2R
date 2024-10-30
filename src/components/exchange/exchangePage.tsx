@@ -1,6 +1,5 @@
 'use client'
 import { useExchange } from '@/zustand/exchange'
-import useSWR from 'swr'
 import exChangeService from '@/services/exchange/exchange.service'
 import { Tabs } from 'antd'
 import { ViewExchangeModal } from './viewExchange'
