@@ -134,7 +134,7 @@ export const getAllExchangeStatusName = (string: string) => {
     case 'pending':
       return 'Chờ xử lý'
     case 'accepted':
-      return 'Đã duyệt'
+      return 'Đã chấp nhận'
     case 'canceled':
       return 'Đã hủy'
     case 'completed':

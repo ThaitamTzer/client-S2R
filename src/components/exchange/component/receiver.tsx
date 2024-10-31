@@ -2,19 +2,21 @@
 import { rem, Avatar, Divider } from '@mantine/core'
 import { truncateText } from '@/helper/format'
 import { Exchange } from '@/types/exchangeTypes'
-import { Image, Tooltip, Steps, Button, Popconfirm, Rate, Input } from 'antd'
+import { Image, Tooltip, Steps, Button, Popconfirm, Rate, Input, Form } from 'antd'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
 import { useExchange } from '@/zustand/exchange'
 import { useState } from 'react'
 import exChangeService from '@/services/exchange/exchange.service'
 import toast from 'react-hot-toast'
 import ratingService from '@/services/rating/rating.service'
+import { useGetName } from '@/helper/getName'
 
 export const Receiver = ({ exchange }: { exchange: Exchange }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
   const { setExchangeRev } = useExchange()
+  const { getColorName } = useGetName()
+
+  const [form] = Form.useForm()
 
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
     const statusOrder = ['pending', 'shipping', 'completed', 'canceled']
@@ -87,8 +89,8 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
       .create({
         targetId: exchange?._id,
         targetType: 'exchange',
-        rating: rating,
-        comment: comment,
+        rating: form.getFieldValue('rating'),
+        comment: form.getFieldValue('comment'),
       })
       .then(() => {
         setTimeout(() => {
@@ -153,7 +155,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             <div className="flex items-center gap-2">
               <span>Màu sắc: </span>
               <p className="text-green-800 text-xl font-semibold">
-                {exchange?.receiveProduct?.colors}
+                {getColorName(exchange?.receiveProduct?.colors)}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -170,160 +172,253 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             </div>
           </div>
         </div>
-        {exchange?.allExchangeStatus === 'accepted' && (
+        {exchange?.allExchangeStatus !== 'pending' && (
           <div className="flex flex-col justify-center items-center gap-4">
-            <Steps
-              direction="horizontal"
-              current={getCurrentStep(exchange?.receiverStatus?.exchangeStatus)}
-              size="small"
-              status={exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined}
-              items={[
-                {
-                  title: 'Chờ xử lý',
-                  icon: <IconCircleDot />,
-                  status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'pending'),
-                },
-                {
-                  title: 'Đang giao',
-                  icon: <IconTruckDelivery />,
-                  status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'shipping'),
-                },
-                {
-                  title: 'Hoàn thành',
-                  icon: <IconCircleCheck />,
-                  status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'completed'),
-                },
-              ]}
-            />
-            {exchange.role === 'receiver' && (
-              <div className="w-full h-full bg-white shadow-sm rounded-sm container mx-auto p-3 flex flex-col justify-start">
-                {exchange?.receiverStatus?.exchangeStatus === 'pending' && (
-                  <>
-                    <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
-                    <div className="flex items-center gap-3 mt-2">
-                      <p className="text-xs ">
-                        (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
-                      </p>
-                      <Button
-                        variant="solid"
-                        color="primary"
-                        onClick={() => handleUpdateStatus(exchange._id, 'shipping')}
-                        loading={isLoading}
-                      >
-                        Cập nhật
-                      </Button>
-                    </div>
-                    <Divider my="sm" />
-                    <div className="flex items-center justify-start gap-1 mt-2">
-                      <p className="text-sm ">Bạn muốn dừng trao đổi ?</p>
-                      <Popconfirm
-                        title="Bạn muốn dừng trao đổi ?"
-                        onConfirm={() => handleUpdateStatus(exchange._id, 'canceled')}
-                        showCancel={false}
-                        okText="Đồng ý"
-                      >
-                        <span className="text-sm underline text-red-500 cursor-pointer">Hủy</span>
-                      </Popconfirm>
-                    </div>
-                  </>
-                )}
-                {exchange?.receiverStatus?.exchangeStatus === 'shipping' && (
-                  <>
-                    <p className="text-base font-medium">
-                      Bạn đã giao hàng thành công cho người nhận ?
-                    </p>
-                    <div className="flex items-center gap-3 mt-2">
-                      <p className="text-xs ">
-                        (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
-                      </p>
-                      <Button
-                        variant="solid"
-                        color="primary"
-                        onClick={() => handleUpdateStatus(exchange._id, 'completed')}
-                        loading={isLoading}
-                      >
-                        Cập nhật
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {exchange?.receiverStatus?.exchangeStatus === 'completed' && (
-                  <>
-                    {exchange?.receiverStatus?.confirmStatus !== 'confirmed' && (
+            {exchange?.allExchangeStatus !== 'canceled' && (
+              <>
+                <Steps
+                  direction="horizontal"
+                  current={getCurrentStep(exchange?.receiverStatus?.exchangeStatus)}
+                  size="small"
+                  status={
+                    exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined
+                  }
+                  items={[
+                    {
+                      title: 'Chờ xử lý',
+                      icon: <IconCircleDot />,
+                      status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'pending'),
+                    },
+                    {
+                      title: 'Đang giao',
+                      icon: <IconTruckDelivery />,
+                      status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'shipping'),
+                    },
+                    {
+                      title: 'Hoàn thành',
+                      icon: <IconCircleCheck />,
+                      status: getStepStatus(exchange?.receiverStatus?.exchangeStatus, 'completed'),
+                    },
+                  ]}
+                />
+                {exchange.role === 'receiver' && (
+                  <div className="w-full h-full bg-white shadow-sm rounded-sm container mx-auto p-3 flex flex-col justify-start">
+                    {exchange?.receiverStatus?.exchangeStatus === 'pending' && (
                       <>
-                        <p className="text-base font-medium">Hoàn thành giao hàng</p>
-                        <div className="flex items-center justify-between gap-1 mt-2">
-                          <p className="text-sm ">
-                            Bạn sẽ được đánh giá người gửi của bạn sau khi người gửi của bạn và bạn
-                            xác nhận đã nhận được hàng của nhau
+                        <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <p className="text-xs ">
+                            (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
                           </p>
+                          <Button
+                            variant="solid"
+                            color="primary"
+                            onClick={() => handleUpdateStatus(exchange._id, 'shipping')}
+                            loading={isLoading}
+                          >
+                            Cập nhật
+                          </Button>
+                        </div>
+                        <Divider my="sm" />
+                        <div className="flex items-center justify-start gap-1 mt-2">
+                          <p className="text-sm ">Bạn muốn dừng trao đổi ?</p>
+                          <Popconfirm
+                            title="Bạn muốn dừng trao đổi ?"
+                            onConfirm={() => handleUpdateStatus(exchange._id, 'canceled')}
+                            showCancel={false}
+                            okText="Đồng ý"
+                          >
+                            <span className="text-sm underline text-red-500 cursor-pointer">
+                              Hủy
+                            </span>
+                          </Popconfirm>
                         </div>
                       </>
                     )}
-                    {exchange?.requestStatus?.confirmStatus === 'confirmed' && (
-                      <div className="flex items-center justify-between gap-1 mt-2">
-                        <p className="text-sm ">
-                          Bạn đã nhận được hàng vui lòng đánh giá người gửi
-                        </p>
-                      </div>
+                    {exchange?.receiverStatus?.exchangeStatus === 'shipping' && (
+                      <>
+                        <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <p className="text-xs ">
+                            (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
+                          </p>
+                          <Button
+                            variant="solid"
+                            color="primary"
+                            onClick={() => handleUpdateStatus(exchange._id, 'completed')}
+                            loading={isLoading}
+                          >
+                            Cập nhật
+                          </Button>
+                        </div>
+                      </>
                     )}
-                    {exchange?.requestStatus?.exchangeStatus === 'completed' &&
-                      exchange?.receiverStatus.confirmStatus !== 'confirmed' && (
-                        <>
-                          <Divider my="sm" />
-                          <div className="flex flex-col gap-1 mt-2">
-                            <p className="text-base font-medium">Xác nhận đã nhận được hàng</p>
-                          </div>
-                          <div className="flex items-center justify-end gap-1 mt-2">
-                            <Button
-                              variant="solid"
-                              color="primary"
-                              onClick={() => handleConfirmReceived(exchange._id)}
-                              loading={isLoading}
-                            >
-                              Xác nhận
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
-                      exchange.role === 'receiver' &&
-                      exchange.receiverStatus.confirmStatus === 'confirmed' && (
-                        <>
-                          <div className="flex flex-col gap-2">
-                            <Rate
-                              disabled={!!exchange?.ratings?.receiverRating?.rating}
-                              allowHalf
-                              defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
-                              onChange={(value) => setRating(value)}
-                              allowClear={false}
-                            />
-                            <Input.TextArea
-                              rows={4}
-                              placeholder="Nhập nhận xét"
-                              onChange={(e) => setComment(e.target.value)}
-                              defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
-                              disabled={!!exchange?.ratings?.receiverRating?.comment}
-                            />
-                            {!exchange?.ratings?.receiverRating && (
-                              <Button
-                                variant="solid"
-                                color="primary"
-                                loading={isLoading}
-                                onClick={handleCreateRating}
-                              >
-                                Đánh giá
-                              </Button>
-                            )}
-                          </div>
-                        </>
-                      )}
-                  </>
+                    {exchange?.receiverStatus?.exchangeStatus === 'completed' && (
+                      <>
+                        {exchange?.receiverStatus?.confirmStatus !== 'confirmed' && (
+                          <>
+                            <p className="text-base font-medium">Hoàn thành giao hàng</p>
+                            <div className="flex items-center justify-between gap-1 mt-2">
+                              <p className="text-sm ">
+                                Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn
+                                và bạn xác nhận đã nhận được hàng của nhau
+                              </p>
+                            </div>
+                          </>
+                        )}
+                        {exchange?.requestStatus?.confirmStatus === 'confirmed' &&
+                          exchange.ratings?.receiverRating === null && (
+                            <div className="flex items-center justify-between gap-1 mt-2">
+                              <p className="text-sm ">
+                                Bạn đã nhận được hàng vui lòng đánh giá người nhận
+                              </p>
+                            </div>
+                          )}
+                        {exchange?.requestStatus?.exchangeStatus === 'completed' &&
+                          exchange?.receiverStatus.confirmStatus !== 'confirmed' && (
+                            <>
+                              <Divider my="sm" />
+                              <div className="flex flex-col gap-1 mt-2">
+                                <p className="text-base font-medium">Xác nhận đã nhận được hàng</p>
+                              </div>
+                              <div className="flex items-center justify-end gap-1 mt-2">
+                                <Button
+                                  variant="solid"
+                                  color="primary"
+                                  onClick={() => handleConfirmReceived(exchange._id)}
+                                  loading={isLoading}
+                                >
+                                  Xác nhận
+                                </Button>
+                              </div>
+                            </>
+                          )}
+                        {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
+                          exchange.role === 'receiver' &&
+                          exchange.receiverStatus.confirmStatus === 'confirmed' && (
+                            // thực hiện đánh giá
+                            <>
+                              <div className="flex flex-col">
+                                <Form form={form} onFinish={handleCreateRating} layout="vertical">
+                                  <Form.Item
+                                    name="rating"
+                                    rules={[{ required: true }]}
+                                    label="Đánh giá:"
+                                    style={{
+                                      marginBottom: '0px',
+                                    }}
+                                  >
+                                    <Rate
+                                      disabled={!!exchange?.ratings?.receiverRating?.rating}
+                                      defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
+                                      allowClear={false}
+                                    />
+                                  </Form.Item>
+                                  <Form.Item
+                                    name="comment"
+                                    label="Nhận xét:"
+                                    style={{
+                                      marginBottom: '0px',
+                                    }}
+                                  >
+                                    <Input.TextArea
+                                      rows={4}
+                                      placeholder="Nhập nhận xét"
+                                      defaultValue={
+                                        exchange?.ratings?.receiverRating?.comment || ''
+                                      }
+                                      disabled={!!exchange?.ratings?.receiverRating?.comment}
+                                    />
+                                  </Form.Item>
+                                  {!exchange?.ratings?.receiverRating && (
+                                    <Button
+                                      variant="solid"
+                                      color="primary"
+                                      loading={isLoading}
+                                      type="primary"
+                                      htmlType="submit"
+                                    >
+                                      Đánh giá
+                                    </Button>
+                                  )}
+                                </Form>
+                                {/* <div className="flex items-center gap-1">
+                                  <Rate
+                                    disabled={!!exchange?.ratings?.receiverRating?.rating}
+                                    defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
+                                    onChange={(value) => setRating(value)}
+                                    allowClear={false}
+                                  />
+                                </div>
+                                <Input.TextArea
+                                  rows={4}
+                                  placeholder="Nhập nhận xét"
+                                  onChange={(e) => setComment(e.target.value)}
+                                  defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
+                                  disabled={!!exchange?.ratings?.receiverRating?.comment}
+                                />
+                                {!exchange?.ratings?.receiverRating && (
+                                  <Button
+                                    variant="solid"
+                                    color="primary"
+                                    loading={isLoading}
+                                    onClick={handleCreateRating}
+                                  >
+                                    Đánh giá
+                                  </Button>
+                                )} */}
+                              </div>
+                            </>
+                          )}
+                      </>
+                    )}
+                  </div>
                 )}
-              </div>
+              </>
             )}
           </div>
         )}
+        {exchange?.ratings?.receiverRating && (
+          <>
+            {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
+              exchange.role === 'requester' &&
+              exchange.receiverStatus.confirmStatus === 'confirmed' && (
+                // thực hiện đánh giá
+                <>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-1">
+                      <Rate
+                        disabled={!!exchange?.ratings?.receiverRating?.rating}
+                        defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
+                        allowClear={false}
+                      />
+                      <p className="text-md ">({exchange?.ratings?.receiverRating?.rating})</p>
+                    </div>
+                    <Input.TextArea
+                      rows={4}
+                      placeholder="Nhập nhận xét"
+                      defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
+                      disabled={!!exchange?.ratings?.receiverRating?.comment}
+                    />
+                  </div>
+                </>
+              )}
+          </>
+        )}
+        {exchange.role === 'requester' &&
+          exchange?.receiverStatus?.confirmStatus !== 'confirmed' &&
+          exchange?.requestStatus?.exchangeStatus === 'completed' && (
+            <div className="flex flex-col justify-center items-center gap-4">
+              <p className="text-red-500 font-medium">Người này chưa nhận được hàng</p>
+            </div>
+          )}
+        {exchange?.ratings?.receiverRating === null &&
+          exchange.role === 'requester' &&
+          exchange?.receiverStatus?.confirmStatus === 'confirmed' && (
+            <div className="flex flex-col justify-center items-center gap-4">
+              <p className="text-red-500 font-medium">Người này chưa thực hiện đánh giá</p>
+            </div>
+          )}
         {exchange?.receiverStatus?.exchangeStatus === 'canceled' && (
           <div className="flex flex-col justify-center items-center gap-4">
             <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>

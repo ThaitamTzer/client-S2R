@@ -80,7 +80,7 @@ export type Exchange = {
   completedAt: string | Date
   createdAt: string | Date
   updatedAt: string | Date
-  role: string
+  role: 'requester' | 'receiver'
   ratings?: {
     requesterRating: Rating | null
     receiverRating: Rating | null

@@ -205,6 +205,13 @@ const ExChangeDrawer = () => {
                               </p>
                             </div>
                           )}
+                          {exchange?.allExchangeStatus === 'completed' && (
+                            <div className="">
+                              <p className="text-blue font-medium text-base py-1 px-2 bg-blue-200 rounded-sm">
+                                Hoàn thành
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <Divider />
