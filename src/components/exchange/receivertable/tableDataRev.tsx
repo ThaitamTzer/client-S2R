@@ -37,8 +37,8 @@ export const TableDataRev = () => {
   const [total, setTotal] = useState(0)
   const [allUsers, setAllUsers] = useState<{ value: string; label: string }[]>([])
   const { styles } = useStyle()
-  const param = useSearchParams()
   const router = useRouter()
+  const param = useSearchParams()
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10
   const filterUserIds = param.getAll('filterUserId')

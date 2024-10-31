@@ -4,24 +4,29 @@ import { useExchange } from '@/zustand/exchange'
 import { useAuth } from '@/hooks/useAuth'
 import { Login } from './login'
 import exChangeService from '@/services/exchange/exchange.service'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { Avatar, rem } from '@mantine/core'
 import IconifyIcon from '../icons'
 import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 const ExChangeDrawer = () => {
   const { user } = useAuth()
   const { openExchangeModal, toogleExchangeModal, listExchange, setListExchange } = useExchange()
+  const param = useSearchParams()
+  const page = Number(param.get('page')) || 1
+  const limit = Number(param.get('limit')) || 10
+  const filterUserIds = param.getAll('filterUserId')
 
-  const { data, mutate } = useSWR('listExchange', () => exChangeService.getAll(1, 1000, ''))
+  const { data, mutate: refresh } = useSWR('listExchange', () =>
+    exChangeService.getAll(1, 1000, ''),
+  )
 
   useEffect(() => {
     if (data) {
       setListExchange(data.data)
     }
   }, [data, setListExchange])
-
-  console.log('listExchange', listExchange)
 
   const [api, contextHolder] = notification.useNotification()
 
@@ -43,7 +48,9 @@ const ExChangeDrawer = () => {
           placement: 'topLeft',
         })
         setTimeout(() => {
-          mutate()
+          refresh()
+          mutate(['exchangesRev', page, limit, ...filterUserIds])
+          mutate(['exchanges', page, limit, ...filterUserIds])
         }, 1000)
       })
       .catch(() => {
@@ -64,7 +71,9 @@ const ExChangeDrawer = () => {
           placement: 'topLeft',
         })
         setTimeout(() => {
-          mutate()
+          refresh()
+          mutate(['exchangesRev', page, limit, ...filterUserIds])
+          mutate(['exchanges', page, limit, ...filterUserIds])
         }, 1000)
       })
       .catch(() => {
