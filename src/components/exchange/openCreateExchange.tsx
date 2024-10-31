@@ -167,7 +167,7 @@ export const CreateExchangeModal = () => {
                         }`}
                         onClick={() => setProductSelected(product)}
                       >
-                        <Image
+                        <img
                           src={product?.imgUrls?.[0]}
                           loading="lazy"
                           alt={product?.productName}
