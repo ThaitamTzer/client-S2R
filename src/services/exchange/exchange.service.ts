@@ -60,7 +60,7 @@ const exChangeService = {
   // ** Confirm received
   confirmReceived: async (id: string, status: 'confirmed' | 'pending') => {
     const res = await axiClient.patch(
-      `/api/Exchange/update-confirm-status-exchange/${id}?status=${status}`,
+      `/api/Exchange/update-confirm-status-exchange/${id}?confirmStatus=${status}`,
     )
 
     return res?.data

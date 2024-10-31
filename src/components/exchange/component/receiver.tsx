@@ -2,15 +2,18 @@
 import { rem, Avatar, Divider } from '@mantine/core'
 import { truncateText } from '@/helper/format'
 import { Exchange } from '@/types/exchangeTypes'
-import { Image, Tooltip, Steps, Button, Popconfirm } from 'antd'
+import { Image, Tooltip, Steps, Button, Popconfirm, Rate, Input } from 'antd'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
 import { useExchange } from '@/zustand/exchange'
 import { useState } from 'react'
 import exChangeService from '@/services/exchange/exchange.service'
 import toast from 'react-hot-toast'
+import ratingService from '@/services/rating/rating.service'
 
 export const Receiver = ({ exchange }: { exchange: Exchange }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
   const { setExchangeRev } = useExchange()
 
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
@@ -60,6 +63,46 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
       toast.error('Cập nhật trạng thái thất bại')
       setIsLoading(false)
     }
+  }
+
+  const handleConfirmReceived = async (id: string) => {
+    setIsLoading(true)
+    try {
+      await exChangeService.confirmReceived(id, 'confirmed').then(() => {
+        exChangeService.getById(id).then((res) => {
+          setExchangeRev(res)
+        })
+        toast.success('Xác nhận thành công')
+        setIsLoading(false)
+      })
+    } catch {
+      toast.error('Xác nhận thất bại')
+      setIsLoading(false)
+    }
+  }
+
+  const handleCreateRating = async () => {
+    setIsLoading(true)
+    await ratingService
+      .create({
+        targetId: exchange?._id,
+        targetType: 'exchange',
+        rating: rating,
+        comment: comment,
+      })
+      .then(() => {
+        setTimeout(() => {
+          exChangeService.getById(exchange?._id).then((res) => {
+            setExchangeRev(res)
+          })
+        }, 1000)
+        toast.success('Đánh giá thành công')
+        setIsLoading(false)
+      })
+      .catch(() => {
+        toast.error('Đánh giá thất bại')
+        setIsLoading(false)
+      })
   }
 
   console.log(exchange)
@@ -186,7 +229,9 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                 )}
                 {exchange?.receiverStatus?.exchangeStatus === 'shipping' && (
                   <>
-                    <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
+                    <p className="text-base font-medium">
+                      Bạn đã giao hàng thành công cho người nhận ?
+                    </p>
                     <div className="flex items-center gap-3 mt-2">
                       <p className="text-xs ">
                         (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
@@ -204,16 +249,75 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                 )}
                 {exchange?.receiverStatus?.exchangeStatus === 'completed' && (
                   <>
-                    <p className="text-base font-medium">Hoàn thành trao đổi</p>
-                    <div className="flex items-center justify-between gap-1 mt-2">
-                      <p className="text-sm ">
-                        Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và bạn
-                        xác nhận đã nhận được hàng của nhau
-                      </p>
-                    </div>
-                    <Button variant="solid" color="primary" disabled>
-                      Đánh giá
-                    </Button>
+                    {exchange?.receiverStatus?.confirmStatus !== 'confirmed' && (
+                      <>
+                        <p className="text-base font-medium">Hoàn thành giao hàng</p>
+                        <div className="flex items-center justify-between gap-1 mt-2">
+                          <p className="text-sm ">
+                            Bạn sẽ được đánh giá người gửi của bạn sau khi người gửi của bạn và bạn
+                            xác nhận đã nhận được hàng của nhau
+                          </p>
+                        </div>
+                      </>
+                    )}
+                    {exchange?.requestStatus?.confirmStatus === 'confirmed' && (
+                      <div className="flex items-center justify-between gap-1 mt-2">
+                        <p className="text-sm ">
+                          Bạn đã nhận được hàng vui lòng đánh giá người gửi
+                        </p>
+                      </div>
+                    )}
+                    {exchange?.requestStatus?.exchangeStatus === 'completed' &&
+                      exchange?.receiverStatus.confirmStatus !== 'confirmed' && (
+                        <>
+                          <Divider my="sm" />
+                          <div className="flex flex-col gap-1 mt-2">
+                            <p className="text-base font-medium">Xác nhận đã nhận được hàng</p>
+                          </div>
+                          <div className="flex items-center justify-end gap-1 mt-2">
+                            <Button
+                              variant="solid"
+                              color="primary"
+                              onClick={() => handleConfirmReceived(exchange._id)}
+                              loading={isLoading}
+                            >
+                              Xác nhận
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
+                      exchange.role === 'receiver' &&
+                      exchange.receiverStatus.confirmStatus === 'confirmed' && (
+                        <>
+                          <div className="flex flex-col gap-2">
+                            <Rate
+                              disabled={!!exchange?.ratings?.receiverRating?.rating}
+                              allowHalf
+                              defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
+                              onChange={(value) => setRating(value)}
+                              allowClear={false}
+                            />
+                            <Input.TextArea
+                              rows={4}
+                              placeholder="Nhập nhận xét"
+                              onChange={(e) => setComment(e.target.value)}
+                              defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
+                              disabled={!!exchange?.ratings?.receiverRating?.comment}
+                            />
+                            {!exchange?.ratings?.receiverRating && (
+                              <Button
+                                variant="solid"
+                                color="primary"
+                                loading={isLoading}
+                                onClick={handleCreateRating}
+                              >
+                                Đánh giá
+                              </Button>
+                            )}
+                          </div>
+                        </>
+                      )}
                   </>
                 )}
               </div>

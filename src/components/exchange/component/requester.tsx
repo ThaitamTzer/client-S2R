@@ -2,15 +2,18 @@
 import { rem, Avatar, Divider } from '@mantine/core'
 import { truncateText } from '@/helper/format'
 import { Exchange } from '@/types/exchangeTypes'
-import { Image, Tooltip, Button, Popconfirm, Steps, Rate } from 'antd'
+import { Image, Tooltip, Button, Popconfirm, Steps, Rate, Input } from 'antd'
 import { useState } from 'react'
 import exChangeService from '@/services/exchange/exchange.service'
 import toast from 'react-hot-toast'
 import { useExchange } from '@/zustand/exchange'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
+import ratingService from '@/services/rating/rating.service'
 
 export const Requester = ({ exchange }: { exchange: Exchange }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
   const { setExchange } = useExchange()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +53,30 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
       toast.error('Xác nhận thất bại')
       setIsLoading(false)
     }
+  }
+
+  const handleCreateRating = async () => {
+    setIsLoading(true)
+    await ratingService
+      .create({
+        targetId: exchange?._id,
+        targetType: 'exchange',
+        rating: rating,
+        comment: comment,
+      })
+      .then(() => {
+        setTimeout(() => {
+          exChangeService.getById(exchange?._id).then((res) => {
+            setExchange(res)
+          })
+        }, 1000)
+        toast.success('Đánh giá thành công')
+        setIsLoading(false)
+      })
+      .catch(() => {
+        toast.error('Đánh giá thất bại')
+        setIsLoading(false)
+      })
   }
 
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
@@ -148,42 +175,6 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
             </div>
           </div>
         </div>
-        {/* Status */}
-        {/* <div>
-          {exchange?.requesterExchangeStatus === 'pending' && (
-            <div className="flex flex-row items-center gap-3">
-              <h1 className="text-lg font-medium">Trạng thái:</h1>
-              <p className="text-base px-2 py-1 bg-yellow-500 text-white capitalize rounded-md shadow-sm">
-                Đang chờ xử lý
-              </p>
-            </div>
-          )}
-          {exchange?.requesterExchangeStatus === 'canceled' && (
-            <div className="flex flex-row items-center gap-3">
-              <h1 className="text-lg font-medium">Trạng thái:</h1>
-              <p className="text-base px-2 py-1 bg-red-500 text-white capitalize rounded-md shadow-sm">
-                Đã hủy
-              </p>
-            </div>
-          )}
-          {exchange?.requesterExchangeStatus === 'shipping' && (
-            <div className="flex flex-row items-center gap-3">
-              <h1 className="text-lg font-medium">Trạng thái:</h1>
-              <p className="text-base px-2 py-1 bg-blue-500 text-white capitalize rounded-md shadow-sm">
-                Đang giao hàng
-              </p>
-            </div>
-          )}
-          {exchange?.requesterExchangeStatus === 'delivered' && (
-            <div className="flex flex-row items-center gap-3">
-              <h1 className="text-lg font-medium">Trạng thái:</h1>
-              <p className="text-base px-2 py-1 bg-green-500 text-white capitalize rounded-md shadow-sm">
-                Đã hoàn thành
-              </p>
-            </div>
-          )}
-        </div> */}
-        {/* Change status */}
         {exchange?.allExchangeStatus !== 'pending' && (
           <div className="flex flex-col justify-start items-center gap-4 max-w-[900px]">
             {exchange?.allExchangeStatus !== 'canceled' && (
@@ -249,7 +240,9 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                     )}
                     {exchange?.requestStatus?.exchangeStatus === 'shipping' && (
                       <>
-                        <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
+                        <p className="text-base font-medium">
+                          Bạn đã giao hàng thành công cho người nhận ?
+                        </p>
                         <div className="flex items-center gap-3 mt-2">
                           <p className="text-xs ">
                             (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
@@ -267,14 +260,16 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                     )}
                     {exchange?.requestStatus?.exchangeStatus === 'completed' && (
                       <>
-                        <p className="text-base font-medium">Hoàn thành giao hàng</p>
-                        {exchange?.receiverStatus?.confirmStatus !== 'confirmed' && (
-                          <div className="flex items-center justify-between gap-1 mt-2">
-                            <p className="text-sm ">
-                              Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và
-                              bạn xác nhận đã nhận được hàng của nhau
-                            </p>
-                          </div>
+                        {exchange?.requestStatus?.confirmStatus !== 'confirmed' && (
+                          <>
+                            <p className="text-base font-medium">Hoàn thành giao hàng</p>
+                            <div className="flex items-center justify-between gap-1 mt-2">
+                              <p className="text-sm ">
+                                Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn
+                                và bạn xác nhận đã nhận được hàng của nhau
+                              </p>
+                            </div>
+                          </>
                         )}
                         {exchange?.receiverStatus?.confirmStatus === 'confirmed' && (
                           <div className="flex items-center justify-between gap-1 mt-2">
@@ -283,30 +278,56 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                             </p>
                           </div>
                         )}
-                        {exchange?.requestStatus?.exchangeStatus === 'completed' && (
-                          <>
-                            <Divider my="sm" />
-                            <div className="flex flex-col gap-1 mt-2">
-                              <p className="text-sm ">Xác nhận đã nhận được đơn hàng</p>
-                            </div>
-                            <div className="flex items-center justify-end gap-1 mt-2">
-                              <Button
-                                variant="solid"
-                                color="primary"
-                                onClick={() => handleConfirmReceived(exchange._id)}
-                                loading={isLoading}
-                              >
-                                Xác nhận
-                              </Button>
-                            </div>
-                          </>
-                        )}
+                        {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
+                          exchange?.requestStatus.confirmStatus !== 'confirmed' && (
+                            <>
+                              <Divider my="sm" />
+                              <div className="flex flex-col gap-1 mt-2">
+                                <p className="text-base font-medium">Xác nhận đã nhận được hàng</p>
+                              </div>
+                              <div className="flex items-center justify-end gap-1 mt-2">
+                                <Button
+                                  variant="solid"
+                                  color="primary"
+                                  onClick={() => handleConfirmReceived(exchange._id)}
+                                  loading={isLoading}
+                                >
+                                  Xác nhận
+                                </Button>
+                              </div>
+                            </>
+                          )}
                         {exchange?.requestStatus?.exchangeStatus === 'completed' &&
                           exchange.role === 'requester' &&
                           exchange.requestStatus.confirmStatus === 'confirmed' && (
                             // thực hiện đánh giá
                             <>
-                              <Rate allowHalf defaultValue={0}  />,
+                              <div className="flex flex-col gap-2">
+                                <Rate
+                                  disabled={!!exchange?.ratings?.requesterRating?.rating}
+                                  allowHalf
+                                  defaultValue={exchange?.ratings?.requesterRating?.rating || 1}
+                                  onChange={(value) => setRating(value)}
+                                  allowClear={false}
+                                />
+                                <Input.TextArea
+                                  rows={4}
+                                  placeholder="Nhập nhận xét"
+                                  onChange={(e) => setComment(e.target.value)}
+                                  defaultValue={exchange?.ratings?.requesterRating?.comment || ''}
+                                  disabled={!!exchange?.ratings?.requesterRating?.comment}
+                                />
+                                {!exchange?.ratings?.requesterRating && (
+                                  <Button
+                                    variant="solid"
+                                    color="primary"
+                                    loading={isLoading}
+                                    onClick={handleCreateRating}
+                                  >
+                                    Đánh giá
+                                  </Button>
+                                )}
+                              </div>
                             </>
                           )}
                       </>
