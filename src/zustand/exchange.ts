@@ -7,6 +7,8 @@ type State = {
   openLogin: boolean
   exchanges: Exchange[]
   exchange: Exchange
+  exchangeRev: Exchange
+  exchangesRev: Exchange[]
   openViewExchangeModal: boolean
   openViewExchangeModalRev: boolean
   openCreateExchangeModal: boolean
@@ -15,7 +17,9 @@ type State = {
   openPopconfirmShipping: boolean
   openPopconfirmDelivered: boolean
   exchangeId: string
+  exchangeIdRev: string
   loading: boolean
+  listExchange: Exchange[]
 }
 
 type Actions = {
@@ -33,6 +37,10 @@ type Actions = {
   updateExchange: (exchange: Exchange) => void
   setExchangeId: (exchangeId: string) => void
   setLoading: (loading: boolean) => void
+  setExchangesRev: (exchangesRev: Exchange[]) => void
+  setExchangeRev: (exchangeRev: Exchange) => void
+  setExchangeIdRev: (exchangeIdRev: string) => void
+  setListExchange: (listExchange: Exchange[]) => void
 }
 
 export const useExchange = create<State & Actions>((set) => ({
@@ -49,10 +57,15 @@ export const useExchange = create<State & Actions>((set) => ({
   openPopconfirmDelivered: false,
   exchangeId: '',
   loading: false,
+  exchangesRev: [],
+  exchangeRev: {} as Exchange,
+  exchangeIdRev: '',
+  listExchange: [],
   toogleExchangeModal: () => set((state) => ({ openExchangeModal: !state.openExchangeModal })),
   toogleLogin: () => set((state) => ({ openLogin: !state.openLogin })),
   setExchange: (exchange) => set({ exchange }),
   setExchanges: (exchanges) => set({ exchanges }),
+  setExchangesRev: (exchangesRev) => set({ exchangesRev }),
   setOpenCreateExchangeModal: (openCreateExchangeModal) => set({ openCreateExchangeModal }),
   setOpenViewExchangeModal: (openViewExchangeModal) => set({ openViewExchangeModal }),
   setData: (data) => set({ data }),
@@ -63,4 +76,7 @@ export const useExchange = create<State & Actions>((set) => ({
   setExchangeId: (exchangeId) => set({ exchangeId }),
   setLoading: (loading) => set({ loading }),
   setOpenViewExchangeModalRev: (openViewExchangeModalRev) => set({ openViewExchangeModalRev }),
+  setExchangeRev: (exchangeRev) => set({ exchangeRev }),
+  setExchangeIdRev: (exchangeIdRev) => set({ exchangeIdRev }),
+  setListExchange: (listExchange) => set({ listExchange }),
 }))

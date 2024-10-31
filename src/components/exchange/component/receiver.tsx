@@ -11,7 +11,7 @@ import toast from 'react-hot-toast'
 
 export const Receiver = ({ exchange }: { exchange: Exchange }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { setExchange } = useExchange()
+  const { setExchangeRev } = useExchange()
 
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
     const statusOrder = ['pending', 'shipping', 'completed', 'canceled']
@@ -47,7 +47,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
         .update(id, status)
         .then(() => {
           exChangeService.getById(id).then((res) => {
-            setExchange(res)
+            setExchangeRev(res)
           })
           toast.success('Cập nhật trạng thái thành công')
           setIsLoading(false)
@@ -154,7 +154,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             />
             {exchange.role === 'receiver' && (
               <div className="w-full h-full bg-white shadow-sm rounded-sm container mx-auto p-3 flex flex-col justify-start">
-                {exchange?.requestStatus?.exchangeStatus === 'pending' && (
+                {exchange?.receiverStatus?.exchangeStatus === 'pending' && (
                   <>
                     <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
                     <div className="flex items-center gap-3 mt-2">
@@ -184,7 +184,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                     </div>
                   </>
                 )}
-                {exchange?.requestStatus?.exchangeStatus === 'shipping' && (
+                {exchange?.receiverStatus?.exchangeStatus === 'shipping' && (
                   <>
                     <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
                     <div className="flex items-center gap-3 mt-2">
@@ -202,7 +202,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                     </div>
                   </>
                 )}
-                {exchange?.requestStatus?.exchangeStatus === 'completed' && (
+                {exchange?.receiverStatus?.exchangeStatus === 'completed' && (
                   <>
                     <p className="text-base font-medium">Hoàn thành trao đổi</p>
                     <div className="flex items-center justify-between gap-1 mt-2">

@@ -3,11 +3,17 @@ import { CreateExchangeType, ExchangeType, Exchange } from '@/types/exchangeType
 
 const exChangeService = {
   //  ** Get all exchange
-  getAll: async (page?: number, limit?: number, filterUserId?: string): Promise<ExchangeType> => {
+  getAll: async (
+    page?: number,
+    limit?: number,
+    filterUserId?: string,
+    filterRole?: string,
+  ): Promise<ExchangeType> => {
     const queryParams = new URLSearchParams()
 
     if (page) queryParams.append('page', page.toString())
     if (limit) queryParams.append('limit', limit.toString())
+    if (filterRole) queryParams.append('filterRole', filterRole)
 
     if (filterUserId) {
       filterUserId.split(',').forEach((id) => {
@@ -34,9 +40,7 @@ const exChangeService = {
     id: string,
     status: 'pending' | 'accepted' | 'rejected' | 'completed' | 'canceled',
   ) => {
-    const res = await axiClient.patch(`/api/Exchange/approve-exchange/${id}?status=${status}`)
-
-    return res?.data
+    axiClient.patch(`/api/Exchange/approve-exchange/${id}?status=${status}`)
   },
 
   // ** Update exchange
@@ -51,6 +55,15 @@ const exChangeService = {
     const res: Exchange = await axiClient.get(`/api/Exchange/get-exchange-detail/${id}`)
 
     return res
+  },
+
+  // ** Confirm received
+  confirmReceived: async (id: string, status: 'confirmed' | 'pending') => {
+    const res = await axiClient.patch(
+      `/api/Exchange/update-confirm-status-exchange/${id}?status=${status}`,
+    )
+
+    return res?.data
   },
 }
 

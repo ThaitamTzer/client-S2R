@@ -1,11 +1,5 @@
 import type { Metadata } from 'next'
-import {
-  ColorSchemeScript,
-  createTheme,
-  DEFAULT_THEME,
-  MantineProvider,
-  mergeMantineTheme,
-} from '@mantine/core'
+import { ColorSchemeScript } from '@mantine/core'
 import { Montserrat } from 'next/font/google'
 import './globals.css'
 import '@/styles/style.css'
@@ -14,14 +8,9 @@ import Header from '@/partials/header'
 import ScrollingUp from '@/partials/up'
 import Footer from '@/partials/footer'
 import LoginModal from '@/components/loginModal'
-import { AuthProvider } from '@/contexts/AuthContext'
-import { AntdRegistry } from '@ant-design/nextjs-registry'
-import { ConfigProvider } from 'antd'
-import { themeAntProvider } from '@/components/themeProvider'
-import { Toaster } from 'react-hot-toast'
 import { Suspense } from 'react'
-import { ClientProvider } from '@/contexts/ClientContext'
 import ExChangeDrawer from '@/components/exchange/exchange'
+import { Providers } from '@/providers/providers'
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -35,14 +24,6 @@ export const metadata: Metadata = {
     template: '%s | Share2Receive',
   },
 }
-
-const theme = mergeMantineTheme(
-  DEFAULT_THEME,
-  createTheme({
-    fontFamily: montserrat.style.fontFamily,
-    fontFamilyMonospace: montserrat.style.fontFamily,
-  }),
-)
 
 export default function RootLayout({
   children,
@@ -61,27 +42,18 @@ export default function RootLayout({
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
         <Suspense>
-          <AuthProvider>
-            <ClientProvider>
-              <ConfigProvider theme={themeAntProvider}>
-                <AntdRegistry>
-                  <MantineProvider theme={theme}>
-                    <Header />
-                    <ExChangeDrawer />
-                    <main
-                      className={`relative mt-16 h-full min-h-screen scroll-smooth  ${montserrat.className}`}
-                    >
-                      <LoginModal />
-                      <Toaster position="top-right" />
-                      {children}
-                      <ScrollingUp />
-                    </main>
-                    <Footer />
-                  </MantineProvider>
-                </AntdRegistry>
-              </ConfigProvider>
-            </ClientProvider>
-          </AuthProvider>
+          <Providers>
+            <Header />
+            <ExChangeDrawer />
+            <main
+              className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
+            >
+              <LoginModal />
+              {children}
+              <ScrollingUp />
+            </main>
+            <Footer />
+          </Providers>
         </Suspense>
       </body>
     </html>

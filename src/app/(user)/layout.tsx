@@ -72,7 +72,7 @@ export default function UsersLayout({
             </Sider>
             <Layout>
               <Content style={{ height: 'auto' }}>
-                <Suspense>{children}</Suspense>
+                <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
               </Content>
             </Layout>
           </Layout>

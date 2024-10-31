@@ -6,7 +6,7 @@ import { rem, Avatar } from '@mantine/core'
 import { TableProps, Button, Tooltip } from 'antd'
 import Image from 'next/image'
 import { getAllExchangeStatusName } from '@/helper/getName'
-import IconifyIcon from '../icons'
+import IconifyIcon from '@/components/icons'
 import { useExchange } from '@/zustand/exchange'
 
 export const columns: TableProps<Exchange>['columns'] = [
@@ -20,9 +20,9 @@ export const columns: TableProps<Exchange>['columns'] = [
     },
   },
   {
-    title: 'Người nhận yêu cầu',
+    title: 'Người gửi yêu cầu',
     dataIndex: 'role',
-    key: 'receiverId',
+    key: 'yourProduct',
     width: '30%',
     render: (_, record) => {
       const receiver = record.role === 'requester' ? record.receiverId : record.requesterId
@@ -44,12 +44,12 @@ export const columns: TableProps<Exchange>['columns'] = [
     },
   },
   {
-    title: 'Sản phẩm của bạn',
+    title: 'Sản phẩm cần đổi',
     dataIndex: 'role',
-    key: 'yourProduct',
+    key: 'receiverId',
     render: (_, record) => {
       const product =
-        record.role === 'requester'
+        record.role === 'receiver'
           ? record.requestProduct.requesterProductId
           : record.receiveProduct.receiverProductId
 
@@ -70,12 +70,12 @@ export const columns: TableProps<Exchange>['columns'] = [
     },
   },
   {
-    title: 'Sản phẩn cần đổi',
+    title: 'Sản phẩn của bạn',
     dataIndex: 'role',
     key: 'otherProduct',
     render: (_, record) => {
       const product =
-        record.role === 'requester'
+        record.role === 'receiver'
           ? record.receiveProduct.receiverProductId
           : record.requestProduct.requesterProductId
 
@@ -144,9 +144,9 @@ export const columns: TableProps<Exchange>['columns'] = [
           <Button
             onClick={() => {
               setTimeout(() => {
-                useExchange.getState().setOpenViewExchangeModal(true)
+                useExchange.getState().setOpenViewExchangeModalRev(true)
               }, 200)
-              useExchange.getState().setExchangeId(record._id)
+              useExchange.getState().setExchangeIdRev(record._id)
             }}
             variant="text"
             type="text"

@@ -6,7 +6,7 @@ import { rem, Avatar } from '@mantine/core'
 import { TableProps, Button, Tooltip } from 'antd'
 import Image from 'next/image'
 import { getAllExchangeStatusName } from '@/helper/getName'
-import IconifyIcon from '../icons'
+import IconifyIcon from '@/components/icons'
 import { useExchange } from '@/zustand/exchange'
 
 export const columns: TableProps<Exchange>['columns'] = [
@@ -20,9 +20,9 @@ export const columns: TableProps<Exchange>['columns'] = [
     },
   },
   {
-    title: 'Người gửi yêu cầu',
+    title: 'Người nhận yêu cầu',
     dataIndex: 'role',
-    key: 'yourProduct',
+    key: 'receiverId',
     width: '30%',
     render: (_, record) => {
       const receiver = record.role === 'requester' ? record.receiverId : record.requesterId
@@ -44,12 +44,12 @@ export const columns: TableProps<Exchange>['columns'] = [
     },
   },
   {
-    title: 'Sản phẩm cần đổi',
+    title: 'Sản phẩm của bạn',
     dataIndex: 'role',
-    key: 'receiverId',
+    key: 'yourProduct',
     render: (_, record) => {
       const product =
-        record.role === 'receiver'
+        record.role === 'requester'
           ? record.requestProduct.requesterProductId
           : record.receiveProduct.receiverProductId
 
@@ -70,12 +70,12 @@ export const columns: TableProps<Exchange>['columns'] = [
     },
   },
   {
-    title: 'Sản phẩn của bạn',
+    title: 'Sản phẩn cần đổi',
     dataIndex: 'role',
     key: 'otherProduct',
     render: (_, record) => {
       const product =
-        record.role === 'receiver'
+        record.role === 'requester'
           ? record.receiveProduct.receiverProductId
           : record.requestProduct.requesterProductId
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { columns } from '../columnReq'
+import { columns } from './columnReq'
 import { Table, Select } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createStyles } from 'antd-style'
@@ -81,15 +81,7 @@ export const TableDataReq = () => {
 
   const { isLoading } = useSWR(
     ['exchanges', page, limit, ...filterUserIds],
-    async () => {
-      const data = await exChangeService.getAll(page, limit, filterUserIds.join(','))
-      // Lọc chỉ lấy các exchange có role là requester
-      const filteredData = {
-        data: data.data.filter((item) => item.role === 'requester'),
-        total: data.data.filter((item) => item.role === 'requester').length,
-      }
-      return filteredData
-    },
+    () => exChangeService.getAll(page, limit, filterUserIds.join(','), 'requester'),
     {
       onSuccess: (data) => {
         setExchanges(data.data)

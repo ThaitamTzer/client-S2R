@@ -2,15 +2,15 @@
 import { useExchange } from '@/zustand/exchange'
 import exChangeService from '@/services/exchange/exchange.service'
 import { Tabs } from 'antd'
-import { ViewExchangeModal } from './viewExchange'
-import { TableDataReq } from './component/tableDataReq'
+import { ViewExchangeModal } from './requestertable/viewExchange'
+import { TableDataReq } from './requestertable/tableDataReq'
 import toast from 'react-hot-toast'
 import { useEffect } from 'react'
-import { TableDataRev } from './component/tableDataRev'
-import { ViewExchangeModalRev } from './viewExchangeRev'
+import { TableDataRev } from './receivertable/tableDataRev'
+import { ViewExchangeModalRev } from './receivertable/viewExchangeRev'
 
 export const ExchangePage = () => {
-  const { setExchange, exchangeId, setLoading } = useExchange()
+  const { setExchange, exchangeId, setLoading, setExchangeRev, exchangeIdRev } = useExchange()
 
   useEffect(() => {
     if (exchangeId) {
@@ -29,6 +29,24 @@ export const ExchangePage = () => {
         })
     }
   }, [exchangeId])
+
+  useEffect(() => {
+    if (exchangeIdRev) {
+      setLoading(true)
+      exChangeService
+        .getById(exchangeIdRev)
+        .then((data) => {
+          if (data) {
+            setExchangeRev(data)
+            setLoading(false)
+          }
+        })
+        .catch(() => {
+          toast.error('Lấy thông tin trao đổi thất bại')
+          setLoading(false)
+        })
+    }
+  }, [exchangeIdRev])
 
   return (
     <>

@@ -1,6 +1,6 @@
 'use client'
 
-import { columns } from '../columnRev'
+import { columns } from './columnRev'
 import { Table, Select } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createStyles } from 'antd-style'
@@ -33,7 +33,7 @@ const useStyle = createStyles(({ css, token }) => {
 })
 
 export const TableDataRev = () => {
-  const { setExchanges, exchanges } = useExchange()
+  const { setExchangesRev, exchangesRev } = useExchange()
   const [total, setTotal] = useState(0)
   const [allUsers, setAllUsers] = useState<{ value: string; label: string }[]>([])
   const { styles } = useStyle()
@@ -56,7 +56,7 @@ export const TableDataRev = () => {
     router.push(`/exchange-management?${queryString}`, { scroll: false })
   }
 
-  useSWR('forAllUsers', () => exChangeService.getAll(1, 100, ''), {
+  useSWR('forAllUsersRev', () => exChangeService.getAll(1, 100, ''), {
     onSuccess: (data) => {
       // Tạo một Map để lưu trữ user theo receiverId
       const uniqueUsers = new Map()
@@ -80,19 +80,11 @@ export const TableDataRev = () => {
   })
 
   const { isLoading } = useSWR(
-    ['exchanges', page, limit, ...filterUserIds],
-    async () => {
-      const data = await exChangeService.getAll(page, limit, filterUserIds.join(','))
-      // Lọc chỉ lấy các exchange có role là requester
-      const filteredData = {
-        data: data.data.filter((item) => item.role === 'receiver'),
-        total: data.data.filter((item) => item.role === 'receiver').length,
-      }
-      return filteredData
-    },
+    ['exchangesRev', page, limit, ...filterUserIds],
+    () => exChangeService.getAll(page, limit, filterUserIds.join(','), 'receiver'),
     {
       onSuccess: (data) => {
-        setExchanges(data.data)
+        setExchangesRev(data.data)
         setTotal(data.total)
       },
     },
@@ -134,7 +126,7 @@ export const TableDataRev = () => {
         sticky
         loading={isLoading}
         columns={columns}
-        dataSource={exchanges || []}
+        dataSource={exchangesRev || []}
         onChange={handleTableChange}
         scroll={{ y: 100 * 5 }}
         showSorterTooltip={false}

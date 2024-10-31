@@ -2,7 +2,7 @@
 import { rem, Avatar, Divider } from '@mantine/core'
 import { truncateText } from '@/helper/format'
 import { Exchange } from '@/types/exchangeTypes'
-import { Image, Tooltip, Button, Popconfirm, Steps } from 'antd'
+import { Image, Tooltip, Button, Popconfirm, Steps, Rate } from 'antd'
 import { useState } from 'react'
 import exChangeService from '@/services/exchange/exchange.service'
 import toast from 'react-hot-toast'
@@ -36,6 +36,22 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
     }
   }
 
+  const handleConfirmReceived = async (id: string) => {
+    setIsLoading(true)
+    try {
+      await exChangeService.confirmReceived(id, 'confirmed').then(() => {
+        exChangeService.getById(id).then((res) => {
+          setExchange(res)
+        })
+        toast.success('Xác nhận thành công')
+        setIsLoading(false)
+      })
+    } catch {
+      toast.error('Xác nhận thất bại')
+      setIsLoading(false)
+    }
+  }
+
   const getStepStatus = (currentStatus: string, targetStatus: string) => {
     const statusOrder = ['pending', 'shipping', 'completed', 'canceled']
     const currentIndex = statusOrder.indexOf(currentStatus)
@@ -57,6 +73,8 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
         return 2
       case 'canceled':
         return 3
+      case 'confirmed':
+        return 4
       default:
         return 0
     }
@@ -249,16 +267,48 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                     )}
                     {exchange?.requestStatus?.exchangeStatus === 'completed' && (
                       <>
-                        <p className="text-base font-medium">Hoàn thành trao đổi</p>
-                        <div className="flex items-center justify-between gap-1 mt-2">
-                          <p className="text-sm ">
-                            Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và
-                            bạn xác nhận đã nhận được hàng của nhau
-                          </p>
-                        </div>
-                        <Button variant="solid" color="primary" disabled>
-                          Đánh giá
-                        </Button>
+                        <p className="text-base font-medium">Hoàn thành giao hàng</p>
+                        {exchange?.receiverStatus?.confirmStatus !== 'confirmed' && (
+                          <div className="flex items-center justify-between gap-1 mt-2">
+                            <p className="text-sm ">
+                              Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và
+                              bạn xác nhận đã nhận được hàng của nhau
+                            </p>
+                          </div>
+                        )}
+                        {exchange?.receiverStatus?.confirmStatus === 'confirmed' && (
+                          <div className="flex items-center justify-between gap-1 mt-2">
+                            <p className="text-sm ">
+                              Bạn đã nhận được hàng vui lòng đánh giá người nhận
+                            </p>
+                          </div>
+                        )}
+                        {exchange?.requestStatus?.exchangeStatus === 'completed' && (
+                          <>
+                            <Divider my="sm" />
+                            <div className="flex flex-col gap-1 mt-2">
+                              <p className="text-sm ">Xác nhận đã nhận được đơn hàng</p>
+                            </div>
+                            <div className="flex items-center justify-end gap-1 mt-2">
+                              <Button
+                                variant="solid"
+                                color="primary"
+                                onClick={() => handleConfirmReceived(exchange._id)}
+                                loading={isLoading}
+                              >
+                                Xác nhận
+                              </Button>
+                            </div>
+                          </>
+                        )}
+                        {exchange?.requestStatus?.exchangeStatus === 'completed' &&
+                          exchange.role === 'requester' &&
+                          exchange.requestStatus.confirmStatus === 'confirmed' && (
+                            // thực hiện đánh giá
+                            <>
+                              <Rate allowHalf defaultValue={0}  />,
+                            </>
+                          )}
                       </>
                     )}
                   </div>

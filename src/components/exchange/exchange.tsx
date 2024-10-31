@@ -7,16 +7,21 @@ import exChangeService from '@/services/exchange/exchange.service'
 import useSWR from 'swr'
 import { Avatar, rem } from '@mantine/core'
 import IconifyIcon from '../icons'
+import { useEffect } from 'react'
 
 const ExChangeDrawer = () => {
   const { user } = useAuth()
-  const { openExchangeModal, toogleExchangeModal, setExchanges, exchanges } = useExchange()
+  const { openExchangeModal, toogleExchangeModal, listExchange, setListExchange } = useExchange()
 
-  const { mutate } = useSWR('/api/Exchange/get-list-exchange', exChangeService.getAll, {
-    onSuccess: (data) => {
-      setExchanges(data.data)
-    },
-  })
+  const { data, mutate } = useSWR('listExchange', () => exChangeService.getAll(1, 1000, ''))
+
+  useEffect(() => {
+    if (data) {
+      setListExchange(data.data)
+    }
+  }, [data, setListExchange])
+
+  console.log('listExchange', listExchange)
 
   const [api, contextHolder] = notification.useNotification()
 
@@ -32,12 +37,14 @@ const ExChangeDrawer = () => {
   const handleAcceptExchange = (exchangeId: string) => {
     exChangeService
       .approve(exchangeId, 'accepted')
-      .then(() => {
-        mutate()
+      .then(async () => {
         api.success({
           message: 'Chấp nhận trao đổi thành công',
           placement: 'topLeft',
         })
+        setTimeout(() => {
+          mutate()
+        }, 1000)
       })
       .catch(() => {
         api.error({
@@ -51,12 +58,14 @@ const ExChangeDrawer = () => {
   const handleRejectExchange = (exchangeId: string) => {
     exChangeService
       .approve(exchangeId, 'rejected')
-      .then(() => {
-        mutate()
+      .then(async () => {
         api.success({
           message: 'Từ chối trao đổi thành công',
           placement: 'topLeft',
         })
+        setTimeout(() => {
+          mutate()
+        }, 1000)
       })
       .catch(() => {
         api.error({
@@ -83,7 +92,7 @@ const ExChangeDrawer = () => {
               <h1>Danh sách các sản phẩm trao đổi</h1>
             </div>
             <div className="flex flex-col justify-between">
-              {exchanges?.map((exchange) => {
+              {[...(listExchange || [])]?.reverse()?.map((exchange) => {
                 if (exchange.role === 'receiver')
                   return (
                     <>

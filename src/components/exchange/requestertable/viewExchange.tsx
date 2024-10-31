@@ -1,9 +1,9 @@
 'use client'
 import { Modal } from 'antd'
 import { useExchange } from '@/zustand/exchange'
-import IconifyIcon from '../icons'
-import { Requester } from './component/requester'
-import { Receiver } from './component/receiver'
+import IconifyIcon from '../../icons'
+import { Requester } from '../component/requester'
+import { Receiver } from '../component/receiver'
 
 export const ViewExchangeModal = () => {
   const {
@@ -22,6 +22,8 @@ export const ViewExchangeModal = () => {
     setOpenPopconfirmShipping(false)
     setExchangeId('')
   }
+
+  console.log(exchange)
 
   if (exchange)
     return (
