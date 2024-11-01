@@ -22,9 +22,10 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Trang chủ',
+    default: 'Share2Receive',
     template: '%s | Share2Receive',
   },
+  description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
 }
 
 export default function RootLayout({

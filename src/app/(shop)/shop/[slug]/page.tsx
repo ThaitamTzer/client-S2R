@@ -32,7 +32,9 @@ export default async function ProductPage({ params }: { params: { slug: string }
   if (!product) {
     notFound()
   }
-  
+
+  console.log('product', product)
+
   return (
     <>
       <ProductDetail product={product} />

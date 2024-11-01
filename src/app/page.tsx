@@ -19,7 +19,8 @@ const Navigation = lazy(() => import('@/components/nav'))
 const HomePageTitle = lazy(() => import('@/components/homepage/HomepageTitle'))
 
 export const metadata: Metadata = {
-  title: 'Trang chủ',
+  title: 'Share2Receive',
+  description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
 }
 
 export default function Home() {
