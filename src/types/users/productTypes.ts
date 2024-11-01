@@ -149,6 +149,8 @@ export type ProductsClient = {
     firstname: string
     lastname: string
     avatar: string
+    averageRating: number
+    numberOfRating: number
   }
   sizeVariants: sizeVariants[]
   categoryId: {

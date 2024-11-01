@@ -5,6 +5,7 @@ export type Category = {
   status: string
   type: string
   imgUrl: string
+  priority: string
 }
 
 export type Brand = {
@@ -14,4 +15,6 @@ export type Brand = {
   description: string
   status: string
   slug: string
+  imgUrl: string
+  priority: string
 }

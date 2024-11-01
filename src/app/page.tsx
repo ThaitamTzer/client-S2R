@@ -7,7 +7,7 @@ import Loading from './loading'
 // Chuyển sang dùng React.lazy
 const HomePageHero = lazy(() => import('@/components/homepage/HomepageHero'))
 const HomePageFavorate = lazy(() => import('@/components/homepage/HomePageFavorite'))
-const HomePagePickPrice = lazy(() => import('@/components/homepage/HomePagePickPrice'))
+// const HomePagePickPrice = lazy(() => import('@/components/homepage/HomePagePickPrice'))
 const HomePageSamePrice = lazy(() => import('@/components/homepage/HomePageSamePrice'))
 const HomePageCategory = lazy(() => import('@/components/homepage/HomePageCategory'))
 const HomePageTogetherSection = lazy(() => import('@/components/homepage/HomePageTogetherSection'))
@@ -32,7 +32,7 @@ export default function Home() {
         <HomePageHero />
         <HomePageTitle />
         <HomePageYouLike />
-        <HomePagePickPrice />
+        {/* <HomePagePickPrice /> */}
         <HomePageManFashion />
         <HomePageFemale />
         <HomePageUnisex />

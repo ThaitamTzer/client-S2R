@@ -18,6 +18,7 @@ export default function HomePageHero() {
                             src="https://www.youtube.com/embed/uyHgY2O__fY?playlist=uyHgY2O__fY&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=5&end=179"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
                             referrerPolicy="strict-origin-when-cross-origin"
+                            loading="lazy"
                           ></iframe>
                         </div>
                       </div>

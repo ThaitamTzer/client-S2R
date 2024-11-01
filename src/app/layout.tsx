@@ -8,9 +8,9 @@ import ScrollingUp from '@/partials/up'
 import { Suspense, lazy } from 'react'
 import { Providers } from '@/providers/providers'
 import Loading from './loading'
+import Header from '@/partials/header'
+import Footer from '@/partials/footer'
 
-const Header = lazy(() => import('@/partials/header'))
-const Footer = lazy(() => import('@/partials/footer'))
 const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
 const LoginModal = lazy(() => import('@/components/loginModal'))
 

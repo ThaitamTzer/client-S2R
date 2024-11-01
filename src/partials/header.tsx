@@ -79,9 +79,11 @@ export default function Header() {
             />
             <div className="text-green-800 text-3xl font-semibold">
               <Link href="/">
-                Share
-                <span style={{ color: 'salmon' }}>2</span>
-                Receive
+                <h1>
+                  Share
+                  <span style={{ color: 'salmon' }}>2</span>
+                  Receive
+                </h1>
               </Link>
             </div>
             <div className="nav ml-6">

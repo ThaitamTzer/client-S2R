@@ -1,9 +1,16 @@
 import ProductDetail from '@/components/product/productDetail'
 import productService from '@/services/product/product.service'
 import { notFound } from 'next/navigation'
+import dynamic from 'next/dynamic'
+
+const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'))
 
 export async function generateStaticParams() {
   const products = await productService.getAllProdClient(1, 999)
+
+  if (!products) {
+    return []
+  }
 
   return products.data.map((product) => ({
     slug: product.slug,
@@ -33,10 +40,17 @@ export default async function ProductPage({ params }: { params: { slug: string }
     notFound()
   }
 
-  console.log('product', product)
+  const breadcrumbItems = [
+    { label: 'Trang chủ', link: '/' },
+    { label: 'Cửa hàng', link: '/shop' },
+    { label: product.productName, link: `/shop/${product.productName}` },
+  ]
 
   return (
     <>
+      <div className="container mx-auto mt-36">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
       <ProductDetail product={product} />
     </>
   )

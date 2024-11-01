@@ -22,5 +22,8 @@ export const themeAntProvider: ThemeConfig = {
     Menu: {
       itemActiveBg: '#dffae6',
     },
+    Breadcrumb: {
+      fontSize: 16,
+    },
   },
 }

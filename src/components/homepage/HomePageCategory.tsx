@@ -2,51 +2,25 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useClient } from '@/hooks/useClient'
 
-const category = [
-  {
-    id: 1,
-    title: 'Đầm nữ',
-    src: '/images/dress-icon-v2.png',
-  },
-  {
-    id: 2,
-    title: 'Áo thun',
-    src: '/images/tshirt-icon-v2.png',
-  },
-  {
-    id: 3,
-    title: 'Chân váy',
-    src: '/images/skirt-icon-v2.png',
-  },
-  {
-    id: 4,
-    title: 'Giày các loại',
-    src: '/images/shoes-icon-v2.png',
-  },
-  {
-    id: 5,
-    title: 'Quần jeans',
-    src: '/images/jean-icon-v2.png',
-  },
-  {
-    id: 6,
-    title: 'Áo sơ mi',
-    src: '/images/shirt-icon-v2.png',
-  },
-  {
-    id: 7,
-    title: 'Áo khoác',
-    src: '/images/coat-icon-v2.png',
-  },
-  {
-    id: 8,
-    title: 'Túi xách',
-    src: '/images/hand-bag-v2.png',
-  },
-]
+const priorityOrder = {
+  veryHigh: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+}
 
 export default function HomePageCategory() {
+  const { categories } = useClient()
+
+  const sortedCategories = categories?.sort((a, b) => {
+    return (
+      priorityOrder[b.priority as keyof typeof priorityOrder] -
+      priorityOrder[a.priority as keyof typeof priorityOrder]
+    )
+  })
+
   return (
     <>
       <div className="category-section mt-8 bg-green-100 w-full h-full">
@@ -66,28 +40,33 @@ export default function HomePageCategory() {
             </Link>
           </div>
           <div className="category-list grid grid-cols-4 gap-3">
-            {category.map((item) => (
-              <div
-                key={item.id}
-                className="category-item relative bg-white rounded-md shadow-md flex items-center justify-around overflow-hidden"
-              >
-                <Image
-                  src={item.src}
-                  alt={item.title}
-                  loading="lazy"
-                  width={100}
-                  height={100}
-                  className="w-1/3 mx-2"
-                />
-                <div>
-                  <p className="text-lg ">
-                    <Link href={`/category/${item.id}`}>{item.title}</Link>
-                  </p>
+            {sortedCategories?.slice(0, 8)?.map((item) => (
+              <Link href={`/shop?filterCategory=${item._id}`} key={item._id}>
+                <div className="category-item relative bg-white rounded-md shadow-md flex items-center justify-around overflow-hidden">
+                  <div className="min-w-[100px] min-h-[100px] max-w-[100px] max-h-[100px] relative">
+                    <Image
+                      src={item.imgUrl}
+                      alt={item.name}
+                      loading="lazy"
+                      width={100}
+                      height={100}
+                      quality={60}
+                      style={{
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-lg ">{item.name}</p>
+                  </div>
                 </div>
-                <div className="absolute top-0 right-0 bg-red-300 w-16 flex justify-center items-center rounded-bl-md">
-                  <p className="text-sm">Hot</p>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

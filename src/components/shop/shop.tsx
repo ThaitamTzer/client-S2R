@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation'
 import { FilterFilled } from '@ant-design/icons'
 import dynamic from 'next/dynamic'
 
-const ProductCard = dynamic(() => import('./productCard'), { ssr: false })
+const ProductCard = dynamic(() => import('./productCard'))
 const FilterTag = dynamic(() => import('./filterTag'), { ssr: false })
 const FilterSide = dynamic(() => import('./filter'), { ssr: false })
 
@@ -120,7 +120,7 @@ const Shop = () => {
 
   return (
     <>
-      <div className="container mx-auto mt-40">
+      <div className="container mx-auto mt-5">
         <h1 className="text-2xl font-semibold uppercase">
           <FilterFilled size={30} /> Bộ lọc tìm kiếm
         </h1>

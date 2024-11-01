@@ -50,6 +50,8 @@ export type UserDataType = {
   description: string
   gender: string
   phone: string
+  averageRating: number
+  numberOfRating: number
 }
 
 export type AuthValuesType = {
