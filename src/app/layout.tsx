@@ -5,14 +5,14 @@ import './globals.css'
 import '@/styles/style.css'
 import '@mantine/carousel/styles.css'
 import ScrollingUp from '@/partials/up'
-import LoginModal from '@/components/loginModal'
 import { Suspense, lazy } from 'react'
-import ExChangeDrawer from '@/components/exchange/exchange'
 import { Providers } from '@/providers/providers'
 import Loading from './loading'
 
 const Header = lazy(() => import('@/partials/header'))
 const Footer = lazy(() => import('@/partials/footer'))
+const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
+const LoginModal = lazy(() => import('@/components/loginModal'))
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
