@@ -28,7 +28,7 @@ const expandIcon = ({ isActive }: { isActive: boolean | undefined }) => {
   )
 }
 
-export const FilterSide = () => {
+const FilterSide = () => {
   const { categories, brands } = useClient()
   const [activeKey, setActiveKey] = useState<string[]>([
     '1',
@@ -491,3 +491,5 @@ export const FilterSide = () => {
     </>
   )
 }
+
+export default FilterSide

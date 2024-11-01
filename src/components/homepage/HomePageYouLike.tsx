@@ -8,7 +8,7 @@ import { Badge } from '@mantine/core'
 import { useRef } from 'react'
 import Autoplay from 'embla-carousel-autoplay'
 
-export const HomePageYouLike = () => {
+const HomePageYouLike = () => {
   const { productsPropose, setProductsPropose } = useProductClient()
 
   useSWR('product/propose', productService.getProductUserWillLike, {
@@ -108,3 +108,5 @@ export const HomePageYouLike = () => {
     </>
   )
 }
+
+export default HomePageYouLike

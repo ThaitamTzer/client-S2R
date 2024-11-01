@@ -7,7 +7,9 @@ import { IconUserCircle } from '@tabler/icons-react'
 import { useProfileLinks } from '@/navigation/profile/type'
 import { usePathname } from 'next/navigation'
 import { Suspense } from 'react'
-import NavigationWithBg from '@/components/navWithBg'
+import dynamic from 'next/dynamic'
+
+const NavigationProfile = dynamic(() => import('@/components/navProfile'))
 
 const { Content, Sider } = Layout
 
@@ -15,6 +17,22 @@ const navLinks: navLink[] = [
   {
     href: '/profile',
     label: 'Thông tin tài khoản',
+  },
+  {
+    href: '/change-password',
+    label: 'Đổi mật khẩu',
+  },
+  {
+    href: '/product-management',
+    label: 'Quản lý sản phẩm',
+  },
+  {
+    href: '/exchange-management',
+    label: 'Đổi trả',
+  },
+  {
+    href: '/user-style',
+    label: 'Phong cách',
   },
 ]
 
@@ -32,7 +50,7 @@ export default function UsersLayout({
     <>
       <Suspense>
         <Suspense>
-          <NavigationWithBg navLink={navLinks} />
+          <NavigationProfile navLink={navLinks} />
         </Suspense>
         <div className="container mx-auto bg-white mt-40 mb-10">
           <Layout className="h-[120%]">

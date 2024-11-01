@@ -11,8 +11,10 @@ import productService from '@/services/product/product.service'
 import { mutate } from 'swr'
 import { Product } from '@/types/users/productTypes'
 import { UploadFileStatus } from 'antd/es/upload/interface'
-import { TabInformation } from './tabs/tabInformation'
-import { TabUploadImages } from './tabs/tabImages'
+import dynamic from 'next/dynamic'
+
+const TabInformation = dynamic(() => import('./tabs/tabInformation'), { ssr: false })
+const TabUploadImages = dynamic(() => import('./tabs/tabImages'), { ssr: false })
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -24,7 +26,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error)
   })
 
-export const EditProduct = () => {
+export default function EditProduct() {
   const { openEditProductModal, toggleEditProductModal, product, setProduct } =
     useProductManagement()
   const param = useSearchParams()
@@ -119,35 +121,58 @@ export const EditProduct = () => {
           'price',
           'style',
         ])
-        const values: Product = {
-          ...formValues,
-          tags: form.getFieldValue('tags').split(' '),
-          sizeVariants: form
-            .getFieldValue('sizeVariants')
-            .map((sizeVariant: { size: string; colors: string; amount: number }) => ({
-              size: sizeVariant.size,
-              colors: sizeVariant.colors,
-              amount: sizeVariant.amount,
-            })),
+
+        // Tạo object chứa các giá trị đã thay đổi
+        const changedValues: Partial<Product> = {}
+
+        // So sánh từng trường và chỉ thêm vào nếu có thay đổi
+        Object.keys(formValues).forEach((key) => {
+          if (formValues[key] !== product[key as keyof Product]) {
+            changedValues[key as keyof Product] = formValues[key]
+          }
+        })
+
+        // Kiểm tra tags nếu có thay đổi
+        const newTags = form.getFieldValue('tags').split(' ')
+        if (JSON.stringify(newTags) !== JSON.stringify(product.tags)) {
+          changedValues.tags = newTags
         }
 
-        // Conditionally add the price field if type is 'sale'
-        if (formValues.type === 'sale') {
-          values.price = Number(formValues.price)
+        // Kiểm tra sizeVariants nếu có thay đổi
+        const newSizeVariants = form
+          .getFieldValue('sizeVariants')
+          .map((sizeVariant: { size: string; colors: string; amount: number }) => ({
+            size: sizeVariant.size,
+            colors: sizeVariant.colors,
+            amount: sizeVariant.amount,
+          }))
+        if (JSON.stringify(newSizeVariants) !== JSON.stringify(product.sizeVariants)) {
+          changedValues.sizeVariants = newSizeVariants
         }
 
-        await productService
-          .editProduct(productId, values)
-          .then(() => {
-            toast.success('Cập nhật sản phẩm thành công!')
-            toggleEditProductModal()
-            mutate(['/api/product', page, limit, searchKey, sortField, sortOrder])
-          })
-          .catch((err) => {
-            console.error(err)
-            form.setFields([{ name: 'productName', errors: ['Tên sản phẩm đã bị trùng lập!'] }])
-            toast.error('Cập nhật sản phẩm thất bại!')
-          })
+        // Xử lý giá nếu type là 'sale'
+        if (formValues.type === 'sale' && changedValues.price !== undefined) {
+          changedValues.price = Number(changedValues.price)
+        }
+
+        // Chỉ gọi API nếu có thay đổi
+        if (Object.keys(changedValues).length > 0) {
+          await productService
+            .editProduct(productId, changedValues as Product)
+            .then(() => {
+              toast.success('Cập nhật sản phẩm thành công!')
+              toggleEditProductModal()
+              mutate(['/api/product', page, limit, searchKey, sortField, sortOrder])
+            })
+            .catch((err) => {
+              console.error(err)
+              form.setFields([{ name: 'productName', errors: ['Tên sản phẩm đã bị trùng lập!'] }])
+              toast.error('Cập nhật sản phẩm thất bại!')
+            })
+        } else {
+          toast.error('Không có thay đổi nào được thực hiện')
+          toggleEditProductModal()
+        }
       })
   }
 

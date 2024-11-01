@@ -1,11 +1,13 @@
 import { Form, GetProp, Modal, Tabs, UploadFile, UploadProps } from 'antd'
-import { TabUploadImages } from './tabs/tabImages'
-import { TabInformation } from './tabs/tabInformation'
 import { Product } from '@/types/users/productTypes'
 import { useClient } from '@/hooks/useClient'
 import { useEffect, useState } from 'react'
 import { useProductManagement } from '@/zustand/productManagement'
 import { UploadFileStatus } from 'antd/es/upload/interface'
+import dynamic from 'next/dynamic'
+
+const TabInformation = dynamic(() => import('./tabs/tabInformation'), { ssr: false })
+const TabUploadImages = dynamic(() => import('./tabs/tabImages'), { ssr: false })
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -17,7 +19,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error)
   })
 
-export const ViewProductModal = () => {
+export default function ViewProductModal() {
   const { openViewProductModal, toggleViewProductModal, product, setProduct } =
     useProductManagement()
   const { categories, loading, brands } = useClient()

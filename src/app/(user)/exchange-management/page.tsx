@@ -1,5 +1,9 @@
+import Loading from '@/app/loading'
 import { Metadata } from 'next'
-import { ExchangePage } from '@/components/exchange/exchangePage'
+import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
+
+const ExchangePage = dynamic(() => import('@/components/exchange/exchangePage'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'Quản lý trao đổi',
@@ -8,9 +12,9 @@ export const metadata: Metadata = {
 
 const Exchange = () => {
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <ExchangePage />
-    </>
+    </Suspense>
   )
 }
 

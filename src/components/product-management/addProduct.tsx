@@ -27,7 +27,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error)
   })
 
-export const AddProduct = () => {
+export default function AddProduct() {
   const param = useSearchParams()
 
   const page = Number(param.get('page')) || 1

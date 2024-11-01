@@ -46,7 +46,7 @@ const donam = [
   },
 ]
 
-export const HomePageManFashion = () => {
+const HomePageManFashion = () => {
   const autoplay = useRef(Autoplay({ delay: 2000 }))
 
   return (
@@ -112,23 +112,17 @@ export const HomePageManFashion = () => {
                                   {item.productName}
                                 </h1>
                               </div>
-                              <div className="text-base font-medium">
-                                Kích thước: {item.size}
-                              </div>
+                              <div className="text-base font-medium">Kích thước: {item.size}</div>
                               <div className="text-xl font-semibold text-green-800">
                                 {item.tag === 'Trao đổi' ? (
                                   <>
                                     <p>Trao đổi</p>
-                                    <p className="text-sm underline">
-                                      Xem ngay
-                                    </p>
+                                    <p className="text-sm underline">Xem ngay</p>
                                   </>
                                 ) : (
                                   <>
                                     <p>{item.price}</p>
-                                    <p className="text-sm underline">
-                                      Xem ngay
-                                    </p>
+                                    <p className="text-sm underline">Xem ngay</p>
                                   </>
                                 )}
                               </div>
@@ -148,3 +142,5 @@ export const HomePageManFashion = () => {
     </div>
   )
 }
+
+export default HomePageManFashion

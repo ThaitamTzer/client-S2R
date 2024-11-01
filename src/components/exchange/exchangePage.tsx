@@ -3,13 +3,16 @@ import { useExchange } from '@/zustand/exchange'
 import exChangeService from '@/services/exchange/exchange.service'
 import { Tabs } from 'antd'
 import { ViewExchangeModal } from './requestertable/viewExchange'
-import { TableDataReq } from './requestertable/tableDataReq'
 import toast from 'react-hot-toast'
 import { useEffect } from 'react'
-import { TableDataRev } from './receivertable/tableDataRev'
 import { ViewExchangeModalRev } from './receivertable/viewExchangeRev'
+import { Suspense, lazy } from 'react'
+import Loading from '@/app/loading'
 
-export const ExchangePage = () => {
+const TableDataReq = lazy(() => import('./requestertable/tableDataReq'))
+const TableDataRev = lazy(() => import('./receivertable/tableDataRev'))
+
+const ExchangePage = () => {
   const { setExchange, exchangeId, setLoading, setExchangeRev, exchangeIdRev } = useExchange()
 
   useEffect(() => {
@@ -62,18 +65,18 @@ export const ExchangePage = () => {
               key: '1',
               label: 'Yêu cầu trao đổi của bạn',
               children: (
-                <>
+                <Suspense fallback={<Loading />}>
                   <TableDataReq />
-                </>
+                </Suspense>
               ),
             },
             {
               key: '2',
               label: 'Yêu cầu trao đổi từ người khác',
               children: (
-                <>
+                <Suspense fallback={<Loading />}>
                   <TableDataRev />
-                </>
+                </Suspense>
               ),
             },
           ]}
@@ -82,3 +85,5 @@ export const ExchangePage = () => {
     </>
   )
 }
+
+export default ExchangePage

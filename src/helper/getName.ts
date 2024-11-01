@@ -1,3 +1,4 @@
+'use client'
 import { useClient } from '@/hooks/useClient'
 import { colorData } from '@/metadata/colorData'
 import { materialData } from '@/metadata/materialData'

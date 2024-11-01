@@ -1,5 +1,9 @@
-import ChangePassword from '@/components/changePassword/changePassword'
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
+
+const ChangePassword = dynamic(() => import('@/components/changePassword/changePassword'), {
+  ssr: false,
+})
 
 export const metadata: Metadata = {
   title: 'Đổi mật khẩu',

@@ -4,37 +4,36 @@ import productService from '@/services/product/product.service'
 import { useProductClient } from '@/zustand/productClient'
 import { useState } from 'react'
 import { Card } from 'antd'
-import Image from 'next/image'
-import { formatPrice } from '@/helper/format'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { FilterFilled } from '@ant-design/icons'
-import { FilterTag } from '@/components/shop/filterTag'
-import { FilterSide } from '@/components/shop/filter'
+import dynamic from 'next/dynamic'
 
-export const Shop = () => {
+const ProductCard = dynamic(() => import('./productCard'), { ssr: false })
+const FilterTag = dynamic(() => import('./filterTag'), { ssr: false })
+const FilterSide = dynamic(() => import('./filter'), { ssr: false })
+
+const Shop = () => {
   const { products, setProducts } = useProductClient()
   const [total, setTotal] = useState<number>(0)
-  const { Meta } = Card
-  const router = useRouter()
   const param = useSearchParams()
 
   const page = param.get('page') ? Number(param.get('page')) : 1
   const limit = param.get('limit') ? Number(param.get('limit')) : 10
-  const filterCategory = param.get('filterCategory') || undefined
-  const filterBrand = param.get('filterBrand') || undefined
-  const filterStartPrice = param.get('filterStartPrice')
-    ? Number(param.get('filterStartPrice'))
+  const filterCategory = param.getAll('filterCategory') || undefined
+  const filterBrand = param.getAll('filterBrand') || undefined
+  const filterStartPrice = param.getAll('filterStartPrice')
+    ? Number(param.getAll('filterStartPrice'))
     : undefined
-  const filterEndPrice = param.get('filterEndPrice')
-    ? Number(param.get('filterEndPrice'))
+  const filterEndPrice = param.getAll('filterEndPrice')
+    ? Number(param.getAll('filterEndPrice'))
     : undefined
-  const filterSize = param.get('filterSize') || undefined
-  const filterColor = param.get('filterColor') || undefined
-  const filterMaterial = param.get('filterMaterial') || undefined
-  const filterCondition = param.get('filterCondition') || undefined
-  const filterType = param.get('filterType') || undefined
-  const filterStyle = param.get('filterStyle') || undefined
-  const filterTypeCategory = param.get('filterTypeCategory') || undefined
+  const filterSize = param.getAll('filterSize') || undefined
+  const filterColor = param.getAll('filterColor') || undefined
+  const filterMaterial = param.getAll('filterMaterial') || undefined
+  const filterCondition = param.getAll('filterCondition') || undefined
+  const filterType = param.getAll('filterType') || undefined
+  const filterStyle = param.getAll('filterStyle') || undefined
+  const filterTypeCategory = param.getAll('filterTypeCategory') || undefined
   const searchKey = param.get('searchKey') || undefined
 
   const { isLoading } = useSWR(
@@ -139,115 +138,7 @@ export const Shop = () => {
                 <SekeletonCard />
                 <div className="grid grid-cols-4 gap-5">
                   {products.map((product) => (
-                    <div
-                      key={product._id}
-                      onClick={() => {
-                        router.push(`shop/${product.slug}`)
-                      }}
-                    >
-                      <Card
-                        key={product._id}
-                        hoverable={true}
-                        loading={isLoading}
-                        className="shadow-sm"
-                        style={{
-                          width: '100%',
-                          border: '2px solid #f0f0f0',
-                        }}
-                        cover={
-                          <div
-                            style={{
-                              width: '100%', // Fixed width for the image container
-                              height: '300px', // Fixed height for the image container
-                              overflow: 'hidden', // Ensures the image fits the container without overflow
-                              position: 'relative',
-                            }}
-                          >
-                            {product.type === 'barter' && (
-                              <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1">
-                                Trao đổi
-                              </div>
-                            )}
-                            {product.condition === 'new' && (
-                              <div className="absolute top-0 right-0 text-white bg-red-500 px-2 py-1">
-                                Mới
-                              </div>
-                            )}
-                            <Image
-                              src={product.imgUrls?.[0]}
-                              alt={product.productName}
-                              width={240} // Matches the container width
-                              height={200} // Matches the container height
-                              className="object-cover"
-                              style={{
-                                width: '100%', // Ensures the image covers the container
-                                height: '100%', // Ensures the image covers the container
-                              }}
-                            />
-                          </div>
-                        }
-                      >
-                        <Meta title={<p className="text-xl">{product.productName}</p>} />
-                        <Meta
-                          title={
-                            <p className="text-lg font-normal">
-                              Kích thước:{' '}
-                              {Array.from(
-                                new Set(product.sizeVariants.map((variant) => variant.size)),
-                              )
-                                .slice(0, 3)
-                                .map((size, index) => (
-                                  <span key={index}>
-                                    {size}
-                                    {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
-                                  </span>
-                                ))}
-                              {product.sizeVariants.length > 3 && ',...'}
-                            </p>
-                          }
-                        />
-                        <Meta
-                          title={
-                            <p className="text-xl font-semibold text-green-800">
-                              {product.type === 'barter' ? (
-                                <>
-                                  <p>Liên hệ</p>
-                                  <p className="text-sm underline">Xem ngay</p>
-                                </>
-                              ) : (
-                                <>
-                                  <p>{formatPrice(product.price) + 'đ'}</p>
-                                  <p className="text-sm underline">Xem ngay</p>
-                                </>
-                              )}
-                            </p>
-                          }
-                        />
-                        <Meta
-                          style={{
-                            marginTop: '15px',
-                          }}
-                          title={
-                            <div className="flex">
-                              <div className="w-5 h-5 overflow-hidden rounded-full mr-2">
-                                <Image
-                                  src={product.userId?.avatar}
-                                  alt={product.userId?.firstname + ' ' + product.userId?.lastname}
-                                  width={50}
-                                  height={50}
-                                  className="object-cover "
-                                />
-                              </div>
-                              <div className="flex justify-center items-center">
-                                <p className="text-sm font-semibold">
-                                  {product.userId?.firstname + ' ' + product.userId?.lastname}
-                                </p>
-                              </div>
-                            </div>
-                          }
-                        />
-                      </Card>
-                    </div>
+                    <ProductCard key={product._id} product={product} isLoading={isLoading} />
                   ))}
                 </div>
               </div>
@@ -258,3 +149,5 @@ export const Shop = () => {
     </>
   )
 }
+
+export default Shop

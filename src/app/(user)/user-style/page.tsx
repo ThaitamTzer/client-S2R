@@ -1,5 +1,8 @@
-import UserStyle from '@/components/userStyle/useStyle'
+import Loading from '@/app/loading'
 import { Metadata } from 'next'
+import { Suspense, lazy } from 'react'
+
+const UserStyle = lazy(() => import('@/components/userStyle/useStyle'))
 
 export const metadata: Metadata = {
   title: 'Phong cách của bạn',
@@ -8,9 +11,9 @@ export const metadata: Metadata = {
 
 const UserStylePage = () => {
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <UserStyle />
-    </>
+    </Suspense>
   )
 }
 

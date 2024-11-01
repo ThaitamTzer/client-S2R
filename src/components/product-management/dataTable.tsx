@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import productService from '@/services/product/product.service'
 import { createStyles } from 'antd-style'
 
-
 declare module 'antd-style' {
   interface FullToken {
     antCls: string
@@ -31,7 +30,7 @@ const useStyle = createStyles(({ css, token }) => {
   }
 })
 
-export const DataTable = () => {
+const DataTable = () => {
   const { styles } = useStyle()
 
   const param = useSearchParams()
@@ -122,3 +121,5 @@ export const DataTable = () => {
     </>
   )
 }
+
+export default DataTable

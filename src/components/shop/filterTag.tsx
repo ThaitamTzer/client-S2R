@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { CloseOutlined } from '@ant-design/icons'
 import { useGetName } from '@/helper/getName'
 
-export const FilterTag = () => {
+const FilterTag = () => {
   const param = useSearchParams()
   const [paramsObj, setParamsObj] = useState<Record<string, string[]>>({})
   const {
@@ -16,9 +16,9 @@ export const FilterTag = () => {
     getPriceRange,
     getTypeProduct,
     getStyleName,
-    clearAll, 
+    clearAll,
     removeTag,
-    removeTwoTags
+    removeTwoTags,
   } = useGetName()
 
   useEffect(() => {
@@ -153,3 +153,5 @@ export const FilterTag = () => {
     </>
   )
 }
+
+export default FilterTag

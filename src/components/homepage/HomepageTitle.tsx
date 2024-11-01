@@ -9,7 +9,7 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 })
 
-export const HomePageTitle = () => {
+const HomePageTitle = () => {
   return (
     <>
       <div className="container mx-auto px-24 pt-14 grid gap-10">
@@ -27,12 +27,14 @@ export const HomePageTitle = () => {
             className="text-green-800 "
             fw={500}
           >
-            “Tại Share2Receive, chúng tôi tin rằng mặc đồ gì giúp bạn luôn sáng
-            tạo và giúp môi trường XANH hơn. Bạn có thể cùng chúng tôi xây dựng
-            tương lai bền vững hơn.” - Xuân Nguyễn, Founder
+            “Tại Share2Receive, chúng tôi tin rằng mặc đồ gì giúp bạn luôn sáng tạo và giúp môi
+            trường XANH hơn. Bạn có thể cùng chúng tôi xây dựng tương lai bền vững hơn.” - Xuân
+            Nguyễn, Founder
           </Title>
         </div>
       </div>
     </>
   )
 }
+
+export default HomePageTitle

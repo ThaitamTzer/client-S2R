@@ -32,7 +32,7 @@ const useStyle = createStyles(({ css, token }) => {
   }
 })
 
-export const TableDataRev = () => {
+export default function TableDataRev() {
   const { setExchangesRev, exchangesRev } = useExchange()
   const [total, setTotal] = useState(0)
   const [allUsers, setAllUsers] = useState<{ value: string; label: string }[]>([])

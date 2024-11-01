@@ -1,18 +1,19 @@
 'use client'
 
 import React from 'react'
-import { Suspense } from 'react'
-
-import { DataTable } from '@/components/product-management/dataTable'
-import { AddProduct } from '@/components/product-management/addProduct'
-import { EditProduct } from '@/components/product-management/editProduct'
+import { Suspense, lazy } from 'react'
 import { Alert } from '@/components/product-management/tabs/alert'
 import { useProductManagement } from '@/zustand/productManagement'
 import productService from '@/services/product/product.service'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import { useSearchParams } from 'next/navigation'
-import { ViewProductModal } from '@/components/product-management/viewProduct'
+import Loading from '@/app/loading'
+
+const DataTable = lazy(() => import('@/components/product-management/dataTable'))
+const ViewProductModal = lazy(() => import('@/components/product-management/viewProduct'))
+const EditProduct = lazy(() => import('@/components/product-management/editProduct'))
+const AddProduct = lazy(() => import('@/components/product-management/addProduct'))
 
 const ProductManagement = () => {
   const param = useSearchParams()
@@ -48,13 +49,17 @@ const ProductManagement = () => {
 
   return (
     <div className="container px-10 mx-auto">
-      <EditProduct />
-      <ViewProductModal />
+      <Suspense fallback={<Loading />}>
+        <EditProduct />
+        <ViewProductModal />
+      </Suspense>
       <div className="title text-black text-2xl font-semibold">
         <h2>Quản lý sản phẩm</h2>
       </div>
       <div className="flex justify-end">
-        <AddProduct />
+        <Suspense fallback={<Loading />}>
+          <AddProduct />
+        </Suspense>
         <Alert
           title="Xác nhận xóa"
           content="Bạn có chắc chắn muốn xóa sản phẩm này không?"
@@ -66,7 +71,7 @@ const ProductManagement = () => {
         />
       </div>
       <div className="mt-5 bg-white p-2 shadow-lg rounded-md">
-        <Suspense>
+        <Suspense fallback={<Loading />}>
           <DataTable />
         </Suspense>
       </div>

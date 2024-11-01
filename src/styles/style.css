@@ -324,36 +324,22 @@ input.search-box:focus {
   outline: none;
 }
 
-/* .filter_color .card-checkbox {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.loading_screen {
+  --c: #000;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  color: #0000;
+  overflow: hidden;
+  text-shadow:
+    0 0 var(--c),
+    11ch 0 var(--c);
+  animation: c6 2s infinite linear;
 }
-
-.filter_color .card-checkbox:hover {
-  color: green;
+@keyframes c6 {
+  to {
+    text-shadow:
+      -11ch 0 var(--c),
+      0ch 0 var(--c);
+  }
 }
-
-.filter_color .card-checkbox .card-content p {
-  margin: 0;
-}
-
-.filter_color .ant-checkbox-checked .card-checkbox {
-  border-color: green;
-  background-color: #e6ffe6 !important;
-}
-
-.filter_color .ant-checkbox-wrapper {
-  border: none !important;
-}
-
-.filter_checkbox .card-content {
-  width: 30px;
-  height: 30px;
-} */

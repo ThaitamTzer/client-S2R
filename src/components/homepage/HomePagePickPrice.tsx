@@ -1,7 +1,7 @@
-"use client";
-import homepage from "@/styles/homepage.module.css";
+'use client'
+import homepage from '@/styles/homepage.module.css'
 
-export const HomePagePickPrice = () => {
+export default function HomePagePickPrice() {
   return (
     <>
       <div
@@ -35,5 +35,5 @@ export const HomePagePickPrice = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

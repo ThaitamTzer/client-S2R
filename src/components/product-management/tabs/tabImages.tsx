@@ -5,7 +5,7 @@ import { Grid } from '@mantine/core'
 import toast from 'react-hot-toast'
 import { PlusOutlined } from '@ant-design/icons'
 
-export const TabUploadImages = ({
+export default function TabUploadImages({
   form,
   onUploadImages,
   fileList,
@@ -31,7 +31,7 @@ export const TabUploadImages = ({
   previewImage: any
   handlePreview: any
   disabled?: any
-}) => {
+}) {
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
       <PlusOutlined />

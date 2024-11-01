@@ -45,15 +45,14 @@ const category = [
     src: '/images/hand-bag-v2.png',
   },
 ]
-export const HomePageCategory = () => {
+
+export default function HomePageCategory() {
   return (
     <>
       <div className="category-section mt-8 bg-green-100 w-full h-full">
         <div className="container mx-auto px-24 py-10">
           <div className="text-center">
-            <h1 className="text-3xl font-semibold">
-              Hàng trăm sản phẩm các loại
-            </h1>
+            <h1 className="text-3xl font-semibold">Hàng trăm sản phẩm các loại</h1>
             <p className="text-base font-medium mt-3">
               Được kiểm duyệt kỹ càng sẵn sàng đến tay bạn!
             </p>
@@ -112,9 +111,7 @@ export const HomePageCategory = () => {
               </p>
               <p className="mb-1 text-2xl font-semibold ">
                 Rác thải thời trang,{' '}
-                <span className="text-white text-2xl">
-                  tính đến ngày 27/11/2024
-                </span>
+                <span className="text-white text-2xl">tính đến ngày 27/11/2024</span>
               </p>
             </div>
           </div>

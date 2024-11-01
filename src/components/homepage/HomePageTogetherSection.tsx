@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-export const HomePageTogetherSection = () => {
+export default function HomePageTogetherSection() {
   return (
     <>
       <div

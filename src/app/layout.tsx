@@ -4,13 +4,15 @@ import { Montserrat } from 'next/font/google'
 import './globals.css'
 import '@/styles/style.css'
 import '@mantine/carousel/styles.css'
-import Header from '@/partials/header'
 import ScrollingUp from '@/partials/up'
-import Footer from '@/partials/footer'
 import LoginModal from '@/components/loginModal'
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import ExChangeDrawer from '@/components/exchange/exchange'
 import { Providers } from '@/providers/providers'
+import Loading from './loading'
+
+const Header = lazy(() => import('@/partials/header'))
+const Footer = lazy(() => import('@/partials/footer'))
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -41,7 +43,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
-        <Suspense>
+        <Suspense fallback={<Loading />}>
           <Providers>
             <Header />
             <ExChangeDrawer />

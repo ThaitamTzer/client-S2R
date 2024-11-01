@@ -14,6 +14,8 @@ import axiosClient from '@/lib/axios'
 import authConfig from '@/config/auth'
 
 import { useLoginModal } from '@/zustand/loginModal'
+import { useProductManagement } from '@/zustand/productManagement'
+import { useExchange } from '@/zustand/exchange'
 
 // ** Types
 import {
@@ -48,7 +50,8 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
-
+  const { setProducts } = useProductManagement()
+  const { setExchanges, setListExchange, setExchangesRev } = useExchange()
   const { closeModal } = useLoginModal()
 
   // ** Hooks
@@ -58,10 +61,6 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
-      // const storedToken = window.localStorage.getItem(
-      //   authConfig.storageTokenKeyName,
-      // )!;
-      // if (storedToken) {
       await axiosClient
         .get(authConfig.meEndpoint)
         .then(async (response) => {
@@ -71,26 +70,17 @@ const AuthProvider = ({ children }: Props) => {
           Cookies.remove('accessToken')
           Cookies.remove('refreshToken')
           setUser(null)
-          if (
-            authConfig.onTokenExpiration === 'logout' &&
-            !pathName.includes('login')
-          ) {
+          if (authConfig.onTokenExpiration === 'logout' && !pathName.includes('login')) {
             router.replace('/login')
           }
         })
-      // } else {
-      //   setLoading(false);
-      // }
     }
 
     initAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleLogin = (
-    params: LoginParams,
-    errorCallback?: ErrCallbackType,
-  ) => {
+  const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     setLoading(true)
     try {
       axiosClient
@@ -98,23 +88,14 @@ const AuthProvider = ({ children }: Props) => {
         .then(async (response) => {
           setLoading(false)
           if (params.rememberMe) {
-            window.localStorage.setItem(
-              authConfig.storageTokenKeyName,
-              response.data.accessToken,
-            )
-            window.localStorage.setItem(
-              authConfig.onTokenExpiration,
-              response.data.refreshToken,
-            )
+            window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
+            window.localStorage.setItem(authConfig.onTokenExpiration, response.data.refreshToken)
           }
           const returnUrl = searchParams.get('returnUrl')
 
           setUser({ ...response.data.user })
           if (params.rememberMe) {
-            window.localStorage.setItem(
-              'userData',
-              JSON.stringify(response.data.user),
-            )
+            window.localStorage.setItem('userData', JSON.stringify(response.data.user))
           }
 
           const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
@@ -154,10 +135,7 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  const handleResetPassword = async (params: {
-    code: string
-    newPassword: string
-  }) => {
+  const handleResetPassword = async (params: { code: string; newPassword: string }) => {
     try {
       await axiosClient.put('/api/auth/reset-password', params)
     } catch {
@@ -178,9 +156,11 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogout = () => {
     try {
       axiosClient.patch(authConfig.logoutEndpoint).then(() => {
-        Cookies.remove('accessToken')
-        Cookies.remove('refreshToken')
         setUser(null)
+        setProducts([])
+        setExchanges([])
+        setListExchange([])
+        setExchangesRev([])
         router.push('/')
       })
     } catch {

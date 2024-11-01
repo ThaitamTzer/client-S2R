@@ -5,12 +5,15 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { navLink } from '@/types/navTypes'
-import { usePathname } from 'next/navigation'
+import { usePathname, useParams, useSearchParams } from 'next/navigation'
 
 const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const pathname = usePathname()
+  const params = useParams()
+
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,9 +32,29 @@ const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [lastScrollY, pathname])
+  }, [lastScrollY, pathname, params])
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (linkPath: string) => {
+    // Tách path và search params của link
+    const [basePath, searchString] = linkPath.split('?')
+
+    // Kiểm tra path có khớp không
+    if (pathname !== basePath) return false
+
+    // Nếu không có search params, chỉ cần so sánh path
+    if (!searchString) return !searchParams.toString()
+
+    // So sánh search params
+    const linkParams = new URLSearchParams(searchString)
+    const currentParams = searchParams
+
+    // Kiểm tra từng param trong link có khớp với current params không
+    for (const [key, value] of Array.from(linkParams.entries())) {
+      if (currentParams.get(key) !== value) return false
+    }
+
+    return true
+  }
 
   return (
     <>

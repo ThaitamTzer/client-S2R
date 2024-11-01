@@ -8,7 +8,7 @@ import { Grid } from '@mantine/core'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
 import { Form, Button, Select, Radio, Input } from 'antd'
 
-export const TabInformation = ({
+export default function TabInformation({
   form,
   product,
   setProduct,
@@ -32,7 +32,7 @@ export const TabInformation = ({
   categories: any
   brands: any
   disabled?: any
-}) => {
+}) {
   return (
     <>
       <Form

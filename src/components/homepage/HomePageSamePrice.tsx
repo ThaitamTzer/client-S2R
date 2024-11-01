@@ -45,7 +45,7 @@ const discountCard = [
   },
 ];
 
-export const HomePageSamePrice = () => {
+export default function HomePageSamePrice () {
   const autoplay3 = useRef(Autoplay({ delay: 5000 }));
 
   return (

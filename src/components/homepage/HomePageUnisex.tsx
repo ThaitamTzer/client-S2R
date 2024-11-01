@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export const HomePageUnisex = () => {
+const HomePageUnisex = () => {
   return (
     <>
       <div className="relative mt-5">
@@ -29,3 +29,5 @@ export const HomePageUnisex = () => {
     </>
   )
 }
+
+export default HomePageUnisex

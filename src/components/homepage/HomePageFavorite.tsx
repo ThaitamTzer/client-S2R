@@ -8,7 +8,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import { useRef } from 'react'
 import homepage from '@/styles/homepage.module.css'
 
-export const HomePageFavorate = () => {
+export default function HomePageFavorate() {
   const autoplay2 = useRef(Autoplay({ delay: 2000 }))
 
   return (

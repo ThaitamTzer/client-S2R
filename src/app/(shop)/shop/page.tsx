@@ -1,5 +1,9 @@
-import { Shop } from '@/components/shop/shop'
+import Loading from '@/app/loading'
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
+
+const Shop = dynamic(() => import('@/components/shop/shop'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'Cửa hàng',
@@ -8,9 +12,9 @@ export const metadata: Metadata = {
 
 const ShopPage = () => {
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <Shop />
-    </>
+    </Suspense>
   )
 }
 

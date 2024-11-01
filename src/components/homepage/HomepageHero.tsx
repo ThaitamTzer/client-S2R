@@ -1,6 +1,6 @@
 'use client'
 
-export const HomePageHero = () => {
+export default function HomePageHero() {
   return (
     <>
       <div className="relative mt-6 wrapper pointer-events-none">
