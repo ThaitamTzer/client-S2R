@@ -120,7 +120,7 @@ const Shop = () => {
 
   return (
     <>
-      <div className="container mx-auto px-10 mt-40">
+      <div className="container mx-auto mt-40">
         <h1 className="text-2xl font-semibold uppercase">
           <FilterFilled size={30} /> Bộ lọc tìm kiếm
         </h1>
@@ -136,7 +136,7 @@ const Shop = () => {
               <p className="text-xl font-semibold">{total} sản phẩm</p>
               <div className="container mx-auto mt-3">
                 <SekeletonCard />
-                <div className="grid grid-cols-4 gap-5">
+                <div className="flex flex-wrap gap-3">
                   {products.map((product) => (
                     <ProductCard key={product._id} product={product} isLoading={isLoading} />
                   ))}

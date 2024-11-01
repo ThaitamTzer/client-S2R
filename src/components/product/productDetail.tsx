@@ -13,7 +13,7 @@ import { useExchange } from '@/zustand/exchange'
 import { CreateExchangeModal } from '../exchange/openCreateExchange'
 import { useAuth } from '@/hooks/useAuth'
 
-export const ProductDetail = ({ product }: { product: ProductsClient }) => {
+export default function ProductDetail({ product }: { product: ProductsClient }) {
   const [count, setCount] = useState(1)
   const [mainImage, setMainImage] = useState(product.imgUrls[0]) // New state for the main image
   const { getMaterialName, getConditionName } = useGetName()
@@ -126,6 +126,7 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                   width={500}
                   height={500}
                   loading="lazy"
+                  quality={80}
                   className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
                 />
               </div>
@@ -152,8 +153,10 @@ export const ProductDetail = ({ product }: { product: ProductsClient }) => {
                         <Image
                           src={imgUrl}
                           alt={product.productName}
-                          width={100}
-                          height={100}
+                          width={80}
+                          height={80}
+                          loading="lazy"
+                          quality={70}
                           className=" absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover cursor-pointer"
                         />
                       </div>

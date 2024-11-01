@@ -2,8 +2,8 @@
 import { Card } from 'antd'
 import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
-import { useRouter } from 'next/navigation'
 import { ProductsClient } from '@/types/users/productTypes'
+import Link from 'next/link'
 
 export default function ProductCard({
   product,
@@ -13,30 +13,26 @@ export default function ProductCard({
   isLoading: boolean
 }) {
   const { Meta } = Card
-  const router = useRouter()
 
   return (
     <>
-      <div
-        key={product._id}
-        onClick={() => {
-          router.push(`shop/${product.slug}`)
-        }}
-      >
+      <Link href={`/shop/${product.slug}`} key={product._id} prefetch={true}>
         <Card
           key={product._id}
           hoverable={true}
           loading={isLoading}
           className="shadow-sm"
+          size="default"
           style={{
-            width: '100%',
+            width: '265px',
             border: '2px solid #f0f0f0',
+            height: '100%',
           }}
           cover={
             <div
               style={{
                 width: '100%', // Fixed width for the image container
-                height: '300px', // Fixed height for the image container
+                height: '330px', // Fixed height for the image container
                 overflow: 'hidden', // Ensures the image fits the container without overflow
                 position: 'relative',
               }}
@@ -124,7 +120,7 @@ export default function ProductCard({
             }
           />
         </Card>
-      </div>
+      </Link>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { ProductDetail } from '@/components/product/productDetail'
+import ProductDetail from '@/components/product/productDetail'
 import productService from '@/services/product/product.service'
 import { notFound } from 'next/navigation'
 
@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
   if (!product) {
     notFound()
   }
-
+  
   return (
     <>
       <ProductDetail product={product} />
