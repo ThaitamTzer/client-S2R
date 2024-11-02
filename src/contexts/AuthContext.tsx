@@ -171,8 +171,6 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  console.log('user', user)
-
   const values = {
     user,
     loading,

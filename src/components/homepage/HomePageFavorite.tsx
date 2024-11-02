@@ -90,9 +90,9 @@ export default function HomePageFavorate() {
                         loading="lazy"
                         src={brand.imgUrl}
                         alt={brand.name}
-                        width={80}
-                        height={80}
-                        quality={70}
+                        width={340}
+                        height={380}
+                        quality={80}
                         style={{
                           width: '100%',
                           height: '100%',

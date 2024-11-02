@@ -1,4 +1,3 @@
-
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { ConfigProvider } from 'antd'
 import { themeAntProvider } from '@/components/themeProvider'
@@ -8,6 +7,7 @@ import { MantineProvider } from '@mantine/core'
 import { Toaster } from 'react-hot-toast'
 import { Montserrat } from 'next/font/google'
 import { createTheme, DEFAULT_THEME, mergeMantineTheme } from '@mantine/core'
+import { SocketProvider } from '@/contexts/SocketContext'
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -30,16 +30,18 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <AuthProvider>
-      <ClientProvider>
-        <ConfigProvider theme={themeAntProvider}>
-          <AntdRegistry>
-            <MantineProvider theme={theme}>
-              <Toaster position="top-right" />
-              {children}
-            </MantineProvider>
-          </AntdRegistry>
-        </ConfigProvider>
-      </ClientProvider>
+      <SocketProvider>
+        <ClientProvider>
+          <ConfigProvider theme={themeAntProvider}>
+            <AntdRegistry>
+              <MantineProvider theme={theme}>
+                <Toaster position="top-right" />
+                {children}
+              </MantineProvider>
+            </AntdRegistry>
+          </ConfigProvider>
+        </ClientProvider>
+      </SocketProvider>
     </AuthProvider>
   )
 }

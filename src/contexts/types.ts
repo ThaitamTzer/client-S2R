@@ -59,7 +59,7 @@ export type AuthValuesType = {
   logout: () => void
   user: UserDataType | null
   setLoading: (value: boolean) => void
-  setUser: (value: UserDataType | null) => void
+  setUser: (value: UserDataType) => void
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
   register: (params: RegisterParams) => Promise<void>
   forgetPassword: (params: { email: string }) => Promise<void>

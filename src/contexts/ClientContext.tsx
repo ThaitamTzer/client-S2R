@@ -70,6 +70,11 @@ const ClientProvider = ({ children }: Props) => {
       setProductsUser(data.data)
       setLoading(false)
     },
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshInterval: 0,
+    dedupingInterval: 10000,
+    errorRetryCount: 3,
   })
 
   const value = {
