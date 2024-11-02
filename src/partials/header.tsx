@@ -69,8 +69,8 @@ export default function Header() {
       socket.on('generalNotification', () => {
         mutate()
         api.open({
-          message: 'Thông báo trao đổi',
-          description: 'Bạn có một yêu cầu trao đổi mới ',
+          message: 'Bạn có thông báo mới',
+          description: 'Bạn có một thông báo mới ',
           showProgress: true,
           pauseOnHover: true,
           duration: 5,
@@ -80,8 +80,8 @@ export default function Header() {
 
       socket.on('authenticatedNotification', () => {
         api.open({
-          message: 'Thông báo trao đổi',
-          description: 'Bạn có một yêu cầu trao đổi mới ',
+          message: 'Bạn có thông báo mới',
+          description: 'Bạn có một thông báo mới ',
           showProgress: true,
           pauseOnHover: true,
           duration: 5,
