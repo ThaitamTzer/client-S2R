@@ -21,7 +21,7 @@ export default function HomePageSamePrice() {
         10,
         ['670a21cad47ec9342aedcdac'],
         undefined,
-        0,
+        19000,
         19000,
         undefined,
         undefined,

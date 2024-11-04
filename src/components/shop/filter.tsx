@@ -30,17 +30,7 @@ const expandIcon = ({ isActive }: { isActive: boolean | undefined }) => {
 
 const FilterSide = () => {
   const { categories, brands } = useClient()
-  const [activeKey, setActiveKey] = useState<string[]>([
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-  ])
+  const [activeKey, setActiveKey] = useState<string[]>(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
   const handleCollapseChange = (key: string[]) => {
     setActiveKey(key)
   }
@@ -109,11 +99,7 @@ const FilterSide = () => {
         expandIcon={({ isActive }) => expandIcon({ isActive })}
       >
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo danh mục ({countCheckedFilters('filterCategory')})
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo danh mục ({countCheckedFilters('filterCategory')})</p>}
           key="1"
           style={{
             borderBottom: '1px solid #000',
@@ -137,7 +123,7 @@ const FilterSide = () => {
                   onChange={(e) => handleFilterChange(e.target.checked, 'filterCategory', cate._id)}
                   checked={isFilterChecked('filterCategory', cate._id)}
                 >
-                  {cate.name}
+                  {cate.name + ` (${cate.totalProduct || 0})`}
                 </Checkbox>
               ))}
             </div>
@@ -145,11 +131,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo kích thước ({countCheckedFilters('filterSize')}){' '}
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo kích thước ({countCheckedFilters('filterSize')}) </p>}
           key="2"
           style={{
             borderBottom: '1px solid #000',
@@ -181,11 +163,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo màu sắc ({countCheckedFilters('filterColor')})
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo màu sắc ({countCheckedFilters('filterColor')})</p>}
           key="3"
           style={{
             borderBottom: '1px solid #000',
@@ -219,11 +197,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo chất liệu ({countCheckedFilters('filterMaterial')})
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo chất liệu ({countCheckedFilters('filterMaterial')})</p>}
           key="7"
           style={{
             borderBottom: '1px solid #000',
@@ -244,9 +218,7 @@ const FilterSide = () => {
                     color: '#000',
                     fontSize: '1.3rem',
                   }}
-                  onChange={(e) =>
-                    handleFilterChange(e.target.checked, 'filterMaterial', material.value)
-                  }
+                  onChange={(e) => handleFilterChange(e.target.checked, 'filterMaterial', material.value)}
                   checked={isFilterChecked('filterMaterial', material.value)}
                 >
                   {material.name}
@@ -325,8 +297,8 @@ const FilterSide = () => {
             </Checkbox>
 
             <Checkbox
-              onChange={(e) => handlePriceRangeChange(e.target.checked, 1000000, Number.MAX_VALUE)}
-              checked={isPriceRangeChecked(1000000, Number.MAX_VALUE)}
+              onChange={(e) => handlePriceRangeChange(e.target.checked, 1000000, 50000000)}
+              checked={isPriceRangeChecked(1000000, 50000000)}
               className="my-2 filter_checkbox"
               style={{
                 color: '#000',
@@ -342,11 +314,7 @@ const FilterSide = () => {
           header={
             <p className="text-xl font-medium">
               Theo tình trạng (
-              {isFilterChecked('filterCondition', 'used') ||
-              isFilterChecked('filterCondition', 'new')
-                ? 1
-                : 0}
-              )
+              {isFilterChecked('filterCondition', 'used') || isFilterChecked('filterCondition', 'new') ? 1 : 0})
             </p>
           }
           key="5"
@@ -384,9 +352,7 @@ const FilterSide = () => {
           header={
             <>
               <div>
-                <p className="text-xl font-medium">
-                  Theo thương hiệu ({countCheckedFilters('filterBrand')})
-                </p>
+                <p className="text-xl font-medium">Theo thương hiệu ({countCheckedFilters('filterBrand')})</p>
               </div>
             </>
           }
@@ -407,7 +373,7 @@ const FilterSide = () => {
                   fontSize: '1.3rem',
                 }}
               >
-                {brand.name}
+                {brand.name + ` (${brand.totalProduct || 0})`}
               </Checkbox>
             ))}
           </div>
@@ -417,10 +383,7 @@ const FilterSide = () => {
           header={
             <p className="text-xl font-medium">
               Theo loại sản phẩm (
-              {isFilterChecked('filterType', 'barter') || isFilterChecked('filterType', 'sale')
-                ? 1
-                : 0}
-              )
+              {isFilterChecked('filterType', 'barter') || isFilterChecked('filterType', 'sale') ? 1 : 0})
             </p>
           }
           key="8"
@@ -455,11 +418,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium ">
-              Theo phong cách ({countCheckedFilters('filterStyle')})
-            </p>
-          }
+          header={<p className="text-xl font-medium ">Theo phong cách ({countCheckedFilters('filterStyle')})</p>}
           key="9"
         >
           <div

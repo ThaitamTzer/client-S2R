@@ -13,6 +13,7 @@ const FilterTag = () => {
     getCategoryName,
     getBrandName,
     getConditionName,
+    getTypeCategory,
     getPriceRange,
     getTypeProduct,
     getStyleName,
@@ -120,6 +121,9 @@ const FilterTag = () => {
                 break
               case 'filterStyle':
                 displayName = getStyleName(value)
+                break
+              case 'filterTypeCategory':
+                displayName = getTypeCategory(value)
                 break
             }
 

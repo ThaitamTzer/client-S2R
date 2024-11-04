@@ -6,6 +6,7 @@ export type Category = {
   type: string
   imgUrl: string
   priority: string
+  totalProduct: number
 }
 
 export type Brand = {

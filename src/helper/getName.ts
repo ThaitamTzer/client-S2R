@@ -10,6 +10,23 @@ export const useGetName = () => {
   const router = useRouter()
   const param = useSearchParams()
 
+  const getTypeCategory = (string: string) => {
+    switch (string) {
+      case 'male':
+        return 'Thời trang nam'
+      case 'female':
+        return 'Thời trang nữ'
+      case 'unisex':
+        return 'Thời trang unisex'
+      case 'other':
+        return 'Khác'
+      case 'item':
+        return 'Phụ kiện'
+      default:
+        return string
+    }
+  }
+
   // Helper function to find name by id in categories or brands
   const getCategoryName = (id: string) => {
     const category = categories?.find((cat) => cat._id === id)
@@ -31,8 +48,15 @@ export const useGetName = () => {
     return color ? color.name : id
   }
 
-  const getPriceRange = (start: string, end: string) => {
-    return `${start} - ${end}`
+  const getPriceRange = (startPrice: string, endPrice: string) => {
+    const start = parseInt(startPrice)
+    const end = parseInt(endPrice)
+
+    if (start === 0 && end === 100000) return 'Dưới 100k'
+    if (start === 100000 && end === 200000) return '100k - 200k'
+    if (start === 200000 && end === 500000) return '200k - 500k'
+    if (start === 500000 && end === 1000000) return '500k - 1tr'
+    if (start === 1000000 && end === 50000000) return 'Trên 1tr'
   }
 
   const getConditionName = (id: string) => {
@@ -127,6 +151,7 @@ export const useGetName = () => {
     removeTag,
     removeTwoTags,
     clearAll,
+    getTypeCategory,
   }
 }
 
