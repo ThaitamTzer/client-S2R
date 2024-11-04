@@ -101,10 +101,10 @@ export default function ProductOverview({
               <Image
                 src={mainImage} // Use mainImage state
                 alt={product.productName}
-                width={500}
-                height={500}
+                width={600}
+                height={600}
                 loading="lazy"
-                quality={80}
+                quality={90}
                 className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
               />
             </div>
