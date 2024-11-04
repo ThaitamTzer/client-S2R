@@ -13,20 +13,18 @@ const FilterTag = dynamic(() => import('./filterTag'), { ssr: false })
 const FilterSide = dynamic(() => import('./filter'), { ssr: false })
 
 const Shop = () => {
-  const { products, setProducts } = useProductClient()
+  const { setProducts } = useProductClient()
   const [total, setTotal] = useState<number>(0)
   const param = useSearchParams()
+  const [currentPage, setCurrentPage] = useState<number>(param.get('page') ? Number(param.get('page')) : 1)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [loadedProducts, setLoadedProducts] = useState<any[]>([])
 
-  const page = param.get('page') ? Number(param.get('page')) : 1
-  const limit = param.get('limit') ? Number(param.get('limit')) : 10
+  const limit = param.get('limit') ? Number(param.get('limit')) : 50
   const filterCategory = param.getAll('filterCategory') || undefined
   const filterBrand = param.getAll('filterBrand') || undefined
-  const filterStartPrice = param.getAll('filterStartPrice')
-    ? Number(param.getAll('filterStartPrice'))
-    : undefined
-  const filterEndPrice = param.getAll('filterEndPrice')
-    ? Number(param.getAll('filterEndPrice'))
-    : undefined
+  const filterStartPrice = param.getAll('filterStartPrice') ? Number(param.getAll('filterStartPrice')) : undefined
+  const filterEndPrice = param.getAll('filterEndPrice') ? Number(param.getAll('filterEndPrice')) : undefined
   const filterSize = param.getAll('filterSize') || undefined
   const filterColor = param.getAll('filterColor') || undefined
   const filterMaterial = param.getAll('filterMaterial') || undefined
@@ -39,7 +37,7 @@ const Shop = () => {
   const { isLoading } = useSWR(
     [
       '/shop',
-      page,
+      currentPage,
       limit,
       filterCategory,
       filterBrand,
@@ -56,7 +54,7 @@ const Shop = () => {
     ],
     () =>
       productService.getAllProdClient(
-        page,
+        currentPage,
         limit,
         filterCategory,
         filterBrand,
@@ -76,11 +74,20 @@ const Shop = () => {
         setProducts([])
       },
       onSuccess: (data) => {
-        setProducts(data.data)
+        if (currentPage === 1) {
+          setLoadedProducts(data.data)
+        } else {
+          setLoadedProducts((prev) => [...prev, ...data.data])
+        }
+        setProducts(loadedProducts)
         setTotal(data.total)
       },
     },
   )
+
+  const handleLoadMore = () => {
+    setCurrentPage((prev) => prev + 1)
+  }
 
   const SekeletonCard = () => {
     if (isLoading) {
@@ -137,10 +144,21 @@ const Shop = () => {
               <div className="container mx-auto mt-3">
                 <SekeletonCard />
                 <div className="flex flex-wrap gap-3">
-                  {products.map((product) => (
+                  {loadedProducts.map((product) => (
                     <ProductCard key={product._id} product={product} isLoading={isLoading} />
                   ))}
                 </div>
+                {loadedProducts.length < total && (
+                  <div className="text-center mt-5">
+                    <button
+                      onClick={handleLoadMore}
+                      disabled={isLoading}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      {isLoading ? 'Đang tải...' : 'Xem thêm'}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

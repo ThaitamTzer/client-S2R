@@ -74,7 +74,7 @@ export type Approved = {
   _id: string
 }
 
-export type Status = 'active' | 'inactive' | 'suspend'
+export type Status = 'active' | 'inactive' | 'suspend' | 'soldOut'
 
 export type Product = {
   _id: string

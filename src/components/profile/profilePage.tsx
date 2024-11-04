@@ -43,7 +43,7 @@ const Profile = () => {
         })
         .catch((error) => {
           console.log(error)
-          toast.error('Cập nhật thông tin thất bại!')
+          toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
           setLoading(false)
         })
         .finally(() => {
@@ -77,7 +77,7 @@ const Profile = () => {
         setFile(null)
       })
       .catch(() => {
-        toast.error('Cập nhật ảnh đại diện thất bại!')
+        toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
         setFile(null)
       })
   }

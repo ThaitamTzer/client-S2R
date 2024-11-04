@@ -33,6 +33,7 @@ export default function TabInformation({
   brands: any
   disabled?: any
 }) {
+  console.log(product)
   return (
     <>
       <Form
@@ -54,6 +55,7 @@ export default function TabInformation({
             type: product.type,
             price: product.price,
             tags: product.tags?.join(' '),
+            weight: product.weight,
             sizeVariants: product.sizeVariants?.map((sizeVariant) => ({
               size: sizeVariant.size,
               colors: sizeVariant.colors,
@@ -193,11 +195,7 @@ export default function TabInformation({
               }))}
             />
           </Form.Item>
-          <Form.Item
-            name="style"
-            label="Phong cách"
-            rules={[{ required: true, message: 'Vui lòng chọn phong cách!' }]}
-          >
+          <Form.Item name="style" label="Phong cách" rules={[{ required: true, message: 'Vui lòng chọn phong cách!' }]}>
             <Select
               placeholder="Chọn phong cách"
               options={clothingStylesData.map((style) => ({
@@ -250,6 +248,26 @@ export default function TabInformation({
             />
           </Form.Item>
         </div>
+        <div className="grid grid-cols-2">
+          <Form.Item
+            name="weight"
+            label="Trọng lượng (gram)"
+            rules={[
+              { required: true, message: 'Vui lòng nhập trọng lượng!' },
+              {
+                validator: (_, value) => {
+                  const weight = Number(value)
+                  if (weight <= 50) {
+                    return Promise.reject(new Error('Trọng lượng sản phẩm phải lớn hơn 50 gram!'))
+                  }
+                  return Promise.resolve()
+                },
+              },
+            ]}
+          >
+            <Input type="number" placeholder="Nhập trọng lượng sản phẩm" />
+          </Form.Item>
+        </div>
         <div className="w-full grid grid-flow-col ">
           <Form.Item
             name="type"
@@ -275,6 +293,9 @@ export default function TabInformation({
               <Radio value="active">Kích hoạt</Radio>
               <Radio value="inactive">Không kích hoạt</Radio>
               <Radio value="suspend">Tạm dừng</Radio>
+              <Radio disabled value="soldOut">
+                Hết hàng
+              </Radio>
             </Radio.Group>
           </Form.Item>
         </div>
@@ -287,8 +308,7 @@ export default function TabInformation({
               { required: true, message: 'Vui lòng nhập giá sản phẩm!' },
               {
                 validator: (_, value) => {
-                  if (value < 1000)
-                    return Promise.reject(new Error('Giá sản phẩm phải lớn hơn 1 nghìn đồng!'))
+                  if (value < 1000) return Promise.reject(new Error('Giá sản phẩm phải lớn hơn 1 nghìn đồng!'))
                   if (value > 5000000) {
                     return Promise.reject(new Error('Giá sản phẩm không được vượt quá 5 triệu!'))
                   }
@@ -300,11 +320,7 @@ export default function TabInformation({
             <Input placeholder="Nhập giá sản phẩm" type="number" />
           </Form.Item>
         )}
-        <Form.Item
-          name="tags"
-          label="Tags"
-          rules={[{ required: true, message: 'Vui lòng nhập tags!' }]}
-        >
+        <Form.Item name="tags" label="Tags" rules={[{ required: true, message: 'Vui lòng nhập tags!' }]}>
           <Input.TextArea
             placeholder="Nhập tags"
             onChange={(e) => {
@@ -314,9 +330,7 @@ export default function TabInformation({
               const tags = value.split(' ')
 
               // Đảm bảo mỗi tag có dấu #
-              const formattedTags = tags.map((tag) =>
-                tag.startsWith('#') || tag.trim() === '' ? tag : `#${tag}`,
-              )
+              const formattedTags = tags.map((tag) => (tag.startsWith('#') || tag.trim() === '' ? tag : `#${tag}`))
 
               // Gộp lại các tag thành chuỗi
               const formattedValue = formattedTags.join(' ')

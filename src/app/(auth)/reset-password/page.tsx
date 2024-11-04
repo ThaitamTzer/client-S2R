@@ -60,9 +60,7 @@ const ResetPage = () => {
         <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
           <div className="w-full max-w-[590px] p-5 bg-white shadow-xl rounded-md">
             <div className="login-form-title ">
-              <h1 className="text-5xl pt-2 font-semibold text-center ">
-                Khôi phục mật khẩu
-              </h1>
+              <h1 className="text-5xl pt-2 font-semibold text-center ">Khôi phục mật khẩu</h1>
             </div>
             <div className="login-form-content mt-5">
               <div className="w-[70%] mx-auto">
@@ -101,10 +99,7 @@ const ResetPage = () => {
                       },
                     ]}
                   >
-                    <Input.Password
-                      size="large"
-                      placeholder="Nhập vào mật khẩu mới"
-                    />
+                    <Input.Password size="large" placeholder="Nhập vào mật khẩu mới" />
                   </Form.Item>
                   <Form.Item
                     name="confirmPassword"
@@ -118,10 +113,7 @@ const ResetPage = () => {
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
-                          if (
-                            !value ||
-                            getFieldValue('newPassword') === value
-                          ) {
+                          if (!value || getFieldValue('newPassword') === value) {
                             return Promise.resolve()
                           }
                           return Promise.reject('Mật khẩu không khớp')
@@ -129,10 +121,7 @@ const ResetPage = () => {
                       }),
                     ]}
                   >
-                    <Input.Password
-                      size="large"
-                      placeholder="Nhập vào xác nhận mật khẩu mới"
-                    />
+                    <Input.Password size="large" placeholder="Nhập vào xác nhận mật khẩu mới" />
                   </Form.Item>
                   <Form.Item>
                     <Button
@@ -150,11 +139,7 @@ const ResetPage = () => {
             </div>
             {sendAgain && (
               <Grid justify="center" mt={2}>
-                <Button
-                  size="large"
-                  type="link"
-                  onClick={() => router.push('/forgot-password')}
-                >
+                <Button size="large" type="link" onClick={() => router.push('/forgot-password')}>
                   Gửi lại mã xác thực
                 </Button>
               </Grid>

@@ -37,17 +37,16 @@ export default function HomePageSamePrice() {
       },
     },
   )
-
+  if (samePrice.length === 0) return null
   return (
     <>
       <div className="container mx-auto px-24 mt-10">
         <div className="discount mb-10">
-          <p className="text-2xl font-bold text-center mb-2">
-            Các sản phẩm đồng giá <span className="text-orange-600">19k</span>
-          </p>
-          <p className="text-lg font-medium text-center">
-            Luôn có những sản phẩm đồng giá dành cho bạn
-          </p>
+          <Link href="/shop?filterCategory=670a21cad47ec9342aedcdac">
+            <p className="text-2xl font-bold text-center mb-2 uppercase">
+              Các sản phẩm <span className="text-orange-600">Đầm</span>
+            </p>
+          </Link>
         </div>
         <div
           className="discount-content relative w-full h-[500px] bg-contain bg-no-repeat rounded-md flex justify-between"
@@ -80,9 +79,9 @@ export default function HomePageSamePrice() {
             </Carousel>
           </div>
           <div className="mt-4 mr-5">
-            <Link href="/discount" className="text-end">
+            <Link href="/shop?filterCategory=670a21cad47ec9342aedcdact" className="text-end">
               <h2 className="font-bold text-3xl">
-                Đồng giá <span className="text-green-500">19k</span> Các loại sản phẩm
+                Đồng giá <span className="text-green-500">19k</span> Các loại sản phẩm đầm
               </h2>
               <p>&#40;Xem ngay để nhận ưu đãi lớn nhất từ Share2Receive &#41;</p>
             </Link>

@@ -29,9 +29,7 @@ export default function InforProduct({
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-row gap-7 items-center ">
                     <p className="w-1/2 text-base font-semibold">Mô tả: </p>
-                    <p className="text-base capitalize whitespace-pre-line">
-                      {product.description}
-                    </p>
+                    <p className="text-base capitalize whitespace-pre-line">{product.description}</p>
                   </div>
                   <div className="flex flex-row gap-7 items-center ">
                     <p className="w-1/2 text-base font-semibold">Chất liệu: </p>
@@ -49,17 +47,6 @@ export default function InforProduct({
                     <p className="w-1/2 text-base font-semibold">Phong cách: </p>
                     <p className="text-base capitalize">{getStyleName(product.style)}</p>
                   </div>
-                  {/* <div className="flex flex-row items-center">
-                    <p className="mr-2">Hashtag: </p>
-                    {product.tags.map((tag) => (
-                      <div
-                        key={tag}
-                        className="bg-green-200 text-green-800 px-2 py-1 rounded-sm mr-2"
-                      >
-                        {tag}
-                      </div>
-                    ))}
-                  </div> */}
                 </div>
               ),
               showArrow: false,

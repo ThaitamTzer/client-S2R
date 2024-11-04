@@ -1,12 +1,17 @@
 'use client'
 import { Category, Brand } from '@/types/clientypes'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import categoryService from '@/services/category/category.service'
 import brandService from '@/services/brand/brand.service'
 import { useCategory } from '@/zustand/category'
 import { Product } from '@/types/users/productTypes'
 import productService from '@/services/product/product.service'
+import { useNotificationStore } from '@/zustand/notification'
+import notificationService from '@/services/notification/notification.service'
+import { useAuth } from '@/hooks/useAuth'
+import exChangeService from '@/services/exchange/exchange.service'
+import { useExchange } from '@/zustand/exchange'
 
 type ClientValuesType = {
   loading: boolean
@@ -40,6 +45,9 @@ const ClientProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const [productsUser, setProductsUser] = useState<Product[] | null>(defaultProvider.productsUser)
   const { setCategories } = useCategory()
+  const { setNotifications } = useNotificationStore()
+  const { setListExchangeRev } = useExchange()
+  const { user } = useAuth()
 
   useSWR('/api/category/list-category-client', categoryService.gellClientCategories, {
     onLoadingSlow: () => {
@@ -76,6 +84,17 @@ const ClientProvider = ({ children }: Props) => {
     dedupingInterval: 10000,
     errorRetryCount: 3,
   })
+
+  useEffect(() => {
+    if (user) {
+      notificationService.getNotifications().then((data) => {
+        setNotifications(data)
+      })
+      exChangeService.getAll(1, 10, '', 'receiver').then((data) => {
+        setListExchangeRev(data.data)
+      })
+    }
+  }, [user])
 
   const value = {
     loading,

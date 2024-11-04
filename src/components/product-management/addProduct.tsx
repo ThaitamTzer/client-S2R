@@ -128,7 +128,7 @@ export default function AddProduct() {
           }
         })
         .catch(async () => {
-          toast.error('Thêm sản phẩm thất bại!')
+          toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
           setActiveStep(0)
           setTimeout(() => {
             form.setFields([
@@ -228,7 +228,7 @@ export default function AddProduct() {
                               name={[field.name, 'size']}
                               fieldKey={['size']}
                               label={
-                                index === 0 ? 'Size' : '' // Ẩn label của size đầu tiên
+                                index === 0 ? 'Size' : '' // Ẩn label của size đ��u tiên
                               }
                               rules={[
                                 {
@@ -375,9 +375,20 @@ export default function AddProduct() {
                 <Form.Item
                   name="weight"
                   label="Trọng lượng (gram)"
-                  rules={[{ required: true, message: 'Vui lòng nhập trọng lượng!' }]}
+                  rules={[
+                    { required: true, message: 'Vui lòng nhập trọng lượng!' },
+                    {
+                      validator: (_, value) => {
+                        const weight = Number(value);
+                        if (weight <= 50) {
+                          return Promise.reject(new Error('Trọng lượng sản phẩm phải lớn hơn 50 gram!'));
+                        }
+                        return Promise.resolve();
+                      },
+                    },
+                  ]}
                 >
-                  <Input type="number" />
+                  <Input type="number" placeholder="Nhập trọng lượng sản phẩm" />
                 </Form.Item>
               </div>
               <div className="w-full grid grid-flow-col ">
@@ -430,22 +441,6 @@ export default function AddProduct() {
                   <Input
                     placeholder="Nhập giá sản phẩm"
                     type="number"
-                    // onChange={(e) => {
-                    //   let value = e.target.value
-
-                    //   // Loại bỏ ký tự không phải số trước khi định dạng lại
-                    //   value = value.replace(/\D/g, '')
-                    //   // Chuyển giá trị về dạng số và giới hạn giá trị không vượt quá 5 triệu
-                    //   let numericValue = Number(value)
-
-                    //   // Định dạng giá trị thành tiền tệ
-                    //   const formattedValue = new Intl.NumberFormat('vi-VN', {
-                    //     style: 'decimal',
-                    //   }).format(numericValue)
-
-                    //   // Cập nhật giá trị đã định dạng
-                    //   form.setFieldsValue({ price: formattedValue })
-                    // }}
                   />
                 </Form.Item>
               )}

@@ -27,8 +27,7 @@ const getBase64 = (file: FileType): Promise<string> =>
   })
 
 export default function EditProduct() {
-  const { openEditProductModal, toggleEditProductModal, product, setProduct } =
-    useProductManagement()
+  const { openEditProductModal, toggleEditProductModal, product, setProduct } = useProductManagement()
   const param = useSearchParams()
 
   const page = Number(param.get('page')) || 1
@@ -62,6 +61,7 @@ export default function EditProduct() {
         description: product.description,
         type: product.type,
         price: product.price,
+        weight: product.weight,
         tags: product.tags?.join(' '),
         sizeVariants: product.sizeVariants?.map((sizeVariant) => ({
           size: sizeVariant.size,
@@ -107,6 +107,7 @@ export default function EditProduct() {
         'price',
         'style',
         'sizeVariants',
+        'weight',
       ])
       .then(async () => {
         const formValues = form.getFieldsValue([
@@ -120,6 +121,7 @@ export default function EditProduct() {
           'status',
           'price',
           'style',
+          'weight',
         ])
 
         // Tạo object chứa các giá trị đã thay đổi
@@ -154,6 +156,9 @@ export default function EditProduct() {
         if (formValues.type === 'sale' && changedValues.price !== undefined) {
           changedValues.price = Number(changedValues.price)
         }
+        if (changedValues.weight !== undefined) {
+          changedValues.weight = Number(changedValues.weight)
+        }
 
         // Chỉ gọi API nếu có thay đổi
         if (Object.keys(changedValues).length > 0) {
@@ -167,7 +172,7 @@ export default function EditProduct() {
             .catch((err) => {
               console.error(err)
               form.setFields([{ name: 'productName', errors: ['Tên sản phẩm đã bị trùng lập!'] }])
-              toast.error('Cập nhật sản phẩm thất bại!')
+              toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
             })
         } else {
           toast.error('Không có thay đổi nào được thực hiện')

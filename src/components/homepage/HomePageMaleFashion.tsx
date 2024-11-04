@@ -14,6 +14,8 @@ const HomePageManFashion = () => {
 
   const [products, setProducts] = useState<ProductsClient[]>([])
 
+  const shouldAutoplay = products.length > 3
+
   useSWR(
     'maleFashion',
     () =>
@@ -72,15 +74,16 @@ const HomePageManFashion = () => {
                 <div className="slider">
                   <Carousel
                     withIndicators={false}
+                    withControls={products.length > 3 ? true : false}
                     height={500}
                     translate="yes"
                     slideGap="sm"
-                    slideSize="40%"
+                    slideSize="33.33%"
                     loop
                     align="start"
-                    plugins={[autoplay.current]}
-                    onMouseEnter={autoplay.current.stop}
-                    onMouseLeave={autoplay.current.reset}
+                    plugins={shouldAutoplay ? [autoplay.current] : []}
+                    onMouseEnter={shouldAutoplay ? autoplay.current.stop : undefined}
+                    onMouseLeave={shouldAutoplay ? autoplay.current.reset : undefined}
                   >
                     {products.map((item) => (
                       <>

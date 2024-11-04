@@ -16,11 +16,9 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        // Scrolling down
         setShowHeader(false)
         setShowBg(true)
       } else {
-        // Scrolling up
         setShowHeader(true)
       }
       setLastScrollY(window.scrollY)
@@ -41,7 +39,12 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
     }
   }, [lastScrollY, pathname])
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => {
+    if (pathname === '/shop') {
+      return path === '/shop'
+    }
+    return pathname === path
+  }
 
   return (
     <>

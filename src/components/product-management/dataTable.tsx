@@ -87,6 +87,8 @@ const DataTable = () => {
     { onSuccess: () => preloadPages(page) },
   )
 
+  console.log('products', products)
+
   return (
     <>
       <Table

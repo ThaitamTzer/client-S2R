@@ -58,11 +58,11 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
           setIsLoading(false)
         })
         .catch(() => {
-          toast.error('Cập nhật trạng thái thất bại')
+          toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
           setIsLoading(false)
         })
     } catch {
-      toast.error('Cập nhật trạng thái thất bại')
+      toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
       setIsLoading(false)
     }
   }

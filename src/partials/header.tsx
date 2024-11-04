@@ -23,10 +23,11 @@ import { useExchange } from '@/zustand/exchange'
 import useSWR from 'swr'
 import notificationService from '@/services/notification/notification.service'
 import { useSocket } from '@/hooks/useSocket'
-import { NotificationType } from '@/types/notificationType'
+import { useNotificationStore } from '@/zustand/notification'
 
 export default function Header() {
-  const [notifications, setNotifications] = useState<NotificationType[]>([])
+  const { notifications, setNotifications } = useNotificationStore()
+  const {  listExchangeRev } = useExchange()
   const [api, contextHolder] = notification.useNotification()
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -47,6 +48,7 @@ export default function Header() {
     errorRetryCount: 3,
   })
 
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
@@ -66,7 +68,8 @@ export default function Header() {
 
   useEffect(() => {
     if (socket) {
-      socket.on('generalNotification', () => {
+      socket.on('generalNotification', (newNotification) => {
+        console.log('newNotification', newNotification)
         mutate()
         api.open({
           message: 'Bạn có thông báo mới',
@@ -78,10 +81,11 @@ export default function Header() {
         })
       })
 
-      socket.on('authenticatedNotification', () => {
-        api.open({
-          message: 'Bạn có thông báo mới',
-          description: 'Bạn có một thông báo mới ',
+      socket.on('authenticatedNotification', (newNotification) => {
+        console.log('newNotification', newNotification)
+        api.info({
+          message: newNotification.title,
+          description: newNotification.message,
           showProgress: true,
           pauseOnHover: true,
           duration: 5,
@@ -106,13 +110,15 @@ export default function Header() {
 
   const handleViewNotification = async (notificationId: string, event: React.MouseEvent) => {
     event.stopPropagation()
-    await notificationService.updateNotification(notificationId)
+    notificationService.updateNotification(notificationId)
     setTimeout(() => {
       mutate()
     }, 1000)
   }
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
+  const pendingExchangeCount =
+    listExchangeRev?.filter((exchange) => exchange.allExchangeStatus === 'pending').length || 0
 
   return (
     <>
@@ -128,14 +134,7 @@ export default function Header() {
           <div className="flex items-center justify-between">
             {/* Left section: Logo and Navigation */}
             <div className="flex items-center">
-              <Image
-                src="/logo.png"
-                width={50}
-                height={50}
-                alt="Share2Receive"
-                loading="lazy"
-                className="mr-1 p-1"
-              />
+              <Image src="/logo.png" width={50} height={50} alt="Share2Receive" loading="lazy" className="mr-1 p-1" />
               <div className="text-green-800 text-3xl font-semibold">
                 <Link href="/">
                   <h1>
@@ -250,9 +249,7 @@ export default function Header() {
                                 <Text size="sm" fw={500}>
                                   Thông báo trao đổi
                                 </Text>
-                                {!notification.isViewed && (
-                                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                                )}
+                                {!notification.isViewed && <span className="w-2 h-2 rounded-full bg-blue-500"></span>}
                               </div>
                               {notification.isViewed && (
                                 <Text size="xs" c="dimmed">
@@ -281,7 +278,7 @@ export default function Header() {
                   }}
                 />
               </UnstyledButton>
-              <UnstyledButton onClick={() => toogleExchangeModal()}>
+              <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
                 <IconifyIcon
                   icon="carbon:ibm-data-product-exchange"
                   className="text-green-900"
@@ -290,17 +287,17 @@ export default function Header() {
                     height: rem(30),
                   }}
                 />
+                {pendingExchangeCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {pendingExchangeCount}
+                  </span>
+                )}
               </UnstyledButton>
               {user ? (
                 <Menu shadow="md" width={250}>
                   <Menu.Target>
                     <div className="flex items-center cursor-pointer">
-                      <Avatar
-                        src={user.avatar}
-                        alt={user.firstname}
-                        radius={rem(24)}
-                        size={rem(35)}
-                      />
+                      <Avatar src={user.avatar} alt={user.firstname} radius={rem(24)} size={rem(35)} />
                       <Text className="ml-3" size="xl" fw={500}>
                         {user.firstname + ' ' + user.lastname}
                       </Text>
@@ -308,16 +305,12 @@ export default function Header() {
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Link href="/profile">
-                      <Menu.Item
-                        leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
-                      >
+                      <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
                         Thông tin tài khoản
                       </Menu.Item>
                     </Link>
                     <Link href="/product-management">
-                      <Menu.Item
-                        leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}
-                      >
+                      <Menu.Item leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}>
                         Quản lý sản phẩm
                       </Menu.Item>
                     </Link>
@@ -331,10 +324,7 @@ export default function Header() {
                   </Menu.Dropdown>
                 </Menu>
               ) : (
-                <Text
-                  className="font-bold text-green-900 cursor-pointer"
-                  onClick={() => openModal()}
-                >
+                <Text className="font-bold text-green-900 cursor-pointer" onClick={() => openModal()}>
                   Đăng nhập/Đăng ký
                 </Text>
               )}

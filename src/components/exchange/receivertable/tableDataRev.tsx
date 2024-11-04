@@ -62,7 +62,7 @@ export default function TableDataRev() {
       const uniqueUsers = new Map()
 
       data.data
-        .filter((user) => user.role === 'receiver')
+        .filter((user) => user.role === 'requester')
         .forEach((user) => {
           const receiverId = user.receiverId._id
           // Chỉ thêm vào Map nếu chưa tồn tại
@@ -100,7 +100,7 @@ export default function TableDataRev() {
               style={{ width: '50%' }}
               size="large"
               mode="multiple"
-              placeholder="Chọn người nhận yêu cầu"
+              placeholder="Chọn người gửi yêu cầu"
               options={allUsers}
               allowClear
               value={param.getAll('filterUserId')}
@@ -115,9 +115,7 @@ export default function TableDataRev() {
                   currentParams.append('filterUserId', id)
                 })
 
-                router.push(
-                  `/exchange-management${currentParams.toString() ? '?' + currentParams.toString() : ''}`,
-                )
+                router.push(`/exchange-management${currentParams.toString() ? '?' + currentParams.toString() : ''}`)
               }}
             />
           </div>

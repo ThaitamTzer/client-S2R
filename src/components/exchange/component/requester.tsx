@@ -31,11 +31,11 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
           setIsLoading(false)
         })
         .catch(() => {
-          toast.error('Cập nhật trạng thái thất bại')
+          toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
           setIsLoading(false)
         })
     } catch {
-      toast.error('Cập nhật trạng thái thất bại')
+      toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
       setIsLoading(false)
     }
   }
@@ -120,10 +120,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
           />
           <div className="flex flex-col ml-4">
             <h1 className="text-lg font-medium">
-              {exchange?.requesterId?.firstname +
-                ' ' +
-                exchange?.requesterId?.lastname +
-                ' (đề xuất trao đổi)'}
+              {exchange?.requesterId?.firstname + ' ' + exchange?.requesterId?.lastname + ' (đề xuất trao đổi)'}
             </h1>
             <p className="text-sm text-gray-500">{exchange?.requesterId?.email}</p>
           </div>
@@ -154,21 +151,15 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
             </Tooltip>
             <div className="flex items-center gap-2">
               <span>Màu sắc: </span>
-              <p className="text-green-800 text-xl font-semibold">
-                {getColorName(exchange?.requestProduct?.colors)}
-              </p>
+              <p className="text-green-800 text-xl font-semibold">{getColorName(exchange?.requestProduct?.colors)}</p>
             </div>
             <div className="flex items-center gap-2">
               <span>Size: </span>
-              <p className="text-green-800 text-xl font-semibold">
-                {exchange?.requestProduct?.size}
-              </p>
+              <p className="text-green-800 text-xl font-semibold">{exchange?.requestProduct?.size}</p>
             </div>
             <div className="flex items-center gap-2">
               <span>Số lượng: </span>
-              <p className="text-green-800 text-xl font-semibold">
-                {exchange?.requestProduct?.amount}
-              </p>
+              <p className="text-green-800 text-xl font-semibold">{exchange?.requestProduct?.amount}</p>
             </div>
             {exchange?.note === null ? (
               <div className="flex flex-row items-center whitespace-nowrap">
@@ -193,9 +184,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                   direction="horizontal"
                   current={getCurrentStep(exchange?.requestStatus?.exchangeStatus)}
                   size="small"
-                  status={
-                    exchange?.requestStatus?.exchangeStatus === 'canceled' ? 'error' : undefined
-                  }
+                  status={exchange?.requestStatus?.exchangeStatus === 'canceled' ? 'error' : undefined}
                   items={[
                     {
                       title: 'Đang xử lý',
@@ -220,9 +209,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                       <>
                         <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
                         <div className="flex items-center gap-3 mt-2">
-                          <p className="text-xs ">
-                            (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
-                          </p>
+                          <p className="text-xs ">(Cập nhật trạng thái đơn hàng của bạn thành đang giao)</p>
                           <Button
                             variant="solid"
                             color="primary"
@@ -241,22 +228,16 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                             showCancel={false}
                             okText="Đồng ý"
                           >
-                            <span className="text-sm underline text-red-500 cursor-pointer">
-                              Hủy
-                            </span>
+                            <span className="text-sm underline text-red-500 cursor-pointer">Hủy</span>
                           </Popconfirm>
                         </div>
                       </>
                     )}
                     {exchange?.requestStatus?.exchangeStatus === 'shipping' && (
                       <>
-                        <p className="text-base font-medium">
-                          Bạn đã giao hàng thành công cho người nhận ?
-                        </p>
+                        <p className="text-base font-medium">Bạn đã giao hàng thành công cho người nhận ?</p>
                         <div className="flex items-center gap-3 mt-2">
-                          <p className="text-xs ">
-                            (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
-                          </p>
+                          <p className="text-xs ">(Cập nhật trạng thái đơn hàng của bạn thành đã giao)</p>
                           <Button
                             variant="solid"
                             color="primary"
@@ -275,8 +256,8 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                             <p className="text-base font-medium">Hoàn thành giao hàng</p>
                             <div className="flex items-center justify-between gap-1 mt-2">
                               <p className="text-sm ">
-                                Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn
-                                và bạn xác nhận đã nhận được hàng của nhau
+                                Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và bạn xác nhận đã
+                                nhận được hàng của nhau
                               </p>
                             </div>
                           </>
@@ -284,9 +265,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                         {exchange?.receiverStatus?.confirmStatus === 'confirmed' &&
                           exchange?.ratings?.requesterRating === null && (
                             <div className="flex items-center justify-between gap-1 mt-2">
-                              <p className="text-sm ">
-                                Bạn đã nhận được hàng vui lòng đánh giá người nhận
-                              </p>
+                              <p className="text-sm ">Bạn đã nhận được hàng vui lòng đánh giá người nhận</p>
                             </div>
                           )}
                         {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
@@ -339,9 +318,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
                                     <Input.TextArea
                                       rows={4}
                                       placeholder="Nhập nhận xét"
-                                      defaultValue={
-                                        exchange?.ratings?.requesterRating?.comment || ''
-                                      }
+                                      defaultValue={exchange?.ratings?.requesterRating?.comment || ''}
                                       disabled={!!exchange?.ratings?.requesterRating?.comment}
                                     />
                                   </Form.Item>

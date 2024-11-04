@@ -34,7 +34,7 @@ export default function SizeSelection({
                     : 'opacity-50 cursor-not-allowed border-gray-300'
                 }`}
               >
-                <div className="text-lg font-semibold p-5 flex justify-center items-center w-5 h-5">
+                <div className="text-lg font-semibold p-5 flex justify-center items-center min-w-5 min-h-5 max-w-fit max-h-5">
                   {size}
                 </div>
               </label>

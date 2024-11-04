@@ -3,12 +3,7 @@ import { CreateExchangeType, ExchangeType, Exchange } from '@/types/exchangeType
 
 const exChangeService = {
   //  ** Get all exchange
-  getAll: async (
-    page?: number,
-    limit?: number,
-    filterUserId?: string,
-    filterRole?: string,
-  ): Promise<ExchangeType> => {
+  getAll: async (page?: number, limit?: number, filterUserId?: string, filterRole?: string): Promise<ExchangeType> => {
     const queryParams = new URLSearchParams()
 
     if (page) queryParams.append('page', page.toString())
@@ -36,10 +31,7 @@ const exChangeService = {
   },
 
   // ** Approve exchange
-  approve: async (
-    id: string,
-    status: 'pending' | 'accepted' | 'rejected' | 'completed' | 'canceled',
-  ) => {
+  approve: async (id: string, status: 'pending' | 'accepted' | 'rejected' | 'completed' | 'canceled') => {
     axiClient.patch(`/api/Exchange/approve-exchange/${id}?status=${status}`)
   },
 
@@ -59,9 +51,7 @@ const exChangeService = {
 
   // ** Confirm received
   confirmReceived: async (id: string, status: 'confirmed' | 'pending') => {
-    const res = await axiClient.patch(
-      `/api/Exchange/update-confirm-status-exchange/${id}?confirmStatus=${status}`,
-    )
+    const res = await axiClient.patch(`/api/Exchange/update-confirm-status-exchange/${id}?confirmStatus=${status}`)
 
     return res?.data
   },

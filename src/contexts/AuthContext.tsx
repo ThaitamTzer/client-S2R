@@ -18,13 +18,9 @@ import { useProductManagement } from '@/zustand/productManagement'
 import { useExchange } from '@/zustand/exchange'
 
 // ** Types
-import {
-  AuthValuesType,
-  LoginParams,
-  ErrCallbackType,
-  UserDataType,
-  RegisterParams,
-} from '@/contexts/types'
+import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType, RegisterParams } from '@/contexts/types'
+import { useNotificationStore } from '@/zustand/notification'
+import toast from 'react-hot-toast'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -51,8 +47,19 @@ const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const { setProducts } = useProductManagement()
-  const { setExchanges, setListExchange, setExchangesRev } = useExchange()
+  const { setExchanges, setListExchange, setExchangesRev, setListExchangeRev } = useExchange()
   const { closeModal } = useLoginModal()
+  const { setNotifications } = useNotificationStore()
+
+  const setAllNull = () => {
+    setUser(null)
+    setProducts([])
+    setExchanges([])
+    setListExchange([])
+    setExchangesRev([])
+    setListExchangeRev([])
+    setNotifications([])
+  }
 
   // ** Hooks
   const router = useRouter()
@@ -65,11 +72,11 @@ const AuthProvider = ({ children }: Props) => {
         .get(authConfig.meEndpoint)
         .then(async (response) => {
           setUser({ ...response.data })
+          Cookies.set('jwt', JSON.stringify(response.data))
         })
         .catch(() => {
-          Cookies.remove('accessToken')
-          Cookies.remove('refreshToken')
           setUser(null)
+          Cookies.remove('jwt')
           if (authConfig.onTokenExpiration === 'logout' && !pathName.includes('login')) {
             router.replace('/login')
           }
@@ -78,7 +85,7 @@ const AuthProvider = ({ children }: Props) => {
 
     initAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [Cookies.get('jwt')])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     setLoading(true)
@@ -87,25 +94,23 @@ const AuthProvider = ({ children }: Props) => {
         .post(authConfig.loginEndpoint, params)
         .then(async (response) => {
           setLoading(false)
-          if (params.rememberMe) {
-            window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
-            window.localStorage.setItem(authConfig.onTokenExpiration, response.data.refreshToken)
-          }
-          const returnUrl = searchParams.get('returnUrl')
-
           setUser({ ...response.data.user })
-          if (params.rememberMe) {
-            window.localStorage.setItem('userData', JSON.stringify(response.data.user))
-          }
 
+          // Lưu token vào cookie với httpOnly và secure
+          Cookies.set('jwt', response.data.accessToken, {
+            secure: true,
+            sameSite: 'strict',
+            expires: 7, // Token hết hạn sau 7 ngày
+          })
+
+          const returnUrl = searchParams.get('returnUrl')
           const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
-
           router.replace(redirectURL as string)
           closeModal()
         })
-
         .catch((err) => {
           setLoading(false)
+          toast.error('Đăng nhập thất bại')
           if (errorCallback) errorCallback(err)
         })
     } catch (error) {
@@ -119,11 +124,13 @@ const AuthProvider = ({ children }: Props) => {
     try {
       const res = await axiosClient.post(authConfig.registerEndpoint, params)
       setUser(res.data.user)
+      Cookies.set('jwt', JSON.stringify(res.data.user))
       console.log('res', res.data.user)
       setLoading(false)
       router.push('/')
     } catch {
       setLoading(false)
+      toast.error('Đăng ký thất bại')
     }
   }
 
@@ -156,16 +163,13 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogout = () => {
     try {
       axiosClient.patch(authConfig.logoutEndpoint).then(() => {
-        setUser(null)
-        setProducts([])
-        setExchanges([])
-        setListExchange([])
-        setExchangesRev([])
+        // Xóa token
+        Cookies.remove('jwt')
+        setAllNull()
         router.push('/')
       })
     } catch {
-      Cookies.remove('accessToken')
-      Cookies.remove('refreshToken')
+      Cookies.remove('jwt')
       setUser(null)
       router.push('/')
     }

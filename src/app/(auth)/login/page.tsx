@@ -3,8 +3,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Form, Button, Input } from 'antd'
 import { useAuth } from '@/hooks/useAuth'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 
 interface formData {
   account: string
@@ -13,14 +11,7 @@ interface formData {
 
 const LoginPage = () => {
   const [form] = Form.useForm()
-  const { login, user } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      router.push('/')
-    }
-  }, [user, router])
+  const { login } = useAuth()
 
   const onFinish = (values: formData) => {
     login(values, () => {

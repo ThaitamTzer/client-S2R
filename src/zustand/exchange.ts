@@ -20,6 +20,7 @@ type State = {
   exchangeIdRev: string
   loading: boolean
   listExchange: Exchange[]
+  listExchangeRev: Exchange[]
 }
 
 type Actions = {
@@ -41,6 +42,7 @@ type Actions = {
   setExchangeRev: (exchangeRev: Exchange) => void
   setExchangeIdRev: (exchangeIdRev: string) => void
   setListExchange: (listExchange: Exchange[]) => void
+  setListExchangeRev: (listExchangeRev: Exchange[]) => void
 }
 
 export const useExchange = create<State & Actions>((set) => ({
@@ -61,6 +63,7 @@ export const useExchange = create<State & Actions>((set) => ({
   exchangeRev: {} as Exchange,
   exchangeIdRev: '',
   listExchange: [],
+  listExchangeRev: [],
   toogleExchangeModal: () => set((state) => ({ openExchangeModal: !state.openExchangeModal })),
   toogleLogin: () => set((state) => ({ openLogin: !state.openLogin })),
   setExchange: (exchange) => set({ exchange }),
@@ -79,4 +82,5 @@ export const useExchange = create<State & Actions>((set) => ({
   setExchangeRev: (exchangeRev) => set({ exchangeRev }),
   setExchangeIdRev: (exchangeIdRev) => set({ exchangeIdRev }),
   setListExchange: (listExchange) => set({ listExchange }),
+  setListExchangeRev: (listExchangeRev) => set({ listExchangeRev }),
 }))

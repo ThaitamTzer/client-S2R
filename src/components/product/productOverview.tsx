@@ -60,6 +60,7 @@ export default function ProductOverview({
             <div className="list-image h-full min-w-[95px]">
               <Carousel
                 withIndicators={false}
+                withControls={product.imgUrls.length > 4 ? true : false}
                 orientation="vertical"
                 height={600}
                 align="start"
@@ -94,9 +95,7 @@ export default function ProductOverview({
             </div>
             <div className="relative w-full max-w-[calc(100%-160px)] h-full overflow-hidden rounded-lg mr-10 mt-[9px]">
               {product.type === 'barter' && (
-                <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1 z-10">
-                  Trao đổi
-                </div>
+                <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1 z-10">Trao đổi</div>
               )}
               {/* Display the main image */}
               <Image
@@ -112,19 +111,14 @@ export default function ProductOverview({
           </div>
           <div className="product-info w-[45%] mt-3">
             <div className="h-full w-full flex flex-col gap-5">
-              <h1 className="text-3xl font-semibold break-words whitespace-normal">
-                {product.productName}
-              </h1>
-              {/* <p className="text-lg  text-green-700">{product.description}</p> */}
+              <h1 className="text-3xl font-semibold break-words whitespace-normal">{product.productName}</h1>
               {product.type === 'barter' ? (
                 <div className="flex flex-row items-center">
                   <p className="text-2xl font-semibold text-green-800">Sản phẩm trao đổi</p>
                 </div>
               ) : (
                 <div className="flex flex-row items-center">
-                  <p className="text-2xl font-semibold text-green-800">
-                    {formatPrice(product.price)}đ
-                  </p>
+                  <p className="text-2xl font-semibold text-green-800">{formatPrice(product.price)}đ</p>
                 </div>
               )}
               <Suspense fallback={<Loading />}>

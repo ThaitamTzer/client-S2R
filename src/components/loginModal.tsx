@@ -9,7 +9,6 @@ import { Button, Form, Input } from 'antd'
 interface formData {
   account: string
   password: string
-  rememberMe: boolean
 }
 
 const LoginModal = () => {

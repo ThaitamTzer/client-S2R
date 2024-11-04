@@ -28,15 +28,11 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
   const [totalQuantity, setTotalQuantity] = useState<number>(0)
 
   const validColors = selectedSize
-    ? product.sizeVariants
-        .filter((variant) => variant.size === selectedSize)
-        .map((variant) => variant.colors)
+    ? product.sizeVariants.filter((variant) => variant.size === selectedSize).map((variant) => variant.colors)
     : uniqueColors
 
   const validSizes = selectedColor
-    ? product.sizeVariants
-        .filter((variant) => variant.colors === selectedColor)
-        .map((variant) => variant.size)
+    ? product.sizeVariants.filter((variant) => variant.colors === selectedColor).map((variant) => variant.size)
     : uniqueSizes
 
   // Function to update the max quantity based on selected size and color

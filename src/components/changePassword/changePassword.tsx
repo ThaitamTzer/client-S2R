@@ -39,7 +39,7 @@ const ChangePassword = () => {
       })
       .catch((error) => {
         console.log(error)
-        toast.error('Cập nhật mật khẩu thất bại!')
+        toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
         setLoading(false)
       })
   }

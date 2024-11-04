@@ -1,9 +1,9 @@
-import ProductDetail from '@/components/product/productDetail'
 import productService from '@/services/product/product.service'
 import { notFound } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
 const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'))
+const ProductDetail = dynamic(() => import('@/components/product/productDetail'))
 
 export async function generateStaticParams() {
   const products = await productService.getAllProdClient(1, 999)

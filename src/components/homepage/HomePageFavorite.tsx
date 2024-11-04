@@ -3,17 +3,30 @@
 
 import { rem } from '@mantine/core'
 import { IconDiamond, IconRefresh, IconTag } from '@tabler/icons-react'
-import { Carousel } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import { useRef } from 'react'
-import homepage from '@/styles/homepage.module.css'
 import { useClient } from '@/hooks/useClient'
-import Image from 'next/image'
-import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const BrandSlider = dynamic(() => import('@/components/slider/brandSilder'), { ssr: false })
+
+const priorityOrder = {
+  veryHigh: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+}
 
 export default function HomePageFavorate() {
   const autoplay2 = useRef(Autoplay({ delay: 2000 }))
   const { brands } = useClient()
+
+  const sortedBrands = brands?.sort((a, b) => {
+    return (
+      priorityOrder[b.priority as keyof typeof priorityOrder] -
+      priorityOrder[a.priority as keyof typeof priorityOrder]
+    )
+  })
 
   return (
     <>
@@ -60,52 +73,7 @@ export default function HomePageFavorate() {
               </div>
             </div>
           </div>
-          <div className="absolute top-0 left-0 right-0 bottom-0 z-40">
-            <div className="container mx-auto px-24 pointer-events-auto">
-              <Carousel
-                classNames={{
-                  slide: homepage.slidecard,
-                  control: homepage.controlCard,
-                }}
-                withControls
-                slideSize="25%"
-                slideGap="md"
-                loop
-                align="start"
-                plugins={[autoplay2.current]}
-                onMouseEnter={autoplay2.current.stop}
-                onMouseLeave={autoplay2.current.reset}
-              >
-                {brands?.map((brand) => (
-                  <Carousel.Slide
-                    key={brand._id}
-                    style={{
-                      maxHeight: '380px',
-                      maxWidth: '340px',
-                    }}
-                  >
-                    <Link href={`/shop?filterBrand=${brand._id}`} prefetch={false}>
-                      <Image
-                        className={homepage.slidecontent}
-                        loading="lazy"
-                        src={brand.imgUrl}
-                        alt={brand.name}
-                        width={340}
-                        height={380}
-                        quality={80}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          position: 'relative',
-                          objectFit: 'cover',
-                        }}
-                      />
-                    </Link>
-                  </Carousel.Slide>
-                ))}
-              </Carousel>
-            </div>
-          </div>
+          <BrandSlider sortedBrands={sortedBrands} autoplay2={autoplay2} />
         </section>
       </div>
     </>

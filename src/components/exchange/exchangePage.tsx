@@ -8,12 +8,22 @@ import { useEffect } from 'react'
 import { ViewExchangeModalRev } from './receivertable/viewExchangeRev'
 import { Suspense, lazy } from 'react'
 import Loading from '@/app/loading'
+import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 
 const TableDataReq = lazy(() => import('./requestertable/tableDataReq'))
 const TableDataRev = lazy(() => import('./receivertable/tableDataRev'))
 
 const ExchangePage = () => {
   const { setExchange, exchangeId, setLoading, setExchangeRev, exchangeIdRev } = useExchange()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const activeTab = searchParams.get('tab') || 'requester'
+
+  const handleTabChange = (key: string) => {
+    router.push(`${pathname}?tab=${key}`)
+  }
 
   useEffect(() => {
     if (exchangeId) {
@@ -60,9 +70,11 @@ const ExchangePage = () => {
           <h2>Quản lý trao đổi</h2>
         </div>
         <Tabs
+          activeKey={activeTab}
+          onChange={handleTabChange}
           items={[
             {
-              key: '1',
+              key: 'requester',
               label: 'Yêu cầu trao đổi của bạn',
               children: (
                 <Suspense fallback={<Loading />}>
@@ -71,7 +83,7 @@ const ExchangePage = () => {
               ),
             },
             {
-              key: '2',
+              key: 'receiver',
               label: 'Yêu cầu trao đổi từ người khác',
               children: (
                 <Suspense fallback={<Loading />}>

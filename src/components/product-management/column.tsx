@@ -77,6 +77,7 @@ export const columns: TableProps<Product>['columns'] = [
         {record.status === 'active' && 'Hoạt động'}
         {record.status === 'inactive' && 'Không hoạt động'}
         {record.status === 'suspend' && 'Tạm ngưng'}
+        {record.status === 'soldOut' && 'Hết hàng'}
       </>
     ),
   },

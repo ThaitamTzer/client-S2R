@@ -18,17 +18,23 @@ export default function UserWhosell({ product }: { product: ProductsClient }) {
               className="object-cover"
             />
           </div>
-          <p className="text-lg font-semibold">
-            {product.userId.firstname + ' ' + product.userId.lastname}
-          </p>
+          <p className="text-lg font-semibold">{product.userId.firstname + ' ' + product.userId.lastname}</p>
         </div>
       </div>
       {product?.userId?.averageRating !== null && (
         <div className="flex flex-row items-center gap-1">
           <p className="text-lg">Đánh giá của người bán: </p>
-          <p className="text-lg ml-2">{product?.userId?.averageRating?.toFixed(2)} / 5 </p>
-          <IconifyIcon icon="fluent-emoji-flat:star" width={25} height={25} />
-          <p className="text-lg">({product?.userId?.numberOfRating} đánh giá)</p>
+          {product?.userId?.averageRating > 0 && (
+            <>
+              <p className="text-lg ml-2">{product?.userId?.averageRating?.toFixed(2)} / 5 </p>
+              <IconifyIcon icon="fluent-emoji-flat:star" width={25} height={25} />
+            </>
+          )}
+          {product?.userId?.numberOfRating > 0 ? (
+            <p className="text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
+          ) : (
+            <p className="text-lg ml-2">Chưa có đánh giá</p>
+          )}
         </div>
       )}
     </>

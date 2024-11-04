@@ -3,7 +3,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Form, Button, Input, Flex } from 'antd'
 import { useAuth } from '@/hooks/useAuth'
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
@@ -16,14 +15,8 @@ interface formData {
 
 const RegisterPage = () => {
   const [form] = Form.useForm()
-  const { register, user } = useAuth()
+  const { register } = useAuth()
   const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      router.push('/')
-    }
-  }, [user, router])
 
   const onFinish = (values: formData) => {
     register(values)
@@ -111,18 +104,10 @@ const RegisterPage = () => {
                       },
                     ]}
                   >
-                    <Input.Password
-                      size="large"
-                      placeholder="Nhập vào mật khẩu"
-                    />
+                    <Input.Password size="large" placeholder="Nhập vào mật khẩu" />
                   </Form.Item>
                   <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="w-full"
-                      size="large"
-                    >
+                    <Button type="primary" htmlType="submit" className="w-full" size="large">
                       Đăng ký
                     </Button>
                   </Form.Item>
@@ -141,12 +126,7 @@ const RegisterPage = () => {
                   className="bg-white w-1/2 mx-auto px-6 py-4 rounded-md border block"
                 >
                   <div className="flex items-center justify-center">
-                    <Image
-                      src="/images/gmail-icon.png"
-                      alt="google-icon"
-                      width={30}
-                      height={30}
-                    />
+                    <Image src="/images/gmail-icon.png" alt="google-icon" width={30} height={30} />
                     <span className="ml-2">Đăng nhập với Google</span>
                   </div>
                 </Link>
