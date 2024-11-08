@@ -39,13 +39,13 @@ const ExChangeDrawer = () => {
   useEffect(() => {
     if (data) {
       if (page === 1) {
-        setListExchange(data.data)
+        setListExchange(data?.data)
       } else {
-        setListExchange([...(listExchangeRev || []), ...data.data])
+        setListExchange([...(listExchangeRev || []), ...data?.data])
       }
-      setTotalItems(data.total)
-      setTotalPages(Math.ceil(data.total / 10))
-      setHasMore(page < Math.ceil(data.total / 10))
+      setTotalItems(data?.total)
+      setTotalPages(Math.ceil(data?.total / 10))
+      setHasMore(page < Math.ceil(data?.total / 10))
     }
   }, [user, data])
 

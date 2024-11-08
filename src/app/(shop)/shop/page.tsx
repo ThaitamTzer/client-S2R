@@ -19,7 +19,7 @@ const ShopPage = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <div className="container mx-auto mt-36">
+      <div className="container mx-auto mt-40 px-2 md:px-0 md:mt-36">
         <Breadcrumb items={breadcrumbItems} />
       </div>
       <Shop />

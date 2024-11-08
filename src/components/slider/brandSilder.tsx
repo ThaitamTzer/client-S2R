@@ -15,15 +15,21 @@ export default function BrandSlider({
 }) {
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-40">
-      <div className="container mx-auto px-24 pointer-events-auto">
+      <div className="container mx-auto px-2 md:px-24 pointer-events-auto">
         <Carousel
           classNames={{
             slide: homepage.slidecard,
             control: homepage.controlCard,
           }}
           withControls
-          slideSize="25%"
-          slideGap="md"
+          slideSize={{
+            base: '50%',
+            md: '25%',
+          }}
+          slideGap={{
+            base: 'md',
+            md: 'md',
+          }}
           loop
           align="start"
           plugins={[autoplay2.current]}

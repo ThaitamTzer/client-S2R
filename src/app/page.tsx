@@ -7,7 +7,6 @@ import Loading from './loading'
 // Chuyển sang dùng React.lazy
 const HomePageHero = lazy(() => import('@/components/homepage/HomepageHero'))
 const HomePageFavorate = lazy(() => import('@/components/homepage/HomePageFavorite'))
-// const HomePagePickPrice = lazy(() => import('@/components/homepage/HomePagePickPrice'))
 const HomePageSamePrice = lazy(() => import('@/components/homepage/HomePageSamePrice'))
 const HomePageCategory = lazy(() => import('@/components/homepage/HomePageCategory'))
 const HomePageTogetherSection = lazy(() => import('@/components/homepage/HomePageTogetherSection'))
@@ -29,23 +28,24 @@ export default function Home() {
       <FormStyleUser />
       <Suspense fallback={<Loading />}>
         <Navigation navLink={TypeCategory} />
-        <HomePageHero />
-        <HomePageTitle />
-        <HomePageYouLike />
-        {/* <HomePagePickPrice /> */}
-        <HomePageManFashion />
-        <HomePageFemale />
-        <HomePageUnisex />
-        <HomePageFavorate />
-        <HomePageSamePrice />
-        <div className="container mx-auto px-32 text-center text-2xl font-medium text-green-800 uppercase mt-8">
-          <h1>
-            <span className="font-bold">Share2Receive </span>
-            &#45; Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng
-          </h1>
+        <div className="mt-[105px] md:mt-0">
+          <HomePageHero />
+          <HomePageTitle />
+          <HomePageYouLike />
+          <HomePageManFashion />
+          <HomePageFemale />
+          <HomePageUnisex />
+          <HomePageFavorate />
+          <HomePageSamePrice />
+          <div className="container mx-auto px-2 md:px-32 text-center text-lg md:text-2xl font-medium text-green-800 uppercase mt-8">
+            <h1>
+              <span className="font-bold">Share2Receive </span>
+              &#45; Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng
+            </h1>
+          </div>
+          <HomePageCategory />
+          <HomePageTogetherSection />
         </div>
-        <HomePageCategory />
-        <HomePageTogetherSection />
       </Suspense>
     </>
   )

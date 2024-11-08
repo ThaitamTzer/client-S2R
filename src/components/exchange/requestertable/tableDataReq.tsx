@@ -58,10 +58,13 @@ export default function TableDataReq() {
 
   useSWR('forAllUsers', () => exChangeService.getAll(1, 100, ''), {
     onSuccess: (data) => {
+      if (!data || !data.data) {
+        return
+      }
       // Tạo một Map để lưu trữ user theo receiverId
       const uniqueUsers = new Map()
 
-      data.data
+      data?.data
         .filter((user) => user.role === 'requester')
         .forEach((user) => {
           const receiverId = user.receiverId._id
@@ -84,8 +87,8 @@ export default function TableDataReq() {
     () => exChangeService.getAll(page, limit, filterUserIds.join(','), 'requester'),
     {
       onSuccess: (data) => {
-        setExchanges(data.data)
-        setTotal(data.total)
+        setExchanges(data?.data)
+        setTotal(data?.total)
       },
     },
   )
@@ -115,9 +118,7 @@ export default function TableDataReq() {
                   currentParams.append('filterUserId', id)
                 })
 
-                router.push(
-                  `/exchange-management${currentParams.toString() ? '?' + currentParams.toString() : ''}`,
-                )
+                router.push(`/exchange-management${currentParams.toString() ? '?' + currentParams.toString() : ''}`)
               }}
             />
           </div>

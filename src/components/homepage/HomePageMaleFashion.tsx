@@ -8,9 +8,11 @@ import productService from '@/services/product/product.service'
 import { ProductsClient } from '@/types/users/productTypes'
 import ProductCard from '../shop/productCard'
 import IconifyIcon from '../icons'
+import { useMediaQuery } from '@mantine/hooks'
 
 const HomePageManFashion = () => {
   const autoplay = useRef(Autoplay({ delay: 2000 }))
+  const isDesktop = useMediaQuery('(min-width: 62em)')
 
   const [products, setProducts] = useState<ProductsClient[]>([])
 
@@ -36,7 +38,7 @@ const HomePageManFashion = () => {
       ),
     {
       onSuccess(data) {
-        setProducts(data.data)
+        setProducts(data?.data)
       },
       revalidateOnFocus: true,
       refreshInterval: 10000,
@@ -44,14 +46,14 @@ const HomePageManFashion = () => {
   )
 
   return (
-    <div className="relative mt-10">
+    <div className="relative container mx-auto px-2 pt-3 md:px-24 md:pt-10">
       <div className="text-center flex justify-center">
-        <div className="flex w-[50%] items-center rounded-full">
+        <div className="flex w-full md:w-1/2 items-center rounded-full">
           <div className="flex-1 border-b border-gray-300"></div>
           <Link href="shop?filterTypeCategory=male">
-            <div className="m-6 group relative w-max text-black text-2xl font-bold leading-3 px-8 py-3 uppercase">
+            <div className="group relative w-max text-black text-lg font-bold leading-6 m-3 md:m-6 md:text-2xl md:leading-3 px-2 py-1 md:px-8 md:py-3 uppercase">
               <h1 className="flex items-center gap-2">
-                Thời trang dành cho nam <IconifyIcon icon="ic:twotone-male" width={30} />
+                Thời trang dành cho nam <IconifyIcon icon="ic:twotone-male" className="w-4 md:w-8" />
               </h1>
               <span className="absolute -bottom-1 left-1/2 w-0 transition-all h-0.5 bg-green-600 group-hover:w-3/6"></span>
               <span className="absolute -bottom-1 right-1/2 w-0 transition-all h-0.5 bg-green-600 group-hover:w-3/6"></span>
@@ -61,24 +63,24 @@ const HomePageManFashion = () => {
         </div>
       </div>
       <div
-        className="overflow-hidden relative mx-auto w-full h-full min-h-[500px] bg-cover bg-no-repeat rounded-md flex justify-between mt-6"
+        className="overflow-hidden relative mx-auto w-full h-full min-h-[150px] md:min-h-[500px] bg-cover bg-no-repeat rounded-md flex justify-between md:mt-6"
         style={{
           backgroundImage: 'url(/images/do_nam.png)',
           backgroundPosition: 'center 0px',
         }}
       >
-        <div className="container mx-auto px-24">
-          <div className="slider py-10">
+        <div className="container mx-auto px-2">
+          <div className="slider py-2 md:py-4">
             <div className="flex w-full h-full">
-              <div className="w-[62%]">
+              <div className="w-full md:w-[62%]">
                 <div className="slider">
                   <Carousel
                     withIndicators={false}
-                    withControls={products.length > 3 ? true : false}
-                    height={500}
+                    withControls={isDesktop ? (products.length > 3 ? true : false) : false}
+                    height={isDesktop ? 510 : 430}
                     translate="yes"
-                    slideGap="sm"
-                    slideSize="33.33%"
+                    slideGap={isDesktop ? 'sm' : 'xs'}
+                    slideSize={isDesktop ? '33.33%' : '50%'}
                     loop
                     align="start"
                     plugins={shouldAutoplay ? [autoplay.current] : []}
@@ -95,7 +97,7 @@ const HomePageManFashion = () => {
                   </Carousel>
                 </div>
               </div>
-              <div className="w-[45%]"></div>
+              <div className="w-[45%] hidden md:block"></div>
             </div>
           </div>
         </div>

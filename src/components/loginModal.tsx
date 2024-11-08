@@ -43,16 +43,18 @@ const LoginModal = () => {
         </Modal.Header>
         <Modal.Header className="w-full block">
           <Modal.Title>
-            <div className="text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center">
-              <Image src={'/images/lock.svg'} alt="Lock" width={80} height={80} loading="lazy" />
-              <h1 className="uppercase">Tham gia cùng Share2Recive</h1>
+            <div className="text-xl md:text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center">
+              <div className="w-16 md:w-24">
+                <Image src={'/images/lock.svg'} alt="Lock" width={80} height={80} loading="lazy" />
+              </div>
+              <h1 className="uppercase text-center">Tham gia cùng Share2Recive</h1>
             </div>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="flex flex-col justify-center items-center">
             <p>Đăng nhập với email</p>
-            <div className="login-with-email container px-32">
+            <div className="login-with-email container md:px-32">
               <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item
                   name="account"
@@ -83,14 +85,7 @@ const LoginModal = () => {
                   <Input.Password size="large" placeholder="Nhập vào mật khẩu" />
                 </Form.Item>
                 <Form.Item>
-                  <Button
-                    block
-                    size="large"
-                    type="primary"
-                    color="default"
-                    htmlType="submit"
-                    loading={loading}
-                  >
+                  <Button block size="large" type="primary" color="default" htmlType="submit" loading={loading}>
                     Đăng nhập
                   </Button>
                 </Form.Item>
@@ -106,11 +101,7 @@ const LoginModal = () => {
             </div>
             <div className="mb-3">
               <p>
-                <Link
-                  href="/forgot-password"
-                  className="text-green-800 font-bold"
-                  onClick={closeModal}
-                >
+                <Link href="/forgot-password" className="text-green-800 font-bold" onClick={closeModal}>
                   Quên mật khẩu?
                 </Link>
               </p>
@@ -123,13 +114,7 @@ const LoginModal = () => {
             <div className="login-with-google my-2">
               <Link href="https://share2receive-server.onrender.com/api/auth/google">
                 <button className="w-fit bg-white border px-6 py-4 rounded-md flex items-center justify-center">
-                  <Image
-                    src={'/images/gmail-icon.png'}
-                    alt="Google"
-                    width={30}
-                    height={30}
-                    loading="lazy"
-                  />
+                  <Image src={'/images/gmail-icon.png'} alt="Google" width={30} height={30} loading="lazy" />
                   <span className="ml-3">Đăng nhập với Google</span>
                 </button>
               </Link>

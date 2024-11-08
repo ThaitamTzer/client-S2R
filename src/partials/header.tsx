@@ -27,7 +27,7 @@ import { useNotificationStore } from '@/zustand/notification'
 
 export default function Header() {
   const { notifications, setNotifications } = useNotificationStore()
-  const {  listExchangeRev } = useExchange()
+  const { listExchangeRev } = useExchange()
   const [api, contextHolder] = notification.useNotification()
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -47,7 +47,6 @@ export default function Header() {
     dedupingInterval: 10000,
     errorRetryCount: 3,
   })
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -130,21 +129,32 @@ export default function Header() {
           'translate-y-0': showHeader,
         })}
       >
-        <div className="main-nav container mx-auto px-24 pt-0 ">
-          <div className="flex items-center justify-between">
+        <div className="main-nav md:container mx-auto px-4 py-2 pt-3 md:pt-0 md:py-0 md:px-24">
+          <div className="flex flex-col md:flex-row justify-between items-center ">
             {/* Left section: Logo and Navigation */}
-            <div className="flex items-center">
-              <Image src="/logo.png" width={50} height={50} alt="Share2Receive" loading="lazy" className="mr-1 p-1" />
-              <div className="text-green-800 text-3xl font-semibold">
-                <Link href="/">
-                  <h1>
-                    Share
-                    <span style={{ color: 'salmon' }}>2</span>
-                    Receive
-                  </h1>
-                </Link>
+            <div className="flex items-center justify-between w-full md:w-auto">
+              <div className="flex items-center">
+                <div className="w-8 md:w-14">
+                  <Image
+                    src="/logo.png"
+                    width={50}
+                    height={50}
+                    alt="Share2Receive"
+                    loading="lazy"
+                    className="mr-1 p-1"
+                  />
+                </div>
+                <div className="text-green-800 text-xl md:text-3xl font-semibold">
+                  <Link href="/">
+                    <h1>
+                      Share
+                      <span style={{ color: 'salmon' }}>2</span>
+                      Receive
+                    </h1>
+                  </Link>
+                </div>
               </div>
-              <div className="nav ml-6">
+              <div className="nav ml-6 hidden md:block">
                 <ul className="nav-list flex flex-row uppercase">
                   <li>
                     <Link
@@ -174,10 +184,125 @@ export default function Header() {
                   </li>
                 </ul>
               </div>
+              <div className="flex items-center gap-2 md:hidden">
+                <div className="md:hidden flex items-center gap-2">
+                  <div
+                    className={clsx('flex items-center', {
+                      hidden: !user,
+                    })}
+                  >
+                    <Menu shadow="md" width={300} closeOnItemClick={false}>
+                      <Menu.Target>
+                        <UnstyledButton className="relative">
+                          {unreadCount > 0 ? (
+                            <IconBellFilled
+                              className="text-green-900"
+                              style={{
+                                width: rem(29),
+                                height: rem(29),
+                              }}
+                            />
+                          ) : (
+                            <IconBell
+                              className="text-green-900"
+                              style={{
+                                width: rem(29),
+                                height: rem(29),
+                              }}
+                            />
+                          )}
+                          {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                              {unreadCount}
+                            </span>
+                          )}
+                        </UnstyledButton>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Label>Thông báo</Menu.Label>
+                        <ScrollArea h={400}>
+                          {notifications && notifications.length > 0 ? (
+                            notifications.map((notification) => (
+                              <Menu.Item
+                                key={notification._id}
+                                onClick={(event) => handleViewNotification(notification._id, event)}
+                              >
+                                <div className="flex flex-col">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      <Text size="sm" fw={500}>
+                                        Thông báo trao đổi
+                                      </Text>
+                                      {!notification.isViewed && (
+                                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                                      )}
+                                    </div>
+                                    {notification.isViewed && (
+                                      <Text size="xs" c="dimmed">
+                                        Đã xem
+                                      </Text>
+                                    )}
+                                  </div>
+                                  <Text size="xs" c="dimmed">
+                                    {notification.content}
+                                  </Text>
+                                </div>
+                              </Menu.Item>
+                            ))
+                          ) : (
+                            <Menu.Item>Chưa có thông báo nào</Menu.Item>
+                          )}
+                        </ScrollArea>
+                      </Menu.Dropdown>
+                    </Menu>
+                  </div>
+                  <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
+                    <IconShoppingCart
+                      className="text-green-900"
+                      style={{
+                        width: rem(29),
+                        height: rem(29),
+                      }}
+                    />
+                  </UnstyledButton>
+                  {!user ? (
+                    <Avatar size={rem(30)} onClick={() => openModal()} color="#2b8a3e" />
+                  ) : (
+                    <>
+                      <Menu shadow="md" width={250}>
+                        <Menu.Target>
+                          <div className="flex items-center cursor-pointer">
+                            <Avatar src={user.avatar} alt={user.firstname} radius={rem(24)} size={rem(30)} />
+                          </div>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                          <Link href="/profile">
+                            <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
+                              Thông tin tài khoản
+                            </Menu.Item>
+                          </Link>
+                          <Link href="/product-management">
+                            <Menu.Item leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}>
+                              Quản lý sản phẩm
+                            </Menu.Item>
+                          </Link>
+                          <Menu.Item
+                            onClick={() => logout()}
+                            color="red"
+                            leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                          >
+                            Đăng xuất
+                          </Menu.Item>
+                        </Menu.Dropdown>
+                      </Menu>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Middle section: Search bar */}
-            <div className="flex-1 mx-4">
+            <div className="flex-1 mx-4 mt-2 md:mt-0 md:mx-0 w-full md:w-auto">
               <form onSubmit={handleSearchSubmit}>
                 <TextInput
                   value={searchKey}
@@ -203,7 +328,8 @@ export default function Header() {
             </div>
 
             {/* Right section: Icons and User Menu */}
-            <div className="flex items-center space-x-4">
+            <div className="hidden space-x-4 w-full md:w-auto md:flex items-center">
+              {/* notification */}
               <Menu shadow="md" width={300} closeOnItemClick={false}>
                 <Menu.Target>
                   <UnstyledButton className="relative">
@@ -269,6 +395,7 @@ export default function Header() {
                   </ScrollArea>
                 </Menu.Dropdown>
               </Menu>
+              {/* cart */}
               <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
                 <IconShoppingCart
                   className="text-green-900"
@@ -278,6 +405,7 @@ export default function Header() {
                   }}
                 />
               </UnstyledButton>
+              {/* Avatar */}
               <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
                 <IconifyIcon
                   icon="carbon:ibm-data-product-exchange"

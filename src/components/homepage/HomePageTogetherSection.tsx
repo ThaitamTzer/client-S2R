@@ -4,13 +4,13 @@ export default function HomePageTogetherSection() {
   return (
     <>
       <div
-        className="together-section relative mt-10 mb-20 w-full h-[250px] bg-contain bg-[center_96px] bg-no-repeat "
+        className="together-section relative mt-10 mb-10 md:mb-20 w-full h-[250px] bg-contain bg-[center_96px] bg-no-repeat "
         style={{
           backgroundImage: 'url("/images/choose-price-bg.png")',
         }}
       >
-        <div className="container mx-auto h-full w-[1200px] md:w-[1000px]">
-          <div className="together_title text-2xl font-bold text-green-900 uppercase text-center ">
+        <div className="container mx-auto h-full w-full md:w-[1000px]">
+          <div className="together_title text-lg md:text-2xl font-bold text-green-900 uppercase text-center ">
             <h1>
               Hãy cùng Share
               <span
@@ -23,53 +23,56 @@ export default function HomePageTogetherSection() {
               Receive
             </h1>
           </div>
-          <div className="together_desc text-sm font-bold text-center mt-2 mb-10">
+          <div className="together_desc text-xs md:text-md font-medium md:font-bold text-center mt-1 md:mt-2 mb-8 md:mb-10 px-5 md:px-0">
             Tuần hoàn và kéo dài vòng đời của các sản phẩm thời trang đã qua sử dụng.
           </div>
-          <div className="card-container flex justify-evenly items-center">
-            <div className="together-card flex flex-col justify-center items-center w-[15%] text-center">
-              <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-36 w-full max-h-56">
+          <div className="card-container flex justify-evenly items-start">
+            <div className="together-card flex flex-col justify-center items-center w-[25%] md:w-[15%] text-center">
+              <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-32 w-28 h-20 md:h-full md:w-full max-h-56">
                 <Image
                   width={155}
                   height={155}
                   src="/images/packet.png"
                   alt="packet"
                   loading="lazy"
-                  className="w-auto h-24"
+                  quality={70}
+                  className="md:w-auto w-12 md:h-24"
                 />
               </div>
-              <p className="together-card-desc font-medium text-sm ">
+              <p className="together-card-desc font-medium text-[10px] md:text-sm ">
                 Đồ cũ không có nghĩa là phải vứt đi
               </p>
             </div>
-            <div className="together-card flex flex-col justify-center items-center w-[13%] text-center">
-              <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-36 w-full max-h-56">
+            <div className="together-card flex flex-col justify-center items-center w-[25%] md:w-[14%] text-center">
+              <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-32 w-28 h-20 md:h-full md:w-full max-h-56">
                 <Image
                   width={155}
                   height={155}
                   src="/images/shirt.svg"
                   alt="shirt"
+                  quality={70}
                   loading="lazy"
-                  className="w-auto h-24"
+                  className="md:w-auto w-12 md:h-24"
                 />
               </div>
-              <p className="together-card-desc font-medium text-sm ">
-                Đồ cũ không có nghĩa là phải vứt đi
+              <p className="together-card-desc font-medium text-[10px] md:text-sm ">
+                “Cũ người, mới ta” hãy cho đồ cũ cuộc đời mới
               </p>
             </div>
-            <div className="together-card flex flex-col justify-center items-center w-[13%] text-center">
-              <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-36 w-full max-h-56">
+            <div className="together-card flex flex-col justify-center items-center w-[25%] md:w-[14%] text-center">
+              <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-32 w-28 h-20 md:h-full md:w-full max-h-56">
                 <Image
                   width={155}
                   height={155}
                   src="/images/replace.png"
                   alt="replace"
+                  quality={70}
                   loading="lazy"
-                  className="w-auto h-24"
+                  className="md:w-auto w-12 md:h-24"
                 />
               </div>
-              <p className="together-card-desc font-medium text-sm ">
-                Đồ cũ không có nghĩa là phải vứt đi
+              <p className="together-card-desc font-medium text-[10px] md:text-sm ">
+                Giảm thiểu được lượng lớn rác thải ra môi trường
               </p>
             </div>
           </div>

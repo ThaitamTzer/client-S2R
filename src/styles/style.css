@@ -161,6 +161,36 @@
   }
 }
 
+.responsive-iframe-brand {
+  position: relative;
+  padding-bottom: 56.25%; /*16:9*/
+  height: 0;
+  overflow: hidden;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .responsive-iframe-brand {
+    position: relative;
+    padding-bottom: 100.25%;
+    height: 0;
+    overflow: hidden;
+    iframe {
+      position: absolute;
+      top: 0;
+      left: -95px;
+      right: 0;
+      width: 174%;
+      height: 124%;
+    }
+  }
+}
+
 .filter_checkbox .ant-checkbox .ant-checkbox-inner {
   width: 30px;
   height: 30px;

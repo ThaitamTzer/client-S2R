@@ -75,7 +75,7 @@ const ClientProvider = ({ children }: Props) => {
       setLoading(true)
     },
     onSuccess: (data) => {
-      setProductsUser(data.data)
+      setProductsUser(data?.data)
       setLoading(false)
     },
     revalidateOnFocus: false,
@@ -91,7 +91,7 @@ const ClientProvider = ({ children }: Props) => {
         setNotifications(data)
       })
       exChangeService.getAll(1, 10, '', 'receiver').then((data) => {
-        setListExchangeRev(data.data)
+        setListExchangeRev(data?.data)
       })
     }
   }, [user])

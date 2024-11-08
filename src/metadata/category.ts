@@ -6,11 +6,11 @@ export const TypeCategory: navLink[] = [
   },
   {
     href: '/shop?filterTypeCategory=female',
-    label: 'Thời trang nữ',
+    label: 'Đồ nữ',
   },
   {
     href: '/shop?filterTypeCategory=male',
-    label: 'Thời trang nam',
+    label: 'Đồ nam',
   },
   {
     href: '/shop?filterTypeCategory=unisex',

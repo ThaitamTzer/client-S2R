@@ -12,7 +12,7 @@ const spaceGrotesk = Space_Grotesk({
 const HomePageTitle = () => {
   return (
     <>
-      <div className="container mx-auto px-24 pt-14 grid gap-10">
+      <div className="container mx-auto px-2 pt-3 md:px-24 md:pt-14 grid gap-10">
         <div className="homepage_title container ">
           <Title
             style={{
@@ -20,16 +20,14 @@ const HomePageTitle = () => {
               fontSmooth: 'auto',
               textTransform: 'uppercase',
               textAlign: 'center',
-              fontSize: '20px',
-              lineHeight: '30px',
               letterSpacing: '.9px',
             }}
-            className="text-green-800 "
+            className="text-green-800 text-sm leading-6 md:text-2xl md:leading-10"
             fw={500}
           >
-            “Tại Share2Receive, chúng tôi tin rằng mặc đồ gì giúp bạn luôn sáng tạo và giúp môi
-            trường XANH hơn. Bạn có thể cùng chúng tôi xây dựng tương lai bền vững hơn.” - Xuân
-            Nguyễn, Founder
+            “Tại Share2Receive, chúng tôi tin rằng mỗi sản phẩm trao đổi không chỉ mang đến niềm vui mới mà còn góp phần
+            giữ gìn hành tinh. Hãy cùng nhau xây dựng một thế giới bền vững hơn qua từng lựa chọn nhỏ.” - Xuân Nguyễn,
+            Founder
           </Title>
         </div>
       </div>

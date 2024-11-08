@@ -4,15 +4,11 @@ import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
 import { ProductsClient } from '@/types/users/productTypes'
 import Link from 'next/link'
+import { useMediaQuery } from '@mantine/hooks'
 
-export default function ProductCard({
-  product,
-  isLoading,
-}: {
-  product: ProductsClient
-  isLoading: boolean
-}) {
+export default function ProductCard({ product, isLoading }: { product: ProductsClient; isLoading: boolean }) {
   const { Meta } = Card
+  const isDesktop = useMediaQuery('(min-width: 62em)')
 
   return (
     <>
@@ -24,23 +20,27 @@ export default function ProductCard({
           className="shadow-sm"
           size="default"
           style={{
-            width: '265px',
+            width: isDesktop ? '265px' : '200px',
             border: '2px solid #f0f0f0',
             height: '100%',
+          }}
+          styles={{
+            body: {
+              padding: '10px',
+              marginTop: '10px',
+            },
           }}
           cover={
             <div
               style={{
                 width: '100%', // Fixed width for the image container
-                height: '330px', // Fixed height for the image container
+                height: isDesktop ? '330px' : '260px', // Fixed height for the image container
                 overflow: 'hidden', // Ensures the image fits the container without overflow
                 position: 'relative',
               }}
             >
               {product.type === 'barter' && (
-                <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1">
-                  Trao đổi
-                </div>
+                <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1">Trao đổi</div>
               )}
               {product.condition === 'new' && (
                 <div className="absolute top-0 right-0 text-white bg-red-500 px-2 py-1">Mới</div>
@@ -59,43 +59,45 @@ export default function ProductCard({
             </div>
           }
         >
-          <Meta title={<p className="text-xl">{product.productName}</p>} />
-          <Meta
-            title={
-              <p className="text-lg font-normal">
-                Kích thước:{' '}
-                {Array.from(new Set(product.sizeVariants.map((variant) => variant.size)))
-                  .slice(0, 3)
-                  .map((size, index) => (
-                    <span key={index}>
-                      {size}
-                      {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
-                    </span>
-                  ))}
-                {product.sizeVariants.length > 3 && ',...'}
-              </p>
-            }
-          />
-          <Meta
-            title={
-              <p className="text-xl font-semibold text-green-800">
-                {product.type === 'barter' ? (
-                  <>
-                    <p>Liên hệ</p>
-                    <p className="text-sm underline">Xem ngay</p>
-                  </>
-                ) : (
-                  <>
-                    <p>{formatPrice(product.price) + 'đ'}</p>
-                    <p className="text-sm underline">Xem ngay</p>
-                  </>
-                )}
-              </p>
-            }
-          />
+          <div className="flex flex-col gap-2">
+            <Meta title={<p className="text-lg md:text-xl">{product.productName}</p>} />
+            <Meta
+              title={
+                <p className="text-sm md:text-lg font-normal">
+                  Kích thước:{' '}
+                  {Array.from(new Set(product.sizeVariants.map((variant) => variant.size)))
+                    .slice(0, 3)
+                    .map((size, index) => (
+                      <span key={index}>
+                        {size}
+                        {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
+                      </span>
+                    ))}
+                  {product.sizeVariants.length > 3 && ',...'}
+                </p>
+              }
+            />
+            <Meta
+              title={
+                <p className="text-lg md:text-xl font-semibold text-green-800">
+                  {product.type === 'barter' ? (
+                    <>
+                      <p>Liên hệ</p>
+                      <p className="text-xs md:text-sm underline">Xem ngay</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>{formatPrice(product.price) + 'đ'}</p>
+                      <p className="text-xs md:text-sm underline">Xem ngay</p>
+                    </>
+                  )}
+                </p>
+              }
+            />
+          </div>
           <Meta
             style={{
-              marginTop: '15px',
+              marginTop: isDesktop ? '10px' : '20px',
             }}
             title={
               <div className="flex">
@@ -112,7 +114,7 @@ export default function ProductCard({
                   />
                 </div>
                 <div className="flex justify-center items-center">
-                  <p className="text-sm font-semibold">
+                  <p className="text-xs md:text-sm font-semibold">
                     {product.userId?.firstname + ' ' + product.userId?.lastname}
                   </p>
                 </div>

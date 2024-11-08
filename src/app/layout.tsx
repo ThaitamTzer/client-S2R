@@ -48,9 +48,7 @@ export default function RootLayout({
           <Providers>
             <Header />
             <ExChangeDrawer />
-            <main
-              className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
-            >
+            <main className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}>
               <LoginModal />
               {children}
               <ScrollingUp />

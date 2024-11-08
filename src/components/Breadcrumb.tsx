@@ -1,5 +1,6 @@
 'use client'
 
+import { useMediaQuery } from '@mantine/hooks'
 import { Breadcrumb as AntBreadcrumb } from 'antd'
 import Link from 'next/link'
 
@@ -14,13 +15,10 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ items }: BreadcrumbProps) {
   const breadcrumbItems = items?.map((item, index) => ({
-    title:
-      index === items.length - 1 ? (
-        <span>{item.label}</span>
-      ) : (
-        <Link href={item.link}>{item.label}</Link>
-      ),
+    title: index === items.length - 1 ? <span>{item.label}</span> : <Link href={item.link}>{item.label}</Link>,
   }))
+
+  const isDesktop = useMediaQuery('(min-width: 62em)')
 
   return (
     <AntBreadcrumb
@@ -28,8 +26,8 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
       style={{
         fontWeight: 'bold',
         color: '#000',
-        marginBottom: '20px',
-        marginTop: '20px',
+        marginBottom: isDesktop ? '20px' : '10px',
+        marginTop: isDesktop ? '20px' : '30px',
         gap: '10px',
         flexWrap: 'wrap',
         width: '100%',

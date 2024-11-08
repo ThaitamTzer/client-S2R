@@ -1,12 +1,13 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { CloseOutlined } from '@ant-design/icons'
 import { useGetName } from '@/helper/getName'
+import { useUserAction } from '@/zustand/user'
 
 const FilterTag = () => {
   const param = useSearchParams()
-  const [paramsObj, setParamsObj] = useState<Record<string, string[]>>({})
+  const { paramsObj, setParamsObj } = useUserAction()
   const {
     getMaterialName,
     getColorName,
