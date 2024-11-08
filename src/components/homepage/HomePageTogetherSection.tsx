@@ -39,9 +39,7 @@ export default function HomePageTogetherSection() {
                   className="md:w-auto w-12 md:h-24"
                 />
               </div>
-              <p className="together-card-desc font-medium text-[10px] md:text-sm ">
-                Đồ cũ không có nghĩa là phải vứt đi
-              </p>
+              <p className="together-card-desc font-medium text-[10px] md:text-sm ">Trao đổi sản phẩm</p>
             </div>
             <div className="together-card flex flex-col justify-center items-center w-[25%] md:w-[14%] text-center">
               <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-32 w-28 h-20 md:h-full md:w-full max-h-56">
@@ -55,9 +53,7 @@ export default function HomePageTogetherSection() {
                   className="md:w-auto w-12 md:h-24"
                 />
               </div>
-              <p className="together-card-desc font-medium text-[10px] md:text-sm ">
-                “Cũ người, mới ta” hãy cho đồ cũ cuộc đời mới
-              </p>
+              <p className="together-card-desc font-medium text-[10px] md:text-sm ">Giữ gìn giá trị thời trang</p>
             </div>
             <div className="together-card flex flex-col justify-center items-center w-[25%] md:w-[14%] text-center">
               <div className="card-img flex items-center justify-center p-3 bg-white rounded-md shadow-[0px_0px_10px_0px_#68d391] mb-3  max-w-32 w-28 h-20 md:h-full md:w-full max-h-56">
@@ -71,9 +67,7 @@ export default function HomePageTogetherSection() {
                   className="md:w-auto w-12 md:h-24"
                 />
               </div>
-              <p className="together-card-desc font-medium text-[10px] md:text-sm ">
-                Giảm thiểu được lượng lớn rác thải ra môi trường
-              </p>
+              <p className="together-card-desc font-medium text-[10px] md:text-sm ">Bảo vệ môi trường</p>
             </div>
           </div>
         </div>
