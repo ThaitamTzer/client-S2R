@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import MyDatePicker from '@/components/DatePicker'
 import { IconUpload } from '@tabler/icons-react'
 import { Group } from '@mantine/core'
+
 const Profile = () => {
   const { user, setLoading, loading, getProfile } = useAuth()
   const [form] = Form.useForm()
@@ -84,11 +85,11 @@ const Profile = () => {
 
   return (
     <>
-      <div className="container px-10 mx-auto">
+      <div className="container px-1 md:px-10 mx-auto">
         <div className="title text-black text-2xl font-semibold">
           <h2>Thông tin tài khoản</h2>
         </div>
-        <div className="mt-10">
+        <div className="mt-5 md:mt-10">
           <div className="profile-avatar bg-white flex items-center gap-3 justify-start pb-6">
             <div className="avatar w-25 h-25 overflow-hidden">
               <Avatar src={preview || user?.avatar} alt="avatar" size={80} />
@@ -110,6 +111,9 @@ const Profile = () => {
               loading={loading}
               className="mt-3"
               disabled={!file}
+              style={{
+                width: 'fit-content',
+              }}
             >
               Cập nhật ảnh đại diện
             </Button>
@@ -117,7 +121,7 @@ const Profile = () => {
         </div>
         <div className="profile-desc container mx-auto px-1 mt-5">
           <div className="card bg-white shadow-2xl rounded-md w-full h-auto">
-            <div className="form p-8">
+            <div className="form p-3 md:p-8">
               <Form
                 form={form}
                 onFinish={onFinish}
@@ -134,7 +138,7 @@ const Profile = () => {
                   dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth) : undefined,
                 }}
               >
-                <div className="w-full flex gap-3">
+                <div className="w-full flex flex-col md:flex-row md:gap-3">
                   <Form.Item
                     className="w-full"
                     label="Họ"
@@ -200,10 +204,10 @@ const Profile = () => {
                   />
                 </Form.Item>
                 <Form.Item label="Địa chỉ" name="address">
-                  <Input placeholder="Địa chỉ" />
+                  <Input.TextArea rows={4} placeholder="Địa chỉ" />
                 </Form.Item>
                 <Form.Item label="Mô tả" name="description">
-                  <Input.TextArea placeholder="Mô tả" />
+                  <Input.TextArea rows={4} placeholder="Mô tả" />
                 </Form.Item>
                 <Form.Item>
                   <Group justify="end">

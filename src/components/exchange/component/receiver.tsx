@@ -10,8 +10,10 @@ import exChangeService from '@/services/exchange/exchange.service'
 import toast from 'react-hot-toast'
 import ratingService from '@/services/rating/rating.service'
 import { useGetName } from '@/helper/getName'
+import { useMediaQuery } from '@mantine/hooks'
 
 export const Receiver = ({ exchange }: { exchange: Exchange }) => {
+  const isDesktop = useMediaQuery('(min-width: 62em)')
   const [isLoading, setIsLoading] = useState(false)
   const { setExchangeRev } = useExchange()
   const { getColorName } = useGetName()
@@ -111,24 +113,21 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-5 max-w-[500px]">
+      <div className="flex flex-col gap-5 w-full md:max-w-[500px]">
         <div className="flex flex-row items-center">
           <Avatar
-            size={rem(50)}
+            size={isDesktop ? rem(50) : rem(40)}
             src={exchange?.receiverId?.avatar}
             alt={exchange?.receiverId?.firstname + ' ' + exchange?.receiverId?.lastname}
           />
           <div className="flex flex-col ml-4">
-            <h1 className="text-lg font-medium">
-              {exchange?.receiverId?.firstname +
-                ' ' +
-                exchange?.receiverId?.lastname +
-                ' (người nhận đề xuất)'}
+            <h1 className="text-base md:text-lg font-medium">
+              {exchange?.receiverId?.firstname + ' ' + exchange?.receiverId?.lastname + ' (người nhận đề xuất)'}
             </h1>
-            <p className="text-sm text-gray-500">{exchange?.receiverId?.email}</p>
+            <p className="text-xs md:text-sm text-gray-500">{exchange?.receiverId?.email}</p>
           </div>
         </div>
-        <div className="flex flex-row justify-start items-start gap-2">
+        <div className="flex flex-col md:flex-row justify-start items-center md:items-start gap-4 md:gap-2">
           <Image
             width={200}
             src={exchange?.receiveProduct?.receiverProductId.imgUrls?.[0]}
@@ -141,12 +140,11 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
               borderRadius: '8px',
             }}
           />
-          <div className="flex flex-col gap-2 text-base">
+          <div className="flex flex-col gap-2 text-sm md:text-base w-full">
             <Tooltip
               title={exchange?.receiveProduct?.receiverProductId.productName}
               placement="top"
               color="#2f9e44"
-              key={exchange?.receiveProduct?.receiverProductId._id}
             >
               <h1 className="text-2xl font-semibold text-green-800">
                 {truncateText(exchange?.receiveProduct?.receiverProductId.productName, 20)}
@@ -173,16 +171,14 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
           </div>
         </div>
         {exchange?.allExchangeStatus !== 'pending' && (
-          <div className="flex flex-col justify-center items-center gap-4">
+          <div className="flex flex-col justify-start items-center gap-4 max-w-[900px]">
             {exchange?.allExchangeStatus !== 'canceled' && (
               <>
                 <Steps
                   direction="horizontal"
                   current={getCurrentStep(exchange?.receiverStatus?.exchangeStatus)}
                   size="small"
-                  status={
-                    exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined
-                  }
+                  status={exchange?.receiverStatus?.exchangeStatus === 'canceled' ? 'error' : undefined}
                   items={[
                     {
                       title: 'Chờ xử lý',
@@ -296,7 +292,6 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                         {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
                           exchange.role === 'receiver' &&
                           exchange.receiverStatus.confirmStatus === 'confirmed' && (
-                            // thực hiện đánh giá
                             <>
                               <div className="flex flex-col">
                                 <Form form={form} onFinish={handleCreateRating} layout="vertical">
@@ -324,9 +319,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                                     <Input.TextArea
                                       rows={4}
                                       placeholder="Nhập nhận xét"
-                                      defaultValue={
-                                        exchange?.ratings?.receiverRating?.comment || ''
-                                      }
+                                      defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
                                       disabled={!!exchange?.ratings?.receiverRating?.comment}
                                     />
                                   </Form.Item>
@@ -342,31 +335,6 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                                     </Button>
                                   )}
                                 </Form>
-                                {/* <div className="flex items-center gap-1">
-                                  <Rate
-                                    disabled={!!exchange?.ratings?.receiverRating?.rating}
-                                    defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
-                                    onChange={(value) => setRating(value)}
-                                    allowClear={false}
-                                  />
-                                </div>
-                                <Input.TextArea
-                                  rows={4}
-                                  placeholder="Nhập nhận xét"
-                                  onChange={(e) => setComment(e.target.value)}
-                                  defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
-                                  disabled={!!exchange?.ratings?.receiverRating?.comment}
-                                />
-                                {!exchange?.ratings?.receiverRating && (
-                                  <Button
-                                    variant="solid"
-                                    color="primary"
-                                    loading={isLoading}
-                                    onClick={handleCreateRating}
-                                  >
-                                    Đánh giá
-                                  </Button>
-                                )} */}
                               </div>
                             </>
                           )}
@@ -383,26 +351,23 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             {exchange?.receiverStatus?.exchangeStatus === 'completed' &&
               exchange.role === 'requester' &&
               exchange.receiverStatus.confirmStatus === 'confirmed' && (
-                // thực hiện đánh giá
-                <>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-1">
-                      <Rate
-                        disabled={!!exchange?.ratings?.receiverRating?.rating}
-                        defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
-                        allowClear={false}
-                      />
-                      <p className="text-md ">({exchange?.ratings?.receiverRating?.rating})</p>
-                    </div>
-                    <Input.TextArea
-                      rows={4}
-                      placeholder="Nhập nhận xét"
-                      defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
-                      disabled={!!exchange?.ratings?.receiverRating?.comment}
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-1">
+                    <Rate
+                      disabled={!!exchange?.ratings?.receiverRating?.rating}
+                      defaultValue={exchange?.ratings?.receiverRating?.rating || 1}
+                      allowClear={false}
                     />
+                    <p className="text-md">({exchange?.ratings?.receiverRating?.rating})</p>
                   </div>
-                </>
-              )}
+                  <Input.TextArea
+                    rows={4}
+                    placeholder="Nhập nhận xét"
+                    defaultValue={exchange?.ratings?.receiverRating?.comment || ''}
+                    disabled={!!exchange?.ratings?.receiverRating?.comment}
+                  />
+                </div>
+            )}
           </>
         )}
         {exchange.role === 'requester' &&
@@ -411,14 +376,14 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             <div className="flex flex-col justify-center items-center gap-4">
               <p className="text-red-500 font-medium">Người này chưa nhận được hàng</p>
             </div>
-          )}
+        )}
         {exchange?.ratings?.receiverRating === null &&
           exchange.role === 'requester' &&
           exchange?.receiverStatus?.confirmStatus === 'confirmed' && (
             <div className="flex flex-col justify-center items-center gap-4">
               <p className="text-red-500 font-medium">Người này chưa thực hiện đánh giá</p>
             </div>
-          )}
+        )}
         {exchange?.receiverStatus?.exchangeStatus === 'canceled' && (
           <div className="flex flex-col justify-center items-center gap-4">
             <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>

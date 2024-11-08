@@ -10,8 +10,10 @@ import { useClient } from '@/hooks/useClient'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import exChangeService from '@/services/exchange/exchange.service'
 import { mutate } from 'swr'
+import { useMediaQuery } from '@mantine/hooks'
 
 export const CreateExchangeModal = () => {
+  const isMobile = useMediaQuery('(max-width: 768px)')
   const [form] = Form.useForm()
   const { data, setOpenCreateExchangeModal, openCreateExchangeModal } = useExchange()
   const [productSelected, setProductSelected] = useState<Product>({} as Product)
@@ -28,16 +30,12 @@ export const CreateExchangeModal = () => {
 
   // Filter color options based on selected size
   const validColors = selectedSize
-    ? productSelected.sizeVariants
-        .filter((variant) => variant.size === selectedSize)
-        .map((v) => v.colors)
+    ? productSelected.sizeVariants.filter((variant) => variant.size === selectedSize).map((v) => v.colors)
     : uniqueColors
 
   // Filter size options based on selected color
   const validSizes = selectedColor
-    ? productSelected.sizeVariants
-        .filter((variant) => variant.colors === selectedColor)
-        .map((v) => v.size)
+    ? productSelected.sizeVariants.filter((variant) => variant.colors === selectedColor).map((v) => v.size)
     : uniqueSizes
 
   useEffect(() => {
@@ -140,7 +138,7 @@ export const CreateExchangeModal = () => {
         footer={false}
         centered
         destroyOnClose
-        width="60%"
+        width={isMobile ? '90%' : '60%'}
         onCancel={() => {
           form.resetFields()
           setOpenCreateExchangeModal(false)
@@ -151,19 +149,22 @@ export const CreateExchangeModal = () => {
         }}
       >
         <Form form={form} layout="vertical" name="create-exchange-form">
-          <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
+          <Stepper
+            active={activeStep}
+            onStepClick={setActiveStep}
+            allowNextStepsSelect={false}
+            orientation={isMobile ? 'vertical' : 'horizontal'}
+          >
             {/* Step 1: Select Product */}
             <Stepper.Step label="Chọn sản phẩm" description="Chọn sản phẩm bạn muốn trao đổi">
-              <div className="flex flex-row flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4">
                 {productsUser?.map((product) => {
-                  if (product?.type === 'barter')
+                  if (product?.type === 'barter' && product?.status === 'active' && product?.isBlock !== true)
                     return (
                       <div
                         key={product?._id}
                         className={`flex flex-col items-center justify-center ${
-                          productSelected._id === product._id
-                            ? 'border-2 border-blue-500 opacity-50'
-                            : ''
+                          productSelected._id === product._id ? 'border-2 border-blue-500 opacity-50' : ''
                         }`}
                         onClick={() => setProductSelected(product)}
                       >
@@ -179,12 +180,7 @@ export const CreateExchangeModal = () => {
                 })}
               </div>
               <div className="flex justify-end">
-                <Button
-                  disabled={!productSelected?._id}
-                  size="large"
-                  type="primary"
-                  onClick={finishStep1}
-                >
+                <Button disabled={!productSelected?._id} size="large" type="primary" onClick={finishStep1}>
                   Tiếp tục
                 </Button>
               </div>
@@ -193,8 +189,8 @@ export const CreateExchangeModal = () => {
             {/* Step 2: Select Size, Color, and Quantity */}
             <Stepper.Step label="Chọn các thay đổi" description="Chọn size màu và số lượng">
               <div>
-                <div className="flex flex-row items-start gap-3">
-                  <div className="relative h-full min-h-[120px] max-h-[120px] my-2 overflow-hidden ">
+                <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} items-start gap-3`}>
+                  <div className={`relative ${isMobile ? 'w-full' : 'w-[100px]'} h-[120px] my-2 overflow-hidden`}>
                     <Image
                       src={productSelected?.imgUrls?.[0]}
                       alt={productSelected?.productName}
@@ -214,7 +210,7 @@ export const CreateExchangeModal = () => {
                       }}
                     />
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 w-full">
                     <h1 className="text-base text-green-800 font-medium capitalize">
                       {truncateText(productSelected?.productName, 20)}
                     </h1>
@@ -231,7 +227,7 @@ export const CreateExchangeModal = () => {
                             value={size}
                             checked={selectedSize === size}
                             onChange={() => handleSizeChange(size as string)}
-                            disabled={!validSizes.includes(size)} // Disable invalid sizes
+                            disabled={!validSizes.includes(size)}
                           >
                             {size}
                           </Checkbox>
@@ -239,11 +235,7 @@ export const CreateExchangeModal = () => {
                       </Checkbox.Group>
                     </Form.Item>
 
-                    <Form.Item
-                      label="Màu"
-                      name="colors"
-                      rules={[{ required: true, message: 'Vui lòng chọn màu' }]}
-                    >
+                    <Form.Item label="Màu" name="colors" rules={[{ required: true, message: 'Vui lòng chọn màu' }]}>
                       <Checkbox.Group>
                         {uniqueColors.map((color) => (
                           <Checkbox
@@ -251,16 +243,16 @@ export const CreateExchangeModal = () => {
                             value={color}
                             checked={selectedColor === color}
                             onChange={() => handleColorChange(color)}
-                            disabled={!validColors.includes(color)} // Disable invalid colors
+                            disabled={!validColors.includes(color)}
                           >
                             {color}
                           </Checkbox>
                         ))}
                       </Checkbox.Group>
                     </Form.Item>
-                    <div className="flex flex-row justify-start items-center">
+                    <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} items-start gap-2`}>
                       <p className="text-sm">Số lượng: </p>
-                      <div className="flex flex-row items-center ml-2">
+                      <div className="flex flex-row items-center">
                         <Button
                           icon={<MinusOutlined style={{ fontSize: '16px', color: '#000' }} />}
                           onClick={() => setCount(count - 1)}

@@ -50,7 +50,7 @@ const UserStyle = () => {
   return (
     <>
       <UpdateFormStyle />
-      <div className="container px-10 mx-auto">
+      <div className="container px-1 md:px-10 mx-auto">
         <div className="title text-black text-2xl font-semibold">
           <h2>Phong cách của bạn</h2>
         </div>
@@ -66,7 +66,7 @@ const UserStyle = () => {
                 <div className="label-age">
                   <p>Độ tuổi:</p>
                 </div>
-                <div className="grid gap-3 grid-cols-8">
+                <div className="grid gap-3 grid-cols-3 md:grid-cols-8">
                   <div
                     className="h-10 rounded shadow-sm text-center flex items-center justify-center uppercase"
                     style={{
@@ -77,39 +77,43 @@ const UserStyle = () => {
                       style={{
                         color: '#00B96B',
                       }}
+                      className="text-xs md:text-base"
                     >
                       {user?.userStyle.age}
                     </p>
                   </div>
                 </div>
               </div>
+
               <div className="card-zodiacSign">
                 <div className="label-zodiacSign">
                   <p>Cung hoàng đạo:</p>
                 </div>
-                <div className="grid gap-3 grid-flow-col">
+                <div className="grid gap-3 grid-cols-2 md:grid-cols-8">
                   <div
-                    className="w-[20%] h-10 rounded shadow-sm text-white text-center flex items-center justify-center"
+                    className="h-10 rounded shadow-sm text-white text-center flex items-center justify-center"
                     style={{
                       backgroundColor: `${
                         zodiacData.find((item) => item.value === user?.userStyle.zodiacSign)?.color
                       }4d`,
-                      color: zodiacData.find((item) => item.value === user?.userStyle.zodiacSign)
-                        ?.color,
+                      color: zodiacData.find((item) => item.value === user?.userStyle.zodiacSign)?.color,
                     }}
                   >
                     <div className="mr-2">
                       {zodiacData.find((item) => item.value === user?.userStyle.zodiacSign)?.icon}
                     </div>
-                    {zodiacData.find((item) => item.value === user?.userStyle.zodiacSign)?.name}
+                    <p className="text-xs md:text-base">
+                      {zodiacData.find((item) => item.value === user?.userStyle.zodiacSign)?.name}
+                    </p>
                   </div>
                 </div>
               </div>
+
               <div className="card-style">
                 <div className="label-style">
                   <p>Phong cách ăn mặc:</p>
                 </div>
-                <div className="grid gap-3 grid-cols-8">
+                <div className="grid gap-3 grid-cols-2 md:grid-cols-8">
                   {user?.userStyle.style.map((style, index) => (
                     <div
                       key={index}
@@ -122,6 +126,7 @@ const UserStyle = () => {
                         style={{
                           color: '#00B96B',
                         }}
+                        className="text-xs md:text-base"
                       >
                         {clothingStylesData.find((item) => item.value === style)?.name}
                       </p>
@@ -129,11 +134,12 @@ const UserStyle = () => {
                   ))}
                 </div>
               </div>
+
               <div className="card_color">
                 <div className="label-color">
                   <p>Màu sắc yêu thích của bạn:</p>
                 </div>
-                <div className="grid gap-3 grid-cols-8">
+                <div className="grid gap-3 grid-cols-3 md:grid-cols-8">
                   {user?.userStyle.color.map((color, index) => {
                     const backgroundColor = colorData.find((item) => item.value === color)?.color
 
@@ -150,6 +156,7 @@ const UserStyle = () => {
                           style={{
                             color: 'black',
                           }}
+                          className="text-xs md:text-base"
                         >
                           {colorData.find((item) => item.value === color)?.name}
                         </p>
@@ -158,11 +165,12 @@ const UserStyle = () => {
                   })}
                 </div>
               </div>
+
               <div className="card-material">
                 <div className="label-material">
                   <p>Chất liệu ưa thích:</p>
                 </div>
-                <div className="grid gap-3 grid-cols-8">
+                <div className="grid gap-3 grid-cols-3 md:grid-cols-8">
                   {user?.userStyle.material.map((material, index) => (
                     <div
                       key={index}
@@ -175,6 +183,7 @@ const UserStyle = () => {
                         style={{
                           color: '#00B96B',
                         }}
+                        className="text-xs md:text-base"
                       >
                         {materialData.find((item) => item.value === material)?.name}
                       </p>
@@ -186,7 +195,7 @@ const UserStyle = () => {
                 <div className="label-size">
                   <p>Kích thước:</p>
                 </div>
-                <div className="grid gap-3 grid-cols-10">
+                <div className="grid gap-3 grid-cols-3 md:grid-cols-10">
                   {user?.userStyle.size.map((size, index) => (
                     <div
                       key={index}
@@ -199,6 +208,7 @@ const UserStyle = () => {
                         style={{
                           color: '#00B96B',
                         }}
+                        className="text-xs md:text-base"
                       >
                         {sizes.find((item) => item.value === size)?.name}
                       </p>
@@ -210,7 +220,7 @@ const UserStyle = () => {
                 <div className="label-hobby">
                   <p>Sở thích:</p>
                 </div>
-                <div className="grid gap-3 grid-cols-8">
+                <div className="grid gap-3 grid-cols-3 md:grid-cols-8">
                   {user?.userStyle.hobby.map((hobby, index) => (
                     <div
                       key={index}
@@ -223,6 +233,7 @@ const UserStyle = () => {
                         style={{
                           color: '#00B96B',
                         }}
+                        className="text-xs md:text-base"
                       >
                         {hobbies.find((item) => item.value === hobby)?.name}
                       </p>

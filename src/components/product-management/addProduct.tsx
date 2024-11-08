@@ -16,6 +16,7 @@ import productService from '@/services/product/product.service'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import { useSearchParams } from 'next/navigation'
+import { useMediaQuery } from '@mantine/hooks'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -28,6 +29,7 @@ const getBase64 = (file: FileType): Promise<string> =>
   })
 
 export default function AddProduct() {
+  const isDesktop = useMediaQuery('(min-width: 62em)')
   const param = useSearchParams()
 
   const page = Number(param.get('page')) || 1
@@ -157,20 +159,18 @@ export default function AddProduct() {
         Thêm
       </Button>
       <Modal
-        width="60%"
+        width={isDesktop ? '60%' : '100%'}
         title="Thêm sản phẩm"
         centered
         open={openAddProductModal}
         onCancel={toggleAddProductModal}
         footer={null}
       >
-        <Stepper
-          iconSize={30}
-          active={activeStep}
-          onStepClick={setActiveStep}
-          allowNextStepsSelect={false}
-        >
-          <Stepper.Step label="Thông tin sản phẩm" description="Thông tin về sản phẩm đăng tải">
+        <Stepper iconSize={30} active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
+          <Stepper.Step
+            label={isDesktop ? 'Thông tin sản phẩm' : 'Thông tin'}
+            description={isDesktop ? 'Thông tin về sản phẩm đăng tải' : ''}
+          >
             <Form
               form={form}
               layout="horizontal"
@@ -222,7 +222,7 @@ export default function AddProduct() {
                       </Form.Item>
                       {fields.map((field, index) => (
                         <>
-                          <div className="grid gap-2 grid-cols-5 items-center" key={field.key}>
+                          <div className="grid gap-2 grid-cols-3 md:grid-cols-5 items-center" key={field.key}>
                             <Form.Item
                               {...field}
                               name={[field.name, 'size']}
@@ -300,7 +300,7 @@ export default function AddProduct() {
                   )}
                 </Form.List>
               </div>
-              <div className="w-full grid grid-cols-3 gap-3">
+              <div className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-3">
                 <Form.Item
                   name="material"
                   label="Chất liệu"
@@ -379,11 +379,11 @@ export default function AddProduct() {
                     { required: true, message: 'Vui lòng nhập trọng lượng!' },
                     {
                       validator: (_, value) => {
-                        const weight = Number(value);
+                        const weight = Number(value)
                         if (weight <= 50) {
-                          return Promise.reject(new Error('Trọng lượng sản phẩm phải lớn hơn 50 gram!'));
+                          return Promise.reject(new Error('Trọng lượng sản phẩm phải lớn hơn 50 gram!'))
                         }
-                        return Promise.resolve();
+                        return Promise.resolve()
                       },
                     },
                   ]}
@@ -429,26 +429,17 @@ export default function AddProduct() {
                         const numericPrice = Number(value.replace(/\D/g, ''))
                         console.log(numericPrice)
                         if (numericPrice > 5000000) {
-                          return Promise.reject(
-                            new Error('Giá sản phẩm không được vượt quá 5 triệu!'),
-                          )
+                          return Promise.reject(new Error('Giá sản phẩm không được vượt quá 5 triệu!'))
                         }
                         return Promise.resolve()
                       },
                     },
                   ]}
                 >
-                  <Input
-                    placeholder="Nhập giá sản phẩm"
-                    type="number"
-                  />
+                  <Input placeholder="Nhập giá sản phẩm" type="number" />
                 </Form.Item>
               )}
-              <Form.Item
-                name="tags"
-                label="Tags"
-                rules={[{ required: true, message: 'Vui lòng nhập tags!' }]}
-              >
+              <Form.Item name="tags" label="Tags" rules={[{ required: true, message: 'Vui lòng nhập tags!' }]}>
                 <Input.TextArea
                   placeholder="Nhập tags"
                   onChange={(e) => {
@@ -496,7 +487,10 @@ export default function AddProduct() {
             </Form>
           </Stepper.Step>
 
-          <Stepper.Step label="Đăng tải hình ảnh" description="Đăng tải hình ảnh sản phẩm">
+          <Stepper.Step
+            label={isDesktop ? 'Đăng tải hình ảnh' : 'Hình ảnh'}
+            description={isDesktop ? 'Đăng tải hình ảnh sản phẩm' : ''}
+          >
             <Form form={form} onFinish={onUploadImages} layout="vertical" validateTrigger="onBlur">
               <Form.Item
                 name="images"

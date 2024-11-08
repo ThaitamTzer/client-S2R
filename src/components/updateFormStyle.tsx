@@ -11,14 +11,20 @@ import userService from '@/services/users/user.service'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/hooks/useAuth'
 import { useUserStyle } from '@/zustand/userStyle'
+import { useMediaQuery } from '@mantine/hooks'
 
 export const UpdateFormStyle = () => {
+  const isDesktop = useMediaQuery('(min-width: 62em)')
   const { user, getProfile } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [form] = Form.useForm()
   const [selectedZodiac, setSelectedZodiac] = useState<string | null>(null)
   const [selectedColors, setSelectedColors] = useState<string[]>([])
   const { toogleUpdateFormStyle, openUpdateFormStyle } = useUserStyle()
+  const onClose = () => {
+    toogleUpdateFormStyle()
+    setActiveStep(0)
+  }
 
   const handleZodiacSelect = (value: string) => {
     setSelectedZodiac(value)
@@ -84,17 +90,7 @@ export const UpdateFormStyle = () => {
     form.validateFields().then(() => {
       try {
         userService
-          .updateStyle(
-            form.getFieldsValue([
-              'age',
-              'zodiacSign',
-              'style',
-              'color',
-              'material',
-              'size',
-              'hobby',
-            ]),
-          )
+          .updateStyle(form.getFieldsValue(['age', 'zodiacSign', 'style', 'color', 'material', 'size', 'hobby']))
           .then(() => {
             toast.success('Cập nhật phong cách thành công!')
             getProfile() // Refresh user profile data
@@ -115,9 +111,9 @@ export const UpdateFormStyle = () => {
     <>
       <Modal.Root
         opened={openUpdateFormStyle}
-        onClose={toogleUpdateFormStyle}
+        onClose={onClose}
         centered
-        size="90%"
+        size={isDesktop ? '90%' : '100%'}
         className="w-full"
       >
         <Modal.Overlay />
@@ -128,20 +124,23 @@ export const UpdateFormStyle = () => {
           </Modal.Header>
           <Modal.Header className="w-full block pt-0">
             <Modal.Title>
-              <div className="text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center text-center">
+              <div className="text-xl md:text-3xl w-full font-semibold text-green-900 flex flex-col justify-center items-center text-center">
                 <h1 className="uppercase">Hãy cho chúng tôi biết sở thích của bạn.</h1>
               </div>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Form
-              form={form}
-              name="form"
-              layout="vertical"
-              initialValues={{ age: '', email: '', color: [] }}
-            >
-              <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
-                <Stepper.Step label="Tìm hiểu vể bạn" description="Một số thông tin cơ bản">
+          <Modal.Body className="px-2 md:px-4">
+            <Form form={form} name="form" layout="vertical" initialValues={{ age: '', email: '', color: [] }}>
+              <Stepper
+                active={activeStep}
+                onStepClick={setActiveStep}
+                allowNextStepsSelect={false}
+                size={isDesktop ? 'lg' : 'sm'}
+              >
+                <Stepper.Step
+                  label={isDesktop ? 'Tìm hiểu vể bạn' : ''}
+                  description={isDesktop ? 'Một số thông tin cơ bản' : ''}
+                >
                   <Form.Item
                     label="Độ tuổi của bạn"
                     name="age"
@@ -149,19 +148,19 @@ export const UpdateFormStyle = () => {
                   >
                     <Radio.Group className="radio-custom display-flex">
                       <Radio className="w-[100px] h-[40px]" value="16-20">
-                        <p className="text-black">16-20</p>
+                        <p className="text-xs md:text-black">16-20</p>
                       </Radio>
                       <Radio className="w-[100px] h-[40px]" value="20-25">
-                        <p className="text-black">20-25</p>
+                        <p className="text-xs md:text-black">20-25</p>
                       </Radio>
                       <Radio className="w-[100px] h-[40px]" value="25-30">
-                        <p className="text-black">25-30</p>
+                        <p className="text-xs md:text-black">25-30</p>
                       </Radio>
                       <Radio className="w-[100px] h-[40px]" value="30-35">
-                        <p className="text-black">30-35</p>
+                        <p className="text-xs md:text-black">30-35</p>
                       </Radio>
                       <Radio className="w-[100px] h-[40px]" value="35+">
-                        <p className="text-black">35+</p>
+                        <p className="text-xs md:text-black">35+</p>
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
@@ -177,20 +176,20 @@ export const UpdateFormStyle = () => {
                     ]}
                   >
                     <Radio.Group
-                      className="radio-custom display-grid grid-flow-row-dense grid-cols-6 gap-2"
+                      className="radio-custom display-grid grid-flow-row-dense grid-cols-2 md:grid-cols-6 gap-2"
                       value={selectedZodiac}
                       onChange={(e) => handleZodiacSelect(e.target.value)}
                     >
                       {zodiacData.map((zodiac) => (
                         <Radio
                           key={zodiac.value}
-                          className={`w-full min-w-[150px] h-[40px] ${selectedZodiac && selectedZodiac !== zodiac.value ? 'faded' : ''}`}
+                          className={`w-full min-w-[150px] h-[40px] text-xs md:text-black ${selectedZodiac && selectedZodiac !== zodiac.value ? 'faded' : ''}`}
                           value={zodiac.value}
                           style={{ backgroundColor: `${zodiac.color}4D` }}
                         >
                           <div className="flex">
                             {zodiac.icon}
-                            <p className="ml-1">{zodiac.name}</p>
+                            <p className="ml-1 text-xs md:text-black">{zodiac.name}</p>
                           </div>
                         </Radio>
                       ))}
@@ -220,15 +219,15 @@ export const UpdateFormStyle = () => {
                     </Checkbox.Group>
                   </Form.Item>
                   <Group justify="end" mt="lg">
-                    <Button size="large" type="primary" onClick={onFinishStep1}>
+                    <Button size={isDesktop ? 'large' : 'middle'} type="primary" onClick={onFinishStep1}>
                       Tiếp tục
                     </Button>
                   </Group>
                 </Stepper.Step>
 
                 <Stepper.Step
-                  label="Chất liệu và màu sắc"
-                  description="Chọn các sở thích cá nhân của bạn"
+                  label={isDesktop ? 'Chất liệu và màu sắc' : ''}
+                  description={isDesktop ? 'Chọn các sở thích cá nhân của bạn' : ''}
                 >
                   <Form.Item
                     label="Màu cơ bản mà bạn yêu thích"
@@ -244,7 +243,7 @@ export const UpdateFormStyle = () => {
                       Làm mới
                     </Button>
                     <Checkbox.Group
-                      className="checkbox-custom display-grid grid-flow-row-dense grid-cols-7 gap-4"
+                      className="checkbox-custom display-grid grid-flow-row-dense md:grid-cols-7 grid-cols-2 gap-4"
                       value={selectedColors}
                       onChange={handleColorSelect}
                     >
@@ -277,11 +276,7 @@ export const UpdateFormStyle = () => {
                   >
                     <Checkbox.Group className="checkbox-custom checkbox-material display-flex flex-wrap gap-2">
                       {materialData.map((material) => (
-                        <Checkbox
-                          key={material.value}
-                          value={material.value}
-                          className="card-checkbox"
-                        >
+                        <Checkbox key={material.value} value={material.value} className="card-checkbox">
                           <div className="">
                             <div className="w-full">
                               <p className="text-black">{material.name}</p>
@@ -303,8 +298,8 @@ export const UpdateFormStyle = () => {
                 </Stepper.Step>
 
                 <Stepper.Step
-                  label="Kích thước và sở thích"
-                  description="Chọn các sở thích cá nhân của bạn"
+                  label={isDesktop ? 'Kích thước và sở thích' : ''}
+                  description={isDesktop ? 'Chọn các sở thích cá nhân của bạn' : ''}
                 >
                   <Form.Item
                     label="Chọn các kích thước của bạn"

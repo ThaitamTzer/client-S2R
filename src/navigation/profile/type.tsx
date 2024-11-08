@@ -1,12 +1,7 @@
 import React from 'react'
 import type { MenuProps } from 'antd'
 import Link from 'next/link'
-import {
-  IconUserFilled,
-  IconLockPassword,
-  IconArchiveFilled,
-  IconAccessibleFilled,
-} from '@tabler/icons-react'
+import { IconUserFilled, IconLockPassword, IconArchiveFilled, IconAccessibleFilled } from '@tabler/icons-react'
 import { useAuth } from '@/hooks/useAuth'
 import IconifyIcon from '@/components/icons'
 
@@ -25,7 +20,7 @@ export const useProfileLinks = () => {
           key: 'profile',
           icon: <IconUserFilled size={26} color="#000" />,
           label: (
-            <Link href="/profile" className="text-lg font-thin">
+            <Link href="/profile" className="text-sm md:text-lg font-thin">
               Thông tin tài khoản
             </Link>
           ),
@@ -37,7 +32,7 @@ export const useProfileLinks = () => {
                 key: 'change-password',
                 icon: <IconLockPassword size={26} color="#000" />,
                 label: (
-                  <Link href="/change-password" className="text-lg font-thin">
+                  <Link href="/change-password" className="text-sm md:text-lg font-thin">
                     Thay đổi mật khẩu
                   </Link>
                 ),
@@ -49,7 +44,7 @@ export const useProfileLinks = () => {
           key: 'user-style',
           icon: <IconAccessibleFilled size={26} color="#000" />,
           label: (
-            <Link href="/user-style" className="text-lg font-thin">
+            <Link href="/user-style" className="text-sm md:text-lg font-thin">
               Phong cách của bạn
             </Link>
           ),
@@ -65,21 +60,16 @@ export const useProfileLinks = () => {
           key: 'product-management',
           icon: <IconArchiveFilled size={26} color="#000" />,
           label: (
-            <Link href="/product-management" className="text-lg font-thin">
+            <Link href="/product-management" className="text-sm md:text-lg font-thin">
               Quản lý sản phẩm
             </Link>
           ),
         },
         {
           key: 'exchange-management',
-          icon: (
-            <IconifyIcon
-              icon="carbon:ibm-data-product-exchange"
-              style={{ fontSize: '1.5rem', color: '#000' }}
-            />
-          ),
+          icon: <IconifyIcon icon="carbon:ibm-data-product-exchange" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (
-            <Link href="/exchange-management" className="text-lg font-thin">
+            <Link href="/exchange-management" className="text-sm md:text-lg font-thin">
               Quản lý trao đổi
             </Link>
           ),

@@ -65,7 +65,7 @@ const ExchangePage = () => {
     <>
       <ViewExchangeModal />
       <ViewExchangeModalRev />
-      <div className="container mx-auto px-10">
+      <div className="container mx-auto px-1 md:px-10">
         <div className="title text-black text-2xl font-semibold">
           <h2>Quản lý trao đổi</h2>
         </div>

@@ -6,6 +6,7 @@ import { Table, Input } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
 import productService from '@/services/product/product.service'
 import { createStyles } from 'antd-style'
+import { useMediaQuery } from '@mantine/hooks'
 
 declare module 'antd-style' {
   interface FullToken {
@@ -32,7 +33,7 @@ const useStyle = createStyles(({ css, token }) => {
 
 const DataTable = () => {
   const { styles } = useStyle()
-
+  const isDesktop = useMediaQuery('(min-width: 62em)')
   const param = useSearchParams()
   const router = useRouter()
   const page = Number(param.get('page')) || 1
@@ -87,16 +88,15 @@ const DataTable = () => {
     { onSuccess: () => preloadPages(page) },
   )
 
-  console.log('products', products)
-
   return (
     <>
       <Table
         title={() => (
-          <div className="flex justify-between">
-            <h2 className="w-1/2 text-xl font-semibold">Danh sách sản phẩm</h2>
+          <div className="flex flex-col sm:flex-row gap-4 sm:justify-between">
+            <h2 className="text-xl font-semibold w-full sm:w-1/2">Danh sách sản phẩm</h2>
             <Input
               placeholder="Tìm kiếm sản phẩm"
+              className="w-full sm:w-auto"
               onChange={(e) => {
                 router.push(`/product-management?searchKey=${e.target.value}`)
               }}
@@ -108,9 +108,9 @@ const DataTable = () => {
         loading={isLoading}
         columns={columns}
         dataSource={products?.data || []}
-        scroll={{ y: 100 * 5 }}
+        scroll={{ x: isDesktop ? 0 : 230 * 5, y: 100 * 5 }}
         showSorterTooltip={false}
-        onChange={handleTableChange} // Kết hợp cả phân trang và sắp xếp
+        onChange={handleTableChange}
         pagination={{
           locale: { items_per_page: '/ 1 Trang' },
           current: page,
@@ -118,6 +118,8 @@ const DataTable = () => {
           total: products?.total,
           showSizeChanger: true,
           showTotal: (total) => `Tổng có ${total} sản phẩm`,
+          responsive: true,
+          size: 'small',
         }}
       />
     </>

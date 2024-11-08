@@ -24,8 +24,7 @@ const ProductManagement = () => {
   const sortField = param.get('sortField') || ''
   const sortOrder = param.get('sortOrder') || ''
 
-  const { toggleDeleteProductModal, openDeleteProductModal, product, setProduct } =
-    useProductManagement()
+  const { toggleDeleteProductModal, openDeleteProductModal, product, setProduct } = useProductManagement()
 
   const handleDeleteProduct = async () => {
     try {
@@ -48,7 +47,7 @@ const ProductManagement = () => {
   }
 
   return (
-    <div className="container px-10 mx-auto">
+    <div className="container px-1 md:px-10 mx-auto">
       <Suspense fallback={<Loading />}>
         <EditProduct />
         <ViewProductModal />

@@ -12,6 +12,7 @@ import { mutate } from 'swr'
 import { Product } from '@/types/users/productTypes'
 import { UploadFileStatus } from 'antd/es/upload/interface'
 import dynamic from 'next/dynamic'
+import { useMediaQuery } from '@mantine/hooks'
 
 const TabInformation = dynamic(() => import('./tabs/tabInformation'), { ssr: false })
 const TabUploadImages = dynamic(() => import('./tabs/tabImages'), { ssr: false })
@@ -29,7 +30,7 @@ const getBase64 = (file: FileType): Promise<string> =>
 export default function EditProduct() {
   const { openEditProductModal, toggleEditProductModal, product, setProduct } = useProductManagement()
   const param = useSearchParams()
-
+  const isDesktop = useMediaQuery('(min-width: 62em)')
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10
   const searchKey = param.get('searchKey') || ''
@@ -214,7 +215,7 @@ export default function EditProduct() {
   return (
     <>
       <Modal
-        width="60%"
+        width={isDesktop ? '60%' : '100%'}
         title="Cập nhật sản phẩm"
         centered
         open={openEditProductModal}
@@ -230,7 +231,7 @@ export default function EditProduct() {
           items={[
             {
               key: '1',
-              label: 'Thông tin sản phẩm',
+              label: isDesktop ? 'Thông tin sản phẩm' : 'Thông tin',
               children: (
                 <TabInformation
                   form={form}
@@ -248,7 +249,7 @@ export default function EditProduct() {
             },
             {
               key: '2',
-              label: 'Hình ảnh sản phẩm',
+              label: isDesktop ? 'Hình ảnh sản phẩm' : 'Hình ảnh',
               children: (
                 <TabUploadImages
                   form={form}

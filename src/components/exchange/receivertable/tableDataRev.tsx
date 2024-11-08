@@ -8,6 +8,7 @@ import exChangeService from '@/services/exchange/exchange.service'
 import useSWR from 'swr'
 import { useExchange } from '@/zustand/exchange'
 import { useState } from 'react'
+import { useMediaQuery } from '@mantine/hooks'
 
 declare module 'antd-style' {
   interface FullToken {
@@ -42,6 +43,7 @@ export default function TableDataRev() {
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10
   const filterUserIds = param.getAll('filterUserId')
+  const isDesktop = useMediaQuery('(min-width: 62em)')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTableChange = (pagination: any) => {
@@ -97,10 +99,10 @@ export default function TableDataRev() {
     <>
       <Table
         title={() => (
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-between items-center">
             <h2 className="text-xl font-semibold">Danh sách yêu cầu trao đổi</h2>
             <Select
-              style={{ width: '50%' }}
+              style={{ width: isDesktop ? '50%' : '100%' }}
               size="large"
               mode="multiple"
               placeholder="Chọn người gửi yêu cầu"
@@ -129,7 +131,7 @@ export default function TableDataRev() {
         columns={columns}
         dataSource={exchangesRev || []}
         onChange={handleTableChange}
-        scroll={{ y: 100 * 5 }}
+        scroll={{ x: isDesktop ? 0 : 200 * 5, y: 100 * 5 }}
         showSorterTooltip={false}
         pagination={{
           locale: { items_per_page: '/ 1 Trang' },

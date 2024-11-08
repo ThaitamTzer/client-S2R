@@ -14,7 +14,7 @@ export default function BrandSlider({
   autoplay2: MutableRefObject<AutoplayType>
 }) {
   return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 z-40">
+    <div className="relative top-0 left-0 right-0 bottom-0 z-40">
       <div className="container mx-auto px-2 md:px-24 pointer-events-auto">
         <Carousel
           classNames={{

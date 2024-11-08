@@ -103,7 +103,7 @@ export default function TabInformation({
                 </Form.Item>
                 {fields.map((field, index) => (
                   <>
-                    <div className="grid gap-2 grid-cols-5 items-center" key={field.key}>
+                    <div className="grid gap-2 grid-cols-3 md:grid-cols-5 items-center" key={field.key}>
                       <Form.Item
                         {...field}
                         name={[field.name, 'size']}
@@ -181,7 +181,7 @@ export default function TabInformation({
             )}
           </Form.List>
         </div>
-        <div className="w-full grid grid-cols-3 gap-3">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-3">
           <Form.Item
             name="material"
             label="Chất liệu"

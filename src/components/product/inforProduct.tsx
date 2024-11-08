@@ -15,7 +15,7 @@ export default function InforProduct({
 }) {
   return (
     <>
-      <div className="rounded-lg p-5 w-1/2">
+      <div className="rounded-lg p-2 md:p-5 w-full md:w-1/2">
         <Collapse
           accordion
           expandIconPosition="right"
@@ -24,28 +24,28 @@ export default function InforProduct({
           items={[
             {
               key: '1',
-              label: <p className="text-lg font-semibold border-b-2">Thông tin sản phẩm</p>,
+              label: <p className="text-base md:text-lg font-semibold border-b-2">Thông tin sản phẩm</p>,
               children: (
                 <div className="flex flex-col gap-3">
-                  <div className="flex flex-row gap-7 items-center ">
-                    <p className="w-1/2 text-base font-semibold">Mô tả: </p>
-                    <p className="text-base capitalize whitespace-pre-line">{product.description}</p>
+                  <div className="flex flex-row gap-7 items-start ">
+                    <p className="w-[140px] md:w-[170px] flex text-sm md:text-lg font-semibold">Mô tả: </p>
+                    <p className="w-full text-sm md:text-lg capitalize whitespace-pre-line">{product.description}</p>
                   </div>
                   <div className="flex flex-row gap-7 items-center ">
-                    <p className="w-1/2 text-base font-semibold">Chất liệu: </p>
-                    <p className="text-base capitalize">{getMaterialName(product.material)}</p>
+                    <p className="w-[140px] md:w-[170px] flex text-sm md:text-lg font-semibold">Chất liệu: </p>
+                    <p className="w-full text-sm md:text-lg capitalize">{getMaterialName(product.material)}</p>
                   </div>
                   <div className="flex flex-row gap-7 items-center ">
-                    <p className="w-1/2 text-base font-semibold">Tình trạng: </p>
-                    <p className="text-base capitalize">{getConditionName(product.condition)}</p>
+                    <p className="w-[140px] md:w-[170px] flex text-sm md:text-lg font-semibold">Tình trạng: </p>
+                    <p className="w-full text-sm md:text-lg capitalize">{getConditionName(product.condition)}</p>
                   </div>
                   <div className="flex flex-row gap-7 items-center ">
-                    <p className="w-1/2 text-base font-semibold">Khối lượng: </p>
-                    <p className="text-base capitalize">{product.weight}g</p>
+                    <p className="w-[140px] md:w-[170px] flex text-sm md:text-lg font-semibold">Khối lượng: </p>
+                    <p className="w-full text-sm md:text-lg capitalize">{product.weight}g</p>
                   </div>
                   <div className="flex flex-row gap-7 items-center ">
-                    <p className="w-1/2 text-base font-semibold">Phong cách: </p>
-                    <p className="text-base capitalize">{getStyleName(product.style)}</p>
+                    <p className="w-[140px] md:w-[170px] flex text-sm md:text-lg font-semibold">Phong cách: </p>
+                    <p className="w-full text-sm md:text-lg capitalize">{getStyleName(product.style)}</p>
                   </div>
                 </div>
               ),

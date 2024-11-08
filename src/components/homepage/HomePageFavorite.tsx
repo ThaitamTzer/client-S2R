@@ -28,7 +28,7 @@ export default function HomePageFavorate() {
 
   return (
     <>
-      <div className="relative mt-6 md:mt-12 wrapper">
+      <div className="mt-6 md:mt-12 wrapper">
         <div className="fashion-brand">
           <p className="text-lg md:text-2xl font-bold text-center mb-5 uppercase">
             Thương hiệu bạn <span className="text-orange-600">yêu thích</span>
@@ -71,7 +71,9 @@ export default function HomePageFavorate() {
               </div>
             </div>
           </div>
-          <BrandSlider sortedBrands={sortedBrands} autoplay2={autoplay2} />
+          <div className="absolute top-0 left-0 right-0 bottom-0">
+            <BrandSlider sortedBrands={sortedBrands} autoplay2={autoplay2} />
+          </div>
         </section>
       </div>
     </>

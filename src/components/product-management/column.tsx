@@ -63,9 +63,7 @@ export const columns: TableProps<Product>['columns'] = [
     dataIndex: 'price',
     key: 'price',
     sorter: true,
-    render: (_, record: Product) => (
-      <>{record.price > 0 ? formatPrice(record.price) + ' VNĐ' : 'Trao đổi'}</>
-    ),
+    render: (_, record: Product) => <>{record.price > 0 ? formatPrice(record.price) + ' VNĐ' : 'Trao đổi'}</>,
   },
   {
     title: 'Trạng thái',
@@ -114,8 +112,7 @@ export const columns: TableProps<Product>['columns'] = [
               content={
                 <>
                   <p>
-                    <span className="font-semibold">Ngày duyệt:</span>{' '}
-                    {formatDate(record.approved.date)}
+                    <span className="font-semibold">Ngày duyệt:</span> {formatDate(record.approved.date)}
                   </p>
                   <p>
                     <span className="font-semibold">Người duyệt:</span> {record.approved.decisionBy}
@@ -160,8 +157,7 @@ export const columns: TableProps<Product>['columns'] = [
               content={
                 <>
                   <p>
-                    <span className="font-semibold">Ngày duyệt:</span>{' '}
-                    {formatDate(record.approved.date)}
+                    <span className="font-semibold">Ngày duyệt:</span> {formatDate(record.approved.date)}
                   </p>
                   <p>
                     <span className="font-semibold">Người duyệt:</span> {record.approved.decisionBy}
@@ -222,12 +218,7 @@ export const columns: TableProps<Product>['columns'] = [
             ],
           }}
         >
-          <Button
-            icon={<EllipsisOutlined size={20} />}
-            variant="text"
-            shape="circle"
-            color="default"
-          />
+          <Button icon={<EllipsisOutlined size={20} />} variant="text" shape="circle" color="default" />
         </Dropdown>
       </>
     ),

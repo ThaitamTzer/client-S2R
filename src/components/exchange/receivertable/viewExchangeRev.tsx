@@ -4,6 +4,7 @@ import { useExchange } from '@/zustand/exchange'
 import IconifyIcon from '../../icons'
 import { Requester } from '../component/requester'
 import { Receiver } from '../component/receiver'
+import { useMediaQuery } from '@mantine/hooks'
 
 export const ViewExchangeModalRev = () => {
   const {
@@ -15,6 +16,8 @@ export const ViewExchangeModalRev = () => {
     setExchangeIdRev,
     loading,
   } = useExchange()
+
+  const isDesktop = useMediaQuery('(min-width: 62em)')
 
   const onClose = () => {
     setOpenViewExchangeModalRev(false)
@@ -52,7 +55,7 @@ export const ViewExchangeModalRev = () => {
         centered
         title={
           <>
-            <h2 className="font-medium text-2xl mb-2">Chi tiết trao đổi</h2>
+            <h2 className="font-medium text-xl md:text-2xl mb-2">Chi tiết trao đổi</h2>
           </>
         }
         open={openViewExchangeModalRev}
@@ -60,20 +63,24 @@ export const ViewExchangeModalRev = () => {
         getContainer={false}
         footer={false}
         loading={loading}
-        width="95%"
+        width={isDesktop ? '95%' : '100%'}
       >
         <>
-          <div className="flex flex-row justify-between items-start gap-1 h-full">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 md:gap-1 h-full">
             <Receiver exchange={exchangeRev} />
-            <div className="h-full flex flex-col justify-center items-center">
-              {/* <div className='absolute top-0 left-0 right-0 bottom-0'></div> */}
-              <div className="flex flex-col justify-center items-center max-h-full min-h-[300px]">
-                <IconifyIcon icon="bi:arrow-right" className="text-2xl text-gray-500" />
+            <div className="h-full flex flex-col justify-center items-center my-4 md:my-0">
+              <div className="flex flex-col justify-center items-center max-h-full min-h-[200px] md:min-h-[300px]">
+                <IconifyIcon 
+                  icon={isDesktop ? "bi:arrow-right" : "bi:arrow-down"} 
+                  className="text-2xl text-gray-500" 
+                />
                 {exchangeRev?.allExchangeStatus && (
-                  <div className="flex flex-row items-center gap-3">
-                    <h1 className="text-lg font-medium">Trạng thái đơn hàng:</h1>
+                  <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 text-center md:text-left">
+                    <h1 className="text-base md:text-lg font-medium">Trạng thái đơn hàng:</h1>
                     <p
-                      className={`text-base px-2 py-1 ${statusConfig[exchangeRev.allExchangeStatus].bgColor} text-white capitalize rounded-md shadow-sm`}
+                      className={`text-base px-2 py-1 ${
+                        statusConfig[exchangeRev.allExchangeStatus].bgColor
+                      } text-white capitalize rounded-md shadow-sm`}
                     >
                       {statusConfig[exchangeRev.allExchangeStatus].label}
                     </p>

@@ -10,8 +10,10 @@ import { useExchange } from '@/zustand/exchange'
 import { IconCircleCheck, IconCircleDot, IconTruckDelivery } from '@tabler/icons-react'
 import ratingService from '@/services/rating/rating.service'
 import { useGetName } from '@/helper/getName'
+import { useMediaQuery } from '@mantine/hooks'
 
 export const Requester = ({ exchange }: { exchange: Exchange }) => {
+  const isDesktop = useMediaQuery('(min-width: 62em)')
   const [isLoading, setIsLoading] = useState(false)
   const { setExchange } = useExchange()
   const { getColorName } = useGetName()
@@ -110,26 +112,26 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-5 max-w-[500px]">
+      <div className="flex flex-col gap-5 w-full md:max-w-[500px]">
         {/* Requester */}
         <div className="flex flex-row items-center">
           <Avatar
-            size={rem(50)}
+            size={isDesktop ? rem(50) : rem(40)}
             src={exchange?.requesterId?.avatar}
             alt={exchange?.requesterId?.firstname + ' ' + exchange?.requesterId?.lastname}
           />
           <div className="flex flex-col ml-4">
-            <h1 className="text-lg font-medium">
+            <h1 className="text-base md:text-lg font-medium">
               {exchange?.requesterId?.firstname + ' ' + exchange?.requesterId?.lastname + ' (đề xuất trao đổi)'}
             </h1>
-            <p className="text-sm text-gray-500">{exchange?.requesterId?.email}</p>
+            <p className="text-xs md:text-sm text-gray-500">{exchange?.requesterId?.email}</p>
           </div>
         </div>
-        <div className="flex flex-row justify-start items-start gap-2">
+        <div className="flex flex-col md:flex-row justify-start items-center md:items-start gap-4 md:gap-2">
           <Image
             width={200}
-            src={exchange?.requestProduct?.requesterProductId?.imgUrls?.[0]}
-            alt={exchange?.requestProduct?.requesterProductId?.productName}
+            src={exchange?.requestProduct?.requesterProductId.imgUrls?.[0]}
+            alt={exchange?.requestProduct?.requesterProductId.productName}
             sizes="(max-width: 200px) 100vw, 200px"
             loading="lazy"
             style={{
@@ -138,7 +140,7 @@ export const Requester = ({ exchange }: { exchange: Exchange }) => {
               borderRadius: '8px',
             }}
           />
-          <div className="flex flex-col gap-2 text-base">
+          <div className="flex flex-col gap-2 text-sm md:text-base w-full">
             <Tooltip
               title={exchange?.requestProduct?.requesterProductId?.productName}
               placement="top"

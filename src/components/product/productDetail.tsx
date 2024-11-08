@@ -128,7 +128,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
             setCount={setCount}
           />
         </div>
-        <div className="container ml-24 px-40 w-full">
+        <div className="container md:ml-24 md:px-40 w-full">
           <InforProduct
             product={product}
             getMaterialName={getMaterialName}

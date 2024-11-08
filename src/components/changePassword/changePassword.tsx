@@ -46,7 +46,7 @@ const ChangePassword = () => {
 
   return (
     <>
-      <div className="container px-10 mx-auto">
+      <div className="container px-1 md:px-10 mx-auto">
         <div className="title text-black text-2xl font-semibold">
           <h2>Thay đổi mật khẩu</h2>
         </div>
@@ -112,13 +112,7 @@ const ChangePassword = () => {
                       <Input.Password placeholder="Nhập lại mật khẩu mới" size="large" />
                     </Form.Item>
                     <Form.Item>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="w-full"
-                        loading={loading}
-                        disabled={loading}
-                      >
+                      <Button type="primary" htmlType="submit" className="w-full" loading={loading} disabled={loading}>
                         Cập nhật mật khẩu
                       </Button>
                     </Form.Item>
