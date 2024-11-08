@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   return (
     <>
-      <div className="container mx-auto mt-36">
+      <div className="container mx-auto mt-40 px-2 md:px-0 md:mt-36">
         <Breadcrumb items={breadcrumbItems} />
       </div>
       <ProductDetail product={product} />

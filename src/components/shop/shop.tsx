@@ -130,6 +130,7 @@ const Shop = () => {
 
   return (
     <>
+      <FilterDrawer />
       <div className="container mx-auto mt-5">
         <p className="md:px-0 px-2 text-xl md:text-2xl font-semibold uppercase flex items-center">
           <IconifyIcon icon="tabler:filter" className="text-xl font-semibold md:text-3xl md:font-bold" /> Bộ lọc tìm
@@ -148,7 +149,6 @@ const Shop = () => {
         />
         <p className="md:hidden md:px-0 px-2 text-blue-600 underline" onClick={() => setOpenFilterDrawer(true)}>
           Lọc kết quả
-          <FilterDrawer />
         </p>
         <div className="flex mt-3">
           <div className="w-[22%] h-full hidden md:block">

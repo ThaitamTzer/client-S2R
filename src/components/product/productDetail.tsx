@@ -106,7 +106,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
     return (
       <>
         <CreateExchangeModal />
-        <div className="px-36 py-5 mt-5 bg-slate-50">
+        <div className="px-2 py-0 md:px-36 md:py-5 md:mt-5 md:bg-slate-50">
           <ProductOverview
             product={product}
             mainImage={mainImage}

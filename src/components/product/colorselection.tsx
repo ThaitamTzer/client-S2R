@@ -12,10 +12,10 @@ export default function ColorSelection({
   return (
     <>
       <div className="flex flex-row items-center">
-        <p className="text-lg">Màu sắc: </p>
+        <p className="text-md md:text-lg">Màu sắc: </p>
         <div className="flex flex-row ml-2">
           {uniqueColors.map((color) => (
-            <div key={color} className="w-full h-full mr-2">
+            <div key={color} className="w-fit h-fit mr-2">
               <input
                 type="checkbox"
                 id={`color-${color}`}
@@ -34,10 +34,7 @@ export default function ColorSelection({
                     : 'opacity-50 cursor-not-allowed border-gray-300'
                 }`}
               >
-                <div
-                  className="w-8 h-8 rounded-full border-2"
-                  style={{ backgroundColor: color }}
-                ></div>
+                <div className="w-7 h-7 md:w-8 md:h-8 rounded-full border-2" style={{ backgroundColor: color }}></div>
               </label>
             </div>
           ))}

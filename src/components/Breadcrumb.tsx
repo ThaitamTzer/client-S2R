@@ -24,7 +24,8 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
     <AntBreadcrumb
       items={breadcrumbItems}
       style={{
-        fontWeight: 'bold',
+        fontWeight: isDesktop ? 'bold' : '500',
+        fontSize: isDesktop ? '16px' : '13px',
         color: '#000',
         marginBottom: isDesktop ? '20px' : '10px',
         marginTop: isDesktop ? '20px' : '30px',

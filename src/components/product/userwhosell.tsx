@@ -6,9 +6,9 @@ export default function UserWhosell({ product }: { product: ProductsClient }) {
   return (
     <>
       <div className="flex flex-row justify-start items-center">
-        <p className="text-lg">Người bán: </p>
+        <p className="text-sm md:text-lg">Người bán: </p>
         <div className="flex flex-row items-center ml-2">
-          <div className="w-10 h-10 overflow-hidden rounded-full mr-2">
+          <div className="w-6 h-6 md:w-10 md:h-10 overflow-hidden rounded-full mr-1 md:mr-2">
             <Image
               src={product.userId.avatar}
               alt={product.userId.firstname + ' ' + product.userId.lastname}
@@ -18,22 +18,24 @@ export default function UserWhosell({ product }: { product: ProductsClient }) {
               className="object-cover"
             />
           </div>
-          <p className="text-lg font-semibold">{product.userId.firstname + ' ' + product.userId.lastname}</p>
+          <p className=" text-sm md:text-lg font-semibold">
+            {product.userId.firstname + ' ' + product.userId.lastname}
+          </p>
         </div>
       </div>
       {product?.userId?.averageRating !== null && (
-        <div className="flex flex-row items-center gap-1">
-          <p className="text-lg">Đánh giá của người bán: </p>
+        <div className="flex flex-row items-center md:gap-1">
+          <p className="text-sm md:text-lg">Đánh giá của người bán: </p>
           {product?.userId?.averageRating > 0 && (
             <>
-              <p className="text-lg ml-2">{product?.userId?.averageRating?.toFixed(2)} / 5 </p>
-              <IconifyIcon icon="fluent-emoji-flat:star" width={25} height={25} />
+              <p className="text-sm md:text-lg ml-2">{product?.userId?.averageRating?.toFixed(2)} / 5 </p>
+              <IconifyIcon icon="fluent-emoji-flat:star" className="md:w-6 md:h-6 w-4 h-4" />
             </>
           )}
           {product?.userId?.numberOfRating > 0 ? (
-            <p className="text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
+            <p className="text-sm md:text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
           ) : (
-            <p className="text-lg ml-2">Chưa có đánh giá</p>
+            <p className="text-sm md:text-lg ml-2">Chưa có đánh giá</p>
           )}
         </div>
       )}

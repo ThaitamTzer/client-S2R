@@ -46,7 +46,7 @@ const HomePageManFashion = () => {
   )
 
   return (
-    <div className="relative container mx-auto px-2 pt-3 md:px-24 md:pt-10">
+    <div className="relative container mx-auto pt-3 md:px-24 md:pt-10">
       <div className="text-center flex justify-center">
         <div className="flex w-full md:w-1/2 items-center rounded-full">
           <div className="flex-1 border-b border-gray-300"></div>
@@ -63,7 +63,7 @@ const HomePageManFashion = () => {
         </div>
       </div>
       <div
-        className="overflow-hidden relative mx-auto w-full h-full min-h-[150px] md:min-h-[500px] bg-cover bg-no-repeat rounded-md flex justify-between md:mt-6"
+        className="overflow-hidden relative mx-auto w-full h-full min-h-[150px] md:min-h-[500px] bg-cover bg-no-repeat md:rounded-md flex justify-between md:mt-6"
         style={{
           backgroundImage: 'url(/images/do_nam.png)',
           backgroundPosition: 'center 0px',
@@ -79,7 +79,9 @@ const HomePageManFashion = () => {
                     withControls={isDesktop ? (products.length > 3 ? true : false) : false}
                     height={isDesktop ? 510 : 430}
                     translate="yes"
-                    slideGap={isDesktop ? 'sm' : 'xs'}
+                    slideGap={{
+                      base: 'xs',
+                    }}
                     slideSize={isDesktop ? '33.33%' : '50%'}
                     loop
                     align="start"

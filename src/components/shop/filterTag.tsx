@@ -46,7 +46,7 @@ const FilterTag = () => {
       {totalTags > 5 && (
         <button
           onClick={clearAll}
-          className="mt-4 mb-2 px-4 py-2 text-white rounded-md shadow-md cursor-pointer"
+          className="mb-1 px-2 py-1 text-sm md:text-xl md:mt-4 md:mb-2 md:px-4 md:py-2 text-white rounded-md shadow-md cursor-pointer"
           style={{
             backgroundColor: '#f87171',
           }}
@@ -73,16 +73,11 @@ const FilterTag = () => {
                   backgroundColor: '#b2e5be',
                   textTransform: 'capitalize',
                 }}
-                className="px-4 py-2 rounded-md shadow-md text-black text-xl cursor-pointer"
+                className="flex items-center px-2 py-1 md:px-4 md:py-2 rounded-md shadow-md text-black text-sm md:text-xl cursor-pointer"
               >
-                {displayName}
+                <p>{displayName}</p>
                 <span
-                  style={{
-                    cursor: 'pointer',
-                    paddingLeft: '10px',
-                    paddingTop: '10px',
-                    paddingBottom: '10px',
-                  }}
+                  className="cursor-pointer pl-1 md:pl-3"
                   onClick={() => {
                     removeTwoTags('filterStartPrice', startPrice, 'filterEndPrice', endPrice)
                   }}
@@ -136,18 +131,10 @@ const FilterTag = () => {
                   backgroundColor: '#b2e5be',
                   textTransform: 'capitalize',
                 }}
-                className="px-4 py-2 rounded-md shadow-md text-black text-xl cursor-pointer"
+                className="flex items-center px-2 py-1 md:px-4 md:py-2 rounded-md shadow-md text-black text-sm md:text-xl cursor-pointer"
               >
-                {displayName}
-                <span
-                  style={{
-                    cursor: 'pointer',
-                    paddingLeft: '10px',
-                    paddingTop: '10px',
-                    paddingBottom: '10px',
-                  }}
-                  onClick={() => removeTag(key, value)}
-                >
+                <p>{displayName}</p>
+                <span className="cursor-pointer pl-1 md:pl-3 " onClick={() => removeTag(key, value)}>
                   <CloseOutlined />
                 </span>
               </div>

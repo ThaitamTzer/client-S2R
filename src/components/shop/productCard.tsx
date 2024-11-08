@@ -20,9 +20,10 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
           className="shadow-sm"
           size="default"
           style={{
-            width: isDesktop ? '265px' : '200px',
+            width: '100%', // Allow card to take the full width of its container
             border: '2px solid #f0f0f0',
             height: '100%',
+            overflow: 'hidden',
           }}
           styles={{
             body: {
@@ -33,7 +34,7 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
           cover={
             <div
               style={{
-                width: '100%', // Fixed width for the image container
+                width: 'auto',
                 height: isDesktop ? '330px' : '260px', // Fixed height for the image container
                 overflow: 'hidden', // Ensures the image fits the container without overflow
                 position: 'relative',
@@ -53,13 +54,12 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
                 loading="lazy"
                 className="object-cover w-full h-full"
                 priority={false}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 quality={70}
               />
             </div>
           }
         >
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 w-full max-w-[177px] overflow-hidden">
             <Meta title={<p className="text-lg md:text-xl">{product.productName}</p>} />
             <Meta
               title={
