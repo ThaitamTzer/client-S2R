@@ -57,6 +57,7 @@ export const useGetName = () => {
     if (start === 200000 && end === 500000) return '200k - 500k'
     if (start === 500000 && end === 1000000) return '500k - 1tr'
     if (start === 1000000 && end === 50000000) return 'Trên 1tr'
+    if (start === 1 && end === 19000) return 'Đồng giá 19k'
   }
 
   const getConditionName = (id: string) => {

@@ -19,13 +19,10 @@ export default function HomePageSamePrice() {
       productService.getAllProdClient(
         1,
         10,
-        // ['670a21cad47ec9342aedcdac'],
+        ['670a21cad47ec9342aedcdac'],
         undefined,
-        undefined,
-        undefined,
-        undefined,
-        // 19000,
-        // 19000,
+        19000,
+        19000,
         undefined,
         undefined,
         undefined,
@@ -53,7 +50,7 @@ export default function HomePageSamePrice() {
         </div>
         <div className="flex md:block">
           <div className="flex items-center md:hidden w-1/2 bg-[#f4e9cb] rounded-l-sm">
-            <Link href="/shop?filterCategory=670a21cad47ec9342aedcdac">
+            <Link href="/shop?filterCategory=670a21cad47ec9342aedcdac&filterStartPrice=1&filterEndPrice=19000">
               <h2 className="font-semibold text-lg text-center">
                 Đồng giá <span className="text-green-500">19k</span> Các loại sản phẩm đầm
               </h2>

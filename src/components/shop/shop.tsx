@@ -120,7 +120,7 @@ const Shop = () => {
           </div>
           <div className="w-full md:w-[75%] h-full md:ml-5">
             <div className="container mx-auto px-2 md:px-5 mb-10">
-              <p className="text-xl font-semibold">{total} sản phẩm</p>
+              <p className="text-xl font-semibold">{total} Kết quả</p>
               <div className="container mx-auto mt-3">
                 <div className="flex flex-wrap gap-3">
                   {loadedProducts.map((product) => (
