@@ -48,14 +48,14 @@ const ForgotPage = () => {
           backgroundImage: 'url(/images/forest-bg.jpg)',
         }}
       >
-        <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
+        <div className="container mx-auto px-2 md:px-40 w-full h-auto flex justify-center relative top-[15%]">
           <div className="w-full max-w-[590px] p-5 bg-white shadow-xl rounded-md">
             <div className="login-form-title">
-              <h1 className="text-5xl pt-2 font-semibold text-center ">Quên mật khẩu</h1>
+              <h1 className="text-2xl md:text-5xl pt-2 font-semibold text-center ">Quên mật khẩu</h1>
               <p className="text-center mt-4">Nhập vào email để khôi phục mật khẩu</p>
             </div>
             <div className="login-form-content mt-5">
-              <div className="w-[70%] mx-auto">
+              <div className="w-[90%] md:w-[70%] mx-auto">
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Form.Item
                     name="email"
@@ -74,13 +74,7 @@ const ForgotPage = () => {
                     <Input size="large" placeholder="Nhập vào email" />
                   </Form.Item>
                   <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="w-full"
-                      size="large"
-                      loading={loading}
-                    >
+                    <Button type="primary" htmlType="submit" className="w-full" size="large" loading={loading}>
                       Gửi
                     </Button>
                   </Form.Item>

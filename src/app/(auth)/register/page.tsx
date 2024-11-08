@@ -42,15 +42,15 @@ const RegisterPage = () => {
           backgroundImage: 'url(/images/forest-bg.jpg)',
         }}
       >
-        <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
+        <div className="container mx-auto px-2 md:px-40 w-full h-auto flex justify-center relative top-[15%]">
           <div className="w-full max-w-[590px] p-5  bg-white shadow-xl rounded-md">
             <div className="login-form-title text-white">
-              <h1 className="text-5xl pt-2 font-semibold text-green-800 text-center ">
+              <h1 className="text-2xl md:text-5xl pt-2 font-semibold text-green-800 text-center ">
                 Tham gia cùng Share2Receive
               </h1>
             </div>
             <div className="login-form-content mt-5">
-              <div className="w-[70%] mx-auto form-register">
+              <div className="w-[80%] md:w-[70%] mx-auto form-register">
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Flex gap={10}>
                     <Form.Item
@@ -123,7 +123,7 @@ const RegisterPage = () => {
               <div className="login-with-gg">
                 <Link
                   href="https://share2receive-server.onrender.com/api/auth/google"
-                  className="bg-white w-1/2 mx-auto px-6 py-4 rounded-md border block"
+                  className="bg-white w-full md:w-1/2 mx-auto px-6 py-4 rounded-md border block"
                 >
                   <div className="flex items-center justify-center">
                     <Image src="/images/gmail-icon.png" alt="google-icon" width={30} height={30} />

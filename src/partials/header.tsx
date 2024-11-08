@@ -191,6 +191,27 @@ export default function Header() {
                       hidden: !user,
                     })}
                   >
+                    <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
+                      <IconifyIcon
+                        icon="carbon:ibm-data-product-exchange"
+                        className="text-green-900"
+                        style={{
+                          width: rem(29),
+                          height: rem(29),
+                        }}
+                      />
+                      {pendingExchangeCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                          {pendingExchangeCount}
+                        </span>
+                      )}
+                    </UnstyledButton>
+                  </div>
+                  <div
+                    className={clsx('flex items-center', {
+                      hidden: !user,
+                    })}
+                  >
                     <Menu shadow="md" width={300} closeOnItemClick={false}>
                       <Menu.Target>
                         <UnstyledButton className="relative">

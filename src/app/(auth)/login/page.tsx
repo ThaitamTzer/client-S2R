@@ -36,13 +36,13 @@ const LoginPage = () => {
           backgroundImage: 'url(/images/forest-bg.jpg)',
         }}
       >
-        <div className="container mx-auto px-40 w-full h-auto flex justify-center relative top-[15%]">
+        <div className="container mx-auto px-2 md:px-40 w-full h-auto flex justify-center relative top-[15%]">
           <div className="w-full max-w-[590px] p-5 bg-white shadow-xl rounded-md">
             <div className="login-form-title">
-              <h1 className="text-5xl pt-5 font-semibold text-center">Đăng nhập</h1>
+              <h1 className="text-2xl md:text-5xl pt-5 font-semibold text-center">Đăng nhập</h1>
             </div>
             <div className="login-form-content mt-5">
-              <div className="w-[60%] mx-auto form-login">
+              <div className="w-[80%] md:w-[60%] mx-auto form-login">
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Form.Item
                     name="account"
@@ -79,7 +79,7 @@ const LoginPage = () => {
                   </Form.Item>
                 </Form>
               </div>
-              <div className="container mx-auto px-28 text-end">
+              <div className="container mx-auto px-2 md:px-28 text-end">
                 <Link href="/forgot-password">
                   <p className="text-green-800">Quên mật khẩu?</p>
                 </Link>
@@ -93,7 +93,7 @@ const LoginPage = () => {
               </div>
             </div>
             <div className="divider flex justify-center my-4">
-              <div className="flex items-center w-[70%]">
+              <div className="flex items-center w-[80%] md:w-[70%]">
                 <div className="border-t border border-gray-400 flex-grow"></div>
                 <div className="px-3 font-bold">Hoặc</div>
                 <div className="border-t border border-gray-400 flex-grow"></div>
@@ -102,7 +102,7 @@ const LoginPage = () => {
             <div className="login-with-gg">
               <Link
                 href="https://share2receive-server.onrender.com/api/auth/google"
-                className="bg-white w-1/2 mx-auto px-6 py-4 rounded-md border block"
+                className="bg-white w-full md:w-1/2 mx-auto px-6 py-4 rounded-md border block"
               >
                 <div className="flex items-center justify-center">
                   <Image src="/images/gmail-icon.png" alt="google-icon" width={30} height={30} />

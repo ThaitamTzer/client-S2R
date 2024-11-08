@@ -5,12 +5,13 @@ import { useAuth } from '@/hooks/useAuth'
 import { Login } from './login'
 import exChangeService from '@/services/exchange/exchange.service'
 import useSWR, { mutate } from 'swr'
-import { Avatar, rem } from '@mantine/core'
+import { Avatar } from '@mantine/core'
 import IconifyIcon from '../icons'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useGetName } from '@/helper/getName'
+import { useMediaQuery } from '@mantine/hooks'
 
 const ExChangeDrawer = () => {
   const { user } = useAuth()
@@ -31,6 +32,7 @@ const ExChangeDrawer = () => {
   const [hasMore, setHasMore] = useState(true)
   const [totalItems, setTotalItems] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const { data, mutate: refresh } = useSWR(['listExchange', page], () =>
     exChangeService.getAll(page, 10, '', 'receiver'),
@@ -136,7 +138,7 @@ const ExChangeDrawer = () => {
       >
         <div className="container mx-auto">
           <div className="w-full">
-            <div className="text-center text-3xl font-medium text-green-900">
+            <div className="text-center text-xl md:text-3xl font-medium text-green-900">
               <h1>Danh sách các sản phẩm trao đổi</h1>
             </div>
             <div className="flex flex-col justify-between">
@@ -170,12 +172,12 @@ const ExChangeDrawer = () => {
                           >
                             <div className="flex flex-row items-center">
                               <Avatar
-                                size={rem(50)}
+                                size={isMobile ? 40 : 50}
                                 src={exchange?.requesterId.avatar}
                                 alt={exchange?.requesterId.firstname + ' ' + exchange?.requesterId.lastname}
                               />
-                              <div className="flex flex-col ml-4">
-                                <h1 className="text-lg font-medium">
+                              <div className="flex flex-col ml-1 md:ml-4">
+                                <h1 className="text-sm md:text-lg font-medium">
                                   {exchange?.requesterId.firstname +
                                     ' ' +
                                     exchange?.requesterId.lastname +
@@ -184,8 +186,8 @@ const ExChangeDrawer = () => {
                                 <p className="text-sm text-gray-500">{exchange?.requesterId?.email}</p>
                               </div>
                             </div>
-                            <p className="mt-3">Sản phẩm muốn trao đổi: </p>
-                            <div className="flex justify-between items-center w-full">
+                            <p className="mt-3 text-xs md:text-base">Sản phẩm muốn trao đổi: </p>
+                            <div className="flex flex-col md:flex-row justify-between items-center w-full">
                               <div className="flex flex-row items-start justify-between gap-3">
                                 <div className="relative h-full min-h-[120px] max-h-[120px] my-2 overflow-hidden ">
                                   <AntdImage
@@ -208,37 +210,37 @@ const ExChangeDrawer = () => {
                                   />
                                 </div>
                                 <div className="p-3">
-                                  <h1 className="text-base text-green-800 font-medium">
+                                  <h1 className="text-xs md:text-base text-green-800 font-medium">
                                     {truncateText(exchange?.requestProduct?.requesterProductId.productName, 20)}
                                   </h1>
                                   <div className="flex items-center gap-2">
-                                    <p>Size: </p>
-                                    <p className="text-base text-green-800 font-medium">
+                                    <p className="text-xs md:text-base">Size: </p>
+                                    <p className="text-xs md:text-base text-green-800 font-medium">
                                       {exchange?.requestProduct?.size}
                                     </p>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <p>Màu sắc: </p>
-                                    <p className="text-base text-green-800 font-medium">
+                                    <p className="text-xs md:text-base">Màu sắc: </p>
+                                    <p className="text-xs md:text-base text-green-800 font-medium">
                                       {getColorName(exchange?.requestProduct?.colors)}
                                     </p>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <p>Số lượng: </p>
-                                    <p className="text-base text-green-800 font-medium">
+                                    <p className="text-xs md:text-base">Số lượng: </p>
+                                    <p className="text-xs md:text-base text-green-800 font-medium">
                                       {exchange?.requestProduct?.amount}
                                     </p>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <p>Ghi chú: </p>
-                                    <p className="text-base text-green-800 font-medium text-wrap whitespace-pre-wrap">
+                                    <p className="text-xs md:text-base">Ghi chú: </p>
+                                    <p className="text-xs md:text-base text-green-800 font-medium text-wrap whitespace-pre-wrap">
                                       {exchange?.note}
                                     </p>
                                   </div>
                                 </div>
                               </div>
                               {exchange?.allExchangeStatus === 'pending' && (
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-row md:flex-col  gap-2">
                                   <Tooltip title="Chấp nhận">
                                     <Button
                                       type="primary"
