@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import productService from '@/services/product/product.service'
 import { useProductClient } from '@/zustand/productClient'
 import { useState } from 'react'
-import { Card, Divider } from 'antd'
+import { Divider } from 'antd'
 import { useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useUserAction } from '@/zustand/user'
@@ -92,42 +92,6 @@ const Shop = () => {
     setCurrentPage((prev) => prev + 1)
   }
 
-  const SekeletonCard = () => {
-    if (isLoading) {
-      const loadingPlaceholders = Array.from({ length: 8 })
-
-      return (
-        <>
-          <div className="container mx-auto px-5">
-            <div className="container mx-auto">
-              <div className="grid grid-cols-4 gap-5">
-                {loadingPlaceholders.map((_, index) => (
-                  <Card
-                    key={index}
-                    hoverable
-                    loading={isLoading}
-                    style={{
-                      width: '100%',
-                    }}
-                    cover={
-                      <div
-                        style={{
-                          width: '100%', // Fixed width for the image container
-                          height: '300px', // Fixed height for the image container
-                          overflow: 'hidden', // Ensures the image fits the container without overflow
-                        }}
-                      ></div>
-                    }
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </>
-      )
-    }
-  }
-
   return (
     <>
       <FilterDrawer />
@@ -158,10 +122,11 @@ const Shop = () => {
             <div className="container mx-auto px-2 md:px-5 mb-10">
               <p className="text-xl font-semibold">{total} sản phẩm</p>
               <div className="container mx-auto mt-3">
-                <SekeletonCard />
                 <div className="flex flex-wrap gap-3">
                   {loadedProducts.map((product) => (
-                    <ProductCard key={product._id} product={product} isLoading={isLoading} />
+                    <div className="w-[48%] md:w-[24%] h-[420px] md:h-[500px]" key={product._id}>
+                      <ProductCard product={product} isLoading={isLoading} />
+                    </div>
                   ))}
                 </div>
                 {loadedProducts.length < total && (

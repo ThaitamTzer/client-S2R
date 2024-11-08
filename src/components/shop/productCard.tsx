@@ -11,8 +11,13 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
   const isDesktop = useMediaQuery('(min-width: 62em)')
 
   return (
-    <>
-      <Link href={`/shop/${product.slug}`} key={product._id} prefetch={true}>
+    <div className="w-full h-full relative">
+      <Link
+        href={`/shop/${product.slug}`}
+        key={product._id}
+        prefetch={true}
+        className="absolute top-0 left-0 right-0 bottom-0"
+      >
         <Card
           key={product._id}
           hoverable={true}
@@ -59,7 +64,7 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
             </div>
           }
         >
-          <div className="flex flex-col gap-2 w-full max-w-[177px] overflow-hidden">
+          <div className="flex flex-col gap-2 w-full">
             <Meta title={<p className="text-lg md:text-xl">{product.productName}</p>} />
             <Meta
               title={
@@ -123,6 +128,6 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
           />
         </Card>
       </Link>
-    </>
+    </div>
   )
 }

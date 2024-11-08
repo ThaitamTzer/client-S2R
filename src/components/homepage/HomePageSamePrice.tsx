@@ -63,7 +63,7 @@ export default function HomePageSamePrice() {
           <div className="discount-content relative w-1/2 md:w-full h-[250px] md:h-[500px] bg-cover md:bg-contain rounded-r-sm md:rounded-md flex justify-between bg-[#ecd5ea] bg-[url('/images/category-brand-bg.png')] bg-no-repeat bg-[100%_100%]">
             <div className="Carousel-discount w-[70%] py-4 pl-4 h-full hidden md:block">
               <Carousel
-                slideSize="25%"
+                slideSize="33.33%"
                 align="start"
                 loop
                 slideGap="md"

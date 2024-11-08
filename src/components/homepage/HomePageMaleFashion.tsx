@@ -16,7 +16,7 @@ const HomePageManFashion = () => {
 
   const [products, setProducts] = useState<ProductsClient[]>([])
 
-  const shouldAutoplay = products.length > 3
+  const shouldAutoplay = products.length > 4
 
   useSWR(
     'maleFashion',
@@ -72,7 +72,7 @@ const HomePageManFashion = () => {
         <div className="container mx-auto px-2">
           <div className="slider py-2 md:py-4">
             <div className="flex w-full h-full">
-              <div className="w-full md:w-[62%]">
+              <div className="w-full md:w-[65%]">
                 <div className="slider">
                   <Carousel
                     withIndicators={false}
@@ -83,7 +83,7 @@ const HomePageManFashion = () => {
                       base: 'xs',
                     }}
                     slideSize={isDesktop ? '33.33%' : '50%'}
-                    loop
+                    loop={shouldAutoplay ? true : false}
                     align="start"
                     plugins={shouldAutoplay ? [autoplay.current] : []}
                     onMouseEnter={shouldAutoplay ? autoplay.current.stop : undefined}
@@ -99,7 +99,7 @@ const HomePageManFashion = () => {
                   </Carousel>
                 </div>
               </div>
-              <div className="w-[45%] hidden md:block"></div>
+              <div className="w-[40%] hidden md:block"></div>
             </div>
           </div>
         </div>
