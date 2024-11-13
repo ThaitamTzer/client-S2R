@@ -72,7 +72,7 @@ export default function ButtonSection({
                 color: '#179d49',
               }}
             >
-              Thêm vào giỏ hàng
+              Liên hệ ngay
             </Button>
 
             <Button

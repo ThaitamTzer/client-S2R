@@ -5,7 +5,7 @@ import { notification, Dropdown, MenuProps } from 'antd'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import clsx from 'clsx'
-import { IconSettings, IconTruck, IconLogout, IconBell, IconBellFilled, IconSearch } from '@tabler/icons-react'
+import { IconSettings, IconTruck, IconLogout, IconSearch } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { useLoginModal } from '@/zustand/loginModal'
 import { useAuth } from '@/hooks/useAuth'
@@ -227,7 +227,8 @@ export default function Header() {
                       <Menu.Target>
                         <UnstyledButton className="relative">
                           {unreadCount > 0 ? (
-                            <IconBellFilled
+                            <IconifyIcon
+                              icon="iconamoon:notification-fill"
                               className="text-green-900"
                               style={{
                                 width: rem(29),
@@ -235,7 +236,8 @@ export default function Header() {
                               }}
                             />
                           ) : (
-                            <IconBell
+                            <IconifyIcon
+                              icon="iconamoon:notification-light"
                               className="text-green-900"
                               style={{
                                 width: rem(29),
@@ -300,6 +302,16 @@ export default function Header() {
                       />
                     </UnstyledButton>
                   </Dropdown>
+                  <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
+                    <IconifyIcon
+                      icon="mynaui:chat"
+                      className="text-green-900"
+                      style={{
+                        width: rem(29),
+                        height: rem(29),
+                      }}
+                    />
+                  </UnstyledButton>
 
                   {!user ? (
                     <Avatar size={rem(30)} onClick={() => openModal()} color="#2b8a3e" />
@@ -364,25 +376,27 @@ export default function Header() {
             </div>
 
             {/* Right section: Icons and User Menu */}
-            <div className="hidden space-x-4 w-full md:w-auto md:flex items-center">
+            <div className="hidden space-x-3 w-full md:w-auto md:flex items-center">
               {/* notification */}
               <Menu shadow="md" width={300} closeOnItemClick={false}>
                 <Menu.Target>
                   <UnstyledButton className="relative">
                     {unreadCount > 0 ? (
-                      <IconBellFilled
+                      <IconifyIcon
+                        icon="iconamoon:notification-fill"
                         className="text-green-900"
                         style={{
-                          width: rem(30),
-                          height: rem(30),
+                          width: rem(29),
+                          height: rem(29),
                         }}
                       />
                     ) : (
-                      <IconBell
+                      <IconifyIcon
+                        icon="iconamoon:notification-light"
                         className="text-green-900"
                         style={{
-                          width: rem(30),
-                          height: rem(30),
+                          width: rem(29),
+                          height: rem(29),
                         }}
                       />
                     )}
