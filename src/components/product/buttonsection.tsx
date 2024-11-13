@@ -1,5 +1,6 @@
 import { ProductsClient } from '@/types/users/productTypes'
 import { Button } from 'antd'
+import IconifyIcon from '../icons'
 
 export default function ButtonSection({
   product,
@@ -14,7 +15,7 @@ export default function ButtonSection({
   return (
     <>
       <div className="flex flex-row">
-        {product.type === 'barter' ? (
+        {product.type === 'barter' && (
           <>
             <Button
               disabled={!user || user._id === product.userId._id}
@@ -54,7 +55,9 @@ export default function ButtonSection({
             </Button>
             {!user && <p className="text-sm text-red-500">Đăng nhập để tạo yêu cầu trao đổi</p>}
           </>
-        ) : (
+        )}
+
+        {product.type === 'sale' && (
           <>
             <Button
               style={{
@@ -88,6 +91,43 @@ export default function ButtonSection({
               }}
             >
               Mua ngay
+            </Button>
+          </>
+        )}
+        {product.type === 'donate' && (
+          <>
+            <Button
+              style={{
+                padding: '8px 16px',
+                borderRadius: '20px',
+                marginRight: '16px',
+                width: '200px',
+                height: '55px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                backgroundColor: '#b2e5be',
+                color: '#179d49',
+              }}
+            >
+              Yêu thích <IconifyIcon icon="fluent-emoji-flat:red-heart" />
+            </Button>
+
+            <Button
+              variant="outlined"
+              type="primary"
+              style={{
+                padding: '8px 16px',
+                borderRadius: '20px',
+                marginRight: '16px',
+                width: '200px',
+                height: '55px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                backgroundColor: '#179d49',
+                color: '#fff',
+              }}
+            >
+              Liên hệ ngay
             </Button>
           </>
         )}

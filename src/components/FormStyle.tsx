@@ -67,17 +67,7 @@ const FormStyleUserNull = () => {
     form.validateFields().then(() => {
       try {
         userService
-          .updateStyle(
-            form.getFieldsValue([
-              'age',
-              'zodiacSign',
-              'style',
-              'color',
-              'material',
-              'size',
-              'hobby',
-            ]),
-          )
+          .updateStyle(form.getFieldsValue(['age', 'zodiacSign', 'style', 'color', 'material', 'size', 'hobby']))
           .then(() => {
             toast.success('Cập nhật phong cách thành công!')
             getProfile()
@@ -215,10 +205,7 @@ const FormStyleUserNull = () => {
                   </Group>
                 </Stepper.Step>
 
-                <Stepper.Step
-                  label="Chất liệu và màu sắc"
-                  description="Chọn các sở thích cá nhân của bạn"
-                >
+                <Stepper.Step label="Chất liệu và màu sắc" description="Chọn các sở thích cá nhân của bạn">
                   <Form.Item
                     label="Màu cơ bản mà bạn yêu thích"
                     name="color"
@@ -266,11 +253,7 @@ const FormStyleUserNull = () => {
                   >
                     <Checkbox.Group className="checkbox-custom checkbox-material display-flex flex-wrap gap-2">
                       {materialData.map((material) => (
-                        <Checkbox
-                          key={material.value}
-                          value={material.value}
-                          className="card-checkbox"
-                        >
+                        <Checkbox key={material.value} value={material.value} className="card-checkbox">
                           <div className="">
                             <div className="w-full">
                               <p className="text-black">{material.name}</p>
@@ -291,10 +274,7 @@ const FormStyleUserNull = () => {
                   </Group>
                 </Stepper.Step>
 
-                <Stepper.Step
-                  label="Kích thước và sở thích"
-                  description="Chọn các sở thích cá nhân của bạn"
-                >
+                <Stepper.Step label="Kích thước và sở thích" description="Chọn các sở thích cá nhân của bạn">
                   <Form.Item
                     label="Chọn các kích thước của bạn"
                     name="size"

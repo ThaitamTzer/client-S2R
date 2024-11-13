@@ -1,19 +1,11 @@
 'use client'
 
 import { Avatar, Menu, rem, Text, UnstyledButton, TextInput, ScrollArea } from '@mantine/core'
-import { notification } from 'antd'
+import { notification, Dropdown, MenuProps } from 'antd'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import clsx from 'clsx'
-import {
-  IconSettings,
-  IconTruck,
-  IconLogout,
-  IconShoppingCart,
-  IconBell,
-  IconBellFilled,
-  IconSearch,
-} from '@tabler/icons-react'
+import { IconSettings, IconTruck, IconLogout, IconBell, IconBellFilled, IconSearch } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { useLoginModal } from '@/zustand/loginModal'
 import { useAuth } from '@/hooks/useAuth'
@@ -24,6 +16,25 @@ import useSWR from 'swr'
 import notificationService from '@/services/notification/notification.service'
 import { useSocket } from '@/hooks/useSocket'
 import { useNotificationStore } from '@/zustand/notification'
+
+const items: MenuProps['items'] = [
+  {
+    key: '1',
+    label: (
+      <>
+        <p>Đơn mua</p>
+      </>
+    ),
+  },
+  {
+    key: '2',
+    label: (
+      <>
+        <p>Đơn bán</p>
+      </>
+    ),
+  },
+]
 
 export default function Header() {
   const { notifications, setNotifications } = useNotificationStore()
@@ -252,7 +263,7 @@ export default function Header() {
                                   <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                       <Text size="sm" fw={500}>
-                                        Thông báo trao đổi
+                                        {notification.title}
                                       </Text>
                                       {!notification.isViewed && (
                                         <span className="w-2 h-2 rounded-full bg-blue-500"></span>
@@ -277,15 +288,19 @@ export default function Header() {
                       </Menu.Dropdown>
                     </Menu>
                   </div>
-                  <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
-                    <IconShoppingCart
-                      className="text-green-900"
-                      style={{
-                        width: rem(29),
-                        height: rem(29),
-                      }}
-                    />
-                  </UnstyledButton>
+                  <Dropdown placement="bottom" arrow menu={{ items }}>
+                    <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
+                      <IconifyIcon
+                        icon="solar:bag-4-linear"
+                        className="text-green-900"
+                        style={{
+                          width: rem(29),
+                          height: rem(29),
+                        }}
+                      />
+                    </UnstyledButton>
+                  </Dropdown>
+
                   {!user ? (
                     <Avatar size={rem(30)} onClick={() => openModal()} color="#2b8a3e" />
                   ) : (
@@ -385,16 +400,13 @@ export default function Header() {
                       notifications.map((notification) => (
                         <Menu.Item
                           key={notification._id}
-                          // className={clsx({
-                          //   'bg-gray-50': !notification.isViewed,
-                          // })}
                           onClick={(event) => handleViewNotification(notification._id, event)}
                         >
                           <div className="flex flex-col">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <Text size="sm" fw={500}>
-                                  Thông báo trao đổi
+                                  {notification.title}
                                 </Text>
                                 {!notification.isViewed && <span className="w-2 h-2 rounded-full bg-blue-500"></span>}
                               </div>
@@ -416,16 +428,42 @@ export default function Header() {
                   </ScrollArea>
                 </Menu.Dropdown>
               </Menu>
-              {/* cart */}
+              {/* favorite */}
               <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
-                <IconShoppingCart
+                <IconifyIcon
+                  icon="mynaui:heart"
                   className="text-green-900"
                   style={{
-                    width: rem(30),
-                    height: rem(30),
+                    width: rem(29),
+                    height: rem(29),
                   }}
                 />
               </UnstyledButton>
+              {/* message */}
+              <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
+                <IconifyIcon
+                  icon="mynaui:chat"
+                  className="text-green-900"
+                  style={{
+                    width: rem(29),
+                    height: rem(29),
+                  }}
+                />
+              </UnstyledButton>
+
+              {/* cart */}
+              <Dropdown placement="bottom" arrow menu={{ items }}>
+                <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
+                  <IconifyIcon
+                    icon="solar:bag-4-linear"
+                    className="text-green-900"
+                    style={{
+                      width: rem(29),
+                      height: rem(29),
+                    }}
+                  />
+                </UnstyledButton>
+              </Dropdown>
               {/* Avatar */}
               <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
                 <IconifyIcon

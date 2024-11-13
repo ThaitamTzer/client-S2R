@@ -45,6 +45,9 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
                 position: 'relative',
               }}
             >
+              {product.type === 'donate' && (
+                <div className="absolute top-0 left-0 bg-blue-800 text-white px-2 py-1">Quyên góp</div>
+              )}
               {product.type === 'barter' && (
                 <div className="absolute top-0 left-0 bg-green-800 text-white px-2 py-1">Trao đổi</div>
               )}

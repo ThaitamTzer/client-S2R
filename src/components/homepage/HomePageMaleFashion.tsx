@@ -16,7 +16,7 @@ const HomePageManFashion = () => {
 
   const [products, setProducts] = useState<ProductsClient[]>([])
 
-  const shouldAutoplay = products.length > 4
+  const shouldAutoplay = products?.length > 4
 
   useSWR(
     'maleFashion',

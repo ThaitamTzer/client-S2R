@@ -64,6 +64,7 @@ export default function EditProduct() {
         price: product.price,
         weight: product.weight,
         tags: product.tags?.join(' '),
+        age: product.age,
         sizeVariants: product.sizeVariants?.map((sizeVariant) => ({
           size: sizeVariant.size,
           colors: sizeVariant.colors,
@@ -109,6 +110,7 @@ export default function EditProduct() {
         'style',
         'sizeVariants',
         'weight',
+        'age',
       ])
       .then(async () => {
         const formValues = form.getFieldsValue([
@@ -123,6 +125,7 @@ export default function EditProduct() {
           'price',
           'style',
           'weight',
+          'age',
         ])
 
         // Tạo object chứa các giá trị đã thay đổi
@@ -172,7 +175,6 @@ export default function EditProduct() {
             })
             .catch((err) => {
               console.error(err)
-              form.setFields([{ name: 'productName', errors: ['Tên sản phẩm đã bị trùng lập!'] }])
               toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
             })
         } else {
@@ -215,7 +217,7 @@ export default function EditProduct() {
   return (
     <>
       <Modal
-        width={isDesktop ? '60%' : '100%'}
+        width={isDesktop ? '80%' : '100%'}
         title="Cập nhật sản phẩm"
         centered
         open={openEditProductModal}

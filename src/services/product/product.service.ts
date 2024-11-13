@@ -90,10 +90,10 @@ const productService = {
     return res
   },
 
-  addProduct: async (data: addProduct) => {
-    const res = await axiosClient.post('/api/product', data)
+  addProduct: async (data: addProduct): Promise<void> => {
+    const res: any = await axiosClient.post('/api/product', data)
 
-    return res.data
+    return res
   },
 
   editProduct: async (productId: string, values: Product) => {

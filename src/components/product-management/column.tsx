@@ -63,7 +63,9 @@ export const columns: TableProps<Product>['columns'] = [
     dataIndex: 'price',
     key: 'price',
     sorter: true,
-    render: (_, record: Product) => <>{record.price > 0 ? formatPrice(record.price) + ' VNĐ' : 'Trao đổi'}</>,
+    render: (_, record: Product) => (
+      <>{record.type === 'donate' ? 'Quyên góp' : record.price > 0 ? formatPrice(record.price) + ' VNĐ' : 'Trao đổi'}</>
+    ),
   },
   {
     title: 'Trạng thái',

@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
 import { Input, Form, Button } from 'antd'
 import userService from '@/services/users/user.service'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/hooks/useAuth'
-import { useRouter } from 'next/navigation'
 import { Suspense } from 'react'
 
 type ChangePassword = {
@@ -15,15 +13,8 @@ type ChangePassword = {
 }
 
 const ChangePassword = () => {
-  const { user, setLoading, loading } = useAuth()
-  const router = useRouter()
+  const { setLoading, loading } = useAuth()
   const [form] = Form.useForm()
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [])
 
   const onFinish = (values: ChangePassword) => {
     setLoading(true)

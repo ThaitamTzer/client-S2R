@@ -48,6 +48,7 @@ axiosClient.interceptors.response.use(
           .catch(() => {
             // Logout user clear cookies
             Cookies.remove('jwt')
+            
           })
 
         return axiosClient(prevReq)

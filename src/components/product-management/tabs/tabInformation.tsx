@@ -33,7 +33,6 @@ export default function TabInformation({
   brands: any
   disabled?: any
 }) {
-  console.log(product)
   return (
     <>
       <Form
@@ -56,6 +55,7 @@ export default function TabInformation({
             price: product.price,
             tags: product.tags?.join(' '),
             weight: product.weight,
+            age: product.age,
             sizeVariants: product.sizeVariants?.map((sizeVariant) => ({
               size: sizeVariant.size,
               colors: sizeVariant.colors,
@@ -199,6 +199,7 @@ export default function TabInformation({
             <Select
               placeholder="Chọn phong cách"
               options={clothingStylesData.map((style) => ({
+                key: style.value,
                 label: style.name,
                 value: style.value,
               }))}
@@ -248,7 +249,7 @@ export default function TabInformation({
             />
           </Form.Item>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-3">
           <Form.Item
             name="weight"
             label="Trọng lượng (gram)"
@@ -267,6 +268,18 @@ export default function TabInformation({
           >
             <Input type="number" placeholder="Nhập trọng lượng sản phẩm" />
           </Form.Item>
+          <Form.Item name="age" label="Độ tuổi" rules={[{ required: true, message: 'Vui lòng chọn độ tuổi!' }]}>
+            <Select
+              placeholder="Chọn độ tuổi"
+              options={[
+                { label: '16-20 tuổi', value: '16-20' },
+                { label: '20-25 tuổi', value: '20-25' },
+                { label: '25-30 tuổi', value: '25-30' },
+                { label: '30-35 tuổi', value: '30-35' },
+                { label: '35+', value: '35+' },
+              ]}
+            />
+          </Form.Item>
         </div>
         <div className="w-full grid grid-flow-col ">
           <Form.Item
@@ -282,6 +295,7 @@ export default function TabInformation({
             >
               <Radio value="sale">Bán</Radio>
               <Radio value="barter">Trao đổi</Radio>
+              <Radio value="donate">Quyên góp</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item

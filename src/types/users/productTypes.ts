@@ -100,6 +100,7 @@ export type Product = {
   updatedAt: string | Date
   slug: string
   weight: number
+  age: string
 }
 
 type sizeVariants = {
@@ -125,6 +126,7 @@ export type addProduct = {
   description: string
   images?: string[]
   weight: number
+  age: string
 }
 
 export type ProductsPropose = {
@@ -162,7 +164,7 @@ export type ProductsClient = {
     name: string
   }
   status: string
-  type: 'sale' | 'barter'
+  type: 'sale' | 'barter' | 'donate'
   price: number
   tags: string[]
   condition: string

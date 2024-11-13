@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useProductManagement } from '@/zustand/productManagement'
 import { UploadFileStatus } from 'antd/es/upload/interface'
 import dynamic from 'next/dynamic'
+import { useMediaQuery } from '@mantine/hooks'
 
 const TabInformation = dynamic(() => import('./tabs/tabInformation'), { ssr: false })
 const TabUploadImages = dynamic(() => import('./tabs/tabImages'), { ssr: false })
@@ -20,8 +21,9 @@ const getBase64 = (file: FileType): Promise<string> =>
   })
 
 export default function ViewProductModal() {
-  const { openViewProductModal, toggleViewProductModal, product, setProduct } =
-    useProductManagement()
+  const isDesktop = useMediaQuery('(min-width: 62em)')
+
+  const { openViewProductModal, toggleViewProductModal, product, setProduct } = useProductManagement()
   const { categories, loading, brands } = useClient()
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
@@ -47,6 +49,7 @@ export default function ViewProductModal() {
         type: product.type,
         price: product.price,
         tags: product.tags?.join(' '),
+        age: product.age,
         sizeVariants: product.sizeVariants?.map((sizeVariant) => ({
           size: sizeVariant.size,
           colors: sizeVariant.colors,
@@ -66,7 +69,7 @@ export default function ViewProductModal() {
 
       form.setFieldsValue({ images: formattedFileList })
     }
-  }, [product, form]) // The form is reset whenever the product or form changes
+  }, [product, form, openViewProductModal]) // The form is reset whenever the product or form changes
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -80,7 +83,7 @@ export default function ViewProductModal() {
   return (
     <>
       <Modal
-        width="60%"
+        width={isDesktop ? '80%' : '100%'}
         title="Chi tiết sản phẩm"
         centered
         open={openViewProductModal}

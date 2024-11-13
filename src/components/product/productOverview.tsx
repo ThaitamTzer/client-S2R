@@ -6,12 +6,12 @@ import { ProductsClient } from '@/types/users/productTypes'
 import { Suspense, lazy } from 'react'
 import Loading from '@/app/loading'
 
-const ShippingSection = lazy(() => import('./shippingsection'))
 const UserWhosell = lazy(() => import('./userwhosell'))
 const ColorSelection = lazy(() => import('./colorselection'))
 const SizeSelection = lazy(() => import('./sizeselection'))
 const QuantitySelection = lazy(() => import('./quantityselection'))
 const ButtonSection = lazy(() => import('./buttonsection'))
+const PolicySection = lazy(() => import('./policysection'))
 
 export default function ProductOverview({
   product,
@@ -137,11 +137,17 @@ export default function ProductOverview({
           <div className="product-info md:w-[45%] mt-3">
             <div className="h-full w-full flex flex-col gap-3 md:gap-5">
               <h1 className="text-lg md:text-3xl font-semibold break-words whitespace-normal">{product.productName}</h1>
-              {product.type === 'barter' ? (
+              {product.type === 'barter' && (
                 <div className="flex flex-row items-center">
                   <p className="text-md md:text-2xl font-semibold text-green-800">Sản phẩm trao đổi</p>
                 </div>
-              ) : (
+              )}
+              {product.type === 'donate' && (
+                <div className="flex flex-row items-center">
+                  <p className="text-md md:text-2xl font-semibold text-green-800">Sản phẩm 0đ</p>
+                </div>
+              )}
+              {product.type === 'sale' && (
                 <div className="flex flex-row items-center">
                   <p className="text-md md:text-2xl font-semibold text-green-800">{formatPrice(product.price)}đ</p>
                 </div>
@@ -173,7 +179,7 @@ export default function ProductOverview({
                 {/* Button section */}
                 <ButtonSection product={product} user={user} onCreateExchange={onCreateExchange} />
                 {/* Mô tả vận chuyển */}
-                <ShippingSection />
+                <PolicySection />
                 <UserWhosell product={product} />
               </Suspense>
             </div>
