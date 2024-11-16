@@ -86,11 +86,11 @@ const HomePageFemale = () => {
                   slideSize={{ base: '50%', sm: '33.33%', md: '27%' }}
                   loop
                   align="start"
-                  plugins={donus.length > 4 ? [autoplay.current] : []}
-                  onMouseEnter={donus.length > 4 ? autoplay.current.stop : undefined}
-                  onMouseLeave={donus.length > 4 ? autoplay.current.reset : undefined}
+                  plugins={donus?.length > 4 ? [autoplay.current] : []}
+                  onMouseEnter={donus?.length > 4 ? autoplay.current.stop : undefined}
+                  onMouseLeave={donus?.length > 4 ? autoplay.current.reset : undefined}
                 >
-                  {donus.map((item) => (
+                  {donus?.map((item) => (
                     <>
                       <Carousel.Slide>
                         <ProductCard product={item} isLoading={false} />

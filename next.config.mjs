@@ -9,6 +9,7 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'raw.githubusercontent.com',
       'minio.theciu.vn',
+      'i.pravatar.cc',
     ],
   },
 }

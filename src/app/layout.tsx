@@ -4,12 +4,12 @@ import { Montserrat } from 'next/font/google'
 import './globals.css'
 import '@/styles/style.css'
 import '@mantine/carousel/styles.css'
-import ScrollingUp from '@/partials/up'
 import { Suspense, lazy } from 'react'
 import { Providers } from '@/providers/providers'
 import Loading from './loading'
 import Header from '@/partials/header'
 import Footer from '@/partials/footer'
+import Chat from '@/components/chat/chat'
 
 const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
 const LoginModal = lazy(() => import('@/components/loginModal'))
@@ -51,8 +51,8 @@ export default function RootLayout({
             <main className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}>
               <LoginModal />
               {children}
-              <ScrollingUp />
             </main>
+            <Chat />
             <Footer />
           </Providers>
         </Suspense>

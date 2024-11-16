@@ -13,6 +13,8 @@
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
     "@ant-design/nextjs-registry": "^1.0.1",
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@hookform/resolvers": "^3.9.0",
     "@mantine/carousel": "^7.13.2",
     "@mantine/core": "^7.13.0",
@@ -29,6 +31,7 @@
     "dayjs": "^1.11.13",
     "embla-carousel-autoplay": "^7.1.0",
     "embla-carousel-react": "^7.1.0",
+    "framer-motion": "^11.11.17",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "mantine-form-yup-resolver": "^2.0.0",

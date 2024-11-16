@@ -123,13 +123,14 @@ const Shop = () => {
               <p className="text-xl font-semibold">{total} Kết quả</p>
               <div className="container mx-auto mt-3">
                 <div className="flex flex-wrap gap-3">
-                  {loadedProducts.map((product) => (
-                    <div className="w-[48%] md:w-[24%] h-[420px] md:h-[500px]" key={product._id}>
-                      <ProductCard product={product} isLoading={isLoading} />
-                    </div>
-                  ))}
+                  {loadedProducts &&
+                    loadedProducts.map((product) => (
+                      <div className="w-[48%] md:w-[24%] h-[420px] md:h-[500px]" key={product._id}>
+                        <ProductCard product={product} isLoading={isLoading} />
+                      </div>
+                    ))}
                 </div>
-                {loadedProducts.length < total && (
+                {loadedProducts && loadedProducts.length < total && (
                   <div className="text-center mt-5">
                     <button
                       onClick={handleLoadMore}
