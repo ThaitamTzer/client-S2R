@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import FloatChatRoom from './floatChatRoom'
 import ChatBox from './chatBox'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -10,7 +10,7 @@ const CHAT_BOX_WIDTH = 330
 const CHAT_BOX_MARGIN = 20
 
 const Chat = () => {
-  const { activeChats, setActiveChats, setChatUsers, chatusers, setMessages, setRoomId } = useUserAction()
+  const { activeChats, setActiveChats, setChatUsers, chatusers } = useUserAction()
 
   const handleUserSelect = (user: any) => {
     if (activeChats.length >= MAX_CHAT_BOXES) {

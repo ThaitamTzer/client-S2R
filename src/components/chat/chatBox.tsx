@@ -16,9 +16,8 @@ interface ChatBoxProps {
 }
 
 export default function ChatBox({ onMinimize }: ChatBoxProps) {
-  const { setActiveChats, activeChats, chatPartner, messages, setMessages, RoomId, setRoomId } = useUserAction()
+  const { setActiveChats, activeChats, chatPartner, setRoomId } = useUserAction()
   const [localMessages, setLocalMessages] = useState<any[]>([])
-  const [newMessages, setNewMessages] = useState<any>()
   const [messageInput, setMessageInput] = useState('')
   const [showEmoji, setShowEmoji] = useState(false)
   const [imagePreview, { open: openImagePreview, close: closeImagePreview }] = useDisclosure(false)

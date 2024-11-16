@@ -14,7 +14,6 @@ import exChangeService from '@/services/exchange/exchange.service'
 import { useExchange } from '@/zustand/exchange'
 import messageService from '@/services/message/message.service'
 import { useUserAction } from '@/zustand/user'
-import { useSocket } from '@/hooks/useSocket'
 
 type ClientValuesType = {
   loading: boolean
@@ -50,9 +49,8 @@ const ClientProvider = ({ children }: Props) => {
   const { setCategories } = useCategory()
   const { setNotifications } = useNotificationStore()
   const { setListExchangeRev } = useExchange()
-  const { setRooms, RoomId, setMessages } = useUserAction()
+  const { setRooms } = useUserAction()
   const { user } = useAuth()
-  const { socket } = useSocket()
 
   useSWR('/api/category/list-category-client', categoryService.gellClientCategories, {
     onLoadingSlow: () => {

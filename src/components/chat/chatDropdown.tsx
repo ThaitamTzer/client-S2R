@@ -4,11 +4,9 @@ import { Menu, Avatar } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
 import { MessageTypes } from '@/types/messageTypes'
 import { useAuth } from '@/hooks/useAuth'
-import { useSocket } from '@/hooks/useSocket'
 
 export default function ChatDropdown() {
-  const { setActiveChats, rooms, setChatPartner, setRoomId, RoomId, setMessages, setChatUsers, chatusers } =
-    useUserAction()
+  const { setActiveChats, rooms, setChatPartner, setRoomId, setChatUsers, chatusers } = useUserAction()
   const { user } = useAuth()
 
   const handleSelectChat = (item: MessageTypes) => {
