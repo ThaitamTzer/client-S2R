@@ -1,9 +1,11 @@
 'use client'
 import React from 'react'
-import FloatChatRoom from './floatChatRoom'
-import ChatBox from './chatBox'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useUserAction } from '@/zustand/user'
+
+const FloatChatRoom = dynamic(() => import('./floatChatRoom'), { ssr: false })
+const ChatBox = dynamic(() => import('./chatBox'), { ssr: false })
 
 const MAX_CHAT_BOXES = 3
 const CHAT_BOX_WIDTH = 330
@@ -62,7 +64,7 @@ const Chat = () => {
               zIndex: 50 - index, // Đảm bảo chatbox phía trước có z-index cao hơn
             }}
           >
-            <ChatBox onMinimize={() => handleMinimizeChat(user)} />
+            <ChatBox key={user.chatPartner._id} onMinimize={() => handleMinimizeChat(user)} />
           </motion.div>
         ))}
       </AnimatePresence>

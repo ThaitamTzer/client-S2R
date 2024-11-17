@@ -3,17 +3,18 @@ import { ProductsClient } from '@/types/users/productTypes'
 import classes from '@/styles/product.module.css'
 import { useEffect, useState } from 'react'
 import { useGetName } from '@/helper/getName'
-import toast from 'react-hot-toast'
 import { useExchange } from '@/zustand/exchange'
 import { CreateExchangeModal } from '../exchange/openCreateExchange'
 import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 import ProductOverview from './productOverview'
 import InforProduct from './inforProduct'
+import { notification } from 'antd'
 
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
+  const [api, contextHolder] = notification.useNotification()
   const [count, setCount] = useState(1)
   const [mainImage, setMainImage] = useState(product.imgUrls[0]) // New state for the main image
   const { getMaterialName, getConditionName, getStyleName } = useGetName()
@@ -85,7 +86,11 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
 
   const onCreateExchange = async () => {
     if (!selectedSize || !selectedColor) {
-      toast.error('Vui lòng chọn kích cỡ và màu sắc trước khi tạo yêu cầu trao đổi')
+      api.error({
+        message: 'Lỗi',
+        description: 'Vui lòng chọn kích cỡ và màu sắc trước khi tạo yêu cầu trao đổi',
+        placement: 'topRight',
+      })
       return
     }
 
@@ -105,6 +110,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
   if (product)
     return (
       <>
+        {contextHolder}
         <CreateExchangeModal />
         <div className="px-2 py-0 md:px-36 md:py-5 md:mt-5 md:bg-slate-50">
           <ProductOverview

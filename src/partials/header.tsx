@@ -53,11 +53,11 @@ export default function Header() {
   useEffect(() => {
     if (socket) {
       socket.on('generalNotification', (newNotification) => {
-        console.log('newNotification', newNotification)
+        console.log(newNotification)
         mutate()
         api.open({
-          message: 'Bạn có thông báo mới',
-          description: 'Bạn có một thông báo mới ',
+          message: newNotification.title,
+          description: newNotification.message,
           showProgress: true,
           pauseOnHover: true,
           duration: 5,
@@ -66,7 +66,7 @@ export default function Header() {
       })
 
       socket.on('authenticatedNotification', (newNotification) => {
-        console.log('newNotification', newNotification)
+        console.log(newNotification)
         api.info({
           message: newNotification.title,
           description: newNotification.message,
@@ -76,6 +76,10 @@ export default function Header() {
           placement: 'topRight',
         })
         mutate()
+      })
+
+      socket.on('receiveMessage', (message) => {
+        console.log(message)
       })
     }
   }, [socket, mutate, api])

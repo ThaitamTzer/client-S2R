@@ -1,6 +1,9 @@
+'use client'
 import { ProductsClient } from '@/types/users/productTypes'
 import { Button } from 'antd'
 import IconifyIcon from '../icons'
+import { useUserAction } from '@/zustand/user'
+import { mutate } from 'swr'
 
 export default function ButtonSection({
   product,
@@ -12,6 +15,50 @@ export default function ButtonSection({
   user: any
   onCreateExchange: () => void
 }) {
+  const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
+
+  const handleSelectChat = (item: ProductsClient) => {
+    setRoomId([user?._id, item.userId._id].sort().join('_'))
+    setActiveChats([
+      {
+        chatPartner: {
+          _id: item.userId._id,
+          avatar: item.userId.avatar,
+          firstname: item.userId.firstname,
+          lastname: item.userId.lastname,
+        },
+        message: {
+          _id: item._id,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          image: '',
+          roomId: RoomId,
+          myId: user?._id || '',
+        },
+        unreadCount: 0,
+      },
+    ])
+    setChatPartner({
+      chatPartner: {
+        _id: item.userId._id,
+        avatar: item.userId.avatar,
+        firstname: item.userId.firstname,
+        lastname: item.userId.lastname,
+      },
+      message: {
+        _id: item._id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        image: '',
+        roomId: RoomId,
+        myId: user?._id || '',
+      },
+      unreadCount: 0,
+    })
+    setChatUsers(chatusers.filter((u) => u.message._id !== item._id))
+    mutate('/api/messages/get-room')
+  }
+
   return (
     <>
       <div className="flex flex-row">
@@ -19,6 +66,9 @@ export default function ButtonSection({
           <>
             <Button
               disabled={!user || user._id === product.userId._id}
+              onClick={() => {
+                handleSelectChat(product)
+              }}
               style={{
                 padding: '8px 16px',
                 borderRadius: '20px',

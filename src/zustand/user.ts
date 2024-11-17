@@ -13,6 +13,7 @@ type State = {
   chatPartner: MessageTypes | null
   message: ChatContentTypes | null
   messages: ChatContentTypes[]
+  messageHistory: Record<string, any[]>
 }
 
 type Actions = {
@@ -27,6 +28,7 @@ type Actions = {
   setMessage: (message: ChatContentTypes) => void
   setMessages: (messages: ChatContentTypes[]) => void
   setRoomId: (roomId: string) => void
+  setMessageHistory: (messageHistory: Record<string, any[]>) => void
 }
 
 export const useUserAction = create<State & Actions>((set) => ({
@@ -41,6 +43,7 @@ export const useUserAction = create<State & Actions>((set) => ({
   paramsObj: {},
   message: null,
   messages: [],
+  messageHistory: {},
   setOpenFilterDrawer: (open) => set({ openFilterDrawer: open }),
   setParamsObj: (paramsObj) => set({ paramsObj }),
   setOpenChatDropdown: (open) => set({ openChatDropdown: open }),
@@ -52,4 +55,5 @@ export const useUserAction = create<State & Actions>((set) => ({
   setMessage: (message) => set({ message }),
   setMessages: (messages) => set({ messages }),
   setRoomId: (roomId) => set({ RoomId: roomId }),
+  setMessageHistory: (messageHistory) => set({ messageHistory }),
 }))

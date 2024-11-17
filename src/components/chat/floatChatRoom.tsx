@@ -14,7 +14,7 @@ interface ChatRoomProps {
 }
 
 export default function FloatChatRoom({ users, onUserSelect }: ChatRoomProps) {
-  const { setOpenChatRoom, setChatUsers, chatusers } = useUserAction()
+  const { setChatUsers, chatusers } = useUserAction()
 
   const handleRemoveUser = (id: string) => {
     setChatUsers(chatusers.filter((u) => u.message._id !== id))
@@ -67,7 +67,6 @@ export default function FloatChatRoom({ users, onUserSelect }: ChatRoomProps) {
                   style={{ objectFit: 'cover' }}
                   quality={70}
                   onClick={() => {
-                    setOpenChatRoom(true)
                     onUserSelect(item)
                   }}
                 />

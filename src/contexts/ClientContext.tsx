@@ -107,6 +107,9 @@ const ClientProvider = ({ children }: Props) => {
       exChangeService.getAll(1, 10, '', 'receiver').then((data) => {
         setListExchangeRev(data?.data)
       })
+      messageService.getRooms().then((data) => {
+        setRooms(data)
+      })
     }
   }, [user])
 

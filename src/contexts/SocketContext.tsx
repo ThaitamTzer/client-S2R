@@ -24,9 +24,9 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       // Khởi tạo kết nối socket
       const socketInstance = io('https://share2receive-server.onrender.com', {
         withCredentials: true,
-        reconnection: true, // Enable reconnection attempts
-        reconnectionAttempts: 5, // Max number of reconnection attempts
-        reconnectionDelay: 1000, // Delay between reconnection attempts
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
       })
 
       socketInstance.on('connect', () => {
@@ -37,9 +37,7 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       socketInstance.on('disconnect', () => {
         setIsConnected(false)
         console.log('Disconnected from socket')
-        setTimeout(() => {
-          socketInstance.connect()
-        }, 1000)
+        // Không cần phải tự reconnect lại ở đây vì socket.io đã tự động reconnect
       })
 
       setSocket(socketInstance)
