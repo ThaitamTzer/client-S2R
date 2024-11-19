@@ -3,17 +3,25 @@
 import { Menu, Avatar } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
 import { MessageTypes } from '@/types/messageTypes'
-import { useAuth } from '@/hooks/useAuth'
 
 export default function ChatDropdown() {
-  const { setActiveChats, rooms, setChatPartner, setRoomId, setChatUsers, chatusers } = useUserAction()
-  const { user } = useAuth()
+  const { setActiveChats, rooms, activeChats, setRoomId, chatusers, setChatUsers } = useUserAction()
 
   const handleSelectChat = (item: MessageTypes) => {
-    setActiveChats([item])
-    setChatPartner(item)
-    setChatUsers(chatusers.filter((u) => u.message._id !== item.message._id))
-    setRoomId([user?._id, item.chatPartner._id].sort().join('_'))
+    const isInActiveChats = activeChats.some((chat) => chat.chatPartner._id === item.chatPartner._id)
+    const isInChatUsers = chatusers.some((chat) => chat.chatPartner._id === item.chatPartner._id)
+
+    if (!isInActiveChats && !isInChatUsers) {
+      setActiveChats([...activeChats, item])
+    } else if (isInChatUsers) {
+      setChatUsers(chatusers.filter((chat) => chat.chatPartner._id !== item.chatPartner._id))
+      setActiveChats([...activeChats, item])
+    } else {
+      const filteredChats = activeChats.filter((chat) => chat.chatPartner._id !== item.chatPartner._id)
+      setActiveChats([...filteredChats, item])
+    }
+
+    setRoomId([item.message.myId, item.chatPartner._id].sort().join('_'))
   }
 
   return (

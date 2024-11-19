@@ -13,17 +13,20 @@ import { useSocket } from '@/hooks/useSocket'
 import { mutate } from 'swr'
 
 interface ChatBoxProps {
+  userChat: MessageTypes
+  roomId: string
   onMinimize: () => void
 }
 
 import { debounce } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import dynamic from 'next/dynamic'
+import { MessageTypes } from '@/types/messageTypes'
 
 const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
 
-export default function ChatBox({ onMinimize }: ChatBoxProps) {
-  const { setActiveChats, activeChats, chatPartner, setRoomId, RoomId } = useUserAction()
+export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) {
+  const { setActiveChats, activeChats } = useUserAction()
   const [localMessages, setLocalMessages] = useState<any[]>([])
   const [messageInput, setMessageInput] = useState('')
   const [showEmoji, setShowEmoji] = useState(false)
@@ -32,16 +35,17 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [room, setRoom] = useState(roomId)
 
   const { user } = useAuth()
   const { socket } = useSocket()
 
   useEffect(() => {
-    if (!user || !chatPartner?.chatPartner) return
+    if (!user || !userChat?.chatPartner) return
 
     if (socket) {
       setIsLoading(true)
-      socket.emit('joinRoom', RoomId)
+      socket.emit('joinRoom', room)
 
       socket.on('previousMessages', (messages) => {
         setLocalMessages(messages)
@@ -58,7 +62,7 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
         socket.off('receiveMessage')
       }
     }
-  }, [RoomId, user, chatPartner, socket])
+  }, [user, userChat, socket, room])
 
   const debouncedScrollToBottom = useMemo(
     () =>
@@ -84,7 +88,7 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
 
       const message = {
         senderId: user?._id,
-        receiverId: chatPartner?.chatPartner?._id,
+        receiverId: userChat?.chatPartner?._id,
         content: messageInput.trim() || null,
         file: file,
         fileName: file ? file.name : null,
@@ -100,7 +104,7 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
       setMessageInput('')
       mutate('/api/messages/get-room')
     },
-    [messageInput, socket, user?._id, chatPartner?.chatPartner?._id],
+    [messageInput, socket, user?._id, userChat?.chatPartner?._id],
   )
 
   const handleMessageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +125,7 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
           setSelectedImage(reader.result as string)
           const message = {
             senderId: user?._id,
-            receiverId: chatPartner?.chatPartner?._id,
+            receiverId: userChat?.chatPartner?._id,
             content: null,
             file: reader.result as string,
             fileName: file.name,
@@ -144,7 +148,7 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
         }
       }
     },
-    [socket, user?._id, chatPartner?.chatPartner?._id],
+    [socket, user?._id, userChat?.chatPartner?._id],
   )
 
   const handleEmojiSelect = useCallback(
@@ -162,24 +166,22 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
         key={message._id || index}
         message={message}
         user={user}
-        chatPartner={chatPartner}
+        chatPartner={userChat}
         onImageClick={(image: string) => {
           setSelectedImage(image)
           openImagePreview()
         }}
       />
     ))
-  }, [localMessages, user, chatPartner, openImagePreview])
+  }, [localMessages, user, userChat, openImagePreview])
 
   return (
     <Paper className="fixed bottom-0 z-max w-[330px] max-w-[330px] h-[455px] rounded-t-lg shadow-2xl">
       <div className="h-14 bg-green-700 rounded-t-lg px-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar src={chatPartner?.chatPartner.avatar} size="md" radius="xl" />
+          <Avatar src={userChat?.chatPartner?.avatar} size="md" radius="xl" />
           <div className="text-white">
-            <p className="font-semibold">
-              {chatPartner?.chatPartner.firstname + ' ' + chatPartner?.chatPartner.lastname}
-            </p>
+            <p className="font-semibold">{userChat?.chatPartner?.firstname + ' ' + userChat?.chatPartner?.lastname}</p>
             <p className="text-sm">Đang hoạt động</p>
           </div>
         </div>
@@ -191,9 +193,9 @@ export default function ChatBox({ onMinimize }: ChatBoxProps) {
             variant="transparent"
             color="white"
             onClick={() => {
-              setActiveChats(activeChats.filter((chat) => chat.chatPartner._id !== chatPartner?.chatPartner._id))
-              setRoomId('')
+              setActiveChats(activeChats.filter((chat) => chat.chatPartner._id !== userChat?.chatPartner._id))
               setLocalMessages([])
+              setRoom('')
             }}
           >
             <IconifyIcon icon="material-symbols:close" fontSize={24} />

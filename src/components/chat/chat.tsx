@@ -16,18 +16,17 @@ const Chat = () => {
 
   const handleUserSelect = (user: any) => {
     if (activeChats.length >= MAX_CHAT_BOXES) {
-      // Nếu đã đạt giới hạn, không thêm chat mới
       alert('Bạn chỉ có thể mở tối đa 3 cuộc trò chuyện cùng lúc')
       return
     }
 
-    // Kiểm tra xem user đã có trong activeChats chưa
-    if (activeChats.some((chat) => chat.message._id === user.message._id)) {
+    if (activeChats.some((chat) => chat.chatPartner._id === user.chatPartner._id)) {
       return
     }
 
     setActiveChats([...activeChats, user])
-    setChatUsers(chatusers.filter((u) => u.message._id !== user.message._id))
+
+    setChatUsers(chatusers.filter((u) => u.chatPartner._id !== user.chatPartner._id))
   }
 
   const handleMinimizeChat = (user: any) => {
@@ -64,7 +63,12 @@ const Chat = () => {
               zIndex: 50 - index, // Đảm bảo chatbox phía trước có z-index cao hơn
             }}
           >
-            <ChatBox key={user.chatPartner._id} onMinimize={() => handleMinimizeChat(user)} />
+            <ChatBox
+              roomId={user.message.roomId}
+              key={user.chatPartner._id}
+              userChat={user}
+              onMinimize={() => handleMinimizeChat(user)}
+            />
           </motion.div>
         ))}
       </AnimatePresence>

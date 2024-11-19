@@ -6,7 +6,7 @@ const MessageItem = memo(({ message, user, chatPartner, onImageClick }: any) => 
 
   return (
     <div className={`flex items-end gap-2 ${isOwnMessage ? 'justify-end' : ''}`}>
-      {!isOwnMessage && <Avatar src={chatPartner?.chatPartner.avatar} size="sm" radius="xl" />}
+      {!isOwnMessage && <Avatar src={chatPartner?.chatPartner?.avatar} size="sm" radius="xl" />}
       <div className={`p-2 rounded-lg max-w-[70%] ${isOwnMessage ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>
         {message.content && <p>{message.content}</p>}
         {(message.image || message.file) && (

@@ -65,8 +65,7 @@ export default function Header() {
         })
       })
 
-      socket.on('authenticatedNotification', (newNotification) => {
-        console.log(newNotification)
+      socket.on('messageNotification', (newNotification) => {
         api.info({
           message: newNotification.title,
           description: newNotification.message,
@@ -78,8 +77,16 @@ export default function Header() {
         mutate()
       })
 
-      socket.on('receiveMessage', (message) => {
-        console.log(message)
+      socket.on('authenticatedNotification', (newNotification) => {
+        api.info({
+          message: newNotification.title,
+          description: newNotification.message,
+          showProgress: true,
+          pauseOnHover: true,
+          duration: 5,
+          placement: 'topRight',
+        })
+        mutate()
       })
     }
   }, [socket, mutate, api])
