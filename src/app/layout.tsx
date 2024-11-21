@@ -25,6 +25,9 @@ export const metadata: Metadata = {
     default: 'Share2Receive',
     template: '%s | Share2Receive',
   },
+  icons: {
+    icon: '/logo.png',
+  },
   description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
 }
 
@@ -41,6 +44,7 @@ export default function RootLayout({
       lang="en"
     >
       <head>
+        <link rel="icon" href="./favicon.ico" sizes="any" />
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
