@@ -42,7 +42,21 @@ const orderService = {
   },
 
   // Create order now
-  createOrderNow: (data: CreateOrderNow) => axiosClient.post('/api/orders/create-now', data),
+  createOrderNow: async (
+    data: CreateOrderNow,
+    success?: (res: any) => void,
+    errorMessage?: (message: string) => void,
+  ) => {
+    try {
+      return await axiosClient.post('/api/orders/create-now', data).then((res) => success && success(res))
+    } catch (error: any) {
+      if (error) {
+        if (errorMessage) {
+          errorMessage(error.response?.data.message)
+        }
+      }
+    }
+  },
 
   cancelOrder: async (id: string, success?: () => void, errorMessage?: (message: string) => void) => {
     try {

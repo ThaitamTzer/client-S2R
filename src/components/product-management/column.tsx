@@ -9,7 +9,7 @@ import { useProductManagement } from '@/zustand/productManagement'
 import { useCategory } from '@/zustand/category'
 import { truncateText } from '@/helper/format'
 
-const formatDate = (date: string | Date) => {
+export const formatDate = (date: string | Date) => {
   const d = new Date(date)
   return d.toLocaleDateString('vi-VN')
 }

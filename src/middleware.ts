@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('jwt')?.value
   const resetPasswordAllowed = request.cookies.get('resetPasswordAllowed')?.value
   const isAuthPage = ['/login', '/register', '/forgot-password'].includes(request.nextUrl.pathname)
-  
+
   // Kiểm tra trang reset-password
   if (request.nextUrl.pathname === '/reset-password') {
     if (!resetPasswordAllowed) {
@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/login',
-    '/register', 
+    '/register',
     '/forgot-password',
     '/reset-password',
     '/profile',
@@ -41,5 +41,7 @@ export const config = {
     '/user-style',
     '/exchange-management',
     '/change-password',
+    '/orders-management',
+    '/checkout/:orderId',
   ],
 }

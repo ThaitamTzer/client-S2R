@@ -5,7 +5,6 @@ import IconifyIcon from '../icons'
 import { useUserAction } from '@/zustand/user'
 import { useProductClient } from '@/zustand/productClient'
 import { mutate } from 'swr'
-
 export default function ButtonSection({
   product,
   user,
@@ -17,7 +16,7 @@ export default function ButtonSection({
   onCreateExchange: () => void
 }) {
   const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
-  const { toggleAddToCardModal, setProductToAdd } = useProductClient()
+  const { toggleAddToCardModal, setProductToAdd, toggleOrderNowModal } = useProductClient()
 
   const handleSelectChat = (item: ProductsClient) => {
     setRoomId([user?._id, item.userId._id].sort().join('_'))
@@ -132,6 +131,10 @@ export default function ButtonSection({
               </Button>
 
               <Button
+                onClick={() => {
+                  setProductToAdd(product)
+                  toggleOrderNowModal()
+                }}
                 variant="outlined"
                 type="primary"
                 style={{

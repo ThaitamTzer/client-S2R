@@ -1,6 +1,5 @@
 'use client'
 import { Modal } from '@mantine/core'
-import { useProductClient } from '@/zustand/productClient'
 import { useClient } from '@/hooks/useClient'
 import ColorSelection from './colorselection'
 import SizeSelection from './sizeselection'
@@ -8,9 +7,6 @@ import QuantitySelection from './quantityselection'
 import { ProductsClient } from '@/types/users/productTypes'
 import { Button } from 'antd'
 import { useEffect, useState } from 'react'
-import cartService from '@/services/cart/cart.service'
-import toast from 'react-hot-toast'
-import { mutate } from 'swr'
 
 export default function AddToCard({
   product,
@@ -28,6 +24,11 @@ export default function AddToCard({
   totalQuantity,
   setSelectedColor,
   setSelectedSize,
+  open,
+  close,
+  title,
+  textButton,
+  handleOnClick,
 }: {
   product: ProductsClient
   uniqueColors: string[]
@@ -44,8 +45,12 @@ export default function AddToCard({
   totalQuantity: number
   setSelectedColor: (color: string) => void
   setSelectedSize: (size: string) => void
+  open: boolean
+  close: () => void
+  title: string
+  textButton: string
+  handleOnClick: () => void
 }) {
-  const { openAddToCardModal, toggleAddToCardModal } = useProductClient()
   const { isMobile } = useClient()
   const [addToCard, setAddToCard] = useState<boolean>(false)
 
@@ -63,31 +68,12 @@ export default function AddToCard({
 
   const handleAddToCard = async () => {
     if (addToCard) {
-      const data = {
-        productId: product._id,
-        size: selectedSize || '',
-        color: selectedColor || '',
-        amount: count,
-      }
-      await cartService.addToCart(
-        data,
-        () => {
-          toast.success('Đã thêm sản phẩm vào giỏ hàng!')
-          mutate('/api/cart')
-          toggleAddToCardModal()
-          setSelectedColor('')
-          setSelectedSize('')
-          setCount(1)
-        },
-        (message: string) => {
-          toast.error(message)
-        },
-      )
+      handleOnClick()
     }
   }
 
   const onClose = () => {
-    toggleAddToCardModal()
+    close()
     setSelectedColor('')
     setSelectedSize('')
     setCount(1)
@@ -97,10 +83,10 @@ export default function AddToCard({
   return (
     <>
       <Modal
-        title={<h2 className="font-semibold text-xl">Thêm vào giỏ hàng</h2>}
+        title={<h2 className="font-semibold text-xl">{title}</h2>}
         centered
         size={isMobile ? '100%' : '70%'}
-        opened={openAddToCardModal}
+        opened={open}
         onClose={onClose}
       >
         <h1 className="text-2xl font-semibold">{product.productName}</h1>
@@ -148,7 +134,7 @@ export default function AddToCard({
               color: '#fff',
             }}
           >
-            Thêm vào giỏ hàng
+            {textButton}
           </Button>
         </div>
       </Modal>

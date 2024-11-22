@@ -11,7 +11,12 @@ import ProductOverview from './productOverview'
 import InforProduct from './inforProduct'
 import { notification } from 'antd'
 import AddToCard from './addToCard'
-
+import { useProductClient } from '@/zustand/productClient'
+import cartService from '@/services/cart/cart.service'
+import toast from 'react-hot-toast'
+import { mutate } from 'swr'
+import orderService from '@/services/order/order.service'
+import { useRouter } from 'next/navigation'
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
@@ -20,7 +25,8 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
   const [mainImage, setMainImage] = useState(product.imgUrls[0]) // New state for the main image
   const { getMaterialName, getConditionName, getStyleName } = useGetName()
   const { setOpenCreateExchangeModal, setData } = useExchange()
-
+  const { openAddToCardModal, toggleAddToCardModal, openOrderNowModal, toggleOrderNowModal } = useProductClient()
+  const router = useRouter()
   const uniqueSizes = Array.from(new Set(product.sizeVariants.map((v) => v.size)))
   const uniqueColors = Array.from(new Set(product.sizeVariants.map((v) => v.colors)))
 
@@ -106,6 +112,49 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
     setOpenCreateExchangeModal(true)
   }
 
+  const handleAddToCard = async () => {
+    const data = {
+      productId: product._id,
+      size: selectedSize || '',
+      color: selectedColor || '',
+      amount: count,
+    }
+    await cartService.addToCart(
+      data,
+      () => {
+        toast.success('Đã thêm sản phẩm vào giỏ hàng!')
+        mutate('/api/cart')
+        close()
+        setSelectedColor('')
+        setSelectedSize('')
+        setCount(1)
+      },
+      (message: string) => {
+        toast.error(message)
+      },
+    )
+  }
+
+  const handleOrderNow = async () => {
+    const data = {
+      productId: product._id,
+      size: selectedSize || '',
+      color: selectedColor || '',
+      quantity: count,
+    }
+    await orderService.createOrderNow(
+      data,
+      (res) => {
+        toast.success('Đặt hàng thành công!, chuyển hướng đến trang thanh toán')
+        router.push(`/checkout/${res.order._id}`)
+      },
+      (message) => {
+        toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
+        console.log(message)
+      },
+    )
+  }
+
   const { user } = useAuth()
 
   if (product)
@@ -129,6 +178,33 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
           totalQuantity={totalQuantity}
           setSelectedColor={setSelectedColor}
           setSelectedSize={setSelectedSize}
+          open={openAddToCardModal}
+          close={() => toggleAddToCardModal()}
+          title="Thêm vào giỏ hàng"
+          textButton="Thêm vào giỏ hàng"
+          handleOnClick={handleAddToCard}
+        />
+        <AddToCard
+          product={product}
+          uniqueColors={uniqueColors}
+          uniqueSizes={uniqueSizes}
+          selectedColor={selectedColor}
+          selectedSize={selectedSize}
+          validColors={validColors}
+          validSizes={validSizes}
+          count={count}
+          setCount={setCount}
+          handleColorToggle={handleColorToggle}
+          handleSizeToggle={handleSizeToggle}
+          maxQuantity={maxQuantity}
+          totalQuantity={totalQuantity}
+          setSelectedColor={setSelectedColor}
+          setSelectedSize={setSelectedSize}
+          open={openOrderNowModal}
+          close={() => toggleOrderNowModal()}
+          title="Đặt hàng ngay"
+          textButton="Đặt hàng ngay"
+          handleOnClick={handleOrderNow}
         />
         <div className="px-2 py-0 md:px-36 md:py-5 md:mt-5 md:bg-slate-50">
           <ProductOverview

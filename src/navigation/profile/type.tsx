@@ -66,6 +66,15 @@ export const useProfileLinks = () => {
           ),
         },
         {
+          key: 'orders-management',
+          icon: <IconifyIcon icon="lsicon:order-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
+          label: (
+            <Link href="/orders-management" className="text-sm md:text-lg font-thin">
+              Quản lý đơn hàng
+            </Link>
+          ),
+        },
+        {
           key: 'exchange-management',
           icon: <IconifyIcon icon="carbon:ibm-data-product-exchange" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (

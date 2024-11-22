@@ -32,6 +32,10 @@ const navLinks: navLink[] = [
     label: 'Đổi trả',
   },
   {
+    href: '/order-management',
+    label: 'Quản lý đơn hàng',
+  },
+  {
     href: '/user-style',
     label: 'Phong cách',
   },

@@ -3,7 +3,7 @@
 import { Avatar, Menu, rem, Text, UnstyledButton, ScrollArea } from '@mantine/core'
 import { Dropdown, MenuProps } from 'antd'
 import Link from 'next/link'
-import { IconSettings, IconTruck, IconLogout } from '@tabler/icons-react'
+import { IconSettings, IconTruck, IconLogout, IconClipboardData } from '@tabler/icons-react'
 import IconifyIcon from '@/components/icons'
 import { useAuth } from '@/hooks/useAuth'
 import { useExchange } from '@/zustand/exchange'
@@ -231,6 +231,11 @@ export default function RightSection({
               <Link href="/profile">
                 <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
                   Thông tin tài khoản
+                </Menu.Item>
+              </Link>
+              <Link href="/orders-management">
+                <Menu.Item leftSection={<IconClipboardData style={{ width: rem(14), height: rem(14) }} />}>
+                  Đơn hàng của tôi
                 </Menu.Item>
               </Link>
               <Link href="/product-management">

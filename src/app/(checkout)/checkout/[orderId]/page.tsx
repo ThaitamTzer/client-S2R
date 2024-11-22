@@ -2,6 +2,7 @@
 
 import ChangeAddressModal from '@/components/checkout/changeAddressModal'
 import CheckoutPage from '@/components/checkout/checkoutPage'
+import PurchasedPage from '@/components/checkout/purchasedPage'
 import orderService from '@/services/order/order.service'
 import { Order } from '@/types/orderTypes'
 import dynamic from 'next/dynamic'
@@ -26,6 +27,8 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
         setOrder(data)
       }
     },
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
   })
 
   if (!order) return null
@@ -34,7 +37,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     <>
       <NavigationWithBgAlways navLink={navLinks} />
       <ChangeAddressModal />
-      <CheckoutPage order={order} />
+      {order.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
     </>
   )
 }

@@ -10,9 +10,14 @@ import { useState } from 'react'
 import { useOrderStore } from '@/zustand/order'
 import checkoutService, { Success } from '@/services/checkout/checkout.service'
 import NavigateToMomo from './navigateToMomo'
+import toast from 'react-hot-toast'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 export default function CheckoutPage({ order }: { order: Order }) {
   const { getColorName } = useGetName()
+  const searchParams = useSearchParams()
+  const callback = searchParams.get('callback')
   const [checked, setChecked] = useState('2')
   const [paymentMethod, setPaymentMethod] = useState('2')
   const { toggleChangeAddressModal, setIdOrder, setAddress, setPhone } = useOrderStore()
@@ -63,15 +68,30 @@ export default function CheckoutPage({ order }: { order: Order }) {
   }
 
   const handleMomoPayment = async () => {
+    if (!order.address || !order.phone) {
+      toast.error('Vui lòng điền địa chỉ nhận hàng')
+      return
+    }
     await checkoutService.momoPayment(order._id, (res: Success) => {
       setPayUrl(res.response.payUrl)
     })
   }
 
+  console.log(order)
+
   return (
     <>
       <NavigateToMomo payUrl={payUrl} setPayUrl={setPayUrl} />
       <div className="container mx-auto px-2 md:px-36 py-10 md:pt-20">
+        {callback === 'orders-management' && (
+          <Link
+            href="/orders-management"
+            className="text-green-900 text-md font-semibold flex flex-row gap-2 items-center"
+          >
+            <IconifyIcon icon="icon-park-outline:left-two" className="w-6 h-6" /> Quay lại trang đơn hàng của bạn
+          </Link>
+        )}
+
         <div className="flex flex-row justify-between space-x-6">
           <div className="w-2/3 flex flex-col gap-4">
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -88,47 +108,43 @@ export default function CheckoutPage({ order }: { order: Order }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.subOrders
-                      .filter((subOrder) => subOrder.status === 'pending')
-                      .map((subOrder) => (
-                        <tr key={subOrder._id} className="border-b border-gray-200">
-                          {subOrder.products.map((product) => (
-                            <>
-                              <td className="py-4">
-                                <div className="flex flex-row gap-4">
-                                  <div className="w-[90px] h-[130px] relative rounded-md overflow-hidden">
-                                    <Image
-                                      src={product.productId.imgUrls[0]}
-                                      alt={product.productName}
-                                      width={100}
-                                      height={100}
-                                      loading="lazy"
-                                      quality={70}
-                                      className="object-cover absolute top-0 left-0 w-full h-full"
-                                    />
-                                  </div>
-                                  <div className="flex flex-col gap-3 max-w-[320px]">
-                                    <div className="text-lg text-green-900 font-semibold text-wrap">
-                                      {product.productName}
-                                    </div>
-                                    <div>
-                                      <p className="text-md">Kích thước: {product.size}</p>
-                                      <p className="text-md">Màu sắc: {getColorName(product.color)}</p>
-                                    </div>
-                                  </div>
+                    {order.subOrders.map((subOrder) =>
+                      subOrder.products.map((product) => (
+                        <tr key={product._id} className="border-b border-gray-200">
+                          <td className="py-4">
+                            <div className="flex flex-row gap-4">
+                              <div className="w-[90px] h-[130px] relative rounded-md overflow-hidden">
+                                <Image
+                                  src={product.productId.imgUrls[0]}
+                                  alt={product.productName}
+                                  width={100}
+                                  height={100}
+                                  loading="lazy"
+                                  quality={70}
+                                  className="object-cover absolute top-0 left-0 w-full h-full"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-3 max-w-[320px]">
+                                <div className="text-lg text-green-900 font-semibold text-wrap">
+                                  {product.productName}
                                 </div>
-                              </td>
-                              <td className="text-center py-4">{product.quantity}</td>
-                              <td className="text-center py-4">{formatPrice(product.price) + 'đ'}</td>
-                              <td className="text-center py-4">
-                                <button className="text-red-500">
-                                  <IconifyIcon icon="iconamoon:trash" className="w-6 h-6 text-red-900" />
-                                </button>
-                              </td>
-                            </>
-                          ))}
+                                <div>
+                                  <p className="text-md">Kích thước: {product.size}</p>
+                                  <p className="text-md">Màu sắc: {getColorName(product.color)}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="text-center py-4">{product.quantity}</td>
+                          <td className="text-center py-4">{formatPrice(product.price) + 'đ'}</td>
+                          <td className="text-center py-4">
+                            <button className="text-red-500">
+                              <IconifyIcon icon="iconamoon:trash" className="w-6 h-6 text-red-900" />
+                            </button>
+                          </td>
                         </tr>
-                      ))}
+                      )),
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -254,10 +270,10 @@ export default function CheckoutPage({ order }: { order: Order }) {
             </div>
             <Button
               type="button"
-              disabled={order.address === '' || order.phone === ''}
+              disabled={!order.address || !order.phone}
               onClick={handleMomoPayment}
               style={{
-                backgroundColor: '#16a34a',
+                backgroundColor: !order.address || !order.phone ? '#ccc' : '#16a34a',
                 color: '#fff',
                 fontWeight: 'bold',
                 fontSize: '30px',
@@ -267,6 +283,9 @@ export default function CheckoutPage({ order }: { order: Order }) {
             >
               Đặt mua
             </Button>
+            {(!order.address || !order.phone) && (
+              <p className="text-red-500 text-center">Vui lòng điền địa chỉ nhận hàng</p>
+            )}
           </div>
         </div>
       </div>
