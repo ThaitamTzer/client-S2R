@@ -18,8 +18,37 @@ const Navigation = lazy(() => import('@/components/nav'))
 const HomePageTitle = lazy(() => import('@/components/homepage/HomepageTitle'))
 
 export const metadata: Metadata = {
-  title: 'Share2Receive',
-  description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+  title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+  description:
+    'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng ',
+  keywords: [
+    'trao đổi đồ',
+    'thời trang bền vững',
+    'second hand',
+    'tủ đồ thông minh',
+    'share2receive',
+    'Share2Receive, trao đổi đồ dùng thời trang, tủ đồ gọn gàng',
+  ],
+  robots: 'index, follow',
+  authors: [{ name: 'Share2Receive', url: 'https://share2receive-client.vercel.app' }],
+  creator: 'Share2Receive',
+  publisher: 'Share2Receive',
+  metadataBase: new URL('https://share2receive-client.vercel.app'),
+  alternates: {
+    canonical: 'https://share2receive-client.vercel.app',
+  },
+  openGraph: {
+    title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+    description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+    url: 'https://share2receive-client.vercel.app',
+    siteName: 'Share2Receive',
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+    description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+  },
 }
 
 export default function Home() {
