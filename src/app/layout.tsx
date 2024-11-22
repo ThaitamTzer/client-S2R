@@ -37,12 +37,12 @@ export const metadata: Metadata = {
   publisher: 'Share2Receive',
   robots: 'index, follow',
   alternates: {
-    canonical: 'share2receive-client.vercel.app',
+    canonical: 'https://share2receive-client.vercel.app',
   },
   openGraph: {
     title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang',
     description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang hàng đầu Việt Nam',
-    url: 'share2receive-client.vercel.app',
+    url: 'https://share2receive-client.vercel.app',
     siteName: 'Share2Receive',
     images: [
       {
@@ -82,6 +82,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#16a34a" />
         <link rel="icon" href="./favicon.ico" sizes="any" />
+        <link rel="canonical" href="https://share2receive-client.vercel.app" />
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
