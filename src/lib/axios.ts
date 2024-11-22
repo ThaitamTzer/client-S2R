@@ -12,6 +12,10 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  responseEncoding: 'utf8',
+  responseType: 'json',
+  timeout: 15000, // 15 seconds
+  timeoutErrorMessage: 'Request timeout',
   withCredentials: true,
 })
 
@@ -48,7 +52,6 @@ axiosClient.interceptors.response.use(
           .catch(() => {
             // Logout user clear cookies
             Cookies.remove('jwt')
-            
           })
 
         return axiosClient(prevReq)
@@ -59,6 +62,8 @@ axiosClient.interceptors.response.use(
         return Promise.reject(error)
       }
     }
+
+    return Promise.reject(error)
   },
 )
 

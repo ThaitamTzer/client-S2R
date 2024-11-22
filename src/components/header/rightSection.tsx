@@ -11,6 +11,8 @@ import { useLoginModal } from '@/zustand/loginModal'
 import { NotificationType } from '@/types/notificationType'
 import { useUserAction } from '@/zustand/user'
 import ChatDropdown from '../chat/chatDropdown'
+import { useProductClient } from '@/zustand/productClient'
+import { useCart } from '@/zustand/cart'
 
 const items: MenuProps['items'] = [
   {
@@ -44,6 +46,8 @@ export default function RightSection({
   const { toogleExchangeModal, listExchangeRev } = useExchange()
   const { openModal } = useLoginModal()
   const { setOpenChatDropdown } = useUserAction()
+  const { toggleCartDrawer } = useProductClient()
+  const { cartItems } = useCart()
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
   const pendingExchangeCount =
@@ -122,21 +126,6 @@ export default function RightSection({
 
         {user && (
           <>
-            {/* favorite */}
-            <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
-              <IconifyIcon
-                icon="mynaui:heart"
-                className="text-green-900"
-                style={{
-                  width: rem(29),
-                  height: rem(29),
-                }}
-              />
-            </UnstyledButton>
-          </>
-        )}
-        {user && (
-          <>
             {/* message */}
             <Menu
               shadow="md"
@@ -168,8 +157,38 @@ export default function RightSection({
             </Menu>
           </>
         )}
-
-        {/* cart */}
+        {user && (
+          <>
+            {/* cart */}
+            <UnstyledButton onClick={toggleCartDrawer} className="relative">
+              {cartItems.length > 0 ? (
+                <>
+                  <IconifyIcon
+                    icon="mynaui:cart-solid"
+                    className="text-green-900"
+                    style={{
+                      width: rem(29),
+                      height: rem(29),
+                    }}
+                  />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartItems.length}
+                  </span>
+                </>
+              ) : (
+                <IconifyIcon
+                  icon="mynaui:cart"
+                  className="text-green-900"
+                  style={{
+                    width: rem(29),
+                    height: rem(29),
+                  }}
+                />
+              )}
+            </UnstyledButton>
+          </>
+        )}
+        {/* bag */}
         <Dropdown placement="bottom" arrow menu={{ items }}>
           <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
             <IconifyIcon

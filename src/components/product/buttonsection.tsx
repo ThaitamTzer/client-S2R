@@ -3,6 +3,7 @@ import { ProductsClient } from '@/types/users/productTypes'
 import { Button } from 'antd'
 import IconifyIcon from '../icons'
 import { useUserAction } from '@/zustand/user'
+import { useProductClient } from '@/zustand/productClient'
 import { mutate } from 'swr'
 
 export default function ButtonSection({
@@ -16,6 +17,7 @@ export default function ButtonSection({
   onCreateExchange: () => void
 }) {
   const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
+  const { toggleAddToCardModal, setProductToAdd } = useProductClient()
 
   const handleSelectChat = (item: ProductsClient) => {
     setRoomId([user?._id, item.userId._id].sort().join('_'))
@@ -108,41 +110,64 @@ export default function ButtonSection({
         )}
 
         {product.type === 'sale' && (
-          <>
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-row gap-3">
+              <Button
+                onClick={() => {
+                  setProductToAdd(product)
+                  toggleAddToCardModal()
+                }}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  width: '200px',
+                  height: '55px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  backgroundColor: '#b2e5be',
+                  color: '#179d49',
+                }}
+              >
+                Thêm vào giỏ hàng
+              </Button>
+
+              <Button
+                variant="outlined"
+                type="primary"
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  width: '200px',
+                  height: '55px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  backgroundColor: '#179d49',
+                  color: '#fff',
+                }}
+              >
+                Mua ngay
+              </Button>
+            </div>
             <Button
+              onClick={() => {
+                handleSelectChat(product)
+              }}
+              variant="outlined"
               style={{
                 padding: '8px 16px',
                 borderRadius: '20px',
                 marginRight: '16px',
-                width: '200px',
+                width: '100%',
                 height: '55px',
                 fontSize: '16px',
                 fontWeight: 'bold',
-                backgroundColor: '#b2e5be',
+                backgroundColor: '#fff',
                 color: '#179d49',
               }}
             >
               Liên hệ ngay
             </Button>
-
-            <Button
-              variant="outlined"
-              type="primary"
-              style={{
-                padding: '8px 16px',
-                borderRadius: '20px',
-                marginRight: '16px',
-                width: '200px',
-                height: '55px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                backgroundColor: '#179d49',
-                color: '#fff',
-              }}
-            >
-              Mua ngay
-            </Button>
-          </>
+          </div>
         )}
         {product.type === 'donate' && (
           <>

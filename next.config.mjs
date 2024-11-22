@@ -10,6 +10,7 @@ const nextConfig = {
       'raw.githubusercontent.com',
       'minio.theciu.vn',
       'i.pravatar.cc',
+      'picsum.photos',
     ],
   },
 }

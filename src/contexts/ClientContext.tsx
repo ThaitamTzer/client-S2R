@@ -14,6 +14,7 @@ import exChangeService from '@/services/exchange/exchange.service'
 import { useExchange } from '@/zustand/exchange'
 import messageService from '@/services/message/message.service'
 import { useUserAction } from '@/zustand/user'
+import { useMediaQuery } from '@mantine/hooks'
 
 type ClientValuesType = {
   loading: boolean
@@ -23,6 +24,7 @@ type ClientValuesType = {
   brands: Brand[] | null
   setBrands: (value: Brand[] | null) => void
   productsUser: Product[] | null
+  isMobile: boolean | undefined
 }
 
 const defaultProvider: ClientValuesType = {
@@ -33,6 +35,7 @@ const defaultProvider: ClientValuesType = {
   brands: null,
   setBrands: () => null,
   productsUser: null,
+  isMobile: false,
 }
 
 const ClientContext = createContext(defaultProvider)
@@ -51,6 +54,7 @@ const ClientProvider = ({ children }: Props) => {
   const { setListExchangeRev } = useExchange()
   const { setRooms } = useUserAction()
   const { user } = useAuth()
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   useSWR('/api/category/list-category-client', categoryService.gellClientCategories, {
     onLoadingSlow: () => {
@@ -122,6 +126,7 @@ const ClientProvider = ({ children }: Props) => {
     setBrands,
     productsUser,
     setProductsUser,
+    isMobile,
   }
 
   return <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

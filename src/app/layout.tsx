@@ -10,9 +10,13 @@ import Loading from './loading'
 import Header from '@/partials/header'
 import Footer from '@/partials/footer'
 import Chat from '@/components/chat/chat'
+import dynamic from 'next/dynamic'
+
+const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
 const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
 const LoginModal = lazy(() => import('@/components/loginModal'))
+const CartDrawer = dynamic(() => import('@/components/cart/cartDrawer'), { ssr: false })
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -22,13 +26,41 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Share2Receive',
+    default: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang',
     template: '%s | Share2Receive',
   },
-  icons: {
-    icon: '/logo.png',
+  description:
+    'Share2Receive - Nền tảng trao đổi đồ dùng thời trang hàng đầu Việt Nam, giúp tủ đồ gọn gàng và bảo vệ môi trường',
+  keywords: ['trao đổi đồ', 'thời trang bền vững', 'second hand', 'tủ đồ thông minh', 'share2receive'],
+  authors: [{ name: 'Share2Receive Team' }],
+  creator: 'Share2Receive',
+  publisher: 'Share2Receive',
+  robots: 'index, follow',
+  alternates: {
+    canonical: 'share2receive-client.vercel.app',
   },
-  description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
+  openGraph: {
+    title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang',
+    description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang hàng đầu Việt Nam',
+    url: 'share2receive-client.vercel.app',
+    siteName: 'Share2Receive',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Share2Receive Preview Image',
+      },
+    ],
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang',
+    description: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang hàng đầu Việt Nam',
+    images: ['/twitter-image.jpg'],
+  },
 }
 
 export default function RootLayout({
@@ -44,6 +76,11 @@ export default function RootLayout({
       lang="en"
     >
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href={`${apiDomain}/api`} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#16a34a" />
         <link rel="icon" href="./favicon.ico" sizes="any" />
         <ColorSchemeScript />
       </head>
@@ -52,6 +89,7 @@ export default function RootLayout({
           <Providers>
             <Header />
             <ExChangeDrawer />
+            <CartDrawer />
             <main className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}>
               <LoginModal />
               {children}

@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic'
 import ProductOverview from './productOverview'
 import InforProduct from './inforProduct'
 import { notification } from 'antd'
+import AddToCard from './addToCard'
 
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
 
@@ -112,6 +113,23 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
       <>
         {contextHolder}
         <CreateExchangeModal />
+        <AddToCard
+          product={product}
+          uniqueColors={uniqueColors}
+          uniqueSizes={uniqueSizes}
+          selectedColor={selectedColor}
+          selectedSize={selectedSize}
+          validColors={validColors}
+          validSizes={validSizes}
+          count={count}
+          setCount={setCount}
+          handleColorToggle={handleColorToggle}
+          handleSizeToggle={handleSizeToggle}
+          maxQuantity={maxQuantity}
+          totalQuantity={totalQuantity}
+          setSelectedColor={setSelectedColor}
+          setSelectedSize={setSelectedSize}
+        />
         <div className="px-2 py-0 md:px-36 md:py-5 md:mt-5 md:bg-slate-50">
           <ProductOverview
             product={product}
