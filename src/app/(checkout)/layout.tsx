@@ -1,11 +1,4 @@
-import { Suspense, lazy } from 'react'
-const NavigationWithBgAlways = lazy(() => import('@/components/navWithBgAlway'))
-
-const navLinks = {
-  href: '/checkout/[orderId]',
-  label: 'Thanh toán',
-}
-
+import { Suspense } from 'react'
 export default function CheckoutLayout({
   children,
 }: Readonly<{
