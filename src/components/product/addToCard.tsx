@@ -69,6 +69,7 @@ export default function AddToCard({
   const handleAddToCard = async () => {
     if (addToCard) {
       handleOnClick()
+      onClose()
     }
   }
 

@@ -70,7 +70,16 @@ export const useProfileLinks = () => {
           icon: <IconifyIcon icon="lsicon:order-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (
             <Link href="/orders-management" className="text-sm md:text-lg font-thin">
-              Quản lý đơn hàng
+              Đơn hàng của tôi
+            </Link>
+          ),
+        },
+        {
+          key: 'sell-management',
+          icon: <IconifyIcon icon="material-symbols:orders-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
+          label: (
+            <Link href="/sell-management" className="text-sm md:text-lg font-thin">
+              Quản lý đơn bán
             </Link>
           ),
         },

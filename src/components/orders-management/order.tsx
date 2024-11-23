@@ -22,8 +22,6 @@ export default function OrderManagement() {
     revalidateOnMount: true,
   })
 
-  console.log(orders)
-
   return (
     <div className="container px-1 md:px-10 mx-auto">
       <div className="title text-black text-2xl font-semibold">

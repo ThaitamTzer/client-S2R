@@ -6,13 +6,16 @@ import { formatPrice } from '@/helper/format'
 import { useGetName } from '@/helper/getName'
 import IconifyIcon from '../icons'
 import { Button, Radio, Stack } from '@mantine/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useOrderStore } from '@/zustand/order'
 import checkoutService, { Success } from '@/services/checkout/checkout.service'
 import NavigateToMomo from './navigateToMomo'
 import toast from 'react-hot-toast'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useAuth } from '@/hooks/useAuth'
+import orderService from '@/services/order/order.service'
+import { mutate } from 'swr'
 
 export default function CheckoutPage({ order }: { order: Order }) {
   const { getColorName } = useGetName()
@@ -22,50 +25,25 @@ export default function CheckoutPage({ order }: { order: Order }) {
   const [paymentMethod, setPaymentMethod] = useState('2')
   const { toggleChangeAddressModal, setIdOrder, setAddress, setPhone } = useOrderStore()
   const [payUrl, setPayUrl] = useState('')
-  const renderDeliveryContent = () => {
-    if (checked === '1') {
-      return (
-        <div className="flex flex-col gap-3 mt-4">
-          <p className="text-lg font-semibold">Địa chỉ cửa hàng:</p>
-          <p className="text-md">123 Đường ABC, Quận XYZ, TP.HCM</p>
-          <p className="text-md">Thời gian: 8h00 - 22h00 các ngày trong tuần</p>
-        </div>
-      )
-    }
+  const { user } = useAuth()
 
-    if (checked === '2') {
-      return (
-        <div className="flex flex-col gap-3 mt-4">
-          <p className="text-lg font-semibold">Thời gian giao hàng dự kiến từ 2 - 7 ngày</p>
-          <div className="flex flex-row items-center gap-3">
-            <p className="text-lg font-semibold text-green-900">22.000đ</p>
-            <div className="w-16 h-10 relative">
-              <Image
-                src="/misc/giao-hang-nhanh-icon.png"
-                alt="delivery"
-                width={70}
-                height={70}
-                loading="lazy"
-                quality={70}
-                className="object-cover absolute top-0 left-0 w-full h-full"
-              />
-            </div>
-            <div className="w-16 h-10 relative">
-              <Image
-                src="/misc/vn-post-icon.png"
-                alt="delivery"
-                width={70}
-                height={70}
-                loading="lazy"
-                quality={70}
-                className="object-cover absolute top-0 left-0 w-full h-full"
-              />
-            </div>
-          </div>
-        </div>
+  useEffect(() => {
+    if (user?.address && user?.phone && !order.address && !order.phone) {
+      orderService.updateAddressOrder(
+        order._id,
+        {
+          address: user.address,
+          phone: user.phone,
+          type: 'momo_wallet',
+        },
+        () => {
+          setAddress(user.address)
+          setPhone(user.phone)
+          mutate(['/order/id', order._id])
+        },
       )
     }
-  }
+  }, [user, order, setAddress, setPhone])
 
   const handleMomoPayment = async () => {
     if (!order.address || !order.phone) {
@@ -77,7 +55,44 @@ export default function CheckoutPage({ order }: { order: Order }) {
     })
   }
 
-  console.log(order)
+  const handleConfirmPayment = async () => {
+    await checkoutService.confirmPayment(
+      order._id,
+      () => {
+        mutate(['/order/id', order._id])
+      },
+      () => {
+        toast.error('Cập nhật trạng thái thanh toán thất bại, vui lòng liên hệ với chúng tôi qua mail')
+      },
+    )
+  }
+
+  const handleDeleteSubOrder = async (subOrderId: string) => {
+    await orderService.deleteSubOrder(
+      subOrderId,
+      () => {
+        mutate(['/order/id', order._id])
+        toast.success('Xóa đơn hàng thành công')
+      },
+      () => {
+        toast.error('Xóa đơn hàng thất bại, vui lòng liên hệ với chúng tôi qua mail')
+      },
+    )
+  }
+
+  const handleDeleteOrderProduct = async (subOrderId: string, productId: string) => {
+    await orderService.deleteOrderProduct(
+      subOrderId,
+      productId,
+      () => {
+        mutate(['/order/id', order._id])
+        toast.success('Xóa sản phẩm thành công')
+      },
+      () => {
+        toast.error('Xóa sản phẩm thất bại, vui lòng liên hệ với chúng tôi qua mail')
+      },
+    )
+  }
 
   return (
     <>
@@ -108,43 +123,75 @@ export default function CheckoutPage({ order }: { order: Order }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.subOrders.map((subOrder) =>
-                      subOrder.products.map((product) => (
-                        <tr key={product._id} className="border-b border-gray-200">
-                          <td className="py-4">
-                            <div className="flex flex-row gap-4">
-                              <div className="w-[90px] h-[130px] relative rounded-md overflow-hidden">
-                                <Image
-                                  src={product.productId.imgUrls[0]}
-                                  alt={product.productName}
-                                  width={100}
-                                  height={100}
-                                  loading="lazy"
-                                  quality={70}
-                                  className="object-cover absolute top-0 left-0 w-full h-full"
-                                />
-                              </div>
-                              <div className="flex flex-col gap-3 max-w-[320px]">
-                                <div className="text-lg text-green-900 font-semibold text-wrap">
-                                  {product.productName}
+                    {order.subOrders.map((subOrder) => (
+                      <>
+                        <tr className="bg-white">
+                          <td colSpan={1} className="py-2 px-4">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">
+                                <div className="flex flex-row gap-2 items-center">
+                                  <span>Người bán:</span>
+                                  <Image
+                                    src={subOrder.sellerId.avatar}
+                                    alt={subOrder.sellerId.firstname + ' ' + subOrder.sellerId.lastname}
+                                    width={25}
+                                    height={25}
+                                    loading="lazy"
+                                    quality={70}
+                                    className="rounded-full"
+                                  />
+                                  {subOrder.sellerId.firstname + ' ' + subOrder.sellerId.lastname}
                                 </div>
-                                <div>
-                                  <p className="text-md">Kích thước: {product.size}</p>
-                                  <p className="text-md">Màu sắc: {getColorName(product.color)}</p>
-                                </div>
-                              </div>
+                              </span>
                             </div>
                           </td>
-                          <td className="text-center py-4">{product.quantity}</td>
-                          <td className="text-center py-4">{formatPrice(product.price) + 'đ'}</td>
+                          <td colSpan={2}></td>
                           <td className="text-center py-4">
-                            <button className="text-red-500">
+                            <button onClick={() => handleDeleteSubOrder(subOrder._id)} className="text-red-500">
                               <IconifyIcon icon="iconamoon:trash" className="w-6 h-6 text-red-900" />
                             </button>
                           </td>
                         </tr>
-                      )),
-                    )}
+                        {subOrder.products.map((product) => (
+                          <tr key={product._id} className="border-b border-gray-200">
+                            <td className="py-4">
+                              <div className="flex flex-row gap-4">
+                                <div className="w-[90px] h-[130px] relative rounded-md overflow-hidden">
+                                  <Image
+                                    src={product.productId.imgUrls[0]}
+                                    alt={product.productName}
+                                    width={100}
+                                    height={100}
+                                    loading="lazy"
+                                    quality={70}
+                                    className="object-cover absolute top-0 left-0 w-full h-full"
+                                  />
+                                </div>
+                                <div className="flex flex-col gap-3 max-w-[320px]">
+                                  <div className="text-lg text-green-900 font-semibold text-wrap">
+                                    {product.productName}
+                                  </div>
+                                  <div>
+                                    <p className="text-md">Kích thước: {product.size}</p>
+                                    <p className="text-md">Màu sắc: {getColorName(product.color)}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="text-center py-4">{product.quantity}</td>
+                            <td className="text-center py-4">{formatPrice(product.price) + 'đ'}</td>
+                            <td className="text-center py-4">
+                              <button
+                                onClick={() => handleDeleteOrderProduct(subOrder._id, product._id)}
+                                className="text-red-500"
+                              >
+                                <IconifyIcon icon="iconamoon:trash" className="w-6 h-6 text-red-900" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -155,11 +202,9 @@ export default function CheckoutPage({ order }: { order: Order }) {
                 <div className="flex flex-col space-y-4">
                   <Radio.Group name="deliveryMethod" withAsterisk value={checked} onChange={setChecked}>
                     <Stack mt="xs">
-                      <Radio size="lg" color="green" value="1" label="Nhận hàng tại cửa hàng" />
-                      <Radio size="lg" color="green" value="2" label="Giao hàng tận nơi" />
+                      <Radio size="lg" color="green" value="2" label="Vận chuyển tự thỏa thuận" />
                     </Stack>
                   </Radio.Group>
-                  {renderDeliveryContent()}
                 </div>
               </div>
             </div>
@@ -256,15 +301,8 @@ export default function CheckoutPage({ order }: { order: Order }) {
               <h1 className="text-2xl font-bold">Thông tin thanh toán</h1>
               <div className="w-full flex flex-col gap-2">
                 <p className="text-xl font-normal flex justify-between">
-                  Tổng tiền hàng:{' '}
-                  <span className="font-semibold text-green-900">{formatPrice(order.totalAmount) + 'đ'}</span>
-                </p>
-                <p className="text-xl font-normal flex justify-between">
-                  Phí vận chuyển: <span className="font-semibold text-green-900">22.000đ</span>
-                </p>
-                <p className="text-xl font-normal flex justify-between">
                   Tổng tiền thanh toán:{' '}
-                  <span className="font-semibold text-green-900">{formatPrice(order.totalAmount + 22000) + 'đ'}</span>
+                  <span className="font-semibold text-green-900">{formatPrice(order.totalAmount) + 'đ'}</span>
                 </p>
               </div>
             </div>
@@ -281,8 +319,36 @@ export default function CheckoutPage({ order }: { order: Order }) {
                 height: '80px',
               }}
             >
-              Đặt mua
+              Thanh toán
             </Button>
+            {order.transactionId && (
+              <>
+                <p className="text-green-900 text-center">Bạn đã thanh toán đơn hàng này?</p>
+                <p className="text-green-900 text-center">
+                  Hãy nhấn vào nút xác minh đã toán để cập nhật trạng thái thanh toán hoặc liên hệ với chúng tôi qua
+                  mail{' '}
+                  <a className="underline" href="mailto:share2recieve.support@gmail.com">
+                    share2recieve.support@gmail.com{' '}
+                  </a>
+                  để được hỗ trợ
+                </p>
+                <Button
+                  type="button"
+                  disabled={!order.address || !order.phone}
+                  onClick={handleConfirmPayment}
+                  style={{
+                    backgroundColor: !order.address || !order.phone ? '#ccc' : '#16a34a',
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    fontSize: '30px',
+                    width: '100%',
+                    height: '80px',
+                  }}
+                >
+                  Xác nhận đã thanh toán
+                </Button>
+              </>
+            )}
             {(!order.address || !order.phone) && (
               <p className="text-red-500 text-center">Vui lòng điền địa chỉ nhận hàng</p>
             )}

@@ -1,5 +1,6 @@
 import axiosClient from '@/lib/axios'
 import { CreateOrderNow, Order, Orders, UpdateAddressOrder } from '@/types/orderTypes'
+import { SellType } from '@/types/sellType'
 
 const orderService = {
   createOrder: async (success?: (res: any) => void, errorMessage?: (message: string) => void) => {
@@ -16,7 +17,7 @@ const orderService = {
 
   getAllOrders: (): Promise<Orders> => axiosClient.get('/api/orders'),
 
-  getAllOrdersByUser: (): Promise<Orders> => axiosClient.get('/api/orders/user'),
+  getAllOrdersByUser: (): Promise<SellType> => axiosClient.get('/api/orders/get-order-for-seller'),
 
   getOrderById: async (id: string): Promise<Order> => {
     const res = await axiosClient.get(`/api/orders/${id}`)
@@ -77,7 +78,37 @@ const orderService = {
     errorMessage?: (message: string) => void,
   ) => {
     try {
-      return await axiosClient.patch(`/api/orders/${id}`, { status }).then(() => success && success())
+      return await axiosClient
+        .patch(`/api/orders/update-status-for-sell/${id}`, { status })
+        .then(() => success && success())
+    } catch (error: any) {
+      if (error) {
+        if (errorMessage) {
+          errorMessage(error.response?.data.message)
+        }
+      }
+    }
+  },
+
+  deleteSubOrder: async (subOrderId: string, success?: () => void, errorMessage?: (message: string) => void) => {
+    try {
+      return await axiosClient.delete(`/api/orders/${subOrderId}`).then(() => success && success())
+    } catch (error: any) {
+      if (error) {
+        if (errorMessage) {
+          errorMessage(error.response?.data.message)
+        }
+      }
+    }
+  },
+  deleteOrderProduct: async (
+    subOrderId: string,
+    orderItemId: string,
+    success?: () => void,
+    errorMessage?: (message: string) => void,
+  ) => {
+    try {
+      return await axiosClient.delete(`/api/orders/${subOrderId}/${orderItemId}`).then(() => success && success())
     } catch (error: any) {
       if (error) {
         if (errorMessage) {

@@ -10,6 +10,36 @@ export const useGetName = () => {
   const router = useRouter()
   const param = useSearchParams()
 
+  const getOrderStatusName = (string: string) => {
+    switch (string) {
+      case 'pending':
+        return 'Chờ xử lý'
+      case 'canceled':
+        return 'Đã hủy'
+      case 'shipping':
+        return 'Đang giao hàng'
+      case 'completed':
+        return 'Đã hoàn thành'
+      default:
+        return string
+    }
+  }
+
+  const getOrderPaymentName = (string: string) => {
+    switch (string) {
+      case 'pending':
+        return 'Chờ thanh toán'
+      case 'paid':
+        return 'Đã thanh toán'
+      case 'canceled':
+        return 'Đã hủy'
+      case 'failed':
+        return 'Thanh toán thất bại'
+      default:
+        return string
+    }
+  }
+
   const getTypeCategory = (string: string) => {
     switch (string) {
       case 'male':
@@ -153,6 +183,8 @@ export const useGetName = () => {
     removeTwoTags,
     clearAll,
     getTypeCategory,
+    getOrderStatusName,
+    getOrderPaymentName,
   }
 }
 

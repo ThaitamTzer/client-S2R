@@ -43,7 +43,13 @@ export type Product = {
 export type SubOrder = {
   _id: string
   orderId: string
-  sellerId: string
+  sellerId: {
+    _id: string
+    firstname: string
+    lastname: string
+    avatar: string
+    email: string
+  }
   subTotal: number
   products: Product[]
   status: string
