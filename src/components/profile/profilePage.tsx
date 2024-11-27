@@ -34,6 +34,7 @@ const Profile = () => {
 
       const addressParts = user.address.split(', ')
       const [provinceName, districtName, wardName, street] = addressParts
+      console.log(provinceName, districtName, wardName, street)
 
       try {
         // Tìm và load thông tin tỉnh/thành phố
@@ -50,6 +51,7 @@ const Profile = () => {
 
             // Tìm thông tin phường/xã
             const foundWard = districtData.wards.find((w: any) => w.name === wardName)
+            setWard(foundWard)
 
             // Cập nhật form với đầy đủ thông tin
             form.setFieldsValue({
@@ -105,6 +107,8 @@ const Profile = () => {
     }
     return `${province?.name}, ${districts?.name}, ${ward?.name}`
   }
+
+  console.log(handleGetAddress())
 
   const onFinish = (values: UpdateProfile) => {
     setLoading(true)

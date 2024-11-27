@@ -4,7 +4,7 @@ import ChangeAddressModal from '@/components/checkout/changeAddressModal'
 import CheckoutPage from '@/components/checkout/checkoutPage'
 import PurchasedPage from '@/components/checkout/purchasedPage'
 import orderService from '@/services/order/order.service'
-import { Order } from '@/types/orderTypes'
+import { OrderById } from '@/types/orderTypes'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -21,12 +21,13 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     label: 'Thanh toán',
   }
 
-  const [order, setOrder] = useState<Order | undefined>()
+  const [order, setOrder] = useState<OrderById | undefined>()
 
   const { isLoading } = useSWR(['/order/id', params.orderId], () => orderService.getOrderById(params.orderId), {
     onSuccess(data) {
       if (data) {
         setOrder(data)
+        console.log(data)
       }
     },
     compare(a, b) {
@@ -38,8 +39,6 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     revalidateOnFocus: false,
     revalidateOnMount: true,
   })
-
-  console.log(order?.summary)
 
   if (isLoading) return <Loading />
 

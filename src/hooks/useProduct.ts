@@ -9,6 +9,7 @@ import productService from '@/services/product/product.service'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import { addProduct } from '@/types/users/productTypes'
+import { useAuth } from './useAuth'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -22,6 +23,7 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 //eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useAddProduct = () => {
+  const { user } = useAuth()
   const isDesktop = useMediaQuery('(min-width: 62em)')
   const param = useSearchParams()
 
@@ -32,13 +34,22 @@ export const useAddProduct = () => {
   const sortOrder = param.get('sortOrder') || ''
 
   const { categories, loading, brands } = useClient()
-  const { openAddProductModal, toggleAddProductModal } = useProductManagement()
+  const { openAddProductModal, toggleAddProductModal, setOpenAddressModal } = useProductManagement()
   const [form] = Form.useForm()
   const [activeStep, setActiveStep] = useState(0)
   const [typeCheck, setTypeCheck] = useState('sale')
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+
+  const handleOpenAddProductModal = () => {
+    if (!user?.address || !user?.phone) {
+      setOpenAddressModal(true)
+      toast.error('Vui lòng cập nhật địa chỉ trước khi thêm sản phẩm!')
+      return
+    }
+    toggleAddProductModal()
+  }
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -130,6 +141,7 @@ export const useAddProduct = () => {
   return {
     isDesktop,
     openAddProductModal,
+    handleOpenAddProductModal,
     toggleAddProductModal,
     form,
     activeStep,

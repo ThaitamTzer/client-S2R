@@ -1,6 +1,6 @@
 'use client'
 
-import { Order } from '@/types/orderTypes'
+import { OrderById } from '@/types/orderTypes'
 import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
 import { useGetName } from '@/helper/getName'
@@ -17,7 +17,7 @@ import { useAuth } from '@/hooks/useAuth'
 import orderService from '@/services/order/order.service'
 import { mutate } from 'swr'
 
-export default function CheckoutPage({ order }: { order: Order }) {
+export default function CheckoutPage({ order }: { order: OrderById }) {
   const { getColorName } = useGetName()
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')

@@ -22,6 +22,8 @@ export default function OrderManagement() {
     revalidateOnMount: true,
   })
 
+  console.log(orders?.data)
+
   return (
     <div className="container px-1 md:px-10 mx-auto">
       <div className="title text-black text-2xl font-semibold">
@@ -38,22 +40,22 @@ export default function OrderManagement() {
             </tr>
           </thead>
           <tbody>
-            {orders?.data.map((order) => (
-              <tr key={order.data._id} className="text-center text-sm md:text-xl">
+            {orders?.data?.map((order) => (
+              <tr key={order._id} className="text-center text-sm md:text-xl">
                 <td className="py-3 text-green-900 flex justify-center">
                   <Tooltip label="Xem chi tiết">
                     <div
                       className="text-center truncate max-w-[200px] cursor-pointer hover:text-green-500"
-                      onClick={() => router.push(`/checkout/${order.data._id}?callback=orders-management`)}
+                      onClick={() => router.push(`/checkout/${order._id}?callback=orders-management`)}
                     >
-                      {order.data._id}
+                      {order._id}
                     </div>
                   </Tooltip>
                 </td>
-                <td className="py-3">{formatDate(order.data.createdAt)}</td>
-                <td className="py-3">{formatPrice(order.data.totalAmount) + 'đ'}</td>
+                <td className="py-3">{formatDate(order.createdAt)}</td>
+                <td className="py-3">{formatPrice(order.totalAmount) + 'đ'}</td>
                 <td className="py-3">
-                  {order.data.paymentStatus === 'paid' ? (
+                  {order.paymentStatus === 'paid' ? (
                     <p className="text-green-500">Đã thanh toán</p>
                   ) : (
                     <p className="text-red-500">Chưa thanh toán</p>

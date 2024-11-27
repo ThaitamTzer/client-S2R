@@ -1,6 +1,6 @@
 'use client'
 
-import { Order } from '@/types/orderTypes'
+import { OrderById } from '@/types/orderTypes'
 import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
 import { useSearchParams } from 'next/navigation'
@@ -12,7 +12,7 @@ import toast from 'react-hot-toast'
 import ModalCancel from './modalCancel'
 import { useGetName } from '@/helper/getName'
 
-export default function PurchasedPage({ order }: { order: Order }) {
+export default function PurchasedPage({ order }: { order: OrderById }) {
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
   const [status, setStatus] = useState('')

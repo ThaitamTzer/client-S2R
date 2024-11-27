@@ -74,6 +74,26 @@ export type DataOrder = {
 }
 
 export type Order = {
+  _id: string
+  userId: User
+  phone: string
+  address: string
+  totalAmount: number
+  paymentStatus: string
+  transactionId: string | null
+  type: string
+  subOrders: SubOrder[]
+  createdAt: string | Date
+  updatedAt: string | Date
+  summary: {
+    totalAmount: number
+    totalTypes: number
+    totalPrice: number
+    totalShippingFee: number
+  }
+}
+
+export type OrderById = {
   data: DataOrder
   summary: {
     totalAmount: number

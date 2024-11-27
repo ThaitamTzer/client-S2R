@@ -13,7 +13,7 @@ export default function AddProduct() {
   const {
     isDesktop,
     openAddProductModal,
-    toggleAddProductModal,
+    handleOpenAddProductModal,
     form,
     activeStep,
     setActiveStep,
@@ -48,7 +48,7 @@ export default function AddProduct() {
         icon={<IconPlus size={15} />}
         variant="solid"
         color="primary"
-        onClick={toggleAddProductModal}
+        onClick={handleOpenAddProductModal}
       >
         Thêm
       </Button>
@@ -57,7 +57,7 @@ export default function AddProduct() {
         title="Thêm sản phẩm"
         centered
         open={openAddProductModal}
-        onCancel={toggleAddProductModal}
+        onCancel={handleOpenAddProductModal}
         footer={null}
       >
         <Stepper iconSize={30} active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
@@ -73,7 +73,7 @@ export default function AddProduct() {
               loading={loading}
               setActiveStep={setActiveStep}
               setTypeCheck={setTypeCheck}
-              toggleAddProductModal={toggleAddProductModal}
+              toggleAddProductModal={handleOpenAddProductModal}
               typeCheck={typeCheck}
             />
           </Stepper.Step>

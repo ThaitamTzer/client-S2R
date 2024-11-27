@@ -1,5 +1,5 @@
 import axiosClient from '@/lib/axios'
-import { CreateOrderNow, Order, Orders, UpdateAddressOrder } from '@/types/orderTypes'
+import { CreateOrderNow, OrderById, Orders, UpdateAddressOrder } from '@/types/orderTypes'
 import { SellType } from '@/types/sellType'
 
 const orderService = {
@@ -19,8 +19,8 @@ const orderService = {
 
   getAllOrdersByUser: (): Promise<SellType> => axiosClient.get('/api/orders/get-order-for-seller'),
 
-  getOrderById: async (id: string): Promise<Order> => {
-    const res: Order = await axiosClient.get(`/api/orders/${id}`)
+  getOrderById: async (id: string): Promise<OrderById> => {
+    const res: OrderById = await axiosClient.get(`/api/orders/${id}`)
 
     return res
   },

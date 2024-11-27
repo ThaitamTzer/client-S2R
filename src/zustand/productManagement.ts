@@ -9,6 +9,7 @@ type State = {
   openViewProductModal: boolean
   products: Product[]
   product: Product
+  openAddressModal: boolean
 }
 
 type Actions = {
@@ -19,6 +20,7 @@ type Actions = {
   toggleViewProductModal: () => void
   setProducts: (products: Product[]) => void
   setProduct: (product: Product) => void
+  setOpenAddressModal: (open: boolean) => void
 }
 
 export const useProductManagement = create<State & Actions>((set) => ({
@@ -29,17 +31,13 @@ export const useProductManagement = create<State & Actions>((set) => ({
   openViewProductModal: false,
   products: [],
   product: {} as Product,
-
-  toggleAddProductModal: () =>
-    set((state) => ({ openAddProductModal: !state.openAddProductModal })),
-  toggleEditProductModal: () =>
-    set((state) => ({ openEditProductModal: !state.openEditProductModal })),
-  toggleDeleteProductModal: () =>
-    set((state) => ({ openDeleteProductModal: !state.openDeleteProductModal })),
-  toggleUploadImageModal: () =>
-    set((state) => ({ openUploadImageModal: !state.openUploadImageModal })),
-  toggleViewProductModal: () =>
-    set((state) => ({ openViewProductModal: !state.openViewProductModal })),
+  openAddressModal: false,
+  toggleAddProductModal: () => set((state) => ({ openAddProductModal: !state.openAddProductModal })),
+  toggleEditProductModal: () => set((state) => ({ openEditProductModal: !state.openEditProductModal })),
+  toggleDeleteProductModal: () => set((state) => ({ openDeleteProductModal: !state.openDeleteProductModal })),
+  toggleUploadImageModal: () => set((state) => ({ openUploadImageModal: !state.openUploadImageModal })),
+  toggleViewProductModal: () => set((state) => ({ openViewProductModal: !state.openViewProductModal })),
   setProducts: (products) => set({ products }),
   setProduct: (product) => set({ product }),
+  setOpenAddressModal: (open) => set({ openAddressModal: open }),
 }))

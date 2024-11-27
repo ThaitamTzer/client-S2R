@@ -14,6 +14,7 @@ const DataTable = lazy(() => import('@/components/product-management/dataTable')
 const ViewProductModal = lazy(() => import('@/components/product-management/viewProduct'))
 const EditProduct = lazy(() => import('@/components/product-management/editProduct'))
 const AddProduct = lazy(() => import('@/components/product-management/addProduct'))
+const AddAdressModal = lazy(() => import('@/components/product-management/addAdressModal'))
 
 const ProductManagement = () => {
   const param = useSearchParams()
@@ -51,6 +52,7 @@ const ProductManagement = () => {
       <Suspense fallback={<Loading />}>
         <EditProduct />
         <ViewProductModal />
+        <AddAdressModal />
       </Suspense>
       <div className="title text-black text-2xl font-semibold">
         <h2>Quản lý sản phẩm</h2>
