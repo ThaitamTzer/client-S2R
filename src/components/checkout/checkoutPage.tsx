@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
 import orderService from '@/services/order/order.service'
 import { mutate } from 'swr'
+import { Descriptions } from 'antd'
 
 export default function CheckoutPage({ order }: { order: OrderById }) {
   const { getColorName } = useGetName()
@@ -32,13 +33,13 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
       orderService.updateAddressOrder(
         order.data._id,
         {
-          address: user.address,
-          phone: user.phone,
+          address: user?.address || '',
+          phone: user?.phone || '',
           type: 'momo_wallet',
         },
         () => {
-          setAddress(user.address)
-          setPhone(user.phone)
+          setAddress(user?.address || '')
+          setPhone(user?.phone || '')
           mutate(['/order/id', order.data._id])
         },
       )
@@ -126,7 +127,7 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                     {order.data.subOrders.map((subOrder) => (
                       <>
                         <tr className="bg-white">
-                          <td colSpan={1} className="py-2 px-4">
+                          <td colSpan={1} className="py-2 ">
                             <div className="flex items-center gap-2">
                               <span className="font-medium">
                                 <div className="flex flex-row gap-2 items-center">
@@ -190,6 +191,84 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                             </td>
                           </tr>
                         ))}
+                        <tr className="border-b border-gray-200">
+                          <td colSpan={4}>
+                            <Descriptions
+                              bordered
+                              size="small"
+                              column={2}
+                              style={{
+                                borderRadius: '0px',
+                              }}
+                              labelStyle={{
+                                fontSize: '12px',
+                                margin: '5px',
+                                padding: '5px',
+                                width: '170px',
+                              }}
+                              contentStyle={{
+                                minHeight: '80px',
+                                padding: '12px',
+                                minWidth: '150px',
+                              }}
+                              items={[
+                                {
+                                  label: 'Phương thức vận chuyển',
+                                  span: 1,
+                                  children: (
+                                    <div className="h-full flex flex-col justify-between">
+                                      <div>
+                                        {subOrder.shippingService === 'GHN' && (
+                                          <>
+                                            <p className="text-black font-bold text-sm">Giao hàng nhanh</p>
+                                            <p className="text-black font-normal text-xs">Standard Express</p>
+                                          </>
+                                        )}
+                                        {subOrder.shippingService === 'GHTK' && (
+                                          <>
+                                            <p className="text-black font-bold text-sm">Giao hàng tiết kiệm</p>
+                                            <p className="text-black font-normal text-xs">Standard Express</p>
+                                          </>
+                                        )}
+                                        {subOrder.shippingService === 'agreement' && (
+                                          <>
+                                            <p className="text-black font-bold text-sm">Theo thỏa thuận</p>
+                                          </>
+                                        )}
+                                      </div>
+                                      <p className="text-green-900 text-xs underline mt-auto">Thay đổi</p>
+                                    </div>
+                                  ),
+                                },
+                                {
+                                  label: 'Phí vận chuyển',
+                                  span: 1,
+                                  children: (
+                                    <div className="h-full flex items-center">
+                                      <p className="text-black font-semibold text-sm">
+                                        {formatPrice(subOrder.shippingFee) + 'đ'}
+                                      </p>
+                                    </div>
+                                  ),
+                                },
+                                {
+                                  label: 'Ghi chú',
+                                  span: 2,
+                                  children: <p className="text-black font-normal text-sm">{subOrder.note}</p>,
+                                },
+                                {
+                                  label: 'Tổng tiền',
+                                  span: 2,
+                                  children: (
+                                    <p className="text-black font-semibold text-sm">
+                                      {formatPrice(subOrder.subTotal) + 'đ'}
+                                    </p>
+                                  ),
+                                },
+                              ]}
+                            />
+                          </td>
+                        </tr>
                       </>
                     ))}
                   </tbody>
@@ -315,8 +394,18 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
               <h1 className="text-2xl font-bold">Thông tin thanh toán</h1>
               <div className="w-full flex flex-col gap-2">
                 <p className="text-xl font-normal flex justify-between">
-                  Tổng tiền thanh toán:{' '}
+                  Tổng tiền sản phẩm:{' '}
                   <span className="font-semibold text-green-900">{formatPrice(order.summary.totalPrice) + 'đ'}</span>
+                </p>
+                <p className="text-xl font-normal flex justify-between">
+                  Phí vận chuyển:{' '}
+                  <span className="font-semibold text-green-900">
+                    {formatPrice(order.summary.totalShippingFee) + 'đ'}
+                  </span>
+                </p>
+                <p className="text-xl font-normal flex justify-between">
+                  Tổng tiền thanh toán:{' '}
+                  <span className="font-semibold text-green-900">{formatPrice(order.data.totalAmount) + 'đ'}</span>
                 </p>
               </div>
             </div>

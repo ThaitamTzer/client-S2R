@@ -10,6 +10,19 @@ export const useGetName = () => {
   const router = useRouter()
   const param = useSearchParams()
 
+  const getShippingServiceName = (string: string) => {
+    switch (string) {
+      case 'GHN':
+        return 'Giao hàng nhanh'
+      case 'GHTK':
+        return 'Giao hàng tiết kiệm'
+      case 'agreement':
+        return 'Theo thỏa thuận'
+      default:
+        return string
+    }
+  }
+
   const getOrderStatusName = (string: string) => {
     switch (string) {
       case 'pending':
@@ -185,6 +198,7 @@ export const useGetName = () => {
     getTypeCategory,
     getOrderStatusName,
     getOrderPaymentName,
+    getShippingServiceName,
   }
 }
 
