@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
 import { useGetName } from '@/helper/getName'
 import IconifyIcon from '../icons'
-import { Button, Radio, Stack } from '@mantine/core'
+import { Button, Divider, Radio, Stack } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { useOrderStore } from '@/zustand/order'
 import checkoutService, { Success } from '@/services/checkout/checkout.service'
@@ -28,9 +28,9 @@ export default function CheckoutPage({ order }: { order: Order }) {
   const { user } = useAuth()
 
   useEffect(() => {
-    if (user?.address && user?.phone && !order.address && !order.phone) {
+    if (user?.address && user?.phone && !order.data.address && !order.data.phone) {
       orderService.updateAddressOrder(
-        order._id,
+        order.data._id,
         {
           address: user.address,
           phone: user.phone,
@@ -39,27 +39,27 @@ export default function CheckoutPage({ order }: { order: Order }) {
         () => {
           setAddress(user.address)
           setPhone(user.phone)
-          mutate(['/order/id', order._id])
+          mutate(['/order/id', order.data._id])
         },
       )
     }
   }, [user, order, setAddress, setPhone])
 
   const handleMomoPayment = async () => {
-    if (!order.address || !order.phone) {
+    if (!order.data.address || !order.data.phone) {
       toast.error('Vui lòng điền địa chỉ nhận hàng')
       return
     }
-    await checkoutService.momoPayment(order._id, (res: Success) => {
+    await checkoutService.momoPayment(order.data._id, (res: Success) => {
       setPayUrl(res.response.payUrl)
     })
   }
 
   const handleConfirmPayment = async () => {
     await checkoutService.confirmPayment(
-      order._id,
+      order.data._id,
       () => {
-        mutate(['/order/id', order._id])
+        mutate(['/order/id', order.data._id])
       },
       () => {
         toast.error('Cập nhật trạng thái thanh toán thất bại, vui lòng liên hệ với chúng tôi qua mail')
@@ -71,7 +71,7 @@ export default function CheckoutPage({ order }: { order: Order }) {
     await orderService.deleteSubOrder(
       subOrderId,
       () => {
-        mutate(['/order/id', order._id])
+        mutate(['/order/id', order.data._id])
         toast.success('Xóa đơn hàng thành công')
       },
       () => {
@@ -85,7 +85,7 @@ export default function CheckoutPage({ order }: { order: Order }) {
       subOrderId,
       productId,
       () => {
-        mutate(['/order/id', order._id])
+        mutate(['/order/id', order.data._id])
         toast.success('Xóa sản phẩm thành công')
       },
       () => {
@@ -123,7 +123,7 @@ export default function CheckoutPage({ order }: { order: Order }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.subOrders.map((subOrder) => (
+                    {order.data.subOrders.map((subOrder) => (
                       <>
                         <tr className="bg-white">
                           <td colSpan={1} className="py-2 px-4">
@@ -194,6 +194,18 @@ export default function CheckoutPage({ order }: { order: Order }) {
                     ))}
                   </tbody>
                 </table>
+                <div className="flex flex-row gap-2 items-center justify-end mt-4">
+                  <p className="text-black">Tổng loại: {order.summary.totalTypes}</p>
+                  <p className="text-black">Tổng số lượng: {order.summary.totalAmount}</p>
+                </div>
+                <Divider my="md" />
+                <p className="text-green-900 text-center">
+                  <IconifyIcon icon="icon-park-outline:information" className="w-6 h-6" />
+                  <span>
+                    Bạn có thể hủy đơn hàng khi đơn hàng đang ở trạng thái chờ xử lý. Đơn hàng sẽ không thể hủy sau khi
+                    đơn hàng được giao cho đơn vị vận chuyển.
+                  </span>
+                </p>
               </div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-md">
@@ -259,18 +271,20 @@ export default function CheckoutPage({ order }: { order: Order }) {
             <div className="bg-white p-8  rounded-lg shadow-md flex flex-col gap-4">
               <h1 className="text-2xl font-bold">Địa chỉ nhận hàng</h1>
               <div className="w-full flex flex-col gap-2">
-                <p className="text-xl font-semibold">{order.userId.firstname + ' ' + order.userId.lastname}</p>
-                {order.address && order.phone ? (
+                <p className="text-xl font-semibold">
+                  {order.data.userId.firstname + ' ' + order.data.userId.lastname}
+                </p>
+                {order.data.address && order.data.phone ? (
                   <>
-                    <p className="text-xl">{order.phone}</p>
-                    <p className="text-xl text-wrap max-w-full">{order.address}</p>
+                    <p className="text-xl">{order.data.phone}</p>
+                    <p className="text-xl text-wrap max-w-full">{order.data.address}</p>
                     <div className="flex flex-row justify-end ">
                       <span
                         onClick={() => {
                           toggleChangeAddressModal()
-                          setIdOrder(order._id)
-                          setAddress(order.address)
-                          setPhone(order.phone)
+                          setIdOrder(order.data._id)
+                          setAddress(order.data.address)
+                          setPhone(order.data.phone)
                         }}
                         className="text-md text-gray-500 cursor-pointer hover:text-green-900"
                       >
@@ -288,7 +302,7 @@ export default function CheckoutPage({ order }: { order: Order }) {
                       }}
                       onClick={() => {
                         toggleChangeAddressModal()
-                        setIdOrder(order._id)
+                        setIdOrder(order.data._id)
                       }}
                     >
                       Điền địa chỉ nhận hàng
@@ -302,16 +316,16 @@ export default function CheckoutPage({ order }: { order: Order }) {
               <div className="w-full flex flex-col gap-2">
                 <p className="text-xl font-normal flex justify-between">
                   Tổng tiền thanh toán:{' '}
-                  <span className="font-semibold text-green-900">{formatPrice(order.totalAmount) + 'đ'}</span>
+                  <span className="font-semibold text-green-900">{formatPrice(order.summary.totalPrice) + 'đ'}</span>
                 </p>
               </div>
             </div>
             <Button
               type="button"
-              disabled={!order.address || !order.phone}
+              disabled={!order.data.address || !order.data.phone}
               onClick={handleMomoPayment}
               style={{
-                backgroundColor: !order.address || !order.phone ? '#ccc' : '#16a34a',
+                backgroundColor: !order.data.address || !order.data.phone ? '#ccc' : '#16a34a',
                 color: '#fff',
                 fontWeight: 'bold',
                 fontSize: '30px',
@@ -321,7 +335,7 @@ export default function CheckoutPage({ order }: { order: Order }) {
             >
               Thanh toán
             </Button>
-            {order.transactionId && (
+            {order.data.transactionId && (
               <>
                 <p className="text-green-900 text-center">Bạn đã thanh toán đơn hàng này?</p>
                 <p className="text-green-900 text-center">
@@ -334,10 +348,10 @@ export default function CheckoutPage({ order }: { order: Order }) {
                 </p>
                 <Button
                   type="button"
-                  disabled={!order.address || !order.phone}
+                  disabled={!order.data.address || !order.data.phone}
                   onClick={handleConfirmPayment}
                   style={{
-                    backgroundColor: !order.address || !order.phone ? '#ccc' : '#16a34a',
+                    backgroundColor: !order.data.address || !order.data.phone ? '#ccc' : '#16a34a',
                     color: '#fff',
                     fontWeight: 'bold',
                     fontSize: '30px',
@@ -349,7 +363,7 @@ export default function CheckoutPage({ order }: { order: Order }) {
                 </Button>
               </>
             )}
-            {(!order.address || !order.phone) && (
+            {(!order.data.address || !order.data.phone) && (
               <p className="text-red-500 text-center">Vui lòng điền địa chỉ nhận hàng</p>
             )}
           </div>

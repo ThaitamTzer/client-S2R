@@ -21,7 +21,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     label: 'Thanh toán',
   }
 
-  const [order, setOrder] = useState<Order>()
+  const [order, setOrder] = useState<Order | undefined>()
 
   const { isLoading } = useSWR(['/order/id', params.orderId], () => orderService.getOrderById(params.orderId), {
     onSuccess(data) {
@@ -38,6 +38,8 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     revalidateOnFocus: false,
     revalidateOnMount: true,
   })
+
+  console.log(order?.summary)
 
   if (isLoading) return <Loading />
 
@@ -64,7 +66,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     <>
       <NavigationWithBgAlways navLink={navLinks} />
       <ChangeAddressModal />
-      {order.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
+      {order.data.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
     </>
   )
 }

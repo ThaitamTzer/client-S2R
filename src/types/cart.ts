@@ -30,4 +30,9 @@ export type CartItem = {
 
 export type Cart = {
   data: CartItem[]
+  summary: {
+    totalAmount: number
+    totalTypes: number
+    totalPrice: number
+  }
 }

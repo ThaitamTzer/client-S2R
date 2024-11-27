@@ -20,9 +20,9 @@ const orderService = {
   getAllOrdersByUser: (): Promise<SellType> => axiosClient.get('/api/orders/get-order-for-seller'),
 
   getOrderById: async (id: string): Promise<Order> => {
-    const res = await axiosClient.get(`/api/orders/${id}`)
+    const res: Order = await axiosClient.get(`/api/orders/${id}`)
 
-    return res.data
+    return res
   },
 
   updateAddressOrder: async (

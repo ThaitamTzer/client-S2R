@@ -54,9 +54,12 @@ export type SubOrder = {
   products: Product[]
   status: string
   orderUUID: string
+  shippingService: string
+  shippingFee: number
+  note: string | null
 }
 
-export type Order = {
+export type DataOrder = {
   _id: string
   userId: User
   phone: string
@@ -68,6 +71,16 @@ export type Order = {
   subOrders: SubOrder[]
   createdAt: string | Date
   updatedAt: string | Date
+}
+
+export type Order = {
+  data: DataOrder
+  summary: {
+    totalAmount: number
+    totalTypes: number
+    totalPrice: number
+    totalShippingFee: number
+  }
 }
 
 export type Orders = {

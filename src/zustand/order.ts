@@ -8,6 +8,12 @@ type OrderState = {
   idOrder: string
   address: string
   phone: string
+  summary: {
+    totalAmount: number
+    totalTypes: number
+    totalPrice: number
+    totalShippingFee: number
+  }
 }
 
 type OrderActions = {
@@ -17,11 +23,23 @@ type OrderActions = {
   setIdOrder: (idOrder: string) => void
   setAddress: (address: string) => void
   setPhone: (phone: string) => void
+  setSummary: (summary: {
+    totalAmount: number
+    totalTypes: number
+    totalPrice: number
+    totalShippingFee: number
+  }) => void
 }
 
 export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   orders: [],
   order: {} as Order,
+  summary: {
+    totalAmount: 0,
+    totalTypes: 0,
+    totalPrice: 0,
+    totalShippingFee: 0,
+  },
   openChangeAddressModal: false,
   idOrder: '',
   address: '',
@@ -32,4 +50,5 @@ export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   setIdOrder: (idOrder) => set({ idOrder }),
   setAddress: (address) => set({ address }),
   setPhone: (phone) => set({ phone }),
+  setSummary: (summary) => set({ summary }),
 }))

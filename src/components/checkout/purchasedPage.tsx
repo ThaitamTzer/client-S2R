@@ -20,21 +20,21 @@ export default function PurchasedPage({ order }: { order: Order }) {
   const { getOrderStatusName } = useGetName()
 
   useEffect(() => {
-    order.subOrders.forEach((subOrder) => {
+    order.data.subOrders.forEach((subOrder) => {
       if (subOrder.status === 'pending') {
         setStatus('pending')
       } else if (subOrder.status === 'canceled') {
         setStatus('canceled')
       }
     })
-  }, [order.subOrders])
+  }, [order.data.subOrders])
 
   const handleCancelOrder = () => {
     orderService.cancelOrder(
-      order._id,
+      order.data._id,
       () => {
         toast.success('Đơn hàng đã được hủy thành công')
-        mutate(['/order/id', order._id])
+        mutate(['/order/id', order.data._id])
         setOpenModalCancel(false)
       },
       () => {
@@ -75,18 +75,18 @@ export default function PurchasedPage({ order }: { order: Order }) {
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl">
             <h2 className="text-2xl font-bold mb-4">Thông tin đơn hàng</h2>
             <p className="text-lg">
-              <span className="font-semibold">Mã đơn hàng:</span> {order._id}
+              <span className="font-semibold">Mã đơn hàng:</span> {order.data._id}
             </p>
             <p className="text-lg">
               <span className="font-semibold">Ngày thanh toán:</span> {new Date().toLocaleDateString()}
             </p>
             <p className="text-lg">
-              <span className="font-semibold">Tổng tiền:</span> {formatPrice(order.totalAmount + 22000) + 'đ'}
+              <span className="font-semibold">Tổng tiền:</span> {formatPrice(order.data.totalAmount + 22000) + 'đ'}
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl">
             <h2 className="text-2xl font-bold mb-4">Sản phẩm</h2>
-            {order.subOrders.map((subOrder) => (
+            {order.data.subOrders.map((subOrder) => (
               <div key={subOrder._id} className="border-b pb-4">
                 {subOrder.products.map((product) => (
                   <div key={product.productId._id} className="flex flex-row justify-between py-2 ">
