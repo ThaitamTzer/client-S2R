@@ -14,6 +14,7 @@ import IconifyIcon from '@/components/icons'
 import OpenEditShippingMethod from '@/components/checkout/openEditShippingMethod'
 import OpenEditNote from '@/components/checkout/openEditNote'
 import ReportModal from '@/components/checkout/reportModal'
+import { RessonOrder } from '@/constants/resson'
 const NavigationWithBgAlways = dynamic(() => import('@/components/navWithBgAlway'), {
   ssr: false,
 })
@@ -70,7 +71,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
       <ChangeAddressModal />
       <OpenEditShippingMethod orderId={params.orderId} />
       <OpenEditNote orderId={params.orderId} />
-      <ReportModal />
+      <ReportModal reportType="order" resson={RessonOrder} />
       {order.data.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
     </>
   )

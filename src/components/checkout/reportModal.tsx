@@ -6,7 +6,7 @@ import { useOrderStore } from '@/zustand/order'
 import reportService from '@/services/report/report.service'
 import toast from 'react-hot-toast'
 
-export default function ReportModal() {
+export default function ReportModal({ reportType, resson }: { reportType: 'order' | 'product'; resson: any }) {
   const { openReportModal, toggleReportModal, subOrderId } = useOrderStore()
 
   const form = useForm({
@@ -32,7 +32,7 @@ export default function ReportModal() {
   const handleCreateReport = () => {
     reportService.createReport(
       {
-        reportType: 'order',
+        reportType: reportType,
         targetId: subOrderId,
         reason: form.values.reason,
         description: form.values.description,
@@ -54,36 +54,7 @@ export default function ReportModal() {
     <Modal size="lg" centered opened={openReportModal} onClose={toggleReportModal} title="Báo cáo đơn hàng này">
       <form onSubmit={form.onSubmit(handleCreateReport)} className="flex flex-col space-y-4">
         <Select
-          data={[
-            {
-              value: 'not_match',
-              label: 'Hàng hóa không đúng với mô tả',
-            },
-            {
-              value: 'broken',
-              label: 'Hàng hóa bị hỏng hoặc lỗi',
-            },
-            {
-              value: 'wrong_product',
-              label: 'Giao sai sản phẩm',
-            },
-            {
-              value: 'not_receive',
-              label: 'Chưa nhận được hàng',
-            },
-            {
-              value: 'short_delivery',
-              label: 'Giao hàng thiếu hoặc thừa',
-            },
-            {
-              value: 'low_quality',
-              label: 'Chất lượng sản phẩm kém',
-            },
-            {
-              value: 'other',
-              label: 'Khác',
-            },
-          ]}
+          data={resson}
           label="Lý do báo cáo"
           placeholder="Chọn lý do báo cáo"
           {...form.getInputProps('reason')}

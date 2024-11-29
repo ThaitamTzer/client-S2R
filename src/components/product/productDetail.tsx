@@ -17,6 +17,12 @@ import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import orderService from '@/services/order/order.service'
 import { useRouter } from 'next/navigation'
+import IconifyIcon from '../icons'
+import { UnstyledButton } from '@mantine/core'
+import ReportModal from '../checkout/reportModal'
+import { useOrderStore } from '@/zustand/order'
+import { RessonProduct } from '@/constants/resson'
+
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
@@ -26,6 +32,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
   const { getMaterialName, getConditionName, getStyleName } = useGetName()
   const { setOpenCreateExchangeModal, setData } = useExchange()
   const { openAddToCardModal, toggleAddToCardModal, openOrderNowModal, toggleOrderNowModal } = useProductClient()
+  const { toggleReportModal, setSubOrderId } = useOrderStore()
   const router = useRouter()
   const uniqueSizes = Array.from(new Set(product.sizeVariants.map((v) => v.size)))
   const uniqueColors = Array.from(new Set(product.sizeVariants.map((v) => v.colors)))
@@ -162,6 +169,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
       <>
         {contextHolder}
         <CreateExchangeModal />
+        <ReportModal reportType="product" resson={RessonProduct} />
         <AddToCard
           product={product}
           uniqueColors={uniqueColors}
@@ -206,7 +214,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
           textButton="Đặt hàng ngay"
           handleOnClick={handleOrderNow}
         />
-        <div className="px-2 py-0 md:px-36 md:py-5 md:mt-5 md:bg-slate-50">
+        <div className="px-2 py-0 md:px-36 md:py-5 md:mt-5 md:bg-slate-50 relative">
           <ProductOverview
             product={product}
             mainImage={mainImage}
@@ -227,6 +235,17 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
             classes={classes}
             setCount={setCount}
           />
+          <div className="absolute top-3 right-3">
+            <UnstyledButton
+              className="p-2 rounded-full hover:bg-slate-200"
+              onClick={() => {
+                toggleReportModal()
+                setSubOrderId(product._id)
+              }}
+            >
+              <IconifyIcon icon="lsicon:flag-filled" className="text-xl text-red-500" />
+            </UnstyledButton>
+          </div>
         </div>
         <div className="container md:ml-24 md:px-40 w-full">
           <InforProduct
