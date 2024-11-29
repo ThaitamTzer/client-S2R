@@ -4,25 +4,25 @@ export default function ModalCancel({
   openModalCancel,
   setOpenModalCancel,
   handleCancelOrder,
+  title,
+  subtitle,
 }: {
   openModalCancel: boolean
   setOpenModalCancel: (value: boolean) => void
   handleCancelOrder: () => void
+  title: string
+  subtitle: string
 }) {
   return (
-    <Modal
-      size="lg"
-      centered
-      title="Xác nhận hủy đơn hàng"
-      opened={openModalCancel}
-      onClose={() => setOpenModalCancel(false)}
-    >
+    <Modal size="lg" centered title={title} opened={openModalCancel} onClose={() => setOpenModalCancel(false)}>
       <div>
-        <h1>Bạn có chắc chắn muốn hủy đơn hàng này không?</h1>
+        <h1>{subtitle}</h1>
         <Group justify="end" mt="md">
-          <Button onClick={() => setOpenModalCancel(false)}>Đóng</Button>
+          <Button variant="outline" onClick={() => setOpenModalCancel(false)}>
+            Hủy
+          </Button>
           <Button color="red" onClick={handleCancelOrder}>
-            Hủy đơn hàng
+            Đồng ý
           </Button>
         </Group>
       </div>

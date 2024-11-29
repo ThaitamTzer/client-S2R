@@ -2,6 +2,32 @@ import axiosClient from '@/lib/axios'
 import { CreateOrderNow, OrderById, Orders, UpdateAddressOrder } from '@/types/orderTypes'
 import { SellType } from '@/types/sellType'
 
+export type Banking = {
+  id: string
+  name: string
+  code: string
+  bin: number
+  short_name: string
+  logo_url: string
+  icon_url: string
+  swift_code: string
+  lookup_supported: number
+}
+
+export type ListBanking = {
+  data: Banking[]
+}
+
+const URL_BANKING = 'https://api.httzip.com/api/bank'
+
+export type CancelSubOrder = {
+  bankingNumber: string
+  bankingName: string
+  bankingNameUser: string
+  bankingBranch: string
+  reason: string
+}
+
 const orderService = {
   createOrder: async (success?: (res: any) => void, errorMessage?: (message: string) => void) => {
     try {
@@ -71,6 +97,23 @@ const orderService = {
     }
   },
 
+  cancelSubOrder: async (
+    subOrderId: string,
+    data: CancelSubOrder,
+    success?: () => void,
+    errorMessage?: (message: string) => void,
+  ) => {
+    try {
+      return await axiosClient.put(`/api/orders/request-refund/${subOrderId}`, data).then(() => success && success())
+    } catch (error: any) {
+      if (error) {
+        if (errorMessage) {
+          errorMessage(error.response?.data.message)
+        }
+      }
+    }
+  },
+
   changeStatusOrder: async (
     id: string,
     status: string,
@@ -116,6 +159,20 @@ const orderService = {
         }
       }
     }
+  },
+
+  listBanking: async (): Promise<ListBanking> => fetch(`${URL_BANKING}/list`).then((res) => res.json()),
+
+  checkBanking: async (bank: string, account: string): Promise<any> => {
+    return fetch(`${URL_BANKING}/id-lookup-prod`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.NEXT_PUBLIC_API_BANKING || '',
+        'x-api-secret': process.env.NEXT_PUBLIC_API_BANKING_SECRET || '',
+      },
+      body: JSON.stringify({ bank, account }),
+    }).then((res) => res.json())
   },
 }
 

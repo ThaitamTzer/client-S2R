@@ -121,7 +121,9 @@ export default function ChangeAddressModal() {
     const selectedDistrict = districts?.find((d: any) => d.code.toString() === form.values.district)
     const selectedWard = wards?.find((w: any) => w.code.toString() === form.values.ward)
 
-    const address = `${selectedProvince?.name}, ${selectedDistrict?.name}, ${selectedWard?.name}, ${values.address}`
+    const address = values.address
+      ? `${values.address}, ${selectedWard?.name}, ${selectedDistrict?.name}, ${selectedProvince?.name}`
+      : `${selectedWard?.name}, ${selectedDistrict?.name}, ${selectedProvince?.name}`
 
     try {
       await orderService.updateAddressOrder(

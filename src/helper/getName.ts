@@ -10,6 +10,13 @@ export const useGetName = () => {
   const router = useRouter()
   const param = useSearchParams()
 
+  const getAddress = (address: string) => {
+    const addressParts = address.split(', ')
+    const [provinceName, districtName, wardName, street] = addressParts
+    if (street) return `${street}, ${wardName}, ${districtName}, ${provinceName}`
+    return `${wardName}, ${districtName}, ${provinceName}`
+  }
+
   const getShippingServiceName = (string: string) => {
     switch (string) {
       case 'GHN':
@@ -199,6 +206,7 @@ export const useGetName = () => {
     getOrderStatusName,
     getOrderPaymentName,
     getShippingServiceName,
+    getAddress,
   }
 }
 

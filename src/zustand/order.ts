@@ -1,13 +1,14 @@
-import { Order } from '@/types/orderTypes'
+import { Order, OrderById, SubOrder } from '@/types/orderTypes'
 import { create } from 'zustand'
 
 type OrderState = {
   orders: Order[]
-  order: Order
+  order: OrderById
   openChangeAddressModal: boolean
   idOrder: string
   address: string
   phone: string
+  subOrder: SubOrder
   summary: {
     totalAmount: number
     totalTypes: number
@@ -18,11 +19,12 @@ type OrderState = {
 
 type OrderActions = {
   setOrders: (orders: Order[]) => void
-  setOrder: (order: Order) => void
+  setOrder: (order: OrderById) => void
   toggleChangeAddressModal: () => void
   setIdOrder: (idOrder: string) => void
   setAddress: (address: string) => void
   setPhone: (phone: string) => void
+  setSubOrder: (subOrder: SubOrder) => void
   setSummary: (summary: {
     totalAmount: number
     totalTypes: number
@@ -33,7 +35,7 @@ type OrderActions = {
 
 export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   orders: [],
-  order: {} as Order,
+  order: {} as OrderById,
   summary: {
     totalAmount: 0,
     totalTypes: 0,
@@ -44,11 +46,13 @@ export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   idOrder: '',
   address: '',
   phone: '',
+  subOrder: {} as SubOrder,
   setOrders: (orders) => set({ orders }),
   setOrder: (order) => set({ order }),
   toggleChangeAddressModal: () => set((state) => ({ openChangeAddressModal: !state.openChangeAddressModal })),
   setIdOrder: (idOrder) => set({ idOrder }),
   setAddress: (address) => set({ address }),
   setPhone: (phone) => set({ phone }),
+  setSubOrder: (subOrder) => set({ subOrder }),
   setSummary: (summary) => set({ summary }),
 }))

@@ -11,12 +11,15 @@ import orderService from '@/services/order/order.service'
 import toast from 'react-hot-toast'
 import ModalCancel from './modalCancel'
 import { useGetName } from '@/helper/getName'
+import ModalCancelSubOrder from './modalCancelSubOrder'
 
 export default function PurchasedPage({ order }: { order: OrderById }) {
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
   const [status, setStatus] = useState('')
   const [openModalCancel, setOpenModalCancel] = useState(false)
+  const [subOrderId, setSubOrderId] = useState('')
+  const [openModalCancelSubOrder, setOpenModalCancelSubOrder] = useState(false)
   const { getOrderStatusName } = useGetName()
 
   useEffect(() => {
@@ -48,12 +51,24 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
     setOpenModalCancel(true)
   }
 
+  const handleOpenModalCancelSubOrder = () => {
+    setOpenModalCancelSubOrder(true)
+  }
+
   return (
     <>
       <ModalCancel
+        title="Xác nhận hủy tất cả đơn hàng"
+        subtitle="Bạn có chắc chắn muốn hủy tất cả đơn hàng này không?"
         openModalCancel={openModalCancel}
         setOpenModalCancel={setOpenModalCancel}
         handleCancelOrder={handleCancelOrder}
+      />
+      <ModalCancelSubOrder
+        subOrderId={subOrderId}
+        title="Thực hiện hủy đơn hàng này?"
+        openModalCancelSubOrder={openModalCancelSubOrder}
+        setOpenModalCancelSubOrder={setOpenModalCancelSubOrder}
       />
       <div className="container mx-auto px-2 md:px-36 py-10 md:pt-20">
         <div className="flex flex-col items-center justify-center space-y-6">
@@ -75,7 +90,13 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl">
             <h2 className="text-2xl font-bold mb-4">Thông tin đơn hàng</h2>
             <p className="text-lg">
-              <span className="font-semibold">Mã đơn hàng:</span> {order.data._id}
+              <span className="font-semibold">Mã đơn hàng:</span> {order.data.orderUUID}
+            </p>
+            <p className="text-lg">
+              <span className="font-semibold">Địa chỉ giao hàng:</span> {order.data.address}
+            </p>
+            <p className="text-lg">
+              <span className="font-semibold">Số điện thoại giao hàng:</span> {order.data.phone}
             </p>
             <p className="text-lg">
               <span className="font-semibold">Ngày thanh toán:</span> {new Date().toLocaleDateString()}
@@ -110,12 +131,34 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
                 <p className="text-md font-semibold text-green-900">
                   <div className="flex flex-row justify-between">
                     <p className="font-semibold text-green-900">
-                      <span className="font-semibold text-gray-700">Mã đơn:</span> {subOrder.orderUUID}
+                      <span className="font-semibold text-gray-700">Mã đơn:</span> {subOrder.subOrderUUID}
                     </p>
                   </div>
-                  <span className="font-semibold text-gray-700">Trạng thái đơn:</span>{' '}
-                  {getOrderStatusName(subOrder.status)}
+                  {subOrder.requestRefund && subOrder.requestRefund.status === 'pending' && (
+                    <>
+                      <p className="text-md font-semibold text-green-900">Đã yêu cầu hoàn tiền chờ xử lý</p>
+                    </>
+                  )}
+                  {!subOrder.requestRefund && (
+                    <>
+                      <span className="font-semibold text-gray-700">Trạng thái đơn:</span>{' '}
+                      {getOrderStatusName(subOrder.status)}
+                    </>
+                  )}
                 </p>
+                {!subOrder.requestRefund && subOrder.status === 'pending' && (
+                  <div className="flex justify-center">
+                    <span
+                      onClick={() => {
+                        setSubOrderId(subOrder._id)
+                        handleOpenModalCancelSubOrder()
+                      }}
+                      className="font-semibold text-red-700 hover:underline cursor-pointer"
+                    >
+                      Hủy đơn hàng
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -130,7 +173,7 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
           {/* cancel order */}
           {status === 'pending' && (
             <button onClick={handleOpenModalCancel} className="text-red-500 text-lg font-semibold hover:underline">
-              Hủy đơn hàng
+              Hủy tất cả đơn hàng
             </button>
           )}
         </div>

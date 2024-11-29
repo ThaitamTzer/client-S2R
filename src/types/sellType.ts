@@ -1,8 +1,19 @@
+import { RequestRefund } from './orderTypes'
+
 export type Sell = {
   _id: string
   orderId: {
     _id: string
     paymentStatus: string
+    userId: {
+      _id: string
+      firstname: string
+      lastname: string
+      email: string
+    }
+    phone: string
+    address: string
+    createdAt: string | Date
   }
   sellerId: string
   subTotal: number
@@ -21,10 +32,14 @@ export type Sell = {
       color: string
     },
   ]
+  shippingService: 'GHN' | 'GHTK' | 'agreement'
+  shippingFee: number
+  note: string | null
+  requestRefund: null | RequestRefund
   status: string
   createdAt: string
   updatedAt: string
-  orderUUID: string
+  subOrderUUID: string
 }
 
 export type SellType = {

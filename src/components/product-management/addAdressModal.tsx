@@ -26,7 +26,7 @@ export default function AddAdressModal() {
 
   useEffect(() => {
     if (user?.address && provinces.length) {
-      const addressParts = user.address.split(', ')
+      const addressParts = user.address.split(', ').reverse()
       const [provinceName, districtName, wardName, street] = addressParts
 
       if (user?.phone) {
@@ -93,8 +93,8 @@ export default function AddAdressModal() {
   const onFinish = () => {
     form.validateFields().then((values) => {
       const address = values.street
-        ? `${selectedProvince?.name}, ${selectedDistrict?.name}, ${selectedWard?.name}, ${values.street}`
-        : `${selectedProvince?.name}, ${selectedDistrict?.name}, ${selectedWard?.name}`
+        ? `${values.street}, ${selectedWard?.name}, ${selectedDistrict?.name}, ${selectedProvince?.name}`
+        : `${selectedWard?.name}, ${selectedDistrict?.name}, ${selectedProvince?.name}`
       userService
         .updateProfile({ ...values, address })
         .then(() => {

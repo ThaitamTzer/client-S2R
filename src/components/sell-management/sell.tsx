@@ -53,12 +53,12 @@ export default function SellPage() {
                 <tr key={sell._id} className="text-center text-sm md:text-xl">
                   <td className="py-3 text-green-900 flex justify-center">
                     <Tooltip label="Xem chi tiết" onClick={() => handleOpen(sell)}>
-                      <div className="text-center  cursor-pointer hover:text-green-500">{sell.orderUUID}</div>
+                      <div className="text-center  cursor-pointer hover:text-green-500">{sell.subOrderUUID}</div>
                     </Tooltip>
                   </td>
                   <td className="py-3 text-black">{formatDate(sell.createdAt)}</td>
                   <td className="py-3 text-black">{formatPrice(sell.subTotal) + 'đ'}</td>
-                  <td className="py-3 text-black">{getOrderPaymentName(sell.orderId.paymentStatus)}</td>
+                  <td className="py-3 text-black">{getOrderPaymentName(sell?.orderId?.paymentStatus)}</td>
                   <td className="py-3 text-black">{getOrderStatusName(sell.status)}</td>
                 </tr>
               ))}

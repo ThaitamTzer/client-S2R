@@ -17,16 +17,17 @@ import { useAuth } from '@/hooks/useAuth'
 import orderService from '@/services/order/order.service'
 import { mutate } from 'swr'
 import { Descriptions } from 'antd'
+import { useCheckoutStore } from '@/zustand/checkout'
 
 export default function CheckoutPage({ order }: { order: OrderById }) {
   const { getColorName } = useGetName()
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
-  const [checked, setChecked] = useState('2')
   const [paymentMethod, setPaymentMethod] = useState('2')
-  const { toggleChangeAddressModal, setIdOrder, setAddress, setPhone } = useOrderStore()
+  const { toggleChangeAddressModal, setIdOrder, setAddress, setPhone, setSubOrder } = useOrderStore()
   const [payUrl, setPayUrl] = useState('')
   const { user } = useAuth()
+  const { toggleEdit, toggleEditNote } = useCheckoutStore()
 
   useEffect(() => {
     if (user?.address && user?.phone && !order.data.address && !order.data.phone) {
@@ -222,12 +223,14 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                           <>
                                             <p className="text-black font-bold text-sm">Giao hàng nhanh</p>
                                             <p className="text-black font-normal text-xs">Standard Express</p>
+                                            <p className="text-black font-normal text-xs">Nhận hàng trong 1-2 ngày</p>
                                           </>
                                         )}
                                         {subOrder.shippingService === 'GHTK' && (
                                           <>
                                             <p className="text-black font-bold text-sm">Giao hàng tiết kiệm</p>
                                             <p className="text-black font-normal text-xs">Standard Express</p>
+                                            <p className="text-black font-normal text-xs">Nhận hàng trong 3-5 ngày</p>
                                           </>
                                         )}
                                         {subOrder.shippingService === 'agreement' && (
@@ -236,7 +239,16 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                           </>
                                         )}
                                       </div>
-                                      <p className="text-green-900 text-xs underline mt-auto">Thay đổi</p>
+                                      <p
+                                        className="text-green-900 text-xs underline mt-auto cursor-pointer"
+                                        onClick={() => {
+                                          toggleEdit()
+                                          setIdOrder(subOrder._id)
+                                          setSubOrder(subOrder)
+                                        }}
+                                      >
+                                        Thay đổi
+                                      </p>
                                     </div>
                                   ),
                                 },
@@ -254,10 +266,24 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                 {
                                   label: 'Ghi chú',
                                   span: 2,
-                                  children: <p className="text-black font-normal text-sm">{subOrder.note}</p>,
+                                  children: (
+                                    <div className="w-full flex justify-between items-center">
+                                      <p className="text-black font-normal text-sm">{subOrder.note}</p>
+                                      <p
+                                        className="text-green-900 text-xs underline mt-auto cursor-pointer"
+                                        onClick={() => {
+                                          toggleEditNote()
+                                          setIdOrder(subOrder._id)
+                                          setSubOrder(subOrder)
+                                        }}
+                                      >
+                                        Thay đổi
+                                      </p>
+                                    </div>
+                                  ),
                                 },
                                 {
-                                  label: 'Tổng tiền',
+                                  label: 'Tổng tiền các sản phẩm',
                                   span: 2,
                                   children: (
                                     <p className="text-black font-semibold text-sm">
@@ -288,24 +314,11 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
               </div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-md">
-              <h1 className="text-2xl font-bold">2. Chọn hình thức vận chuyển</h1>
-              <div className="w-full">
-                <div className="flex flex-col space-y-4">
-                  <Radio.Group name="deliveryMethod" withAsterisk value={checked} onChange={setChecked}>
-                    <Stack mt="xs">
-                      <Radio size="lg" color="green" value="2" label="Vận chuyển tự thỏa thuận" />
-                    </Stack>
-                  </Radio.Group>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <h1 className="text-2xl font-bold">3. Chọn hình thức thanh toán</h1>
+              <h1 className="text-2xl font-bold">2. Chọn hình thức thanh toán</h1>
               <div className="w-full">
                 <Radio.Group name="paymentMethod" withAsterisk value={paymentMethod} onChange={setPaymentMethod}>
                   <Stack mt="xs">
                     <Radio
-                      disabled
                       size="lg"
                       color="green"
                       value="1"
@@ -337,7 +350,9 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                             loading="lazy"
                             quality={70}
                           />
-                          <p className="text-lg font-semibold">Thanh toán qua ví điện tử Momo</p>
+                          <p className="text-lg font-semibold">
+                            Cổng thanh toán điện tử MOMO (QR code, Visa, Mastercard, JCB)
+                          </p>
                         </div>
                       }
                     />

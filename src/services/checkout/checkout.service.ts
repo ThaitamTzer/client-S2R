@@ -39,6 +39,47 @@ const checkoutService = {
       }
     }
   },
+
+  changeShippingMethod: async (
+    orderId: string,
+    data: { shippingService: string },
+    success?: (res: any) => void,
+    error?: (err: any) => void,
+  ) => {
+    try {
+      return await axiosClient
+        .patch(`/api/orders/update-shipping-service/${orderId}`, data)
+        .then((res) => success && success(res))
+    } catch (err) {
+      if (err) {
+        if (error) {
+          error(err)
+        }
+      }
+    }
+  },
+
+  updateNote: async (
+    orderId: string,
+    data: { note: string },
+    success?: (res: any) => void,
+    error?: (err: any) => void,
+  ) => {
+    try {
+      return await axiosClient
+        .patch(`/api/orders/update-shipping-service/${orderId}`, data)
+        .then((res) => success && success(res))
+    } catch (err) {
+      if (err) {
+        if (error) {
+          error(err)
+        }
+      }
+    }
+  },
+
+
+
 }
 
 export default checkoutService

@@ -32,9 +32,8 @@ const Profile = () => {
     const loadAddressData = async () => {
       if (!user?.address || !provinces.length) return
 
-      const addressParts = user.address.split(', ')
+      const addressParts = user.address.split(', ').reverse()
       const [provinceName, districtName, wardName, street] = addressParts
-      console.log(provinceName, districtName, wardName, street)
 
       try {
         // Tìm và load thông tin tỉnh/thành phố
@@ -103,12 +102,10 @@ const Profile = () => {
 
   const handleGetAddress = () => {
     if (form.getFieldValue('street')) {
-      return `${province?.name}, ${districts?.name}, ${ward?.name}, ${form.getFieldValue('street')}`
+      return `${form.getFieldValue('street')}, ${ward?.name}, ${districts?.name}, ${province?.name}`
     }
-    return `${province?.name}, ${districts?.name}, ${ward?.name}`
+    return `${ward?.name}, ${districts?.name}, ${province?.name}`
   }
-
-  console.log(handleGetAddress())
 
   const onFinish = (values: UpdateProfile) => {
     setLoading(true)

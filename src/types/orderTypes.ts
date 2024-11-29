@@ -40,6 +40,16 @@ export type Product = {
   color: string
 }
 
+export type RequestRefund = {
+  status: string
+  bankingNumber: string
+  bankingName: string
+  bankingNameUser: string
+  bankingBranch: string
+  reason: string
+  _id: string
+}
+
 export type SubOrder = {
   _id: string
   orderId: string
@@ -54,9 +64,11 @@ export type SubOrder = {
   products: Product[]
   status: string
   orderUUID: string
+  subOrderUUID: string
   shippingService: string
   shippingFee: number
   note: string | null
+  requestRefund: RequestRefund | null
 }
 
 export type DataOrder = {
@@ -67,6 +79,7 @@ export type DataOrder = {
   totalAmount: number
   paymentStatus: string
   transactionId: string | null
+  orderUUID: string
   type: string
   subOrders: SubOrder[]
   createdAt: string | Date

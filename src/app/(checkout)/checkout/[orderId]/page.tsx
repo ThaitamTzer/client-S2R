@@ -11,6 +11,8 @@ import useSWR from 'swr'
 import Loading from '@/app/loading'
 import Link from 'next/link'
 import IconifyIcon from '@/components/icons'
+import OpenEditShippingMethod from '@/components/checkout/openEditShippingMethod'
+import OpenEditNote from '@/components/checkout/openEditNote'
 const NavigationWithBgAlways = dynamic(() => import('@/components/navWithBgAlway'), {
   ssr: false,
 })
@@ -65,6 +67,8 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     <>
       <NavigationWithBgAlways navLink={navLinks} />
       <ChangeAddressModal />
+      <OpenEditShippingMethod orderId={params.orderId} />
+      <OpenEditNote orderId={params.orderId} />
       {order.data.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
     </>
   )
