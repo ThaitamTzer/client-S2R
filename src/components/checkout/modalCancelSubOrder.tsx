@@ -8,17 +8,20 @@ import Image from 'next/image'
 import { debounce } from 'lodash'
 import toast from 'react-hot-toast'
 import { useForm } from '@mantine/form'
+import { mutate } from 'swr'
 
 export default function ModalCancelSubOrder({
   subOrderId,
   openModalCancelSubOrder,
   setOpenModalCancelSubOrder,
   title,
+  orderId,
 }: {
   subOrderId: string
   openModalCancelSubOrder: boolean
   setOpenModalCancelSubOrder: (value: boolean) => void
   title: string
+  orderId: string
 }) {
   const [banking, setBanking] = useState<Banking[]>([])
 
@@ -126,6 +129,7 @@ export default function ModalCancelSubOrder({
       () => {
         toast.success('Yêu cầu hoàn tiền đã được gửi, đơn hàng này sẽ được hủy')
         handleClose()
+        mutate(['/order/id', orderId])
       },
       () => {
         toast.error('Đã có lỗi xảy ra, vui lòng thử lại sau!')

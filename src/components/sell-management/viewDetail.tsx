@@ -69,6 +69,18 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
             <p className="text-sm font-medium">Trạng thái thanh toán</p>
             <p className="text-sm">{getOrderPaymentName(sell?.orderId?.paymentStatus) || '-'}</p>
           </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">Địa chỉ giao hàng</p>
+            <p className="text-sm">{sell?.orderId?.address || '-'}</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">Số điện thoại</p>
+            <p className="text-sm">{sell?.orderId?.phone || '-'}</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">Tên người nhận</p>
+            <p className="text-sm">{sell?.orderId?.userId?.firstname + ' ' + sell?.orderId?.userId?.lastname || '-'}</p>
+          </div>
           {sell?.status === 'completed' && (
             <div className="flex flex-col gap-2">
               <p className="text-sm font-medium">Trạng thái đơn hàng</p>

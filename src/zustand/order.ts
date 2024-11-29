@@ -18,6 +18,8 @@ type OrderState = {
   }
   openDetailModal: boolean
   sell: Sell
+  openReportModal: boolean
+  subOrderId: string
 }
 
 type OrderActions = {
@@ -36,6 +38,8 @@ type OrderActions = {
   }) => void
   toggleDetailModal: () => void
   setSell: (sell: Sell) => void
+  toggleReportModal: () => void
+  setSubOrderId: (subOrderId: string) => void
 }
 
 export const useOrderStore = create<OrderState & OrderActions>((set) => ({
@@ -54,6 +58,8 @@ export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   subOrder: {} as SubOrder,
   openDetailModal: false,
   sell: {} as Sell,
+  openReportModal: false,
+  subOrderId: '',
   setOrders: (orders) => set({ orders }),
   setOrder: (order) => set({ order }),
   toggleChangeAddressModal: () => set((state) => ({ openChangeAddressModal: !state.openChangeAddressModal })),
@@ -64,4 +70,6 @@ export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   setSummary: (summary) => set({ summary }),
   toggleDetailModal: () => set((state) => ({ openDetailModal: !state.openDetailModal })),
   setSell: (sell) => set({ sell }),
+  toggleReportModal: () => set((state) => ({ openReportModal: !state.openReportModal })),
+  setSubOrderId: (subOrderId) => set({ subOrderId }),
 }))

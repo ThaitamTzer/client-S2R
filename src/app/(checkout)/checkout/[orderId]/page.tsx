@@ -13,6 +13,7 @@ import Link from 'next/link'
 import IconifyIcon from '@/components/icons'
 import OpenEditShippingMethod from '@/components/checkout/openEditShippingMethod'
 import OpenEditNote from '@/components/checkout/openEditNote'
+import ReportModal from '@/components/checkout/reportModal'
 const NavigationWithBgAlways = dynamic(() => import('@/components/navWithBgAlway'), {
   ssr: false,
 })
@@ -69,6 +70,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
       <ChangeAddressModal />
       <OpenEditShippingMethod orderId={params.orderId} />
       <OpenEditNote orderId={params.orderId} />
+      <ReportModal />
       {order.data.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
     </>
   )

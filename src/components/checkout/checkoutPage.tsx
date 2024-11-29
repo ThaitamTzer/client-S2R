@@ -216,7 +216,7 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                 {
                                   label: 'Mã đơn hàng',
                                   span: 2,
-                                  children: <p className="text-black font-semibold text-sm">{subOrder.orderUUID}</p>,
+                                  children: <p className="text-black font-semibold text-sm">{subOrder.subOrderUUID}</p>,
                                 },
                                 {
                                   label: 'Phương thức vận chuyển',

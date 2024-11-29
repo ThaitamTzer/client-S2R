@@ -12,19 +12,21 @@ import toast from 'react-hot-toast'
 import ModalCancel from './modalCancel'
 import { useGetName } from '@/helper/getName'
 import ModalCancelSubOrder from './modalCancelSubOrder'
-import { Button, Rating, Textarea } from '@mantine/core'
+import { Button, Rating, Textarea, Tooltip, UnstyledButton } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import ratingService from '@/services/rating/rating.service'
+import IconifyIcon from '../icons'
+import { useOrderStore } from '@/zustand/order'
 
 export default function PurchasedPage({ order }: { order: OrderById }) {
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
   const [status, setStatus] = useState('')
   const [openModalCancel, setOpenModalCancel] = useState(false)
-  const [subOrderId, setSubOrderId] = useState('')
   const [openModalCancelSubOrder, setOpenModalCancelSubOrder] = useState(false)
   const { getOrderStatusName } = useGetName()
   const [isLoading, setIsLoading] = useState(false)
+  const { toggleReportModal, setSubOrderId, subOrderId } = useOrderStore()
 
   const form = useForm({
     initialValues: {
@@ -122,38 +124,13 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
       />
       <ModalCancelSubOrder
         subOrderId={subOrderId}
+        orderId={order.data._id}
         title="Thực hiện hủy đơn hàng này?"
         openModalCancelSubOrder={openModalCancelSubOrder}
         setOpenModalCancelSubOrder={setOpenModalCancelSubOrder}
       />
       <div className="container mx-auto px-2 md:px-36 py-10 md:pt-20">
         <div className="flex flex-col items-center justify-center space-y-6">
-          {/* {status === 'canceled' && (
-            <>
-              <h1 className="text-4xl font-bold text-red-500">Đơn hàng của bạn đã được hủy!</h1>
-              <p className="text-lg text-gray-700">
-                Cảm ơn bạn đã mua sắm cùng chúng tôi. Đơn hàng của bạn đã được hủy.
-              </p>
-            </>
-          )}
-          {status === 'pending' && (
-            <>
-              <h1 className="text-4xl font-bold text-green-900">Đơn hàng của bạn đã được thanh toán thành công!</h1>
-              <p className="text-lg text-gray-700">
-                Cảm ơn bạn đã mua sắm cùng chúng tôi. Đơn hàng của bạn đang được xử lý và sẽ sớm được giao.
-              </p>
-            </>
-          )}
-          {status === 'delivered' && (
-            <>
-              <h1 className="text-4xl font-bold text-green-900">Đơn hàng của bạn đã được giao thành công!</h1>
-              <p className="text-lg text-gray-700 text-center">
-                Cảm ơn bạn đã mua sắm cùng chúng tôi. Đơn hàng của bạn đã được giao thành công.
-                <br />
-                Vui lòng xác nhận đã nhận được hàng
-              </p>
-            </>
-          )} */}
           {order.data.paymentStatus === 'paid' && (
             <>
               <h1 className="text-4xl font-bold text-green-900">Đơn hàng của bạn đã được thanh toán thành công!</h1>
@@ -183,87 +160,107 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl">
             <h2 className="text-2xl font-bold mb-4">Sản phẩm</h2>
             {order.data.subOrders.map((subOrder) => (
-              <div key={subOrder._id} className="border-b pb-4">
-                {subOrder.products.map((product) => (
-                  <div key={product.productId._id} className="flex flex-row justify-between py-2 ">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 relative">
-                        <Image
-                          src={product.productId.imgUrls[0]}
-                          alt={product.productName}
-                          layout="fill"
-                          className="object-cover rounded-md"
-                        />
+              <>
+                <div className="flex flex-1 justify-end">
+                  <Tooltip label="Báo cáo" withArrow>
+                    <UnstyledButton
+                      onClick={() => {
+                        toggleReportModal()
+                        setSubOrderId(subOrder._id)
+                      }}
+                    >
+                      <IconifyIcon icon="lsicon:flag-filled" className="text-red-500 text-2xl" />
+                    </UnstyledButton>
+                  </Tooltip>
+                </div>
+                <div key={subOrder._id} className="border-b pb-4">
+                  {subOrder.products.map((product) => (
+                    <div key={product.productId._id} className="flex flex-row justify-between py-2 ">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 relative">
+                          <Image
+                            src={product.productId.imgUrls[0]}
+                            alt={product.productName}
+                            layout="fill"
+                            className="object-cover rounded-md"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-lg font-semibold text-wrap max-w-[300px]">{product.productName}</p>
+                          <p className="text-sm text-gray-500">Số lượng: {product.quantity}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-lg font-semibold text-wrap max-w-[300px]">{product.productName}</p>
-                        <p className="text-sm text-gray-500">Số lượng: {product.quantity}</p>
-                      </div>
+                      <p className="text-lg font-semibold text-green-900">{formatPrice(product.price) + 'đ'}</p>
                     </div>
-                    <p className="text-lg font-semibold text-green-900">{formatPrice(product.price) + 'đ'}</p>
-                  </div>
-                ))}
-                <p className="text-md font-semibold text-green-900">
-                  <div className="flex flex-row justify-between">
-                    <p className="font-semibold text-green-900">
-                      <span className="font-semibold text-gray-700">Mã đơn:</span> {subOrder.subOrderUUID}
+                  ))}
+                  <div className="flex flex-1 justify-between items-center">
+                    <p className="text-md font-semibold text-green-900">
+                      <div className="flex flex-row justify-between">
+                        <p className="font-semibold text-green-900">
+                          <span className="font-semibold text-gray-700">Mã đơn:</span> {subOrder.subOrderUUID}
+                        </p>
+                      </div>
+                      {subOrder.requestRefund && subOrder.requestRefund.status === 'pending' && (
+                        <>
+                          <p className="text-md font-semibold text-green-900">Đã yêu cầu hoàn tiền chờ xử lý</p>
+                        </>
+                      )}
+                      {!subOrder.requestRefund && (
+                        <>
+                          <span className="font-semibold text-gray-700">Trạng thái đơn:</span>{' '}
+                          {getOrderStatusName(subOrder.status)}
+                        </>
+                      )}
+                      {subOrder.status === 'completed' && (
+                        <>
+                          <div className="flex flex-1 flex-col gap-1">
+                            <p className="text-md font-semibold text-green-900">Đánh giá người bán</p>
+                            <form
+                              onSubmit={form.onSubmit(() => {
+                                handleSubmitRating(subOrder._id)
+                              })}
+                              className="flex flex-col gap-2"
+                            >
+                              <div className="flex flex-row gap-2 items-center">
+                                <Rating size="md" {...form.getInputProps('rating')} />
+                                <p className="text-sm text-gray-500">{form.values.rating} / 5 sao</p>
+                              </div>
+                              <Textarea
+                                rows={3}
+                                placeholder="Nhập nhận xét của bạn"
+                                {...form.getInputProps('comment')}
+                              />
+                              <Button type="submit" color="green">
+                                Gửi đánh giá
+                              </Button>
+                            </form>
+                          </div>
+                        </>
+                      )}
                     </p>
                   </div>
-                  {subOrder.requestRefund && subOrder.requestRefund.status === 'pending' && (
-                    <>
-                      <p className="text-md font-semibold text-green-900">Đã yêu cầu hoàn tiền chờ xử lý</p>
-                    </>
+                  {status === 'delivered' && (
+                    <div className="flex justify-center">
+                      <Button color="green" onClick={() => handleConfirmReceived(subOrder._id)} loading={isLoading}>
+                        Xác nhận đã nhận được hàng
+                      </Button>
+                    </div>
                   )}
-                  {!subOrder.requestRefund && (
-                    <>
-                      <span className="font-semibold text-gray-700">Trạng thái đơn:</span>{' '}
-                      {getOrderStatusName(subOrder.status)}
-                    </>
+                  {!subOrder.requestRefund && subOrder.status === 'pending' && (
+                    <div className="flex justify-center">
+                      <span
+                        onClick={() => {
+                          setSubOrderId(subOrder._id)
+                          handleOpenModalCancelSubOrder()
+                        }}
+                        className="font-semibold text-red-700 hover:underline cursor-pointer"
+                      >
+                        Hủy đơn hàng
+                      </span>
+                    </div>
                   )}
-                  {subOrder.status === 'completed' && (
-                    <>
-                      <div className="flex flex-1 flex-col gap-1">
-                        <p className="text-md font-semibold text-green-900">Đánh giá người bán</p>
-                        <form
-                          onSubmit={form.onSubmit(() => {
-                            handleSubmitRating(subOrder._id)
-                          })}
-                          className="flex flex-col gap-2"
-                        >
-                          <div className="flex flex-row gap-2 items-center">
-                            <Rating size="md" {...form.getInputProps('rating')} />
-                            <p className="text-sm text-gray-500">{form.values.rating} / 5 sao</p>
-                          </div>
-                          <Textarea rows={3} placeholder="Nhập nhận xét của bạn" {...form.getInputProps('comment')} />
-                          <Button type="submit" color="green">
-                            Gửi đánh giá
-                          </Button>
-                        </form>
-                      </div>
-                    </>
-                  )}
-                </p>
-                {status === 'delivered' && (
-                  <div className="flex justify-center">
-                    <Button color="green" onClick={() => handleConfirmReceived(subOrder._id)} loading={isLoading}>
-                      Xác nhận đã nhận được hàng
-                    </Button>
-                  </div>
-                )}
-                {!subOrder.requestRefund && subOrder.status === 'pending' && (
-                  <div className="flex justify-center">
-                    <span
-                      onClick={() => {
-                        setSubOrderId(subOrder._id)
-                        handleOpenModalCancelSubOrder()
-                      }}
-                      className="font-semibold text-red-700 hover:underline cursor-pointer"
-                    >
-                      Hủy đơn hàng
-                    </span>
-                  </div>
-                )}
-              </div>
+                </div>
+              </>
             ))}
           </div>
           <Link href="/shop" className="text-green-900 text-lg font-semibold hover:underline">
