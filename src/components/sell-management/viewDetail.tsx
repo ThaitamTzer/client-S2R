@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 
-export default function ViewDetail({ opened, onClose, sell }: { opened: boolean; onClose: () => void; sell?: Sell }) {
+export default function ViewDetail({ opened, onClose, sell }: { opened: boolean; onClose: () => void; sell: Sell }) {
   const { getColorName, getOrderPaymentName } = useGetName()
   const [status, setStatus] = useState('')
 
@@ -50,14 +50,16 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
     )
   }
 
+  console.log(sell)
+
   if (!sell) return null
   return (
     <Modal title="Chi tiết đơn hàng" size="lg" centered opened={opened} onClose={onClose}>
       <div className="w-full flex flex-col gap-5">
-        <div className="flex flex-row space-x-10">
+        <div className="flex flex-row gap-10 flex-wrap">
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Mã đơn hàng</p>
-            <p className="text-sm">{sell.orderUUID}</p>
+            <p className="text-sm">{sell.subOrderUUID}</p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Ngày tạo</p>
@@ -65,14 +67,20 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Trạng thái thanh toán</p>
-            <p className="text-sm">{getOrderPaymentName(sell.orderId.paymentStatus)}</p>
+            <p className="text-sm">{getOrderPaymentName(sell?.orderId?.paymentStatus) || '-'}</p>
           </div>
+          {sell?.status === 'completed' && (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Trạng thái đơn hàng</p>
+              <p className="text-sm">Đã nhận được hàng</p>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium">Tổng giá trị đơn hàng</p>
           <p className="text-sm">{formatPrice(sell.subTotal)} đ</p>
         </div>
-        {sell.status !== 'canceled' && sell.orderId.paymentStatus === 'paid' && (
+        {sell?.status !== 'canceled' && sell?.status !== 'completed' && sell?.orderId?.paymentStatus === 'paid' && (
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Cập nhật trạng thái đơn hàng</p>
             <Select data={availableStatuses} value={status} onChange={(value) => setStatus(value || '')} />
@@ -89,7 +97,7 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
         )}
         <div className="flex flex-col gap-2 w-full">
           <p className="text-sm font-medium">Sản phẩm</p>
-          {sell.products.map((product) => (
+          {sell?.products?.map((product) => (
             <div key={product._id} className="flex flex-row gap-2">
               <div className="w-24 h-32 relative">
                 <Image

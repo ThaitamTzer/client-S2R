@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import { ColorSchemeScript } from '@mantine/core'
 import { Montserrat } from 'next/font/google'
-import './globals.css'
-import '@/styles/style.css'
-import '@mantine/carousel/styles.css'
 import { Suspense, lazy } from 'react'
 import { Providers } from '@/providers/providers'
 import Loading from './loading'
@@ -11,6 +8,16 @@ import Header from '@/partials/header'
 import Footer from '@/partials/footer'
 import Chat from '@/components/chat/chat'
 import dynamic from 'next/dynamic'
+
+import './globals.css'
+import './layout.css'
+import '@/styles/style.css'
+import '@mantine/core/styles/global.css'
+import '@mantine/carousel/styles.css'
+import '@mantine/core/styles.layer.css'
+import 'mantine-datatable/styles.layer.css'
+import '@mantine/core/styles/Menu.css'
+import '@mantine/dates/styles.css';
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 

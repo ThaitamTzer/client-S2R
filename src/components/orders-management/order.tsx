@@ -1,28 +1,67 @@
 'use client'
 import useSWR from 'swr'
 import orderService from '@/services/order/order.service'
-import { Orders } from '@/types/orderTypes'
+import { Order, Orders } from '@/types/orderTypes'
 import { useState } from 'react'
-import { formatDate } from '@/components/product-management/column'
-import { formatPrice } from '@/helper/format'
-import { useRouter } from 'next/navigation'
-import { Tooltip } from '@mantine/core'
+import { DataTable } from 'mantine-datatable'
+import { TextInput, Select } from '@mantine/core'
+import { DateInput } from '@mantine/dates'
+import { useOrderColumns } from './column'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { debounce } from 'lodash'
+import { DatesProvider } from '@mantine/dates'
+import 'dayjs/locale/vi'
+
+const PAGE_SIZE = [10, 25, 50, 100]
 
 export default function OrderManagement() {
   const [orders, setOrders] = useState<Orders>()
+  const columns = useOrderColumns()
+
   const router = useRouter()
+  const searchParams = useSearchParams()
 
-  useSWR('/order/user', () => orderService.getAllOrders(), {
-    onSuccess(data) {
-      if (data) {
-        setOrders(data)
-      }
+  // Lấy các tham số từ URL
+  const page = Number(searchParams.get('page')) || 1
+  const limit = Number(searchParams.get('limit')) || 10
+  const paymentStatus = searchParams.get('paymentStatus') || ''
+  const searchKey = searchParams.get('searchKey') || ''
+  const dateFrom = searchParams.get('dateFrom') || ''
+  const dateTo = searchParams.get('dateTo') || ''
+  const sortBy = searchParams.get('sortBy') || ''
+  const sortOrder = searchParams.get('sortOrder') || ''
+
+  const [inputValue, setInputValue] = useState(searchKey)
+
+  // Debounce function để tránh gọi API liên tục khi tìm kiếm
+  const debouncedSearch = debounce((value: string) => {
+    router.push(`/orders-management?searchKey=${value}&page=1&limit=${limit}`)
+  }, 300)
+
+  // Gọi API dựa vào tham số URL và giữ lại dữ liệu cũ khi thay đổi
+  const { isLoading, isValidating } = useSWR(
+    ['/order/user', page, limit, searchKey, sortBy, sortOrder, dateFrom, dateTo, paymentStatus],
+    () => orderService.getAllOrders(page, limit, searchKey, sortBy, sortOrder, dateFrom, dateTo, paymentStatus),
+    {
+      onSuccess(data) {
+        if (data) setOrders(data)
+      },
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
     },
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-  })
+  )
 
-  console.log(orders?.data)
+  // Thêm hàm xử lý sort
+  const handleSort = (field: string) => {
+    const newSortOrder = field === sortBy && sortOrder === 'asc' ? 'desc' : 'asc'
+    router.push(
+      `/orders-management?page=${page}&limit=${limit}&searchKey=${searchKey}&sortBy=${field}&sortOrder=${newSortOrder}&paymentStatus=${paymentStatus}`,
+    )
+  }
+
+  // Thêm state để lưu giá trị ngày
+  const [dateFromValue, setDateFromValue] = useState<Date | null>(dateFrom ? new Date(dateFrom) : null)
+  const [dateToValue, setDateToValue] = useState<Date | null>(dateTo ? new Date(dateTo) : null)
 
   return (
     <div className="container px-1 md:px-10 mx-auto">
@@ -30,41 +69,115 @@ export default function OrderManagement() {
         <h2>Đơn hàng của tôi</h2>
       </div>
       <div className="mt-5 bg-white p-2 shadow-lg rounded-md">
-        <table className="w-full table-auto">
-          <thead>
-            <tr className="text-center text-sm md:text-xl font-light border-b border-gray-200 ">
-              <th className="py-3 font-medium">Mã đơn hàng</th>
-              <th className="py-3 font-medium">Ngày tạo</th>
-              <th className="py-3 font-medium">Tổng tiền</th>
-              <th className="py-3 font-medium">Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders?.data?.map((order) => (
-              <tr key={order._id} className="text-center text-sm md:text-xl">
-                <td className="py-3 text-green-900 flex justify-center">
-                  <Tooltip label="Xem chi tiết">
-                    <div
-                      className="text-center truncate max-w-[200px] cursor-pointer hover:text-green-500"
-                      onClick={() => router.push(`/checkout/${order._id}?callback=orders-management`)}
-                    >
-                      {order._id}
-                    </div>
-                  </Tooltip>
-                </td>
-                <td className="py-3">{formatDate(order.createdAt)}</td>
-                <td className="py-3">{formatPrice(order.totalAmount) + 'đ'}</td>
-                <td className="py-3">
-                  {order.paymentStatus === 'paid' ? (
-                    <p className="text-green-500">Đã thanh toán</p>
-                  ) : (
-                    <p className="text-red-500">Chưa thanh toán</p>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="flex flex-1 justify-between mb-2 gap-3">
+          <div className="flex items-center">
+            <h2 className="text-xl font-semibold">Danh sách đơn hàng</h2>
+          </div>
+
+          <TextInput
+            placeholder="Tìm kiếm"
+            style={{ width: '40%' }}
+            onChange={(e) => {
+              setInputValue(e.target.value) // Cập nhật giá trị ô input
+              debouncedSearch(e.target.value) // Thực hiện debounce và cập nhật URL
+            }}
+            value={inputValue}
+          />
+        </div>
+        <div className="flex flex-1 justify-start mb-3 gap-4">
+          <Select
+            label="Trạng thái thanh toán"
+            data={[
+              {
+                label: 'Tất cả',
+                value: '',
+              },
+              {
+                label: 'Đã thanh toán',
+                value: 'paid',
+              },
+              {
+                label: 'Chưa thanh toán',
+                value: 'pending',
+              },
+              {
+                label: 'Thất bại',
+                value: 'failed',
+              },
+            ]}
+            placeholder="Trạng thái thanh toán"
+            value={paymentStatus}
+            onChange={(value) => {
+              router.push(`/orders-management?paymentStatus=${value}&page=1&limit=${limit}`)
+            }}
+          />
+          <DatesProvider settings={{ locale: 'vi' }}>
+            <DateInput
+              label="Từ ngày"
+              placeholder="Chọn ngày bắt đầu"
+              value={dateFromValue}
+              onChange={(date) => {
+                setDateFromValue(date)
+                const formattedDate = date?.toISOString().split('T')[0] || ''
+                router.push(
+                  `/orders-management?dateFrom=${formattedDate}&dateTo=${dateTo}&page=1&limit=${limit}&paymentStatus=${paymentStatus}`,
+                )
+              }}
+              clearable
+            />
+
+            <DateInput
+              label="Đến ngày"
+              placeholder="Chọn ngày kết thúc"
+              value={dateToValue}
+              onChange={(date) => {
+                setDateToValue(date)
+                const formattedDate = date?.toISOString().split('T')[0] || ''
+                router.push(
+                  `/orders-management?dateFrom=${dateFrom}&dateTo=${formattedDate}&page=1&limit=${limit}&paymentStatus=${paymentStatus}`,
+                )
+              }}
+              disabled={!dateFromValue}
+              clearable
+              minDate={dateFromValue || undefined}
+            />
+          </DatesProvider>
+        </div>
+        <DataTable
+          fetching={isLoading || isValidating}
+          loaderType="bars"
+          highlightOnHover
+          loaderBackgroundBlur={1}
+          columns={columns}
+          height={500}
+          maxHeight={500}
+          minHeight={200}
+          noRecordsText={isValidating ? 'Đang tải dữ liệu...' : 'Không có đơn hàng nào'}
+          records={orders?.data || []}
+          striped
+          page={page}
+          totalRecords={orders?.pagination?.totalOrders || 0}
+          recordsPerPage={limit}
+          onPageChange={(newPage) => {
+            router.push(`/orders-management?page=${newPage}&limit=${limit}&searchKey=${inputValue}`)
+          }}
+          onRecordsPerPageChange={(newLimit) => {
+            router.push(`/orders-management?page=1&limit=${newLimit}&searchKey=${inputValue}`)
+          }}
+          recordsPerPageOptions={PAGE_SIZE}
+          recordsPerPageLabel="Số lượng trên trang"
+          sortStatus={
+            sortBy
+              ? {
+                  columnAccessor: sortBy as keyof Order,
+                  direction: sortOrder as 'asc' | 'desc',
+                }
+              : { columnAccessor: '', direction: 'asc' }
+          }
+          onSortStatusChange={({ columnAccessor }) => {
+            handleSort(columnAccessor as string)
+          }}
+        />
       </div>
     </div>
   )

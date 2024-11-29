@@ -38,7 +38,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
       }
       return false
     },
-    revalidateOnFocus: false,
+    revalidateOnFocus: true,
     revalidateOnMount: true,
   })
 

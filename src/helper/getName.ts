@@ -39,7 +39,9 @@ export const useGetName = () => {
       case 'shipping':
         return 'Đang giao hàng'
       case 'completed':
-        return 'Đã hoàn thành'
+        return 'Đã nhận hàng'
+      case 'delivered':
+        return 'Đã giao hàng'
       default:
         return string
     }

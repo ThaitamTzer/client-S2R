@@ -141,32 +141,22 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             }}
           />
           <div className="flex flex-col gap-2 text-sm md:text-base w-full">
-            <Tooltip
-              title={exchange?.receiveProduct?.receiverProductId.productName}
-              placement="top"
-              color="#2f9e44"
-            >
+            <Tooltip title={exchange?.receiveProduct?.receiverProductId.productName} placement="top" color="#2f9e44">
               <h1 className="text-2xl font-semibold text-green-800">
                 {truncateText(exchange?.receiveProduct?.receiverProductId.productName, 20)}
               </h1>
             </Tooltip>
             <div className="flex items-center gap-2">
               <span>Màu sắc: </span>
-              <p className="text-green-800 text-xl font-semibold">
-                {getColorName(exchange?.receiveProduct?.colors)}
-              </p>
+              <p className="text-green-800 text-xl font-semibold">{getColorName(exchange?.receiveProduct?.colors)}</p>
             </div>
             <div className="flex items-center gap-2">
               <span>Size: </span>
-              <p className="text-green-800 text-xl font-semibold">
-                {exchange?.receiveProduct?.size}
-              </p>
+              <p className="text-green-800 text-xl font-semibold">{exchange?.receiveProduct?.size}</p>
             </div>
             <div className="flex items-center gap-2">
               <span>Số lượng: </span>
-              <p className="text-green-800 text-xl font-semibold">
-                {exchange?.receiveProduct?.amount}
-              </p>
+              <p className="text-green-800 text-xl font-semibold">{exchange?.receiveProduct?.amount}</p>
             </div>
           </div>
         </div>
@@ -203,9 +193,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                       <>
                         <p className="text-base font-medium">Đơn hàng của bạn đã sẵn sàng ?</p>
                         <div className="flex items-center gap-3 mt-2">
-                          <p className="text-xs ">
-                            (Cập nhật trạng thái đơn hàng của bạn thành đang giao)
-                          </p>
+                          <p className="text-xs ">(Cập nhật trạng thái đơn hàng của bạn thành đang giao)</p>
                           <Button
                             variant="solid"
                             color="primary"
@@ -224,9 +212,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                             showCancel={false}
                             okText="Đồng ý"
                           >
-                            <span className="text-sm underline text-red-500 cursor-pointer">
-                              Hủy
-                            </span>
+                            <span className="text-sm underline text-red-500 cursor-pointer">Hủy</span>
                           </Popconfirm>
                         </div>
                       </>
@@ -235,9 +221,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                       <>
                         <p className="text-base font-medium">Bạn đã giao hàng cho yêu cầu ?</p>
                         <div className="flex items-center gap-3 mt-2">
-                          <p className="text-xs ">
-                            (Cập nhật trạng thái đơn hàng của bạn thành đã giao)
-                          </p>
+                          <p className="text-xs ">(Cập nhật trạng thái đơn hàng của bạn thành đã giao)</p>
                           <Button
                             variant="solid"
                             color="primary"
@@ -256,8 +240,8 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                             <p className="text-base font-medium">Hoàn thành giao hàng</p>
                             <div className="flex items-center justify-between gap-1 mt-2">
                               <p className="text-sm ">
-                                Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn
-                                và bạn xác nhận đã nhận được hàng của nhau
+                                Bạn sẽ được đánh giá người nhận của bạn sau khi người nhận của bạn và bạn xác nhận đã
+                                nhận được hàng của nhau
                               </p>
                             </div>
                           </>
@@ -265,9 +249,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                         {exchange?.requestStatus?.confirmStatus === 'confirmed' &&
                           exchange.ratings?.receiverRating === null && (
                             <div className="flex items-center justify-between gap-1 mt-2">
-                              <p className="text-sm ">
-                                Bạn đã nhận được hàng vui lòng đánh giá người nhận
-                              </p>
+                              <p className="text-sm ">Bạn đã nhận được hàng vui lòng đánh giá người nhận</p>
                             </div>
                           )}
                         {exchange?.requestStatus?.exchangeStatus === 'completed' &&
@@ -367,7 +349,7 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
                     disabled={!!exchange?.ratings?.receiverRating?.comment}
                   />
                 </div>
-            )}
+              )}
           </>
         )}
         {exchange.role === 'requester' &&
@@ -376,14 +358,14 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
             <div className="flex flex-col justify-center items-center gap-4">
               <p className="text-red-500 font-medium">Người này chưa nhận được hàng</p>
             </div>
-        )}
+          )}
         {exchange?.ratings?.receiverRating === null &&
           exchange.role === 'requester' &&
           exchange?.receiverStatus?.confirmStatus === 'confirmed' && (
             <div className="flex flex-col justify-center items-center gap-4">
               <p className="text-red-500 font-medium">Người này chưa thực hiện đánh giá</p>
             </div>
-        )}
+          )}
         {exchange?.receiverStatus?.exchangeStatus === 'canceled' && (
           <div className="flex flex-col justify-center items-center gap-4">
             <p className="text-red-500 font-medium">Đơn hàng đã bị hủy</p>

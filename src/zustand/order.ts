@@ -1,4 +1,5 @@
 import { Order, OrderById, SubOrder } from '@/types/orderTypes'
+import { Sell } from '@/types/sellType'
 import { create } from 'zustand'
 
 type OrderState = {
@@ -15,6 +16,8 @@ type OrderState = {
     totalPrice: number
     totalShippingFee: number
   }
+  openDetailModal: boolean
+  sell: Sell
 }
 
 type OrderActions = {
@@ -31,6 +34,8 @@ type OrderActions = {
     totalPrice: number
     totalShippingFee: number
   }) => void
+  toggleDetailModal: () => void
+  setSell: (sell: Sell) => void
 }
 
 export const useOrderStore = create<OrderState & OrderActions>((set) => ({
@@ -47,6 +52,8 @@ export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   address: '',
   phone: '',
   subOrder: {} as SubOrder,
+  openDetailModal: false,
+  sell: {} as Sell,
   setOrders: (orders) => set({ orders }),
   setOrder: (order) => set({ order }),
   toggleChangeAddressModal: () => set((state) => ({ openChangeAddressModal: !state.openChangeAddressModal })),
@@ -55,4 +62,6 @@ export const useOrderStore = create<OrderState & OrderActions>((set) => ({
   setPhone: (phone) => set({ phone }),
   setSubOrder: (subOrder) => set({ subOrder }),
   setSummary: (summary) => set({ summary }),
+  toggleDetailModal: () => set((state) => ({ openDetailModal: !state.openDetailModal })),
+  setSell: (sell) => set({ sell }),
 }))

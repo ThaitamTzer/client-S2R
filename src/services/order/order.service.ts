@@ -41,9 +41,53 @@ const orderService = {
     }
   },
 
-  getAllOrders: (): Promise<Orders> => axiosClient.get('/api/orders'),
+  getAllOrders: async (
+    page?: number,
+    limit?: number,
+    searchKey?: string,
+    sortBy?: string,
+    sortOrder?: string,
+    dateFrom?: string,
+    dateTo?: string,
+    paymentStatus?: string,
+  ): Promise<Orders> => {
+    const params = {
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(searchKey && { searchKey }),
+      ...(sortBy && { sortBy }),
+      ...(sortOrder && { sortOrder }),
+      ...(dateFrom && { dateFrom }),
+      ...(dateTo && { dateTo }),
+      ...(paymentStatus && { paymentStatus }),
+    }
+    const res: Orders = await axiosClient.get('/api/orders', { params })
 
-  getAllOrdersByUser: (): Promise<SellType> => axiosClient.get('/api/orders/get-order-for-seller'),
+    return res
+  },
+
+  getAllOrdersByUser: async (
+    page?: number,
+    limit?: number,
+    searchKey?: string,
+    sortBy?: string,
+    sortOrder?: string,
+    dateFrom?: string,
+    dateTo?: string,
+  ): Promise<SellType> => {
+    const params = {
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(searchKey && { searchKey }),
+      ...(sortBy && { sortBy }),
+      ...(sortOrder && { sortOrder }),
+      ...(dateFrom && { dateFrom }),
+      ...(dateTo && { dateTo }),
+    }
+    const res: SellType = await axiosClient.get('/api/orders/get-order-for-seller', { params })
+
+    return res
+  },
 
   getOrderById: async (id: string): Promise<OrderById> => {
     const res: OrderById = await axiosClient.get(`/api/orders/${id}`)
@@ -105,6 +149,25 @@ const orderService = {
   ) => {
     try {
       return await axiosClient.put(`/api/orders/request-refund/${subOrderId}`, data).then(() => success && success())
+    } catch (error: any) {
+      if (error) {
+        if (errorMessage) {
+          errorMessage(error.response?.data.message)
+        }
+      }
+    }
+  },
+
+  confirmReceived: async (
+    id: string,
+    status: string,
+    success?: () => void,
+    errorMessage?: (message: string) => void,
+  ) => {
+    try {
+      return await axiosClient
+        .patch(`/api/orders/update-status-for-buyer/${id}`, { status })
+        .then(() => success && success())
     } catch (error: any) {
       if (error) {
         if (errorMessage) {

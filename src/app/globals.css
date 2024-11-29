@@ -1,4 +1,4 @@
-@layer tw_base, mantine, tw_components, tw_utilities;
+@layer tw_base, mantine, tw_components, tw_utilities, mantine-datatable;
 
 /* import tailwind */
 @import 'tailwindcss/base' layer(tw_base);

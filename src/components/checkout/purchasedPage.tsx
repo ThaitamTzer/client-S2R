@@ -12,6 +12,9 @@ import toast from 'react-hot-toast'
 import ModalCancel from './modalCancel'
 import { useGetName } from '@/helper/getName'
 import ModalCancelSubOrder from './modalCancelSubOrder'
+import { Button, Rating, Textarea } from '@mantine/core'
+import { useForm } from '@mantine/form'
+import ratingService from '@/services/rating/rating.service'
 
 export default function PurchasedPage({ order }: { order: OrderById }) {
   const searchParams = useSearchParams()
@@ -21,6 +24,22 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
   const [subOrderId, setSubOrderId] = useState('')
   const [openModalCancelSubOrder, setOpenModalCancelSubOrder] = useState(false)
   const { getOrderStatusName } = useGetName()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const form = useForm({
+    initialValues: {
+      rating: 1,
+      comment: '',
+    },
+
+    validateInputOnBlur: ['rating', 'comment'],
+    validateInputOnChange: ['rating', 'comment'],
+
+    validate: {
+      rating: (value) => (value < 1 || value > 5 ? 'Bạn cần đánh giá từ 1 đến 5 sao' : null),
+      comment: (value) => (value.length > 100 ? 'Nhận xét không được quá 100 ký tự' : null),
+    },
+  })
 
   useEffect(() => {
     order.data.subOrders.forEach((subOrder) => {
@@ -28,6 +47,8 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
         setStatus('pending')
       } else if (subOrder.status === 'canceled') {
         setStatus('canceled')
+      } else if (subOrder.status === 'delivered') {
+        setStatus('delivered')
       }
     })
   }, [order.data.subOrders])
@@ -43,6 +64,41 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
       () => {
         toast.error('Đã có lỗi xảy ra khi hủy đơn hàng vui lòng thử lại sau')
         setOpenModalCancel(false)
+      },
+    )
+  }
+
+  const handleConfirmReceived = (subOrderId: string) => {
+    setIsLoading(true)
+    orderService.confirmReceived(
+      subOrderId,
+      'completed',
+      () => {
+        toast.success('Xác nhận đã nhận được hàng thành công')
+        mutate(['/order/id', order.data._id])
+        setIsLoading(false)
+      },
+      () => {
+        toast.error('Đã có lỗi xảy ra vui lòng thử lại sau!')
+        setIsLoading(false)
+      },
+    )
+  }
+
+  const handleSubmitRating = (subOrderId: string) => {
+    ratingService.create(
+      {
+        targetId: subOrderId,
+        rating: form.values.rating,
+        comment: form.values.comment,
+        targetType: 'sale',
+      },
+      () => {
+        toast.success('Đánh giá thành công')
+        mutate(['/order/id', order.data._id])
+      },
+      () => {
+        toast.error('Đã có lỗi xảy ra vui lòng thử lại sau!')
       },
     )
   }
@@ -72,14 +128,33 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
       />
       <div className="container mx-auto px-2 md:px-36 py-10 md:pt-20">
         <div className="flex flex-col items-center justify-center space-y-6">
-          {status === 'canceled' ? (
+          {/* {status === 'canceled' && (
             <>
               <h1 className="text-4xl font-bold text-red-500">Đơn hàng của bạn đã được hủy!</h1>
               <p className="text-lg text-gray-700">
                 Cảm ơn bạn đã mua sắm cùng chúng tôi. Đơn hàng của bạn đã được hủy.
               </p>
             </>
-          ) : (
+          )}
+          {status === 'pending' && (
+            <>
+              <h1 className="text-4xl font-bold text-green-900">Đơn hàng của bạn đã được thanh toán thành công!</h1>
+              <p className="text-lg text-gray-700">
+                Cảm ơn bạn đã mua sắm cùng chúng tôi. Đơn hàng của bạn đang được xử lý và sẽ sớm được giao.
+              </p>
+            </>
+          )}
+          {status === 'delivered' && (
+            <>
+              <h1 className="text-4xl font-bold text-green-900">Đơn hàng của bạn đã được giao thành công!</h1>
+              <p className="text-lg text-gray-700 text-center">
+                Cảm ơn bạn đã mua sắm cùng chúng tôi. Đơn hàng của bạn đã được giao thành công.
+                <br />
+                Vui lòng xác nhận đã nhận được hàng
+              </p>
+            </>
+          )} */}
+          {order.data.paymentStatus === 'paid' && (
             <>
               <h1 className="text-4xl font-bold text-green-900">Đơn hàng của bạn đã được thanh toán thành công!</h1>
               <p className="text-lg text-gray-700">
@@ -145,7 +220,36 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
                       {getOrderStatusName(subOrder.status)}
                     </>
                   )}
+                  {subOrder.status === 'completed' && (
+                    <>
+                      <div className="flex flex-1 flex-col gap-1">
+                        <p className="text-md font-semibold text-green-900">Đánh giá người bán</p>
+                        <form
+                          onSubmit={form.onSubmit(() => {
+                            handleSubmitRating(subOrder._id)
+                          })}
+                          className="flex flex-col gap-2"
+                        >
+                          <div className="flex flex-row gap-2 items-center">
+                            <Rating size="md" {...form.getInputProps('rating')} />
+                            <p className="text-sm text-gray-500">{form.values.rating} / 5 sao</p>
+                          </div>
+                          <Textarea rows={3} placeholder="Nhập nhận xét của bạn" {...form.getInputProps('comment')} />
+                          <Button type="submit" color="green">
+                            Gửi đánh giá
+                          </Button>
+                        </form>
+                      </div>
+                    </>
+                  )}
                 </p>
+                {status === 'delivered' && (
+                  <div className="flex justify-center">
+                    <Button color="green" onClick={() => handleConfirmReceived(subOrder._id)} loading={isLoading}>
+                      Xác nhận đã nhận được hàng
+                    </Button>
+                  </div>
+                )}
                 {!subOrder.requestRefund && subOrder.status === 'pending' && (
                   <div className="flex justify-center">
                     <span

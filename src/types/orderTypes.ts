@@ -98,6 +98,7 @@ export type Order = {
   subOrders: SubOrder[]
   createdAt: string | Date
   updatedAt: string | Date
+  orderUUID: string
   summary: {
     totalAmount: number
     totalTypes: number
@@ -118,4 +119,9 @@ export type OrderById = {
 
 export type Orders = {
   data: Order[]
+  pagination: {
+    currentPage: number
+    totalPages: number
+    totalOrders: number
+  }
 }

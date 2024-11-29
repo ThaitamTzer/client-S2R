@@ -44,4 +44,7 @@ export type Sell = {
 
 export type SellType = {
   data: Sell[]
+  pagination: {
+    totalOrders: number
+  }
 }
