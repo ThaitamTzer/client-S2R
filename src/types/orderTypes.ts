@@ -38,6 +38,10 @@ export type Product = {
   price: number
   size: string
   color: string
+  rating: {
+    comment: string
+    rating: number
+  }
 }
 
 export type RequestRefund = {

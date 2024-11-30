@@ -28,6 +28,9 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
   const [isLoading, setIsLoading] = useState(false)
   const { toggleReportModal, setSubOrderId, subOrderId } = useOrderStore()
 
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
+
   const form = useForm({
     initialValues: {
       rating: 1,
@@ -51,6 +54,17 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
         setStatus('canceled')
       } else if (subOrder.status === 'delivered') {
         setStatus('delivered')
+      } else if (subOrder.status === 'completed') {
+        setStatus('completed')
+      }
+    })
+  }, [order.data.subOrders])
+
+  useEffect(() => {
+    order.data.subOrders.forEach((subOrder) => {
+      if (subOrder.products.some((product) => product.rating)) {
+        setRating(subOrder.products.find((product) => product.rating)?.rating.rating || 0)
+        setComment(subOrder.products.find((product) => product.rating)?.rating.comment || '')
       }
     })
   }, [order.data.subOrders])
@@ -222,17 +236,20 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
                               className="flex flex-col gap-2"
                             >
                               <div className="flex flex-row gap-2 items-center">
-                                <Rating size="md" {...form.getInputProps('rating')} />
+                                <Rating size="md" {...form.getInputProps('rating')} readOnly={rating ? true : false} />
                                 <p className="text-sm text-gray-500">{form.values.rating} / 5 sao</p>
                               </div>
                               <Textarea
                                 rows={3}
                                 placeholder="Nhập nhận xét của bạn"
+                                disabled={comment ? true : false}
                                 {...form.getInputProps('comment')}
                               />
-                              <Button type="submit" color="green">
-                                Gửi đánh giá
-                              </Button>
+                              {!rating && !comment && (
+                                <Button type="submit" color="green">
+                                  Gửi đánh giá
+                                </Button>
+                              )}
                             </form>
                           </div>
                         </>
