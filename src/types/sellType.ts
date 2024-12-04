@@ -32,6 +32,10 @@ export type Sell = {
       color: string
     },
   ]
+  rating: {
+    comment: string
+    rating: number
+  }
   shippingService: 'GHN' | 'GHTK' | 'agreement'
   shippingFee: number
   note: string | null

@@ -63,6 +63,8 @@ export type SubOrder = {
     lastname: string
     avatar: string
     email: string
+    phone: string
+    address: string
   }
   subTotal: number
   products: Product[]

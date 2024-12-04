@@ -8,9 +8,11 @@ import orderService from '@/services/order/order.service'
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
+import IconifyIcon from '../icons'
 
 export default function ViewDetail({ opened, onClose, sell }: { opened: boolean; onClose: () => void; sell: Sell }) {
   const { getColorName, getOrderPaymentName } = useGetName()
+
   const [status, setStatus] = useState('')
 
   useEffect(() => {
@@ -54,8 +56,8 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
 
   if (!sell) return null
   return (
-    <Modal title="Chi tiết đơn hàng" size="lg" centered opened={opened} onClose={onClose}>
-      <div className="w-full flex flex-col gap-5">
+    <Modal title="Chi tiết đơn hàng" size="xl" centered opened={opened} onClose={onClose} zIndex={300}>
+      <div className="w-full flex flex-col gap-5 relative">
         <div className="flex flex-row gap-10 flex-wrap">
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Mã đơn hàng</p>
@@ -87,6 +89,18 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
               <p className="text-sm">Đã nhận được hàng</p>
             </div>
           )}
+          {sell?.rating?.rating && sell?.rating?.comment && (
+            <div className="flex flex-col gap-1">
+              <p className="text-sm font-medium">Đánh giá của người mua</p>
+              <p className="text-sm flex flex-row gap-1 items-center">
+                <span className="font-medium">Đánh giá:</span> {sell?.rating.rating} / 5{' '}
+                <IconifyIcon icon="fluent-emoji-flat:star" />
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Nhận xét:</span> {sell?.rating.comment}
+              </p>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium">Tổng giá trị đơn hàng</p>
@@ -107,6 +121,7 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
             </Button>
           </div>
         )}
+
         <div className="flex flex-col gap-2 w-full">
           <p className="text-sm font-medium">Sản phẩm</p>
           {sell?.products?.map((product) => (

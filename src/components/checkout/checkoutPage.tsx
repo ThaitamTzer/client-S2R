@@ -5,13 +5,13 @@ import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
 import { useGetName } from '@/helper/getName'
 import IconifyIcon from '../icons'
-import { Button, Divider, Radio, Stack } from '@mantine/core'
+import { Button, Divider, Radio, Stack, Popover, ActionIcon } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { useOrderStore } from '@/zustand/order'
 import checkoutService, { Success } from '@/services/checkout/checkout.service'
 import NavigateToMomo from './navigateToMomo'
 import toast from 'react-hot-toast'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
 import orderService from '@/services/order/order.service'
@@ -28,6 +28,7 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
   const [payUrl, setPayUrl] = useState('')
   const { user } = useAuth()
   const { toggleEdit, toggleEditNote } = useCheckoutStore()
+  const router = useRouter()
 
   useEffect(() => {
     if (user?.address && user?.phone && !order.data.address && !order.data.phone) {
@@ -52,9 +53,17 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
       toast.error('Vui lòng điền địa chỉ nhận hàng')
       return
     }
-    await checkoutService.momoPayment(order.data._id, (res: Success) => {
-      setPayUrl(res.response.payUrl)
-    })
+    if (paymentMethod === '1') {
+      await checkoutService.codPayment(order.data._id, () => {
+        toast.success('Đặt hàng thành công, chuyển hướng đến trang chi tiết đơn hàng')
+        mutate(['/order/id', order.data._id])
+        router.push(`/checkout/${order.data._id}?callback=orders-management`)
+      })
+    } else {
+      await checkoutService.momoPayment(order.data._id, (res: Success) => {
+        setPayUrl(res.response.payUrl)
+      })
+    }
   }
 
   const handleConfirmPayment = async () => {
@@ -228,7 +237,27 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                           <>
                                             <p className="text-black font-bold text-sm">Giao hàng nhanh</p>
                                             <p className="text-black font-normal text-xs">Standard Express</p>
-                                            <p className="text-black font-normal text-xs">Nhận hàng trong 1-2 ngày</p>
+                                            <p className="text-black font-normal text-xs">Nhận hàng trong 1-3 ngày</p>
+                                            <p className="text-black font-normal text-xs flex flex-row gap-1 items-center">
+                                              <span>Xem cách tính đơn giá vận chuyển</span>
+                                              <Popover>
+                                                <Popover.Target>
+                                                  <ActionIcon variant="transparent" size="xs">
+                                                    <IconifyIcon icon="mingcute:information-line" className="w-4 h-4" />
+                                                  </ActionIcon>
+                                                </Popover.Target>
+                                                <Popover.Dropdown>
+                                                  <p className="text-black font-normal text-xs">
+                                                    Nội tỉnh: Không quá 3kg, giá giao hàng 22.000đ, mỗi 0,5kg tiếp theo
+                                                    tính 2.500đ
+                                                  </p>
+                                                  <p className="text-black font-normal text-xs">
+                                                    Liên tỉnh: Không quá 0.3kg (300gram), giá giao hàng 30.000đ, mỗi
+                                                    0,5kg tiếp theo tính 5.000đ
+                                                  </p>
+                                                </Popover.Dropdown>
+                                              </Popover>
+                                            </p>
                                           </>
                                         )}
                                         {subOrder.shippingService === 'GHTK' && (
@@ -236,6 +265,26 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                             <p className="text-black font-bold text-sm">Giao hàng tiết kiệm</p>
                                             <p className="text-black font-normal text-xs">Standard Express</p>
                                             <p className="text-black font-normal text-xs">Nhận hàng trong 3-5 ngày</p>
+                                            <p className="text-black font-normal text-xs flex flex-row gap-1 items-center">
+                                              <span>Xem cách tính đơn giá vận chuyển</span>
+                                              <Popover>
+                                                <Popover.Target>
+                                                  <ActionIcon variant="transparent" size="xs">
+                                                    <IconifyIcon icon="mingcute:information-line" className="w-4 h-4" />
+                                                  </ActionIcon>
+                                                </Popover.Target>
+                                                <Popover.Dropdown>
+                                                  <p className="text-black font-normal text-xs">
+                                                    Nội tỉnh: Không quá 3kg, giá giao hàng 15.000đ, mỗi 0,5kg tiếp theo
+                                                    tính 2.500đ
+                                                  </p>
+                                                  <p className="text-black font-normal text-xs">
+                                                    Liên tỉnh: Không quá 0.5kg (500gram), giá giao hàng 29.000đ, mỗi
+                                                    0,5kg tiếp theo tính 5.000đ
+                                                  </p>
+                                                </Popover.Dropdown>
+                                              </Popover>
+                                            </p>
                                           </>
                                         )}
                                         {subOrder.shippingService === 'agreement' && (
@@ -288,10 +337,15 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                                   ),
                                 },
                                 {
+                                  label: '',
+                                  span: 1,
+                                  children: <p className="text-black font-semibold text-sm text-right "></p>,
+                                },
+                                {
                                   label: 'Tổng tiền các sản phẩm',
-                                  span: 2,
+                                  span: 1,
                                   children: (
-                                    <p className="text-black font-semibold text-sm">
+                                    <p className="text-black font-semibold text-sm  ">
                                       {formatPrice(subOrder.subTotal) + 'đ'}
                                     </p>
                                   ),
@@ -413,15 +467,13 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
             <div className="bg-white p-8 rounded-lg shadow-md flex flex-col gap-4">
               <h1 className="text-2xl font-bold">Thông tin thanh toán</h1>
               <div className="w-full flex flex-col gap-2">
-                <p className="text-xl font-normal flex justify-between">
+                <p className="text-lg font-normal flex justify-between">
                   Tổng tiền sản phẩm:{' '}
-                  <span className="font-semibold text-green-900">{formatPrice(order.summary.totalPrice) + 'đ'}</span>
+                  <span className="font-semibold text-black">{formatPrice(order.summary.totalPrice) + 'đ'}</span>
                 </p>
-                <p className="text-xl font-normal flex justify-between">
+                <p className="text-lg font-normal flex justify-between">
                   Phí vận chuyển:{' '}
-                  <span className="font-semibold text-green-900">
-                    {formatPrice(order.summary.totalShippingFee) + 'đ'}
-                  </span>
+                  <span className="font-semibold text-black">{formatPrice(order.summary.totalShippingFee) + 'đ'}</span>
                 </p>
                 <p className="text-xl font-normal flex justify-between">
                   Tổng tiền thanh toán:{' '}
@@ -442,9 +494,9 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                 height: '80px',
               }}
             >
-              Thanh toán
+              {paymentMethod === '1' ? 'Đặt hàng' : 'Thanh toán'}
             </Button>
-            {order.data.transactionId && (
+            {order.data.transactionId && order.data.paymentStatus === 'pending' && (
               <>
                 <p className="text-green-900 text-center">Bạn đã thanh toán đơn hàng này?</p>
                 <p className="text-green-900 text-center">
@@ -460,12 +512,12 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                   disabled={!order.data.address || !order.data.phone}
                   onClick={handleConfirmPayment}
                   style={{
-                    backgroundColor: !order.data.address || !order.data.phone ? '#ccc' : '#16a34a',
+                    backgroundColor: !order.data.address || !order.data.phone ? '#ccc' : '#0A97B0',
                     color: '#fff',
                     fontWeight: 'bold',
-                    fontSize: '30px',
+                    fontSize: '20px',
                     width: '100%',
-                    height: '80px',
+                    height: '50px',
                   }}
                 >
                   Xác nhận đã thanh toán

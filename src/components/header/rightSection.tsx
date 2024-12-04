@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, Menu, rem, Text, UnstyledButton, ScrollArea } from '@mantine/core'
-import { Dropdown, MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import Link from 'next/link'
 import { IconSettings, IconTruck, IconLogout, IconClipboardData } from '@tabler/icons-react'
 import IconifyIcon from '@/components/icons'
@@ -13,34 +13,14 @@ import { useUserAction } from '@/zustand/user'
 import ChatDropdown from '../chat/chatDropdown'
 import { useProductClient } from '@/zustand/productClient'
 import { useCart } from '@/zustand/cart'
-
-const items: MenuProps['items'] = [
-  {
-    key: '1',
-    label: (
-      <>
-        <p>Đơn mua</p>
-      </>
-    ),
-  },
-  {
-    key: '2',
-    label: (
-      <>
-        <p>Đơn bán</p>
-      </>
-    ),
-  },
-]
+import { useRouter } from 'next/navigation'
 
 export default function RightSection({
   notifications,
   handleViewNotification,
-  api,
 }: {
   notifications: NotificationType[]
   handleViewNotification: (notificationId: string, event: React.MouseEvent) => void
-  api: any
 }) {
   const { logout, user } = useAuth()
   const { toogleExchangeModal, listExchangeRev } = useExchange()
@@ -48,6 +28,7 @@ export default function RightSection({
   const { setOpenChatDropdown } = useUserAction()
   const { toggleCartDrawer } = useProductClient()
   const { cartItems } = useCart()
+  const router = useRouter()
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
   const pendingExchangeCount =
@@ -189,8 +170,29 @@ export default function RightSection({
           </>
         )}
         {/* bag */}
-        <Dropdown placement="bottom" arrow menu={{ items }}>
-          <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
+        <Dropdown
+          placement="bottom"
+          arrow
+          menu={{
+            items: [
+              {
+                key: '1',
+                label: <p>Đơn mua</p>,
+                onClick: () => {
+                  router.push('/orders-management')
+                },
+              },
+              {
+                key: '2',
+                label: <p>Đơn bán</p>,
+                onClick: () => {
+                  router.push('/sell-management')
+                },
+              },
+            ],
+          }}
+        >
+          <UnstyledButton>
             <IconifyIcon
               icon="solar:bag-4-linear"
               className="text-green-900"

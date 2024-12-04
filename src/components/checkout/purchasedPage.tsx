@@ -24,12 +24,19 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
   const [status, setStatus] = useState('')
   const [openModalCancel, setOpenModalCancel] = useState(false)
   const [openModalCancelSubOrder, setOpenModalCancelSubOrder] = useState(false)
-  const { getOrderStatusName } = useGetName()
+  const { getOrderStatusName, getShippingServiceName } = useGetName()
   const [isLoading, setIsLoading] = useState(false)
   const { toggleReportModal, setSubOrderId, subOrderId } = useOrderStore()
 
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
+
+  useEffect(() => {
+    if (rating && comment) {
+      form.setFieldValue('rating', rating)
+      form.setFieldValue('comment', comment)
+    }
+  }, [rating, comment])
 
   const form = useForm({
     initialValues: {
@@ -165,10 +172,17 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
               <span className="font-semibold">Số điện thoại giao hàng:</span> {order.data.phone}
             </p>
             <p className="text-lg">
-              <span className="font-semibold">Ngày thanh toán:</span> {new Date().toLocaleDateString()}
+              <span className="font-semibold">Phương thức thanh toán:</span>{' '}
+              {order.data.paymentStatus === 'PayPickup' ? 'Thanh toán khi nhận hàng' : 'Thanh toán online'}
             </p>
             <p className="text-lg">
-              <span className="font-semibold">Tổng tiền:</span> {formatPrice(order.data.totalAmount + 22000) + 'đ'}
+              <span className="font-semibold">
+                {order.data.paymentStatus === 'paid' ? 'Ngày thanh toán:' : 'Ngày đặt hàng:'}
+              </span>{' '}
+              {new Date(order.data.createdAt).toLocaleDateString()}
+            </p>
+            <p className="text-lg">
+              <span className="font-semibold">Tổng tiền:</span> {formatPrice(order.data.totalAmount) + 'đ'}
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-xl">
@@ -225,6 +239,22 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
                           {getOrderStatusName(subOrder.status)}
                         </>
                       )}
+                      <div className="flex flex-row items-center gap-1">
+                        <span className="font-semibold text-gray-700">Đơn vị vận chuyển:</span>{' '}
+                        {getShippingServiceName(subOrder.shippingService)}
+                      </div>
+                      <div className="flex flex-row items-center gap-1">
+                        <span className="font-semibold text-gray-700">Chi phí vận chuyển:</span>{' '}
+                        {formatPrice(subOrder.shippingFee) + 'đ'}
+                      </div>
+                      <div className="flex flex-col  ">
+                        <span className="font-semibold text-gray-700">Thông tin người bán:</span>
+                        <span className="font-semibold text-black">
+                          {subOrder.sellerId.firstname} {subOrder.sellerId.lastname}
+                        </span>
+                        <span className="font-semibold text-black">{subOrder.sellerId.email}</span>
+                        <span className="font-semibold text-black">{subOrder.sellerId.phone}</span>
+                      </div>
                       {subOrder.status === 'completed' && (
                         <>
                           <div className="flex flex-1 flex-col gap-1">

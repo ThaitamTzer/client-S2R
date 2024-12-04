@@ -72,7 +72,13 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
       <OpenEditShippingMethod orderId={params.orderId} />
       <OpenEditNote orderId={params.orderId} />
       <ReportModal reportType="order" resson={RessonOrder} />
-      {order.data.paymentStatus === 'paid' ? <PurchasedPage order={order} /> : <CheckoutPage order={order} />}
+      {order.data.paymentStatus === 'paid' ? (
+        <PurchasedPage order={order} />
+      ) : order.data.paymentStatus === 'PayPickup' ? (
+        <PurchasedPage order={order} />
+      ) : (
+        <CheckoutPage order={order} />
+      )}
     </>
   )
 }

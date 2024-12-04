@@ -1,9 +1,9 @@
 import React from 'react'
 import type { MenuProps } from 'antd'
 import Link from 'next/link'
-import { IconUserFilled, IconLockPassword, IconArchiveFilled, IconAccessibleFilled } from '@tabler/icons-react'
 import { useAuth } from '@/hooks/useAuth'
 import IconifyIcon from '@/components/icons'
+import Image from 'next/image'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -18,10 +18,19 @@ export const useProfileLinks = () => {
       children: [
         {
           key: 'profile',
-          icon: <IconUserFilled size={26} color="#000" />,
+          icon: <IconifyIcon icon="solar:user-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (
             <Link href="/profile" className="text-sm md:text-lg font-thin">
               Thông tin tài khoản
+            </Link>
+          ),
+        },
+        {
+          key: 'banking-infor',
+          icon: <IconifyIcon icon="solar:card-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
+          label: (
+            <Link href="/banking-infor" className="text-sm md:text-lg font-thin">
+              Thông tin thanh toán
             </Link>
           ),
         },
@@ -30,7 +39,7 @@ export const useProfileLinks = () => {
           ? [
               {
                 key: 'change-password',
-                icon: <IconLockPassword size={26} color="#000" />,
+                icon: <IconifyIcon icon="solar:lock-password-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
                 label: (
                   <Link href="/change-password" className="text-sm md:text-lg font-thin">
                     Thay đổi mật khẩu
@@ -42,7 +51,9 @@ export const useProfileLinks = () => {
 
         {
           key: 'user-style',
-          icon: <IconAccessibleFilled size={26} color="#000" />,
+          icon: (
+            <Image src="/images/icon-park-outline--personal-collection.png" alt="user-style" width={26} height={26} />
+          ),
           label: (
             <Link href="/user-style" className="text-sm md:text-lg font-thin">
               Phong cách của bạn
@@ -51,6 +62,7 @@ export const useProfileLinks = () => {
         },
       ],
     },
+
     {
       key: 'product-management',
       label: <p className="font-semibold text-lg text-black">Quản lý</p>,
@@ -58,7 +70,7 @@ export const useProfileLinks = () => {
       children: [
         {
           key: 'product-management',
-          icon: <IconArchiveFilled size={26} color="#000" />,
+          icon: <IconifyIcon icon="fluent-mdl2:product" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (
             <Link href="/product-management" className="text-sm md:text-lg font-thin">
               Quản lý sản phẩm

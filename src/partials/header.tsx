@@ -128,7 +128,7 @@ export default function Header() {
             <MiddleSection handleSearchSubmit={handleSearchSubmit} searchKey={searchKey} setSearchKey={setSearchKey} />
 
             {/* Right section: Icons and User Menu */}
-            <RightSection api={api} handleViewNotification={handleViewNotification} notifications={notifications} />
+            <RightSection handleViewNotification={handleViewNotification} notifications={notifications} />
           </div>
         </div>
       </header>

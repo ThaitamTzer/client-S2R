@@ -7,9 +7,11 @@ import { DataTableColumn } from 'mantine-datatable'
 import { formatDate } from '../product-management/column'
 import { formatPrice } from '@/helper/format'
 import IconifyIcon from '../icons'
+import { useGetName } from '@/helper/getName'
 
 export const useOrderColumns = () => {
   const router = useRouter()
+  const { getOrderPaymentName, getColorPaymentName } = useGetName()
 
   const columns: DataTableColumn<Order>[] = [
     {
@@ -33,12 +35,10 @@ export const useOrderColumns = () => {
     {
       accessor: 'paymentStatus',
       title: 'Trạng thái thanh toán',
-      render: ({ paymentStatus }) =>
-        paymentStatus === 'paid' ? (
-          <p className="text-green-500">Đã thanh toán</p>
-        ) : (
-          <p className="text-red-500">Chưa thanh toán</p>
-        ),
+      render: ({ paymentStatus }) => {
+        const color = getColorPaymentName(paymentStatus)
+        return <p style={{ color: color }}>{getOrderPaymentName(paymentStatus)}</p>
+      },
       sortable: true,
     },
     {

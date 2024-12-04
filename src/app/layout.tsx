@@ -17,7 +17,7 @@ import '@mantine/carousel/styles.css'
 import '@mantine/core/styles.layer.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/core/styles/Menu.css'
-import '@mantine/dates/styles.css';
+import '@mantine/dates/styles.css'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
@@ -88,6 +88,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href={`${apiDomain}/api`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#16a34a" />
+        <meta name="google-site-verification" content="dC_ZZ8dPqFvxMMMiFOeMIV2va5G0-K467cyjKles4lo" />
         <link rel="icon" href="./favicon.ico" sizes="any" />
         <link rel="canonical" href="https://share2receive-client.vercel.app" />
         <ColorSchemeScript />

@@ -25,6 +25,13 @@ export type RegisterParams = {
 
 export type UserDataType = {
   typeUser: string
+  banking: {
+    bankingNumber: string
+    bankingName: string
+    bankingNameUser: string
+    bankingBranch: string
+    _id: string
+  }
   _id: string
   firstname: string
   lastname: string

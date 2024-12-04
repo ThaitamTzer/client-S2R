@@ -36,6 +36,10 @@ const navLinks: navLink[] = [
     label: 'Đơn hàng của tôi',
   },
   {
+    href: '/banking-infor',
+    label: 'Thông tin ngân hàng',
+  },
+  {
     href: '/user-style',
     label: 'Phong cách',
   },

@@ -10,7 +10,7 @@ import { useGetName } from '@/helper/getName'
 import { useOrderStore } from '@/zustand/order'
 
 export const useSellColumns = () => {
-  const { getOrderPaymentName, getOrderStatusName } = useGetName()
+  const { getOrderPaymentName, getOrderStatusName, getColorPaymentName } = useGetName()
   const { toggleDetailModal, setSell } = useOrderStore()
 
   const columns: DataTableColumn<Sell>[] = [
@@ -41,7 +41,11 @@ export const useSellColumns = () => {
     {
       accessor: 'paymentStatus',
       title: 'Trạng thái thanh toán',
-      render: ({ orderId }) => getOrderPaymentName(orderId?.paymentStatus) || '-',
+      render: ({ orderId }) => {
+        const color = getColorPaymentName(orderId?.paymentStatus)
+        return <p style={{ color: color }} className='font-medium'>{getOrderPaymentName(orderId?.paymentStatus)}</p>
+      },
+      sortable: true,
     },
     {
       accessor: '_id',

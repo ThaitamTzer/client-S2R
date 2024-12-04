@@ -55,10 +55,23 @@ export const useGetName = () => {
         return 'Đã thanh toán'
       case 'canceled':
         return 'Đã hủy'
+      case 'PayPickup':
+        return 'Thanh toán khi nhận hàng'
       case 'failed':
         return 'Thanh toán thất bại'
       default:
         return string
+    }
+  }
+
+  const getColorPaymentName = (string: string) => {
+    switch (string) {
+      case 'paid':
+        return '#88C273'
+      case 'PayPickup':
+        return '#F29F58'
+      default:
+        return '#FF0000'
     }
   }
 
@@ -209,6 +222,7 @@ export const useGetName = () => {
     getOrderPaymentName,
     getShippingServiceName,
     getAddress,
+    getColorPaymentName,
   }
 }
 
