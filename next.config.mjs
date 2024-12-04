@@ -11,6 +11,8 @@ const nextConfig = {
       'minio.theciu.vn',
       'i.pravatar.cc',
       'picsum.photos',
+      'api.httzip.com',
+      'api.vietqr.io',
     ],
   },
 }

@@ -14,6 +14,7 @@ type State = {
   message: ChatContentTypes | null
   messages: ChatContentTypes[]
   messageHistory: Record<string, any[]>
+  openUpdateBanking: boolean
 }
 
 type Actions = {
@@ -29,6 +30,7 @@ type Actions = {
   setMessages: (messages: ChatContentTypes[]) => void
   setRoomId: (roomId: string) => void
   setMessageHistory: (messageHistory: Record<string, any[]>) => void
+  setOpenUpdateBanking: (open: boolean) => void
 }
 
 export const useUserAction = create<State & Actions>((set) => ({
@@ -44,6 +46,7 @@ export const useUserAction = create<State & Actions>((set) => ({
   message: null,
   messages: [],
   messageHistory: {},
+  openUpdateBanking: false,
   setOpenFilterDrawer: (open) => set({ openFilterDrawer: open }),
   setParamsObj: (paramsObj) => set({ paramsObj }),
   setOpenChatDropdown: (open) => set({ openChatDropdown: open }),
@@ -56,4 +59,5 @@ export const useUserAction = create<State & Actions>((set) => ({
   setMessages: (messages) => set({ messages }),
   setRoomId: (roomId) => set({ RoomId: roomId }),
   setMessageHistory: (messageHistory) => set({ messageHistory }),
+  setOpenUpdateBanking: (open) => set({ openUpdateBanking: open }),
 }))

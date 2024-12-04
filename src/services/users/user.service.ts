@@ -1,8 +1,8 @@
 import axiosClient, { axiosUpload } from '@/lib/axios'
-import { UpdateProfile, UpdateUserStyle } from '@/types/users/userTypes'
+import { UpdateUserStyle } from '@/types/users/userTypes'
 
 const userService = {
-  updateProfile: async (data: UpdateProfile) => {
+  updateProfile: async (data: any) => {
     const res = await axiosClient.put('/api/users/update-profile', data)
 
     return res.data
@@ -17,10 +17,7 @@ const userService = {
 
     return res.data
   },
-  changePassword: async (data: {
-    oldPassword: string
-    newPassword: string
-  }) => {
+  changePassword: async (data: { oldPassword: string; newPassword: string }) => {
     const res = await axiosClient.patch('/api/users/change-password', data)
 
     return res.data

@@ -5,11 +5,13 @@ import { PlusOutlined } from '@ant-design/icons'
 import { useAddProduct } from '@/hooks/useProduct'
 import dynamic from 'next/dynamic'
 import { Stepper } from '@mantine/core'
+import { useAuth } from '@/hooks/useAuth'
 
 const StepInfor = dynamic(() => import('@/components/product-management/addProduct/stepInfor'), { ssr: false })
 const StepPicture = dynamic(() => import('@/components/product-management/addProduct/stepPicture'), { ssr: false })
 
 export default function AddProduct() {
+  const { user } = useAuth()
   const {
     isDesktop,
     openAddProductModal,
@@ -47,6 +49,7 @@ export default function AddProduct() {
         size="large"
         icon={<IconPlus size={15} />}
         variant="solid"
+        disabled={!user?.banking}
         color="primary"
         onClick={handleOpenAddProductModal}
       >

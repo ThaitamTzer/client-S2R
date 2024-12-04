@@ -9,6 +9,8 @@ import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import { useSearchParams } from 'next/navigation'
 import Loading from '@/app/loading'
+import { useAuth } from '@/hooks/useAuth'
+import Link from 'next/link'
 
 const DataTable = lazy(() => import('@/components/product-management/dataTable'))
 const ViewProductModal = lazy(() => import('@/components/product-management/viewProduct'))
@@ -24,6 +26,8 @@ const ProductManagement = () => {
   const searchKey = param.get('searchKey') || ''
   const sortField = param.get('sortField') || ''
   const sortOrder = param.get('sortOrder') || ''
+
+  const { user } = useAuth()
 
   const { toggleDeleteProductModal, openDeleteProductModal, product, setProduct } = useProductManagement()
 
@@ -70,6 +74,17 @@ const ProductManagement = () => {
           onOpen={openDeleteProductModal}
           onClose={toggleDeleteProductModal}
         />
+      </div>
+      <div className="flex justify-end">
+        {!user?.banking && (
+          <p className="text-red-500">
+            Vui lòng{' '}
+            <Link href="/banking-infor" className="text-blue-500 hover:underline">
+              cập nhật
+            </Link>{' '}
+            thông tin ngân hàng để thêm sản phẩm
+          </p>
+        )}
       </div>
       <div className="mt-5 bg-white p-2 shadow-lg rounded-md">
         <Suspense fallback={<Loading />}>

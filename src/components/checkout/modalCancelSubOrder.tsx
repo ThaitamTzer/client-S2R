@@ -34,7 +34,7 @@ export default function ModalCancelSubOrder({
   const [selectedBank, setSelectedBank] = useState<Banking | null>(null)
   const [bankingCode, setBankingCode] = useState<string>('')
   const [isBankingAccountValid, setIsBankingAccountValid] = useState<boolean>(false)
-  const [bankingAccountInfo, setBankingAccountInfo] = useState<{ ownerName: string } | null>(null)
+ const [bankingAccountInfo, setBankingAccountInfo] = useState<{ ownerName: string } | null>(null) 
   const [search, setSearch] = useState('')
   const [isChecking, setIsChecking] = useState<boolean>(false)
   const [shortName, setShortName] = useState<string>('')
