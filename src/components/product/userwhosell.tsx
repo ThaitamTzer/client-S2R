@@ -1,8 +1,13 @@
+'use client'
+
 import { ProductsClient } from '@/types/users/productTypes'
 import Image from 'next/image'
 import IconifyIcon from '../icons'
+import useRatingStore from '@/zustand/rating'
 
 export default function UserWhosell({ product }: { product: ProductsClient }) {
+  const { toggleRatingModal, setUserId } = useRatingStore()
+
   return (
     <>
       <div className="flex flex-row justify-start items-center">
@@ -33,7 +38,18 @@ export default function UserWhosell({ product }: { product: ProductsClient }) {
             </>
           )}
           {product?.userId?.numberOfRating > 0 ? (
-            <p className="text-sm md:text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
+            <>
+              <p className="text-sm md:text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
+              <p
+                className="text-sm md:text-lg hover:underline cursor-pointer"
+                onClick={() => {
+                  toggleRatingModal()
+                  setUserId(product.userId._id)
+                }}
+              >
+                Xem thêm
+              </p>
+            </>
           ) : (
             <p className="text-sm md:text-lg ml-2">Chưa có đánh giá</p>
           )}

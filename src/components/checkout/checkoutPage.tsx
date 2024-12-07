@@ -26,7 +26,6 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
   const [paymentMethod, setPaymentMethod] = useState('2')
   const { toggleChangeAddressModal, setIdOrder, setAddress, setPhone, setSubOrder } = useOrderStore()
   const [payUrl, setPayUrl] = useState('')
-  const [price, setPrice] = useState(0)
   const { user } = useAuth()
   const { toggleEdit, toggleEditNote } = useCheckoutStore()
   const router = useRouter()

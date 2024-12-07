@@ -22,6 +22,7 @@ import { UnstyledButton } from '@mantine/core'
 import ReportModal from '../checkout/reportModal'
 import { useOrderStore } from '@/zustand/order'
 import { RessonProduct } from '@/constants/resson'
+import ViewRatingModal from '../rating/rating'
 
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
 
@@ -169,6 +170,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
       <>
         {contextHolder}
         <CreateExchangeModal />
+        <ViewRatingModal />
         <ReportModal reportType="product" resson={RessonProduct} />
         <AddToCard
           product={product}

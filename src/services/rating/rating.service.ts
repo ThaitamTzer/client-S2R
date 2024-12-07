@@ -1,5 +1,5 @@
 import axiosClient from '@/lib/axios'
-import { CreateRatingType } from '@/types/rating'
+import { CreateRatingType, RatingType } from '@/types/rating'
 
 const ratingService = {
   create: async (data: CreateRatingType, success?: () => void, errorMessage?: (message: string) => void) => {
@@ -16,6 +16,12 @@ const ratingService = {
 
   getRating: async (targetId: string): Promise<void> => {
     await axiosClient.get(`/api/rating/get-list-detail-rating?targetId=${targetId}`)
+  },
+
+  getRatingByUserId: async (userId: string): Promise<RatingType[]> => {
+    const response: RatingType[] = await axiosClient.get(`/api/rating/get-list-rating-of-user?userId=${userId}`)
+
+    return response
   },
 }
 
