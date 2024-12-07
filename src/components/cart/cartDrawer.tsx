@@ -14,6 +14,7 @@ import orderService from '@/services/order/order.service'
 import IconifyIcon from '../icons'
 import toast from 'react-hot-toast'
 import { formatPrice } from '@/helper/format'
+import { useAuth } from '@/hooks/useAuth'
 
 const CartItem = dynamic(() => import('./cartItem'), { ssr: false })
 
@@ -22,9 +23,10 @@ export default function CartDrawer() {
   const { setCartItems, cartItems, setSummary, summary } = useCart()
   const [total, setTotal] = useState(0)
   const router = useRouter()
+  const { user } = useAuth()
   const [api, contextHolder] = notification.useNotification()
 
-  const { mutate } = useSWR('/api/cart', cartService.getCart, {
+  const { mutate } = useSWR(user ? '/api/cart' : null, cartService.getCart, {
     onSuccess: (data) => {
       setCartItems(data.data)
       setTotal(data.data.length)

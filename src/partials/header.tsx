@@ -9,6 +9,7 @@ import notificationService from '@/services/notification/notification.service'
 import { useSocket } from '@/hooks/useSocket'
 import { useNotificationStore } from '@/zustand/notification'
 import dynamic from 'next/dynamic'
+import { useAuth } from '@/hooks/useAuth'
 
 const LeftSection = dynamic(() => import('@/components/header/leftSection'), { ssr: true })
 const MiddleSection = dynamic(() => import('@/components/header/middleSection'), { ssr: false })
@@ -22,16 +23,22 @@ export default function Header() {
   const [searchKey, setSearchKey] = useState('')
   const router = useRouter() // Using the router to handle navigation
   const { socket } = useSocket()
+  const { user } = useAuth()
 
-  const { mutate } = useSWR('/notifications', () => notificationService.getNotifications(), {
-    onSuccess: (data) => {
-      setNotifications(data)
+  const { mutate } = useSWR(
+    // Only fetch if user exists
+    user ? '/notifications' : null,
+    () => notificationService.getNotifications(),
+    {
+      onSuccess: (data) => {
+        setNotifications(data)
+      },
+      revalidateOnFocus: true,
+      refreshInterval: 0,
+      dedupingInterval: 10000,
+      errorRetryCount: 3,
     },
-    revalidateOnFocus: true,
-    refreshInterval: 0,
-    dedupingInterval: 10000,
-    errorRetryCount: 3,
-  })
+  )
 
   useEffect(() => {
     const handleScroll = () => {

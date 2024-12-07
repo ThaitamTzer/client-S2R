@@ -70,7 +70,7 @@ const ClientProvider = ({ children }: Props) => {
     },
   })
 
-  useSWR('/api/messages/get-room', messageService.getRooms, {
+  useSWR(user ? '/api/messages/get-room' : null, messageService.getRooms, {
     onSuccess: (data) => {
       setRooms(data)
     },
@@ -91,7 +91,7 @@ const ClientProvider = ({ children }: Props) => {
     },
   })
 
-  useSWR('productsUser', () => productService.getAllProductUser(1, 999, '', '', ''), {
+  useSWR(user ? 'productsUser' : null, () => productService.getAllProductUser(1, 999, '', '', ''), {
     onLoadingSlow: () => {
       setLoading(true)
     },
@@ -121,7 +121,7 @@ const ClientProvider = ({ children }: Props) => {
         setAttendances(data.data.attendances)
       })
     }
-  }, [user])
+  }, [user, setNotifications, setListExchangeRev, setRooms, setAttendances])
 
   const value = {
     loading,

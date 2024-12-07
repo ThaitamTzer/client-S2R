@@ -6,12 +6,15 @@ import { useAttend } from '@/zustand/attend'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { Badge } from '@mantine/core'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function Attend() {
   const { toggleAttendModal, attendances } = useAttend()
   const [isAttendance, setIsAttendance] = useState<boolean>(false)
+  const { user } = useAuth()
 
   useEffect(() => {
+    if (!user) return
     const today = dayjs().format('YYYY/MM/DD')
 
     const todayAttendance = attendances.find((attendance) => {
@@ -24,7 +27,9 @@ export default function Attend() {
     } else {
       setIsAttendance(false)
     }
-  }, [attendances])
+  }, [attendances, user])
+
+  if (!user) return null
 
   return (
     <MotionDiv

@@ -34,7 +34,7 @@ const ExChangeDrawer = () => {
   const [totalPages, setTotalPages] = useState(0)
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  const { data, mutate: refresh } = useSWR(['listExchange', page], () =>
+  const { data, mutate: refresh } = useSWR(user ? ['listExchange', page] : null, () =>
     exChangeService.getAll(page, 10, '', 'receiver'),
   )
 

@@ -43,5 +43,7 @@ export const config = {
     '/change-password',
     '/orders-management',
     '/checkout/:orderId',
+    '/sell-management',
+    '/banking-infor',
   ],
 }
