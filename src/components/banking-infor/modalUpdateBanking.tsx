@@ -3,7 +3,7 @@ import { Modal, TextInput, Button, Group } from '@mantine/core'
 import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
 import { useForm } from '@mantine/form'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Banking } from '@/services/order/order.service'
 import Image from 'next/image'
 import bankService from '@/services/bank/bank.service'
@@ -45,30 +45,26 @@ export default function ModalUpdateBanking({ banking }: { banking: Banking[] }) 
       bank.short_name.toLowerCase().includes(search.toLowerCase()),
   )
 
-  const handleCheckBankingAccount = useMemo(
-    () =>
-      debounce(() => {
-        if (!bankingCode || !form.values.bankingNumber) return
+  const handleCheckBankingAccount = debounce(() => {
+    if (!bankingCode || !form.values.bankingNumber) return
 
-        setIsChecking(true)
-        bankService
-          .checkBanking(bankingCode, form.values.bankingNumber)
-          .then((res) => {
-            setBankingAccountInfo(res.data)
-            form.setFieldValue('bankingNameUser', res.data.ownerName)
-            setError('')
-            if (res.msg === 'NOT_FOUND') {
-              toast.error('Số tài khoản không hợp lệ')
-              setBankingAccountInfo(null)
-              setError('Số tài khoản không hợp lệ')
-            }
-          })
-          .finally(() => {
-            setIsChecking(false)
-          })
-      }, 300),
-    [bankingCode, form.values.bankingNumber, form.values.bankingNameUser, form.values.bankingBranch],
-  )
+    setIsChecking(true)
+    bankService
+      .checkBanking(bankingCode, form.values.bankingNumber)
+      .then((res) => {
+        setBankingAccountInfo(res.data)
+        form.setFieldValue('bankingNameUser', res.data.ownerName)
+        setError('')
+        if (res.msg === 'NOT_FOUND') {
+          toast.error('Số tài khoản không hợp lệ')
+          setBankingAccountInfo(null)
+          setError('Số tài khoản không hợp lệ')
+        }
+      })
+      .finally(() => {
+        setIsChecking(false)
+      })
+  }, 300)
 
   const handleSubmit = async () => {
     if (!form.isValid()) return
@@ -102,9 +98,6 @@ export default function ModalUpdateBanking({ banking }: { banking: Banking[] }) 
     setBankingCode('')
     setError('')
   }
-
-  console.log(bankingAccountInfo)
-  console.log(bankingCode, form.values.bankingNumber)
 
   return (
     <>

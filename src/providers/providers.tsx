@@ -37,7 +37,7 @@ export function Providers({ children }: ProvidersProps) {
             <ConfigProvider theme={themeAntProvider}>
               <AntdRegistry>
                 <MantineProvider theme={theme}>
-                  <Toaster position="top-right" />
+                  <Toaster position="top-center" />
                   {children}
                 </MantineProvider>
               </AntdRegistry>

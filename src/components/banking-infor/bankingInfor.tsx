@@ -8,41 +8,36 @@ import Image from 'next/image'
 import { Button, TextInput } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
 import ModalUpdateBanking from './modalUpdateBanking'
+import useSWR from 'swr'
 
 export default function BankingInfor() {
   const { setOpenUpdateBanking } = useUserAction()
   const { user } = useAuth()
 
-  const [banking, setBanking] = useState<Banking[]>([])
+  useSWR('list-banking', bankService.listBanking, {
+    onSuccess: (data) => {
+      setBanking(data.data)
+    },
+  })
 
-  useEffect(() => {
-    bankService.listBanking().then((res) => {
-      setBanking(res.data)
-    })
-  }, [])
+  const [banking, setBanking] = useState<Banking[]>([])
 
   const filterBanking = banking.filter((bank) => bank.short_name === user?.banking?.bankingName)
 
   const form = useForm({
-    initialValues: {
-      bankingNumber: '',
-      bankingName: '',
-      bankingNameUser: '',
-      bankingBranch: '',
-    },
     validateInputOnChange: true,
   })
 
   useEffect(() => {
-    if (user?.banking) {
+    if (user) {
       form.setValues({
-        bankingNumber: user.banking.bankingNumber,
-        bankingName: user.banking.bankingName,
-        bankingNameUser: user.banking.bankingNameUser,
-        bankingBranch: user.banking.bankingBranch,
+        bankingNumber: user?.banking?.bankingNumber,
+        bankingName: user?.banking?.bankingName,
+        bankingNameUser: user?.banking?.bankingNameUser,
+        bankingBranch: user?.banking?.bankingBranch,
       })
     }
-  }, [user?.banking, form])
+  }, [user])
 
   return (
     <>

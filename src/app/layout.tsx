@@ -18,12 +18,14 @@ import '@mantine/core/styles.layer.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/core/styles/Menu.css'
 import '@mantine/dates/styles.css'
+import AttendCalendar from '@/components/attend/attendCalendar'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
 const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
 const LoginModal = lazy(() => import('@/components/loginModal'))
 const CartDrawer = dynamic(() => import('@/components/cart/cartDrawer'), { ssr: false })
+const Attend = dynamic(() => import('@/components/attend/attend'), { ssr: false })
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
@@ -104,6 +106,10 @@ export default function RootLayout({
               {children}
             </main>
             <Chat />
+            <div className="fixed top-[300px] right-0 z-50">
+              <Attend />
+            </div>
+            <AttendCalendar />
             <Footer />
           </Providers>
         </Suspense>

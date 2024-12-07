@@ -15,6 +15,8 @@ import { useExchange } from '@/zustand/exchange'
 import messageService from '@/services/message/message.service'
 import { useUserAction } from '@/zustand/user'
 import { useMediaQuery } from '@mantine/hooks'
+import attendService from '@/services/attend/attend.service'
+import { useAttend } from '@/zustand/attend'
 
 type ClientValuesType = {
   loading: boolean
@@ -52,6 +54,7 @@ const ClientProvider = ({ children }: Props) => {
   const { setCategories } = useCategory()
   const { setNotifications } = useNotificationStore()
   const { setListExchangeRev } = useExchange()
+  const { setAttendances } = useAttend()
   const { setRooms } = useUserAction()
   const { user } = useAuth()
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -113,6 +116,9 @@ const ClientProvider = ({ children }: Props) => {
       })
       messageService.getRooms().then((data) => {
         setRooms(data)
+      })
+      attendService.getAttend().then((data) => {
+        setAttendances(data.data.attendances)
       })
     }
   }, [user])
