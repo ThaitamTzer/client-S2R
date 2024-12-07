@@ -19,10 +19,10 @@ const checkoutService = {
   momoPayment: async (orderId: string, success?: (res: any) => void, error?: (err: any) => void) => {
     try {
       return await axiosClient.post(`/api/checkout/momo/${orderId}`).then((res) => success && success(res))
-    } catch (err) {
+    } catch (err: any) {
       if (err) {
         if (error) {
-          error(err)
+          error(err.response.data.message)
         }
       }
     }
@@ -33,10 +33,22 @@ const checkoutService = {
       return await axiosClient
         .post(`/api/checkout/checkoutout-agreement/${orderId}`)
         .then((res) => success && success(res))
-    } catch (err) {
+    } catch (err: any) {
       if (err) {
         if (error) {
-          error(err)
+          error(err.response.data.message)
+        }
+      }
+    }
+  },
+
+  walletPayment: async (orderId: string, success?: (res: any) => void, error?: (err: any) => void) => {
+    try {
+      return await axiosClient.post(`/api/checkout/wallet-point/`, { orderId }).then((res) => success && success(res))
+    } catch (err: any) {
+      if (err) {
+        if (error) {
+          error(err.response.data.message)
         }
       }
     }

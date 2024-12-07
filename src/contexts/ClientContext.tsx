@@ -17,6 +17,8 @@ import { useUserAction } from '@/zustand/user'
 import { useMediaQuery } from '@mantine/hooks'
 import attendService from '@/services/attend/attend.service'
 import { useAttend } from '@/zustand/attend'
+import { useWalletStore } from '@/zustand/wallet'
+import walletService from '@/services/wallet/wallet.service'
 
 type ClientValuesType = {
   loading: boolean
@@ -56,6 +58,7 @@ const ClientProvider = ({ children }: Props) => {
   const { setListExchangeRev } = useExchange()
   const { setAttendances } = useAttend()
   const { setRooms } = useUserAction()
+  const { setWallet } = useWalletStore()
   const { user } = useAuth()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
@@ -120,8 +123,11 @@ const ClientProvider = ({ children }: Props) => {
       attendService.getAttend().then((data) => {
         setAttendances(data.data.attendances)
       })
+      walletService.getWallet().then((data) => {
+        setWallet(data)
+      })
     }
-  }, [user, setNotifications, setListExchangeRev, setRooms, setAttendances])
+  }, [user, setNotifications, setListExchangeRev, setRooms, setAttendances, setWallet])
 
   const value = {
     loading,

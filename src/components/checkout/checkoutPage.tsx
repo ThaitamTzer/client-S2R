@@ -26,6 +26,7 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
   const [paymentMethod, setPaymentMethod] = useState('2')
   const { toggleChangeAddressModal, setIdOrder, setAddress, setPhone, setSubOrder } = useOrderStore()
   const [payUrl, setPayUrl] = useState('')
+  const [price, setPrice] = useState(0)
   const { user } = useAuth()
   const { toggleEdit, toggleEditNote } = useCheckoutStore()
   const router = useRouter()
@@ -59,10 +60,22 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
         mutate(['/order/id', order.data._id])
         router.push(`/checkout/${order.data._id}?callback=orders-management`)
       })
-    } else {
+    } else if (paymentMethod === '2') {
       await checkoutService.momoPayment(order.data._id, (res: Success) => {
         setPayUrl(res.response.payUrl)
       })
+    } else if (paymentMethod === '3') {
+      await checkoutService.walletPayment(
+        order.data._id,
+        () => {
+          toast.success('Đặt hàng thành công, chuyển hướng đến trang chi tiết đơn hàng')
+          mutate(['/order/id', order.data._id])
+          router.push(`/checkout/${order.data._id}?callback=orders-management`)
+        },
+        (error) => {
+          toast.error(error)
+        },
+      )
     }
   }
 
@@ -412,6 +425,25 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                           <p className="text-lg font-semibold">
                             Cổng thanh toán điện tử MOMO (QR code, Visa, Mastercard, JCB)
                           </p>
+                        </div>
+                      }
+                    />
+                    <Radio
+                      size="lg"
+                      color="green"
+                      value="3"
+                      disabled={order.data.totalAmount >= 50000}
+                      label={
+                        <div className="flex flex-row gap-3 items-center">
+                          <Image
+                            src="/misc/latest.png"
+                            alt="point"
+                            width={30}
+                            height={30}
+                            loading="lazy"
+                            quality={70}
+                          />
+                          <p className="text-lg font-semibold">Thanh toán bằng kim cương</p>
                         </div>
                       }
                     />

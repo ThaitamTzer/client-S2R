@@ -14,6 +14,8 @@ import ChatDropdown from '../chat/chatDropdown'
 import { useProductClient } from '@/zustand/productClient'
 import { useCart } from '@/zustand/cart'
 import { useRouter } from 'next/navigation'
+import { useWalletStore } from '@/zustand/wallet'
+import Image from 'next/image'
 
 export default function RightSection({
   notifications,
@@ -28,6 +30,7 @@ export default function RightSection({
   const { setOpenChatDropdown } = useUserAction()
   const { toggleCartDrawer } = useProductClient()
   const { cartItems } = useCart()
+  const { wallet } = useWalletStore()
   const router = useRouter()
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
@@ -220,40 +223,65 @@ export default function RightSection({
           )}
         </UnstyledButton>
         {user ? (
-          <Menu shadow="md" width={250}>
-            <Menu.Target>
-              <div className="flex items-center cursor-pointer">
-                <Avatar src={user.avatar} alt={user.firstname} radius={rem(24)} size={rem(35)} />
-                <Text className="ml-3" size="xl" fw={500}>
-                  {user.firstname + ' ' + user.lastname}
-                </Text>
-              </div>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Link href="/profile">
-                <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
-                  Thông tin tài khoản
-                </Menu.Item>
-              </Link>
-              <Link href="/orders-management">
-                <Menu.Item leftSection={<IconClipboardData style={{ width: rem(14), height: rem(14) }} />}>
-                  Đơn hàng của tôi
-                </Menu.Item>
-              </Link>
-              <Link href="/product-management">
-                <Menu.Item leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}>
-                  Quản lý sản phẩm
-                </Menu.Item>
-              </Link>
-              <Menu.Item
-                onClick={() => logout()}
-                color="red"
-                leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-              >
-                Đăng xuất
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+          <div className="flex flex-row items-center gap-2">
+            <Avatar src={user.avatar} alt={user.firstname} radius={rem(24)} size={rem(35)} />
+            <div className="flex flex-col">
+              <Menu shadow="md" width={250}>
+                <Menu.Target>
+                  <div className="flex items-center cursor-pointer">
+                    <div className="flex flex-col">
+                      <Text size="xl" fw={500}>
+                        {user.firstname + ' ' + user.lastname}
+                      </Text>
+                      <p className="font-normal text-sm text-blue-900 flex flex-row items-center">
+                        <Image src="/misc/latest.png" alt="point" width={20} height={20} />
+                        <span>{wallet?.point ? wallet.point + ' Kim cương' : 0 + 'Kim cương'}</span>{' '}
+                      </p>
+                    </div>
+                  </div>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Link href="/packet">
+                    <Menu.Item
+                      leftSection={
+                        <IconifyIcon
+                          icon="hugeicons:wallet-add-01"
+                          style={{
+                            height: rem(14),
+                            width: rem(14),
+                          }}
+                        />
+                      }
+                    >
+                      Nạp kim cương
+                    </Menu.Item>
+                  </Link>
+                  <Link href="/profile">
+                    <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
+                      Thông tin tài khoản
+                    </Menu.Item>
+                  </Link>
+                  <Link href="/orders-management">
+                    <Menu.Item leftSection={<IconClipboardData style={{ width: rem(14), height: rem(14) }} />}>
+                      Đơn hàng của tôi
+                    </Menu.Item>
+                  </Link>
+                  <Link href="/product-management">
+                    <Menu.Item leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}>
+                      Quản lý sản phẩm
+                    </Menu.Item>
+                  </Link>
+                  <Menu.Item
+                    onClick={() => logout()}
+                    color="red"
+                    leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                  >
+                    Đăng xuất
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </div>
+          </div>
         ) : (
           <Text className="font-bold text-green-900 cursor-pointer" onClick={() => openModal()}>
             Đăng nhập/Đăng ký
