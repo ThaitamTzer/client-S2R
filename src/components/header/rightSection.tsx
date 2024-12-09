@@ -256,6 +256,21 @@ export default function RightSection({
                       Nạp kim cương
                     </Menu.Item>
                   </Link>
+                  <Link href="/transaction-management">
+                    <Menu.Item
+                      leftSection={
+                        <IconifyIcon
+                          icon="solar:history-broken"
+                          style={{
+                            height: rem(14),
+                            width: rem(14),
+                          }}
+                        />
+                      }
+                    >
+                      Lịch sử giao dịch
+                    </Menu.Item>
+                  </Link>
                   <Link href="/profile">
                     <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
                       Thông tin tài khoản

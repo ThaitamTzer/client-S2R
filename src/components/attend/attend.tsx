@@ -58,7 +58,7 @@ export default function Attend() {
         {!isAttendance ? (
           <Badge className="absolute top-2 right-3 z-10 h-3 w-3 p-0" radius="xl" color="red" variant="filled" />
         ) : null}
-        <Image src="/misc/Item_Jocund_Letters.png" alt="logo" width={100} height={100} />
+        <Image src="/misc/gift.png" alt="logo" width={100} height={100} />
       </div>
     </MotionDiv>
   )

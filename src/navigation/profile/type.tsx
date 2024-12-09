@@ -69,6 +69,15 @@ export const useProfileLinks = () => {
       type: 'group',
       children: [
         {
+          key: 'transaction-management',
+          icon: <IconifyIcon icon="solar:history-broken" style={{ fontSize: '1.5rem', color: '#000' }} />,
+          label: (
+            <Link href="/transaction-management" className="text-sm md:text-lg font-thin">
+              Lịch sử giao dịch
+            </Link>
+          ),
+        },
+        {
           key: 'product-management',
           icon: <IconifyIcon icon="fluent-mdl2:product" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (

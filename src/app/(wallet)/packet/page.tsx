@@ -115,7 +115,7 @@ export default function PacketPage() {
                     marginTop: '1rem',
                   }}
                   label={
-                    <div className="flex flex-row items-center gap-3 items-center">
+                    <div className="flex flex-row items-center gap-3 ">
                       <Image src="/misc/momo-icon.svg" alt="momo" width={30} height={30} loading="lazy" quality={70} />
                       <p className="text-lg font-semibold">
                         Cổng thanh toán điện tử MOMO (QR code, Visa, Mastercard, JCB)

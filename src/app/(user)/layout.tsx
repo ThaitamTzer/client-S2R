@@ -43,6 +43,10 @@ const navLinks: navLink[] = [
     href: '/user-style',
     label: 'Phong cách',
   },
+  {
+    href: '/transaction-management',
+    label: 'Lịch sử giao dịch',
+  }
 ]
 
 export default function UsersLayout({

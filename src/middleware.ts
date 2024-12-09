@@ -45,5 +45,6 @@ export const config = {
     '/checkout/:orderId',
     '/sell-management',
     '/banking-infor',
+    '/packet',
   ],
 }
