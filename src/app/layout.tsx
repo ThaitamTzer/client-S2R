@@ -4,9 +4,6 @@ import { Montserrat } from 'next/font/google'
 import { Suspense, lazy } from 'react'
 import { Providers } from '@/providers/providers'
 import Loading from './loading'
-import Header from '@/partials/header'
-import Footer from '@/partials/footer'
-import Chat from '@/components/chat/chat'
 import dynamic from 'next/dynamic'
 
 import './globals.css'
@@ -18,14 +15,17 @@ import '@mantine/core/styles.layer.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/core/styles/Menu.css'
 import '@mantine/dates/styles.css'
-import AttendCalendar from '@/components/attend/attendCalendar'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
+const Chat = dynamic(() => import('@/components/chat/chat'), { ssr: false })
 const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
 const LoginModal = lazy(() => import('@/components/loginModal'))
 const CartDrawer = dynamic(() => import('@/components/cart/cartDrawer'), { ssr: false })
 const Attend = dynamic(() => import('@/components/attend/attend'), { ssr: false })
+const AttendCalendar = dynamic(() => import('@/components/attend/attendCalendar'), { ssr: false })
+const Header = dynamic(() => import('@/partials/header'), { ssr: false, loading: () => <div /> })
+const Footer = dynamic(() => import('@/partials/footer'), { ssr: false, loading: () => <div /> })
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],

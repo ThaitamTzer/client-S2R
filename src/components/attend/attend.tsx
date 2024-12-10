@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { Badge } from '@mantine/core'
 import { useAuth } from '@/hooks/useAuth'
+import { Tooltip } from '@mantine/core'
 
 export default function Attend() {
   const { toggleAttendModal, attendances } = useAttend()
@@ -14,7 +15,7 @@ export default function Attend() {
   const { user } = useAuth()
 
   useEffect(() => {
-    if (!user) return
+    if (!user || isAttendance) return
     const today = dayjs().format('YYYY/MM/DD')
 
     const todayAttendance = attendances.find((attendance) => {
@@ -27,9 +28,9 @@ export default function Attend() {
     } else {
       setIsAttendance(false)
     }
-  }, [attendances, user])
+  }, [attendances, user, isAttendance])
 
-  if (!user) return null
+  if (!user || isAttendance) return null
 
   return (
     <MotionDiv
@@ -54,12 +55,14 @@ export default function Attend() {
         duration: 0.5,
       }}
     >
-      <div className="cursor-pointer relative" onClick={toggleAttendModal}>
-        {!isAttendance ? (
-          <Badge className="absolute top-2 right-3 z-10 h-3 w-3 p-0" radius="xl" color="red" variant="filled" />
-        ) : null}
-        <Image src="/misc/gift.png" alt="logo" width={100} height={100} />
-      </div>
+      <Tooltip label="Điểm danh">
+        <div className="cursor-pointer relative" onClick={toggleAttendModal}>
+          {!isAttendance ? (
+            <Badge className="absolute top-2 right-3 z-10 h-3 w-3 p-0" radius="xl" color="red" variant="filled" />
+          ) : null}
+          <Image src="/misc/gift.png" alt="logo" width={100} height={100} />
+        </div>
+      </Tooltip>
     </MotionDiv>
   )
 }
