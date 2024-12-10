@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { ColorSchemeScript } from '@mantine/core'
 import { Montserrat } from 'next/font/google'
-import { Suspense, lazy } from 'react'
 import { Providers } from '@/providers/providers'
-import Loading from './loading'
 import dynamic from 'next/dynamic'
 
 import './globals.css'
@@ -20,8 +18,8 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
 const Chat = dynamic(() => import('@/components/chat/chat'), { ssr: false })
-const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
-const LoginModal = lazy(() => import('@/components/loginModal'))
+const ExChangeDrawer = dynamic(() => import('@/components/exchange/exchange'), { ssr: false })
+const LoginModal = dynamic(() => import('@/components/loginModal'), { ssr: false })
 const CartDrawer = dynamic(() => import('@/components/cart/cartDrawer'), { ssr: false })
 const Attend = dynamic(() => import('@/components/attend/attend'), { ssr: false })
 const AttendCalendar = dynamic(() => import('@/components/attend/attendCalendar'), { ssr: false })
@@ -97,26 +95,24 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
-        <Suspense fallback={<Loading />}>
-          <Providers>
-            <Header />
-            <ExChangeDrawer />
-            <CartDrawer />
-            <main
-              suppressHydrationWarning
-              className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
-            >
-              <LoginModal />
-              {children}
-            </main>
-            <Chat />
-            <div className="fixed top-[300px] right-0 z-50">
-              <Attend />
-            </div>
-            <AttendCalendar />
-            <Footer />
-          </Providers>
-        </Suspense>
+        <Providers>
+          <Header />
+          <ExChangeDrawer />
+          <CartDrawer />
+          <main
+            suppressHydrationWarning
+            className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
+          >
+            <LoginModal />
+            {children}
+          </main>
+          <Chat />
+          <div className="fixed top-[300px] right-0 z-50">
+            <Attend />
+          </div>
+          <AttendCalendar />
+          <Footer />
+        </Providers>
       </body>
     </html>
   )

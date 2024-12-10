@@ -25,7 +25,7 @@ const HomePageFemale = lazy(() => import('@/components/homepage/HomePageFemale')
 const HomePageUnisex = lazy(() => import('@/components/homepage/HomePageUnisex'))
 const HomePageYouLike = lazy(() => import('@/components/homepage/HomePageYouLike'))
 const Navigation = lazy(() => import('@/components/nav'))
-const HomePageTitle = lazy(() => import('@/components/homepage/HomepageTitle'))
+const HomePageTitle = dynamic(() => import('@/components/homepage/HomepageTitle'), { ssr: true })
 
 export const metadata: Metadata = {
   title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
