@@ -13,6 +13,7 @@ const nextConfig = {
       'picsum.photos',
       'api.httzip.com',
       'api.vietqr.io',
+      'img.youtube.com',
     ],
   },
 }

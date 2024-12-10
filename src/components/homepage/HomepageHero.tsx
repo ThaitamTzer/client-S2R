@@ -1,6 +1,6 @@
 'use client'
 
-export default function HomePageHero({ src }: { src: string }) {
+export default function HomePageHero() {
   return (
     <>
       <div className="relative mt-6 wrapper pointer-events-none">
@@ -15,13 +15,16 @@ export default function HomePageHero({ src }: { src: string }) {
                         <div className="responsive-iframe">
                           <iframe
                             frameBorder={0}
-                            src={src}
+                            src="https://www.youtube.com/embed/uyHgY2O__fY?playlist=uyHgY2O__fY&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=5&end=179?loading=lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
                             referrerPolicy="strict-origin-when-cross-origin"
                             loading="lazy"
                             width="100%"
                             height="100%"
+                            rel="preload"
+                            title="Share2Receive"
                           ></iframe>
+                          {/* <OptimizedIframe videoId="uyHgY2O__fY" title="Share2Receive" /> */}
                         </div>
                       </div>
                     </div>

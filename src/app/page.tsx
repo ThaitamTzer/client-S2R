@@ -66,11 +66,6 @@ export default async function Home() {
   const productsFemale = await fetchProducts('female')
   const brands = await fetchBrand()
   const categories = await fetchCategories()
-  const getVideoSrc = () => {
-    return 'https://www.youtube.com/embed/uyHgY2O__fY?playlist=uyHgY2O__fY&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=5&end=179?loading=lazy'
-  }
-
-  const src = getVideoSrc()
 
   return (
     <>
@@ -78,7 +73,7 @@ export default async function Home() {
       <Suspense fallback={<Loading />}>
         <Navigation navLink={TypeCategory} />
         <div className="mt-[105px] md:mt-0">
-          <HomePageHero src={src} />
+          <HomePageHero />
           <HomePageTitle />
           <HomePageYouLike />
           <HomePageManFashion products={productsMale.data} />
