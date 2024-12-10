@@ -1,4 +1,3 @@
-'use client'
 import { Card } from 'antd'
 import Image from 'next/image'
 import { formatPrice } from '@/helper/format'
@@ -6,7 +5,7 @@ import { ProductsClient } from '@/types/users/productTypes'
 import Link from 'next/link'
 import { useMediaQuery } from '@mantine/hooks'
 
-export default function ProductCard({ product, isLoading }: { product: ProductsClient; isLoading: boolean }) {
+export default function ProductCard({ product, isLoading }: { product: ProductsClient; isLoading?: boolean }) {
   const { Meta } = Card
   const isDesktop = useMediaQuery('(min-width: 62em)')
 
@@ -68,10 +67,10 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
           }
         >
           <div className="flex flex-col gap-2 w-full">
-            <Meta title={<p className="text-lg md:text-xl">{product.productName}</p>} />
+            <Meta title={<span className="text-lg md:text-xl">{product.productName}</span>} />
             <Meta
               title={
-                <p className="text-sm md:text-lg font-normal">
+                <span className="text-sm md:text-lg font-normal">
                   Kích thước:{' '}
                   {Array.from(new Set(product.sizeVariants.map((variant) => variant.size)))
                     .slice(0, 3)
@@ -82,12 +81,12 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
                       </span>
                     ))}
                   {product.sizeVariants.length > 3 && ',...'}
-                </p>
+                </span>
               }
             />
             <Meta
               title={
-                <p className="text-lg md:text-xl font-semibold text-green-800">
+                <span className="text-lg md:text-xl font-semibold text-green-800">
                   {product.type === 'barter' ? (
                     <>
                       <p>Liên hệ</p>
@@ -99,7 +98,7 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
                       <p className="text-xs md:text-sm underline">Xem ngay</p>
                     </>
                   )}
-                </p>
+                </span>
               }
             />
           </div>
@@ -122,9 +121,9 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
                   />
                 </div>
                 <div className="flex justify-center items-center">
-                  <p className="text-xs md:text-sm font-semibold">
+                  <span className="text-xs md:text-sm font-semibold">
                     {product.userId?.firstname + ' ' + product.userId?.lastname}
-                  </p>
+                  </span>
                 </div>
               </div>
             }

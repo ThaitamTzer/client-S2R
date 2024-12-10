@@ -2,48 +2,17 @@
 import { Carousel } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
-import useSWR from 'swr'
-import productService from '@/services/product/product.service'
+import { useRef } from 'react'
 import { ProductsClient } from '@/types/users/productTypes'
 import ProductCard from '../shop/productCard'
 import IconifyIcon from '../icons'
 import { useMediaQuery } from '@mantine/hooks'
 
-const HomePageManFashion = () => {
+const HomePageManFashion = ({ products }: { products: ProductsClient[] }) => {
   const autoplay = useRef(Autoplay({ delay: 2000 }))
   const isDesktop = useMediaQuery('(min-width: 62em)')
 
-  const [products, setProducts] = useState<ProductsClient[]>([])
-
   const shouldAutoplay = products?.length > 4
-
-  useSWR(
-    'maleFashion',
-    () =>
-      productService.getAllProdClient(
-        1,
-        10,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['male'],
-      ),
-    {
-      onSuccess(data) {
-        setProducts(data?.data)
-      },
-      revalidateOnFocus: true,
-      refreshInterval: 10000,
-    },
-  )
 
   return (
     <div className="relative container mx-auto pt-3 md:px-24 md:pt-10">

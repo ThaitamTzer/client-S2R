@@ -1,0 +1,19 @@
+'use server'
+import { ProductSClientList } from '@/types/users/productTypes'
+const BASEURL = process.env.NEXT_PUBLIC_API_URL
+
+export const fetchProducts = async (filterTypeCategory: string) => {
+  const response = await fetch(
+    `${BASEURL}/api/product/list-product-for-client?page=1&limit=10&filterTypeCategory=${filterTypeCategory}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+
+  const data: ProductSClientList = await response.json()
+
+  return data
+}

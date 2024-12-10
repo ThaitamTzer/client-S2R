@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useClient } from '@/hooks/useClient'
 import { useMediaQuery } from '@mantine/hooks'
+import { Category } from '@/types/clientypes'
 
 const priorityOrder = {
   veryHigh: 4,
@@ -12,10 +12,8 @@ const priorityOrder = {
   low: 1,
 }
 
-export default function HomePageCategory() {
-  const { categories } = useClient()
+export default function HomePageCategory({ categories }: { categories: Category[] }) {
   const isDesktop = useMediaQuery('(min-width: 62em)')
-
   const sortedCategories = categories?.sort((a, b) => {
     return (
       priorityOrder[b.priority as keyof typeof priorityOrder] - priorityOrder[a.priority as keyof typeof priorityOrder]

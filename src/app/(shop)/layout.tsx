@@ -1,8 +1,9 @@
-import NavigationWithBg from '@/components/navWithBg'
 import { TypeCategory } from '@/metadata/category'
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import Loading from '../loading'
 import { Metadata } from 'next'
+
+const NavigationWithBg = lazy(() => import('@/components/navWithBg'))
 
 export const metadata: Metadata = {
   title: {

@@ -3,9 +3,9 @@
 
 import Autoplay from 'embla-carousel-autoplay'
 import { useRef } from 'react'
-import { useClient } from '@/hooks/useClient'
 import dynamic from 'next/dynamic'
 import IconifyIcon from '../icons'
+import { Brand } from '@/types/clientypes'
 
 const BrandSlider = dynamic(() => import('@/components/slider/brandSilder'), { ssr: false })
 
@@ -16,9 +16,8 @@ const priorityOrder = {
   low: 1,
 }
 
-export default function HomePageFavorate() {
+export default function HomePageFavorate({ brands }: { brands: Brand[] }) {
   const autoplay2 = useRef(Autoplay({ delay: 2000 }))
-  const { brands } = useClient()
 
   const sortedBrands = brands?.sort((a, b) => {
     return (
@@ -62,6 +61,9 @@ export default function HomePageFavorate() {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share; loop;"
                             referrerPolicy="strict-origin-when-cross-origin"
                             loading="lazy"
+                            title="brand"
+                            width="100%"
+                            height="100%"
                           ></iframe>
                         </div>
                       </div>

@@ -1,5 +1,3 @@
-'use client'
-
 import { Title } from '@mantine/core'
 import { Space_Grotesk } from 'next/font/google'
 

@@ -1,95 +1,55 @@
 'use client'
-import useSWR from 'swr'
-import productService from '@/services/product/product.service'
-import { useProductClient } from '@/zustand/productClient'
 import { useState } from 'react'
 import { Divider } from 'antd'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useUserAction } from '@/zustand/user'
 import IconifyIcon from '../icons'
+import { ProductsClient } from '@/types/users/productTypes'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const ProductCard = dynamic(() => import('./productCard'))
-const FilterTag = dynamic(() => import('./filterTag'), { ssr: false })
-const FilterSide = dynamic(() => import('./filter'), { ssr: false })
+const ProductCard = dynamic(() => import('./productCard'), {
+  loading: () => <div className="animate-pulse bg-gray-200 h-full w-full rounded" />,
+})
+const FilterTag = dynamic(() => import('./filterTag'), {
+  ssr: false,
+  loading: () => <div className="h-10 bg-gray-100 animate-pulse" />,
+})
+const FilterSide = dynamic(() => import('./filter'), {
+  ssr: false,
+  loading: () => <div className="h-screen w-full bg-gray-100 animate-pulse" />,
+})
 const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false })
 
-const Shop = () => {
-  const { setProducts } = useProductClient()
+const Shop = ({ products, total }: { products: ProductsClient[]; total: number }) => {
   const { setOpenFilterDrawer } = useUserAction()
-  const [total, setTotal] = useState<number>(0)
   const param = useSearchParams()
+  const router = useRouter()
   const [currentPage, setCurrentPage] = useState<number>(param.get('page') ? Number(param.get('page')) : 1)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [loadedProducts, setLoadedProducts] = useState<any[]>([])
 
-  const limit = param.get('limit') ? Number(param.get('limit')) : 50
-  const filterCategory = param.getAll('filterCategory') || undefined
-  const filterBrand = param.getAll('filterBrand') || undefined
-  const filterStartPrice = param.getAll('filterStartPrice') ? Number(param.getAll('filterStartPrice')) : undefined
-  const filterEndPrice = param.getAll('filterEndPrice') ? Number(param.getAll('filterEndPrice')) : undefined
-  const filterSize = param.getAll('filterSize') || undefined
-  const filterColor = param.getAll('filterColor') || undefined
-  const filterMaterial = param.getAll('filterMaterial') || undefined
-  const filterCondition = param.getAll('filterCondition') || undefined
-  const filterType = param.getAll('filterType') || undefined
-  const filterStyle = param.getAll('filterStyle') || undefined
-  const filterTypeCategory = param.getAll('filterTypeCategory') || undefined
-  const searchKey = param.get('searchKey') || undefined
-
-  const { isLoading } = useSWR(
-    [
-      '/shop',
-      currentPage,
-      limit,
-      filterCategory,
-      filterBrand,
-      filterStartPrice,
-      filterEndPrice,
-      filterSize,
-      filterColor,
-      filterMaterial,
-      filterCondition,
-      filterType,
-      filterStyle,
-      filterTypeCategory,
-      searchKey,
-    ],
-    () =>
-      productService.getAllProdClient(
-        currentPage,
-        limit,
-        filterCategory,
-        filterBrand,
-        filterStartPrice,
-        filterEndPrice,
-        filterSize,
-        filterColor,
-        filterMaterial,
-        filterCondition,
-        filterType,
-        filterStyle,
-        filterTypeCategory,
-        searchKey,
-      ),
-    {
-      onLoadingSlow: () => {
-        setProducts([])
-      },
-      onSuccess: (data) => {
-        if (currentPage === 1) {
-          setLoadedProducts(data?.data)
-        } else {
-          setLoadedProducts((prev) => [...prev, ...data?.data])
-        }
-        setProducts(loadedProducts)
-        setTotal(data?.total)
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
       },
     },
-  )
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  }
 
   const handleLoadMore = () => {
-    setCurrentPage((prev) => prev + 1)
+    const newPage = currentPage + 1
+    setCurrentPage(newPage)
+
+    const currentParams = new URLSearchParams(param.toString())
+    currentParams.set('page', newPage.toString())
+
+    router.push(`/shop?page=${newPage}`)
   }
 
   return (
@@ -121,27 +81,50 @@ const Shop = () => {
           <div className="w-full md:w-[75%] h-full md:ml-5">
             <div className="container mx-auto px-2 md:px-5 mb-10">
               <p className="text-xl font-semibold">{total} Kết quả</p>
-              <div className="container mx-auto mt-3">
-                <div className="flex flex-wrap gap-3">
-                  {loadedProducts &&
-                    loadedProducts.map((product) => (
-                      <div className="w-[48%] md:w-[24%] h-[420px] md:h-[500px]" key={product._id}>
-                        <ProductCard product={product} isLoading={isLoading} />
-                      </div>
+              <motion.div className="container mx-auto mt-3" layout>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    className="flex flex-wrap gap-3"
+                    variants={container}
+                    initial="hidden"
+                    animate="show"
+                    layout
+                  >
+                    {products?.map((product, index) => (
+                      <motion.div
+                        layout
+                        layoutId={product._id}
+                        variants={item}
+                        initial="hidden"
+                        animate="show"
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{
+                          duration: 0.5,
+                          delay: index * 0.1,
+                          layout: {
+                            duration: 0.3,
+                          },
+                        }}
+                        className="w-[48%] md:w-[24%] h-[420px] md:h-[500px]"
+                        key={product._id}
+                      >
+                        <ProductCard product={product} />
+                      </motion.div>
                     ))}
-                </div>
-                {loadedProducts && loadedProducts.length < total && (
-                  <div className="text-center mt-5">
+                  </motion.div>
+                </AnimatePresence>
+
+                {products && products.length < total && (
+                  <motion.div className="text-center mt-5" layout>
                     <button
                       onClick={handleLoadMore}
-                      disabled={isLoading}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
-                      {isLoading ? 'Đang tải...' : 'Xem thêm'}
+                      Hiển thị thêm
                     </button>
-                  </div>
+                  </motion.div>
                 )}
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

@@ -3,6 +3,9 @@ import FormStyleUser from '@/components/homepage/FormStyle'
 import { Metadata } from 'next'
 import { lazy, Suspense } from 'react'
 import Loading from './loading'
+import { fetchProducts } from '@/action/homepage'
+import { fetchBrand } from '@/action/brand'
+import { fetchCategories } from '@/action/category'
 
 // Chuyển sang dùng React.lazy
 const HomePageHero = lazy(() => import('@/components/homepage/HomepageHero'))
@@ -16,8 +19,6 @@ const HomePageUnisex = lazy(() => import('@/components/homepage/HomePageUnisex')
 const HomePageYouLike = lazy(() => import('@/components/homepage/HomePageYouLike'))
 const Navigation = lazy(() => import('@/components/nav'))
 const HomePageTitle = lazy(() => import('@/components/homepage/HomepageTitle'))
-
-
 
 export const metadata: Metadata = {
   title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',
@@ -53,7 +54,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Home() {
+export default async function Home() {
+  const productsMale = await fetchProducts('male')
+  const productsFemale = await fetchProducts('female')
+  const brands = await fetchBrand()
+  const categories = await fetchCategories()
+
   return (
     <>
       <FormStyleUser />
@@ -63,10 +69,10 @@ export default function Home() {
           <HomePageHero />
           <HomePageTitle />
           <HomePageYouLike />
-          <HomePageManFashion />
-          <HomePageFemale />
+          <HomePageManFashion products={productsMale.data} />
+          <HomePageFemale donus={productsFemale.data} />
           <HomePageUnisex />
-          <HomePageFavorate />
+          <HomePageFavorate brands={brands} />
           <HomePageSamePrice />
           <div className="container mx-auto px-2 md:px-32 text-center text-lg md:text-2xl font-medium text-green-800 uppercase mt-8">
             <h1>
@@ -74,7 +80,7 @@ export default function Home() {
               &#45; Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng
             </h1>
           </div>
-          <HomePageCategory />
+          <HomePageCategory categories={categories} />
           <HomePageTogetherSection />
         </div>
       </Suspense>

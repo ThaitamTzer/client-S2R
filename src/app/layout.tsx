@@ -101,7 +101,10 @@ export default function RootLayout({
             <Header />
             <ExChangeDrawer />
             <CartDrawer />
-            <main className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}>
+            <main
+              suppressHydrationWarning
+              className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
+            >
               <LoginModal />
               {children}
             </main>

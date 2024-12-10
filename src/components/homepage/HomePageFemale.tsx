@@ -2,45 +2,16 @@
 
 import { Carousel } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import Link from 'next/link'
 import style from '@/styles/card.module.css'
-import productService from '@/services/product/product.service'
-import useSWR from 'swr'
 import { ProductsClient } from '@/types/users/productTypes'
 import ProductCard from '../shop/productCard'
 import IconifyIcon from '../icons'
 import { useMediaQuery } from '@mantine/hooks'
 
-const HomePageFemale = () => {
-  const [donus, setDonus] = useState<ProductsClient[]>([])
+const HomePageFemale = ({ donus }: { donus: ProductsClient[] }) => {
   const isDesktop = useMediaQuery('(min-width: 62em)')
-
-  useSWR(
-    'femaleFashion',
-    () =>
-      productService.getAllProdClient(
-        1,
-        10,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['female'],
-      ),
-    {
-      onSuccess(data) {
-        setDonus(data?.data)
-      },
-    },
-  )
-
   const autoplay = useRef(Autoplay({ delay: 2000 }))
 
   return (
