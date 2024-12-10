@@ -2,13 +2,17 @@ import { TypeCategory } from '@/metadata/category'
 import FormStyleUser from '@/components/homepage/FormStyle'
 import { Metadata } from 'next'
 import { lazy, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import Loading from './loading'
 import { fetchProducts } from '@/action/homepage'
 import { fetchBrand } from '@/action/brand'
 import { fetchCategories } from '@/action/category'
 
 // Chuyển sang dùng React.lazy
-const HomePageHero = lazy(() => import('@/components/homepage/HomepageHero'))
+const HomePageHero = dynamic(() => import('@/components/homepage/HomepageHero'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 const HomePageFavorate = lazy(() => import('@/components/homepage/HomePageFavorite'))
 const HomePageSamePrice = lazy(() => import('@/components/homepage/HomePageSamePrice'))
 const HomePageCategory = lazy(() => import('@/components/homepage/HomePageCategory'))
