@@ -13,7 +13,10 @@ const HomePageHero = dynamic(() => import('@/components/homepage/HomepageHero'),
   ssr: false,
   loading: () => <Loading />,
 })
-const HomePageFavorate = lazy(() => import('@/components/homepage/HomePageFavorite'))
+const HomePageFavorate = dynamic(() => import('@/components/homepage/HomePageFavorite'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 const HomePageSamePrice = lazy(() => import('@/components/homepage/HomePageSamePrice'))
 const HomePageCategory = lazy(() => import('@/components/homepage/HomePageCategory'))
 const HomePageTogetherSection = lazy(() => import('@/components/homepage/HomePageTogetherSection'))
