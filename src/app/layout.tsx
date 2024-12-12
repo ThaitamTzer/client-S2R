@@ -13,6 +13,7 @@ import '@mantine/core/styles.layer.css'
 import 'mantine-datatable/styles.layer.css'
 import '@mantine/core/styles/Menu.css'
 import '@mantine/dates/styles.css'
+import '@mantine/charts/styles.css'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL

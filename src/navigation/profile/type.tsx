@@ -12,6 +12,22 @@ export const useProfileLinks = () => {
 
   const profileLinks: MenuItem[] = [
     {
+      key: 'dashboard',
+      label: <p className="font-semibold text-lg text-black">Tổng quan</p>,
+      type: 'group',
+      children: [
+        {
+          key: 'dashboard',
+          icon: <IconifyIcon icon="streamline:dashboard-3" style={{ fontSize: '1.5rem', color: '#000' }} />,
+          label: (
+            <Link href="/dashboard" className="text-sm md:text-lg font-thin">
+              Tổng quan
+            </Link>
+          ),
+        },
+      ],
+    },
+    {
       key: 'account-infor',
       label: <p className="font-semibold text-lg text-black">Thông tin tài khoản</p>,
       type: 'group',
