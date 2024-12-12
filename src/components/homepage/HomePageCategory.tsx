@@ -1,9 +1,12 @@
 'use client'
 
-import Image from 'next/image'
-import Link from 'next/link'
+import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mantine/hooks'
 import { Category } from '@/types/clientypes'
+import dayjs from 'dayjs'
+import CountUp from 'react-countup'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const priorityOrder = {
   veryHigh: 4,
@@ -12,17 +15,45 @@ const priorityOrder = {
   low: 1,
 }
 
-export default function HomePageCategory({ categories }: { categories: Category[] }) {
+export default function HomePageCategory({ categories, totalWeight }: { categories: Category[]; totalWeight: number }) {
   const isDesktop = useMediaQuery('(min-width: 62em)')
+  const [isCounting, setIsCounting] = useState(false)
+  const categoryRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsCounting(true)
+        }
+      },
+      {
+        threshold: 0.5, // Chỉ kích hoạt khi 50% phần tử xuất hiện trong viewport
+      },
+    )
+
+    if (categoryRef.current) {
+      observer.observe(categoryRef.current)
+    }
+
+    return () => {
+      if (categoryRef.current) {
+        observer.unobserve(categoryRef.current)
+      }
+    }
+  }, [])
+
   const sortedCategories = categories?.sort((a, b) => {
     return (
       priorityOrder[b.priority as keyof typeof priorityOrder] - priorityOrder[a.priority as keyof typeof priorityOrder]
     )
   })
 
+  const getDay = dayjs().format('DD/MM/YYYY')
+
   return (
     <>
-      <div className="category-section mt-5 md:mt-8 bg-green-100 w-full h-full">
+      <div className="category-section mt-5 md:mt-8 bg-green-100 w-full h-full" ref={categoryRef}>
         <div className="container mx-auto px-2 py-4 md:px-24 md:py-10">
           <div className="text-center">
             <h1 className="text-xl md:text-3xl font-semibold">Hàng trăm sản phẩm các loại</h1>
@@ -38,10 +69,10 @@ export default function HomePageCategory({ categories }: { categories: Category[
               Xem tất cả
             </Link>
           </div>
-          <div className="category-list flex justify-center  flex-row flex-wrap gap-3">
+          <div className="category-list flex justify-center flex-row flex-wrap gap-3">
             {sortedCategories?.slice(0, 8)?.map((item) => (
               <Link href={`/shop?filterCategory=${item._id}`} key={item._id} className="w-[43%] md:w-[24%]">
-                <div className="category-item relative bg-white rounded-md shadow-md flex items-center justify-around overflow-hidden ">
+                <div className="category-item relative bg-white rounded-md shadow-md flex items-center justify-around overflow-hidden">
                   <div className="w-[60px] md:w-[100px] h-[80px] md:h-[100px] max-w-[100px] max-h-[100px] relative">
                     <Image
                       src={item.imgUrl}
@@ -82,11 +113,13 @@ export default function HomePageCategory({ categories }: { categories: Category[
               <div className="content-title text-3xl md:text-5xl font-semibold uppercase mb-1">
                 <h1>Giảm thiểu</h1>
               </div>
-              <p className="mb-1 text-3xl md:text-5xl font-bold text-green-900 bg-white w-fit px-3 py-2 rounded-sm">
-                1200 <span>Kilogram</span>
-              </p>
-              <p className="mb-1 text-lg md:text-2xl font-semibold ">
-                Rác thải thời trang, <span className="text-white text-lg md:text-2xl">tính đến ngày 27/11/2024</span>
+              {isCounting && (
+                <p className="mb-1 text-3xl md:text-5xl font-bold text-green-900 bg-white w-fit px-3 py-2 rounded-sm">
+                  <CountUp end={totalWeight} duration={2} decimal="." /> <span>Kilogram</span>
+                </p>
+              )}
+              <p className="mb-1 text-lg md:text-2xl font-semibold">
+                Rác thải thời trang, <span className="text-white text-lg md:text-2xl">tính đến ngày {getDay}</span>
               </p>
             </div>
           </div>

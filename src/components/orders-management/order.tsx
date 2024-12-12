@@ -11,6 +11,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { debounce } from 'lodash'
 import { DatesProvider } from '@mantine/dates'
 import 'dayjs/locale/vi'
+import dayjs from 'dayjs'
 
 const PAGE_SIZE = [10, 25, 50, 100]
 
@@ -118,7 +119,7 @@ export default function OrderManagement() {
               value={dateFromValue}
               onChange={(date) => {
                 setDateFromValue(date)
-                const formattedDate = date?.toISOString().split('T')[0] || ''
+                const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''
                 router.push(
                   `/orders-management?dateFrom=${formattedDate}&dateTo=${dateTo}&page=1&limit=${limit}&paymentStatus=${paymentStatus}`,
                 )
@@ -132,7 +133,7 @@ export default function OrderManagement() {
               value={dateToValue}
               onChange={(date) => {
                 setDateToValue(date)
-                const formattedDate = date?.toISOString().split('T')[0] || ''
+                const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''
                 router.push(
                   `/orders-management?dateFrom=${dateFrom}&dateTo=${formattedDate}&page=1&limit=${limit}&paymentStatus=${paymentStatus}`,
                 )

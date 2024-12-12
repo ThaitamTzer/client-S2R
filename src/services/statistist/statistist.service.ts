@@ -1,6 +1,10 @@
 import axiosClient from '@/lib/axios'
 import { StatisticSellerType } from '@/types/statisticType'
 
+type getEcoOfUserType = {
+  totalWeight: number
+}
+
 const statisticService = {
   getStatisticForSeller: async (startDate?: string, endDate?: string, viewBy?: string) => {
     const params = {
@@ -14,6 +18,10 @@ const statisticService = {
     })
     return res
   },
+
+  getEcoOfUser: async (): Promise<getEcoOfUserType> => axiosClient.get('/api/statistics/get-static-eco-of-user'),
+
+  getEcoOfAllUser: async (): Promise<getEcoOfUserType> => axiosClient.get('/api/statistics/get-static-eco-all'),
 }
 
 export default statisticService

@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 import { lazy, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import Loading from './loading'
-import { fetchProducts } from '@/action/homepage'
+import { fetchProducts, fetchTotalEcoOfAllUser } from '@/action/homepage'
 import { fetchBrand } from '@/action/brand'
 import { fetchCategories } from '@/action/category'
 
@@ -67,6 +67,8 @@ export default async function Home() {
   const brands = await fetchBrand()
   const categories = await fetchCategories()
 
+  const totalWeight = await fetchTotalEcoOfAllUser()
+
   return (
     <>
       <Suspense fallback={<Loading />}>
@@ -87,7 +89,7 @@ export default async function Home() {
               &#45; Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng
             </h1>
           </div>
-          <HomePageCategory categories={categories} />
+          <HomePageCategory categories={categories} totalWeight={totalWeight.totalWeight} />
           <HomePageTogetherSection />
         </div>
       </Suspense>

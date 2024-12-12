@@ -17,3 +17,18 @@ export const fetchProducts = async (filterTypeCategory: string) => {
 
   return data
 }
+
+export const fetchTotalEcoOfAllUser = async () => {
+  const response = await fetch(`${BASEURL}/api/statistics/get-static-eco-all`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const data: any = await response.json()
+
+  console.log(data)
+
+  return data
+}

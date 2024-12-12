@@ -1,5 +1,4 @@
 'use client'
-import { useAuth } from '@/hooks/useAuth'
 import { createContext, useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
@@ -17,36 +16,33 @@ const SocketContext = createContext<SocketContextType>({
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
-  const { user } = useAuth()
 
   useEffect(() => {
-    if (user) {
-      // Khởi tạo kết nối socket
-      const socketInstance = io('https://share2receive-server.onrender.com', {
-        withCredentials: true,
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-      })
+    // Khởi tạo kết nối socket
+    const socketInstance = io('https://share2receive-server.onrender.com', {
+      withCredentials: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    })
 
-      socketInstance.on('connect', () => {
-        setIsConnected(true)
-        console.log('Connected to socket')
-      })
+    socketInstance.on('connect', () => {
+      setIsConnected(true)
+      console.log('Connected to socket')
+    })
 
-      socketInstance.on('disconnect', () => {
-        setIsConnected(false)
-        console.log('Disconnected from socket')
-        // Không cần phải tự reconnect lại ở đây vì socket.io đã tự động reconnect
-      })
+    socketInstance.on('disconnect', () => {
+      setIsConnected(false)
+      console.log('Disconnected from socket')
+      // Không cần phải tự reconnect lại ở đây vì socket.io đã tự động reconnect
+    })
 
-      setSocket(socketInstance)
+    setSocket(socketInstance)
 
-      return () => {
-        socketInstance.disconnect()
-      }
+    return () => {
+      socketInstance.disconnect()
     }
-  }, [user])
+  }, [])
 
   return <SocketContext.Provider value={{ socket, isConnected }}>{children}</SocketContext.Provider>
 }
