@@ -52,7 +52,7 @@ const DateFilters = memo(
             setDateFromValue(null)
             setDateToValue(null)
             // Use selected value directly in URL
-            router.push(`/dashboard?viewBy=${selected || ''}`)
+            router.push(`/dashboard?viewBy=${selected || ''}`, { scroll: false })
           }}
         />
         <DatesProvider settings={{ locale: 'vi' }}>
@@ -71,7 +71,7 @@ const DateFilters = memo(
                     endDate: endDate,
                     viewBy: viewBy,
                   }).toString()
-                  router.push(`/dashboard?${query}`)
+                  router.push(`/dashboard?${query}`, { scroll: false })
                 }}
                 clearable
               />
@@ -88,7 +88,7 @@ const DateFilters = memo(
                     endDate: formattedDate,
                     viewBy: viewBy,
                   }).toString()
-                  router.push(`/dashboard?${query}`)
+                  router.push(`/dashboard?${query}`, { scroll: false })
                 }}
                 disabled={!dateFromValue}
                 clearable
@@ -111,7 +111,7 @@ const DateFilters = memo(
                     endDate: endDate,
                     viewBy: viewBy,
                   }).toString()
-                  router.push(`/dashboard?${query}`)
+                  router.push(`/dashboard?${query}`, { scroll: false })
                 }}
                 clearable
               />
@@ -128,7 +128,7 @@ const DateFilters = memo(
                     endDate: formattedDate,
                     viewBy: viewBy,
                   }).toString()
-                  router.push(`/dashboard?${query}`)
+                  router.push(`/dashboard?${query}`, { scroll: false })
                 }}
                 clearable
               />
@@ -149,7 +149,7 @@ const DateFilters = memo(
                     endDate: endDate,
                     viewBy: viewBy,
                   }).toString()
-                  router.push(`/dashboard?${query}`)
+                  router.push(`/dashboard?${query}`, { scroll: false })
                 }}
                 clearable
               />
@@ -166,7 +166,7 @@ const DateFilters = memo(
                     endDate: formattedDate,
                     viewBy: viewBy,
                   }).toString()
-                  router.push(`/dashboard?${query}`)
+                  router.push(`/dashboard?${query}`, { scroll: false })
                 }}
                 clearable
               />

@@ -1,10 +1,4 @@
 /** @type {import('next').NextConfig} */
-import withBundleAnalyzer from '@next/bundle-analyzer'
-
-const bundleAnalyzer = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-  openAnalyzer: true,
-})
 
 const nextConfig = {
   experimental: {
@@ -34,11 +28,11 @@ const nextConfig = {
       transform: 'lodash/{{member}}',
     },
   },
-  webpack(config) {
-    // Kiểm tra tree-shaking
-    config.optimization.usedExports = true
-    return config
-  },
+  // webpack(config) {
+  //   // Kiểm tra tree-shaking
+  //   config.optimization.usedExports = true
+  //   return config
+  // },
 }
 
-export default bundleAnalyzer(nextConfig)
+export default nextConfig
