@@ -16,6 +16,17 @@ const nextConfig = {
       'img.youtube.com',
     ],
   },
+  optimizeFonts: true,
+  swcMinify: true,
+  // Bật tree shaking cho các module
+  modularizeImports: {
+    '@mui/icons-material': {
+      transform: '@mui/icons-material/{{member}}',
+    },
+    lodash: {
+      transform: 'lodash/{{member}}',
+    },
+  },
 }
 
 export default nextConfig
