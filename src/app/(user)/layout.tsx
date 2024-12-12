@@ -7,10 +7,12 @@ import { IconUserCircle, IconMenu2 } from '@tabler/icons-react'
 import { useProfileLinks } from '@/navigation/profile/type'
 import { usePathname } from 'next/navigation'
 import { Suspense, useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
 import { useMediaQuery } from '@mantine/hooks'
+import { lazy } from 'react'
 
-const NavigationProfile = dynamic(() => import('@/components/navProfile'))
+const NavigationProfile = lazy(() => import('@/components/navProfile'))
+
+export const dynamic = 'force-dynamic'
 
 const { Content, Sider } = Layout
 
@@ -46,7 +48,7 @@ const navLinks: navLink[] = [
   {
     href: '/transaction-management',
     label: 'Lịch sử giao dịch',
-  }
+  },
 ]
 
 export default function UsersLayout({

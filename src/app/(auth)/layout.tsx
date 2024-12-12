@@ -2,6 +2,8 @@ import NavigationWithBg from '@/components/navWithBg'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: {
     default: 'Share2Receive - Đăng nhập & Đăng ký',

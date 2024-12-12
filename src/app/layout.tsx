@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { ColorSchemeScript } from '@mantine/core'
 import { Montserrat } from 'next/font/google'
 import { Providers } from '@/providers/providers'
-import dynamic from 'next/dynamic'
 
 import './globals.css'
 import './layout.css'
@@ -15,23 +14,26 @@ import '@mantine/core/styles/Menu.css'
 import '@mantine/dates/styles.css'
 import '@mantine/charts/styles.css'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+import { lazy } from 'react'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
-const Chat = dynamic(() => import('@/components/chat/chat'), { ssr: false })
-const ExChangeDrawer = dynamic(() => import('@/components/exchange/exchange'), { ssr: false })
-const LoginModal = dynamic(() => import('@/components/loginModal'), { ssr: false })
-const CartDrawer = dynamic(() => import('@/components/cart/cartDrawer'), { ssr: false })
-const Attend = dynamic(() => import('@/components/attend/attend'), { ssr: false })
-const AttendCalendar = dynamic(() => import('@/components/attend/attendCalendar'), { ssr: false })
-const Header = dynamic(() => import('@/partials/header'), { ssr: false, loading: () => <div /> })
-const Footer = dynamic(() => import('@/partials/footer'), { ssr: false, loading: () => <div /> })
+const Chat = lazy(() => import('@/components/chat/chat'))
+const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
+const LoginModal = lazy(() => import('@/components/loginModal'))
+const CartDrawer = lazy(() => import('@/components/cart/cartDrawer'))
+const Attend = lazy(() => import('@/components/attend/attend'))
+const AttendCalendar = lazy(() => import('@/components/attend/attendCalendar'))
+const Header = lazy(() => import('@/partials/header'))
+const Footer = lazy(() => import('@/partials/footer'))
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
   preload: true,
   display: 'swap',
 })
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: {

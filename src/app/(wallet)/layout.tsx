@@ -1,8 +1,9 @@
-import dynamic from 'next/dynamic'
 import { navLink } from '@/types/navTypes'
-import { Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 
-const NavigationWithBg = dynamic(() => import('@/components/navWithBg'), { ssr: false })
+const NavigationWithBg = lazy(() => import('@/components/navWithBg'))
+
+export const dynamic = 'force-dynamic'
 
 const navLinks: navLink[] = [
   {
