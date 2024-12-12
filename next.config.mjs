@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
+import withBundleAnalyzer from '@next/bundle-analyzer'
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: true,
+})
+
 const nextConfig = {
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
@@ -27,6 +34,11 @@ const nextConfig = {
       transform: 'lodash/{{member}}',
     },
   },
+  webpack(config) {
+    // Kiểm tra tree-shaking
+    config.optimization.usedExports = true
+    return config
+  },
 }
 
-export default nextConfig
+export default bundleAnalyzer(nextConfig)
