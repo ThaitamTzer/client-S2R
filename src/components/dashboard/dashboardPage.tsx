@@ -109,6 +109,8 @@ export default function DashboardPage() {
     },
   )
 
+  console.log('data', TimeAddToCart)
+
   const handlePointClick = (dataPoint: any) => {
     setSelectedPoint(dataPoint)
   }
@@ -157,7 +159,8 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-5 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Thống kê thêm vào giỏ hàng</h2>
-          <DonutChart data={TimeAddToCart?.data} />
+          {TimeAddToCart && <DonutChart data={TimeAddToCart.data} />}
+          {TimeAddToCart.data.length === 0 && <p className="text-gray-500 text-center">Không có dữ liệu</p>}
         </div>
 
         {selectedPoint && (

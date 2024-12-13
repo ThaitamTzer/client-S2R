@@ -19,7 +19,7 @@ const CHART_COLORS = [
   '#4BC0C0', // xanh ngọc
   '#9966FF', // tím
   '#FF9F40', // cam
-  '#E7E9ED'  // xám - dùng cho phần "Khác"
+  '#E7E9ED', // xám - dùng cho phần "Khác"
 ]
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -81,28 +81,32 @@ export default function DonutChart({ data }: DonutChartProps) {
   const chartColors = CHART_COLORS.slice(0, chartData.length)
 
   return (
-    <div className="h-[300px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="45%"
-            innerRadius={60}
-            outerRadius={100}
-            fill="#8884d8"
-            paddingAngle={5}
-            dataKey="timesAdded"
-            nameKey="productName" // Thêm nameKey để sử dụng tên sản phẩm
-          >
-            {chartData.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={chartColors[index]} />
-            ))}
-          </Pie>
-          <Tooltip content={<CustomTooltip />} />
-          <Legend content={<CustomLegend />} verticalAlign="bottom" align="center" />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
+    <>
+      {data && (
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="45%"
+                innerRadius={60}
+                outerRadius={100}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="timesAdded"
+                nameKey="productName" // Thêm nameKey để sử dụng tên sản phẩm
+              >
+                {chartData.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={chartColors[index]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+              <Legend content={<CustomLegend />} verticalAlign="bottom" align="center" />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </>
   )
 }
