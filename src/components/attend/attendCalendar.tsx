@@ -30,14 +30,35 @@ export default function AttendCalendar() {
     const currentDate = getCurrentDate()
     const attendanceDate = dayjs(date).format('YYYY/MM/DD')
 
+    if (isAttendance) {
+      return 'claimed' // If already attended, show as claimed regardless of date
+    }
+
     if (dayjs(attendanceDate).isBefore(currentDate)) {
       return 'expired'
     }
     if (attendanceDate === currentDate) {
-      return isAttendance ? 'claimed' : 'available'
+      return 'available'
     }
     return 'future'
   }
+
+  // const getAttendanceStatus = (date: string, isAttendance: boolean) => {
+  //   const currentDate = getCurrentDate()
+  //   const attendanceDate = dayjs(date).format('YYYY/MM/DD')
+
+  //   if (dayjs(attendanceDate).isBefore(currentDate) && !isAttendance) {
+  //     return 'expired'
+  //   }
+  //   if (dayjs(attendanceDate).isBefore(currentDate) && isAttendance) {
+  //     return 'claimed'
+  //   }
+  //   if (attendanceDate === currentDate) {
+  //     return isAttendance ? 'claimed' : 'available'
+  //   }
+
+  //   return 'future'
+  // }
 
   const getButtonProps = (status: string) => {
     switch (status) {

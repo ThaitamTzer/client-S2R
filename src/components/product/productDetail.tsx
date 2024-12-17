@@ -4,13 +4,11 @@ import classes from '@/styles/product.module.css'
 import { useEffect, useState } from 'react'
 import { useGetName } from '@/helper/getName'
 import { useExchange } from '@/zustand/exchange'
-import { CreateExchangeModal } from '../exchange/openCreateExchange'
 import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 import ProductOverview from './productOverview'
 import InforProduct from './inforProduct'
 import { notification } from 'antd'
-import AddToCard from './addToCard'
 import { useProductClient } from '@/zustand/productClient'
 import cartService from '@/services/cart/cart.service'
 import toast from 'react-hot-toast'
@@ -19,12 +17,14 @@ import orderService from '@/services/order/order.service'
 import { useRouter } from 'next/navigation'
 import IconifyIcon from '../icons'
 import { UnstyledButton } from '@mantine/core'
-import ReportModal from '../checkout/reportModal'
 import { useOrderStore } from '@/zustand/order'
 import { RessonProduct } from '@/constants/resson'
-import ViewRatingModal from '../rating/rating'
 
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
+const ViewRatingModal = dynamic(() => import('../rating/rating'), { ssr: false })
+const CreateExchangeModal = dynamic(() => import('../exchange/openCreateExchange'), { ssr: false })
+const ReportModal = dynamic(() => import('../checkout/reportModal'), { ssr: false })
+const AddToCard = dynamic(() => import('./addToCard'), { ssr: false })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
   const [api, contextHolder] = notification.useNotification()

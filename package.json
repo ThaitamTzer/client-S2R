@@ -17,6 +17,7 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@hookform/resolvers": "^3.9.0",
+    "@iconify/react": "^4.1.1",
     "@justinribeiro/lite-youtube": "^1.6.0",
     "@mantine/carousel": "7.14.1",
     "@mantine/charts": "7.14.1",
@@ -68,7 +69,6 @@
     "zustand": "5.0.1"
   },
   "devDependencies": {
-    "@iconify/react": "^5.0.2",
     "@next/bundle-analyzer": "^15.1.0",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.10",

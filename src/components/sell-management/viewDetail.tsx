@@ -9,9 +9,19 @@ import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { mutate } from 'swr'
 import IconifyIcon from '../icons'
+import { useSearchParams } from 'next/navigation'
 
 export default function ViewDetail({ opened, onClose, sell }: { opened: boolean; onClose: () => void; sell: Sell }) {
   const { getColorName, getOrderPaymentName } = useGetName()
+  const searchParams = useSearchParams()
+
+  const page = Number(searchParams.get('page')) || 1
+  const limit = Number(searchParams.get('limit')) || 10
+  const searchKey = searchParams.get('searchKey') || ''
+  const dateFrom = searchParams.get('dateFrom') || ''
+  const dateTo = searchParams.get('dateTo') || ''
+  const sortBy = searchParams.get('sortBy') || ''
+  const sortOrder = searchParams.get('sortOrder') || ''
 
   const [status, setStatus] = useState('')
 
@@ -41,7 +51,7 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
         setStatus(newStatus)
         sell.status = newStatus
         toast.success('Cập nhật trạng thái thành công')
-        mutate('/sell/user')
+        mutate(['/sell/user', page, limit, searchKey, sortBy, sortOrder, dateFrom, dateTo])
         onClose()
       },
       () => {
@@ -106,21 +116,22 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
           <p className="text-sm font-medium">Tổng giá trị đơn hàng</p>
           <p className="text-sm">{formatPrice(sell.subTotal)} đ</p>
         </div>
-        {sell?.status !== 'canceled' && sell?.status !== 'completed' && sell?.orderId?.paymentStatus === 'paid' && (
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium">Cập nhật trạng thái đơn hàng</p>
-            <Select data={availableStatuses} value={status} onChange={(value) => setStatus(value || '')} />
-            <Button
-              onClick={() => handleUpdateStatus(status)}
-              style={{
-                backgroundColor: '#166534',
-                color: '#fff',
-              }}
-            >
-              Cập nhật
-            </Button>
-          </div>
-        )}
+        {(sell?.status !== 'canceled' && sell?.status !== 'completed' && sell?.orderId?.paymentStatus === 'paid') ||
+          (sell?.orderId?.paymentStatus === 'PayPickup' && (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Cập nhật trạng thái đơn hàng</p>
+              <Select data={availableStatuses} value={status} onChange={(value) => setStatus(value || '')} />
+              <Button
+                onClick={() => handleUpdateStatus(status)}
+                style={{
+                  backgroundColor: '#166534',
+                  color: '#fff',
+                }}
+              >
+                Cập nhật
+              </Button>
+            </div>
+          ))}
 
         <div className="flex flex-col gap-2 w-full">
           <p className="text-sm font-medium">Sản phẩm</p>

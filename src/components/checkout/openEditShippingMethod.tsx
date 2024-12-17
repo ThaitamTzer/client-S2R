@@ -18,6 +18,7 @@ export default function OpenEditShippingMethod({ orderId }: { orderId: string })
     form.setValues({
       shippingService: subOrder.shippingService || '',
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subOrder])
 
   const form = useForm({

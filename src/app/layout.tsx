@@ -40,6 +40,9 @@ export const metadata: Metadata = {
     default: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang',
     template: '%s | Share2Receive',
   },
+  icons: {
+    icon: '/favicon.ico',
+  },
   description:
     'Share2Receive - Nền tảng trao đổi đồ dùng thời trang hàng đầu Việt Nam, giúp tủ đồ gọn gàng và bảo vệ môi trường',
   keywords: ['trao đổi đồ', 'thời trang bền vững', 'second hand', 'tủ đồ thông minh', 'share2receive'],
@@ -90,11 +93,19 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href={`${apiDomain}/api`} />
+        <link
+          rel="preload"
+          href="/fonts/Montserrat-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#16a34a" />
         <meta name="google-site-verification" content="dC_ZZ8dPqFvxMMMiFOeMIV2va5G0-K467cyjKles4lo" />
-        <link rel="icon" href="./favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="canonical" href="https://share2receive-client.vercel.app" />
+        <link rel="preconnect" href="https://www.youtube.com"></link>
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>

@@ -11,8 +11,9 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import exChangeService from '@/services/exchange/exchange.service'
 import { mutate } from 'swr'
 import { useMediaQuery } from '@mantine/hooks'
+import NextImage from 'next/image'
 
-export const CreateExchangeModal = () => {
+export default function CreateExchangeModal() {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [form] = Form.useForm()
   const { data, setOpenCreateExchangeModal, openCreateExchangeModal } = useExchange()
@@ -41,6 +42,7 @@ export const CreateExchangeModal = () => {
   useEffect(() => {
     if (selectedSize && !validSizes.includes(selectedSize as SizeE)) setSelectedSize(null)
     if (selectedColor && !validColors.includes(selectedColor)) setSelectedColor(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validSizes, validColors])
 
   // Update max quantity based on selected size and color
@@ -168,7 +170,9 @@ export const CreateExchangeModal = () => {
                         }`}
                         onClick={() => setProductSelected(product)}
                       >
-                        <img
+                        <NextImage
+                          width={100}
+                          height={100}
                           src={product?.imgUrls?.[0]}
                           loading="lazy"
                           alt={product?.productName}

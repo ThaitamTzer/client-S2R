@@ -24,6 +24,7 @@ export default function ChangeAddressModal() {
         phone: user?.phone || '',
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const form = useForm({

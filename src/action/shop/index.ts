@@ -71,14 +71,24 @@ export const fetchAllProdClient = async (
   }
   if (searchKey) params.append('searchKey', searchKey)
 
-  const res = await fetch(`${BASEURL}/api/product/list-product-for-client?${params.toString()}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'GET',
-  })
+  try {
+    const res = await fetch(`${BASEURL}/api/product/list-product-for-client?${params.toString()}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+      cache: 'no-cache',
+    })
 
-  const data: ProductSClientList = await res.json()
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`)
+    }
 
-  return data
+    const data: ProductSClientList = await res.json()
+
+    return data
+  } catch (error) {
+    console.error('Failed to fetch products:', error)
+    throw error
+  }
 }

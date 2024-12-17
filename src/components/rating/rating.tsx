@@ -1,10 +1,8 @@
 'use client'
 
 import ratingService from '@/services/rating/rating.service'
-import { RatingType } from '@/types/rating'
 import useRatingStore from '@/zustand/rating'
 import { Divider, Modal } from '@mantine/core'
-import { useState } from 'react'
 import useSWR from 'swr'
 import { Avatar } from '@mantine/core'
 import IconifyIcon from '../icons'
@@ -12,21 +10,23 @@ import { formatDate } from '../product-management/column'
 
 export default function ViewRatingModal() {
   const { openRatingModal, toggleRatingModal, userId } = useRatingStore()
-  const [ratingData, setRatingData] = useState<RatingType[]>([])
 
-  useSWR('/api/rating/get-list-detail-rating', () => ratingService.getRatingByUserId('66f7223c232a6ff5e0b8ee85'), {
-    onSuccess: (data) => {
-      setRatingData(data)
+  const { data: ratingData } = useSWR(
+    '/api/rating/get-list-detail-rating',
+    () => ratingService.getRatingByUserId(userId),
+    {
+      revalidateOnMount: true,
     },
-  })
+  )
 
-  console.log(ratingData)
-  console.log(userId)
+  const handleClose = () => {
+    toggleRatingModal()
+  }
 
   return (
-    <Modal opened={openRatingModal} onClose={toggleRatingModal} title="Đánh giá của người bán" centered size="lg">
+    <Modal opened={openRatingModal} onClose={handleClose} title="Đánh giá của người bán" centered size="lg">
       <div className="flex flex-col gap-2">
-        {ratingData.map((rating) => (
+        {ratingData?.map((rating) => (
           <>
             {rating ? (
               <>
@@ -65,6 +65,11 @@ export default function ViewRatingModal() {
             )}
           </>
         ))}
+        {ratingData?.length === 0 && (
+          <div className="flex flex-1 ">
+            <p className="text-xl">Chưa có đánh giá nào</p>
+          </div>
+        )}
       </div>
     </Modal>
   )

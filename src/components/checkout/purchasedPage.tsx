@@ -36,6 +36,7 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
       form.setFieldValue('rating', rating)
       form.setFieldValue('comment', comment)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rating, comment])
 
   const form = useForm({
@@ -286,7 +287,7 @@ export default function PurchasedPage({ order }: { order: OrderById }) {
                       )}
                     </p>
                   </div>
-                  {status === 'delivered' && (
+                  {subOrder.status === 'delivered' && (
                     <div className="flex justify-center">
                       <Button color="green" onClick={() => handleConfirmReceived(subOrder._id)} loading={isLoading}>
                         Xác nhận đã nhận được hàng

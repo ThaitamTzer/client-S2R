@@ -2,13 +2,15 @@
 import useSWR from 'swr'
 import statisticService from '@/services/statistist/statistist.service'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'dayjs/locale/vi'
 import dayjs from 'dayjs'
 import StatsSummary from './StatsSummary'
 import DateFilters from './DateFilters'
 import LineChartDashboard from './LineChartDashboard'
 import DonutChart from './DonutChart'
+import DashboardSkeleton from './dashboardSkeleton'
+import { useAuth } from '@/hooks/useAuth'
 
 type DataPoint = {
   date: string
@@ -20,67 +22,32 @@ type DataPoint = {
   totalSubTotal: number
 }
 
-const DashboardSkeleton = () => {
-  return (
-    <div className="container mx-auto px-1 md:px-10 space-y-6 animate-pulse">
-      {/* Tiêu đề skeleton */}
-      <div className="bg-white p-5 rounded-lg shadow-md">
-        <div className="h-8 bg-gray-200 rounded w-1/4 mb-2"></div>
-        <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-      </div>
-
-      {/* Stats Summary skeleton */}
-      <div className="bg-white p-5 rounded-lg shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {[1, 2, 3, 4, 5].map((item) => (
-            <div key={item} className="bg-white rounded-sm shadow-md p-5">
-              <div className="h-5 bg-gray-200 rounded w-2/3 mb-3"></div>
-              <div className="h-8 bg-gray-200 rounded w-full"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Biểu đồ và bộ lọc skeleton */}
-      <div className="bg-white p-5 rounded-lg shadow-md">
-        <div className="mb-6">
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="h-10 bg-gray-200 rounded w-[800px]"></div>
-        </div>
-        <div className="h-[300px] bg-gray-200 rounded"></div>
-      </div>
-
-      {/* Grid 2 cột skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-5 rounded-lg shadow-md">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-[300px] bg-gray-200 rounded"></div>
-        </div>
-        <div className="bg-white p-5 rounded-lg shadow-md">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-[300px] bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function DashboardPage() {
   const searchParams = useSearchParams()
 
   const startDate = searchParams.get('startDate')?.toString() || ''
   const endDate = searchParams.get('endDate')?.toString() || ''
-  const viewBy = searchParams.get('viewBy')?.toString() || ''
+  const viewBy = searchParams.get('viewBy')?.toString() || 'month'
 
   const [value, setValue] = useState<{ value: string; label: string } | null>(
     viewBy ? { value: viewBy, label: viewBy } : null,
   )
-  // Thêm state để lưu giá trị ngày
   const [dateFromValue, setDateFromValue] = useState<Date | null>(startDate ? new Date(startDate) : null)
   const [dateToValue, setDateToValue] = useState<Date | null>(endDate ? new Date(endDate) : null)
   const [selectedPoint, setSelectedPoint] = useState<DataPoint>()
   const [startDateDisplay, setStartDateDisplay] = useState<string>('')
   const [endDateDisplay, setEndDateDisplay] = useState<string>('')
+
+  const { user } = useAuth()
+
+  const [totalWeight, setTotalWeight] = useState<number>(0)
+  useEffect(() => {
+    if (user) {
+      statisticService.getEcoOfUser().then((res) => {
+        setTotalWeight(res.totalWeight)
+      })
+    }
+  }, [user])
 
   const { data } = useSWR(
     ['/api/statistic', startDate, endDate, viewBy],
@@ -88,7 +55,6 @@ export default function DashboardPage() {
     {
       onSuccess(data) {
         if (data) {
-          // lấy ngày đầu tiên và cuối cùng trong dữ liệu
           const firstDate = data.dailyDetails[0]?.date
           const lastDate = data.dailyDetails[data.dailyDetails.length - 1]?.date
           setStartDateDisplay(firstDate)
@@ -109,8 +75,6 @@ export default function DashboardPage() {
     },
   )
 
-  console.log('data', TimeAddToCart)
-
   const handlePointClick = (dataPoint: any) => {
     setSelectedPoint(dataPoint)
   }
@@ -120,26 +84,24 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-1 md:px-10 space-y-6">
-      {/* Phần tiêu đề */}
-      <div className="bg-white p-5 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold">Tổng quan</h2>
-        <p className="text-lg text-gray-600">
-          {startDateDisplay && endDateDisplay
-            ? `Từ ${dayjs(startDateDisplay).format('DD/MM/YYYY')} đến ${dayjs(endDateDisplay).format('DD/MM/YYYY')}`
-            : 'Tất cả thời gian'}
-        </p>
+    <div className="container mx-auto px-6 md:px-10 space-y-6">
+      {/* Tổng khối lượng */}
+      <div className="bg-gradient-to-r from-green-400 to-green-600 p-6 rounded-2xl shadow-xl">
+        <h2 className="text-2xl font-bold text-white">Tổng khối lượng rác thải đã tiết kiệm</h2>
+        <p className="text-4xl font-extrabold text-white mt-2">{totalWeight} gram</p>
       </div>
 
-      {/* Stats Summary */}
-      <div className="bg-white p-5 rounded-lg shadow-md">
-        <StatsSummary data={data} />
-      </div>
-
-      {/* Biểu đồ và bộ lọc */}
-      <div className="bg-white p-5 rounded-lg shadow-md">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-4">Thống kê các khoản phí</h2>
+      {/* Tổng quan */}
+      <div className="bg-white p-6 rounded-2xl shadow-lg flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold">Tổng quan</h2>
+          <p className="text-md text-gray-500">
+            {startDateDisplay && endDateDisplay
+              ? `Từ ${dayjs(startDateDisplay).format('DD/MM/YYYY')} đến ${dayjs(endDateDisplay).format('DD/MM/YYYY')}`
+              : 'Tất cả thời gian'}
+          </p>
+        </div>
+        <div className="flex items-center space-x-4">
           <DateFilters
             value={value}
             setValue={setValue}
@@ -152,53 +114,57 @@ export default function DashboardPage() {
             viewBy={viewBy}
           />
         </div>
+      </div>
+
+      {/* Tổng hợp giá trị và Biểu đồ donut */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Tổng hợp các giá trị */}
+        <StatsSummary data={data} />
+        {/* Biểu đồ donut */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">Thống kê thêm vào giỏ hàng</h2>
+          {TimeAddToCart.data.length > 0 ? (
+            <DonutChart data={TimeAddToCart.data} />
+          ) : (
+            <p className="text-center text-gray-400">Không có dữ liệu</p>
+          )}
+        </div>
+      </div>
+
+      {/* Biểu đồ đường và bộ lọc */}
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">Thống kê các khoản phí</h2>
+        </div>
         <LineChartDashboard data={data} handlePointClick={handlePointClick} />
       </div>
 
-      {/* Grid 2 cột cho biểu đồ tròn */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-5 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Thống kê thêm vào giỏ hàng</h2>
-          {TimeAddToCart && <DonutChart data={TimeAddToCart.data} />}
-          {TimeAddToCart.data.length === 0 && <p className="text-gray-500 text-center">Không có dữ liệu</p>}
-        </div>
-
-        {selectedPoint && (
-          <div className="bg-white p-5 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">
-              Các hoá đơn ngày {dayjs(selectedPoint.date).format('DD/MM/YYYY')}
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
+      {/* Thông tin khi click vào điểm hoặc hướng dẫn */}
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
+        {selectedPoint ? (
+          <>
+            <h3 className="text-xl font-semibold mb-4">Chi tiết ngày {dayjs(selectedPoint.date).format('DD/MM/YYYY')}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <p className="font-medium mb-2">Các hóa đơn đã thanh toán:</p>
-                {selectedPoint.paidUUIDs.length === 0 ? (
-                  <p className="text-gray-500">Không có hóa đơn nào</p>
+                <p className="font-medium mb-2 text-blue-600">Các hóa đơn đã thanh toán:</p>
+                {selectedPoint.paidUUIDs.length > 0 ? (
+                  selectedPoint.paidUUIDs.map((id) => <p key={id} className="text-gray-700">{id}</p>)
                 ) : (
-                  <div className="space-y-1">
-                    {selectedPoint.paidUUIDs.map((item) => (
-                      <p key={item} className="text-sm">
-                        {item}
-                      </p>
-                    ))}
-                  </div>
+                  <p className="text-gray-500">Không có hóa đơn nào</p>
                 )}
               </div>
               <div>
-                <p className="font-medium mb-2">Các hóa đơn đã hoàn tiền:</p>
-                {selectedPoint.refundedUUIDs.length === 0 ? (
-                  <p className="text-gray-500">Không có hóa đơn nào</p>
+                <p className="font-medium mb-2 text-red-600">Các hóa đơn đã hoàn tiền:</p>
+                {selectedPoint.refundedUUIDs.length > 0 ? (
+                  selectedPoint.refundedUUIDs.map((id) => <p key={id} className="text-gray-700">{id}</p>)
                 ) : (
-                  <div className="space-y-1">
-                    {selectedPoint.refundedUUIDs.map((item) => (
-                      <p key={item} className="text-sm">
-                        - {item}
-                      </p>
-                    ))}
-                  </div>
+                  <p className="text-gray-500">Không có hóa đơn nào</p>
                 )}
               </div>
             </div>
-          </div>
+          </>
+        ) : (
+          <p className="text-gray-500">Chọn một điểm trên biểu đồ để xem chi tiết hoặc xem thông tin mặc định.</p>
         )}
       </div>
     </div>

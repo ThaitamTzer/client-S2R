@@ -46,5 +46,6 @@ export const config = {
     '/sell-management',
     '/banking-infor',
     '/packet',
+    '/dashboard',
   ],
 }

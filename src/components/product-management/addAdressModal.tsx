@@ -21,8 +21,10 @@ export default function AddAdressModal() {
   const { getProfile, user } = useAuth()
 
   useEffect(() => {
+    if (!user) return
     provinceService.getAllProvinces().then((res) => setProvinces(res))
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Fetch once on mount
 
   useEffect(() => {
     if (user?.address && provinces.length) {
@@ -33,57 +35,61 @@ export default function AddAdressModal() {
         form.setFieldValue('phone', user.phone)
       }
 
-      provinceService.getAllProvinces().then((res) => {
-        setProvinces(res)
-        const province = res.find((p: any) => provinceName === p.name)
-        if (province) {
-          form.setFieldValue('province', province.code)
-          setSelectedProvince(province)
+      const province = provinces.find((p: any) => provinceName === p.name)
+      if (province) {
+        form.setFieldValue('province', province.code)
+        setSelectedProvince(province)
 
-          provinceService.getProvinceById(province.code).then((districtRes) => {
-            setDistricts(districtRes.districts)
-            const district = districtRes.districts.find((d: any) => districtName === d.name)
-            if (district) {
-              form.setFieldValue('district', district.code)
-              setSelectedDistrict(district)
+        provinceService.getProvinceById(province.code).then((districtRes) => {
+          setDistricts(districtRes.districts)
+          const district = districtRes.districts.find((d: any) => districtName === d.name)
+          if (district) {
+            form.setFieldValue('district', district.code)
+            setSelectedDistrict(district)
 
-              provinceService.getDistrictsByDistrictId(district.code).then((wardRes) => {
-                setWard(wardRes.wards)
-                const wardData = wardRes.wards.find((w: any) => wardName === w.name)
-                if (wardData) {
-                  form.setFieldValue('ward', wardData.code)
-                  setSelectedWard(wardData)
-                }
-              })
-            }
-          })
-        }
-      })
+            provinceService.getDistrictsByDistrictId(district.code).then((wardRes) => {
+              setWard(wardRes.wards)
+              const wardData = wardRes.wards.find((w: any) => wardName === w.name)
+              if (wardData) {
+                form.setFieldValue('ward', wardData.code)
+                setSelectedWard(wardData)
+              }
+            })
+          }
+        })
+      }
 
       if (street && !['undefined', 'null'].includes(street)) {
         form.setFieldValue('street', street)
       }
     }
-  }, [user, form, provinces])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, provinces]) // Ensure provinces are fetched before
 
   const handleChangeProvince = (value: string) => {
     form.setFieldValue('district', undefined)
     form.setFieldValue('ward', undefined)
     setDistricts([])
     setWard([])
-    provinceService.getProvinceById(value).then((res) => {
-      setDistricts(res.districts)
-      setSelectedProvince(provinces.find((p: any) => p.code === value))
-    })
+    const province = provinces.find((p: any) => p.code === value)
+    if (province) {
+      setSelectedProvince(province)
+      provinceService.getProvinceById(value).then((res) => {
+        setDistricts(res.districts)
+      })
+    }
   }
 
   const handleChangeDistrict = (value: string) => {
     form.setFieldValue('ward', undefined)
     setWard([])
-    provinceService.getDistrictsByDistrictId(value).then((res) => {
-      setWard(res.wards)
-      setSelectedDistrict(districts.find((d: any) => d.code === value))
-    })
+    const district = districts.find((d: any) => d.code === value)
+    if (district) {
+      setSelectedDistrict(district)
+      provinceService.getDistrictsByDistrictId(value).then((res) => {
+        setWard(res.wards)
+      })
+    }
   }
 
   const handleChangeWard = (value: string) => {

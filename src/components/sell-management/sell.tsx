@@ -63,8 +63,6 @@ export default function SellPage() {
   const [dateFromValue, setDateFromValue] = useState<Date | null>(dateFrom ? new Date(dateFrom) : null)
   const [dateToValue, setDateToValue] = useState<Date | null>(dateTo ? new Date(dateTo) : null)
 
-  console.log(sells)
-
   return (
     <>
       <ViewDetail

@@ -38,6 +38,7 @@ export default function HomePageCategory({ categories, totalWeight }: { categori
 
     return () => {
       if (categoryRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(categoryRef.current)
       }
     }

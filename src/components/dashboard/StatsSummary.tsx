@@ -2,63 +2,49 @@
 
 import { StatisticSellerType } from '@/types/statisticType'
 import { memo } from 'react'
-import { useEffect, useState } from 'react'
-import statisticService from '@/services/statistist/statistist.service'
-import { useAuth } from '@/hooks/useAuth'
 
-const StatsSummary = memo(({ data }: { data: StatisticSellerType }) => {
-  const { user } = useAuth()
+interface StatsSummaryProps {
+  data: StatisticSellerType
+}
 
-  const [totalWeight, setTotalWeight] = useState<number>(0)
-  useEffect(() => {
-    if (user) {
-      statisticService.getEcoOfUser().then((res) => {
-        setTotalWeight(res.totalWeight)
-      })
-    }
-  }, [user])
+const StatsSummary: React.FC<StatsSummaryProps> = memo(({ data }) => {
+  const summaries = [
+    {
+      title: 'Tổng tiền đã thanh toán',
+      value: data.allSummary.totalPaid,
+      color: 'text-green-800',
+    },
+    {
+      title: 'Tổng hoàn tiền',
+      value: data.allSummary.totalRefund,
+      color: 'text-red-500',
+    },
+    {
+      title: 'Tổng phí vận chuyển',
+      value: data.allSummary.totalShippingFee,
+      color: 'text-blue-600',
+    },
+    {
+      title: 'Tổng doanh thu',
+      value: data.allSummary.totalSubTotal,
+      color: 'text-green-800',
+    },
+  ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <div>
-        <h3 className="text-md font-semibold">Tổng tiền đã thanh toán</h3>
-        <p className="text-3xl font-semibold text-green-800 ">
-          {data.allSummary.totalPaid.toLocaleString('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-          })}
-        </p>
-      </div>
-      <div>
-        <h3 className="text-md font-semibold">Tổng hoàn tiền</h3>
-        <p className="text-3xl font-semibold text-green-800 ">
-          {data.allSummary.totalRefund.toLocaleString('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-          })}
-        </p>
-      </div>
-      <div>
-        <h3 className="text-md font-semibold">Tổng phí vận chuyển</h3>
-        <p className="text-3xl font-semibold text-green-800 ">
-          {data.allSummary.totalShippingFee.toLocaleString('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-          })}
-        </p>
-      </div>
-      <div>
-        <h3 className="text-md font-semibold">Tổng doanh thu</h3>
-        <p className="text-3xl font-semibold text-green-800 ">
-          {data.allSummary.totalSubTotal.toLocaleString('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-          })}
-        </p>
-      </div>
-      <div>
-        <h3 className="text-md font-semibold">Tổng khối lượng bạn đã tiết kiệm</h3>
-        <p className="text-3xl font-semibold text-green-800 ">{totalWeight} gram</p>
+    <div className="bg-white p-5 rounded-lg shadow-lg flex-1">
+      <div className="grid grid-cols-2 gap-4">
+        {summaries.map((item, index) => (
+          <div key={index}>
+            <h3 className="text-lg font-semibold">{item.title}</h3>
+            <p className={`text-3xl font-semibold ${item.color}`}>
+              {item.value.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+              })}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   )

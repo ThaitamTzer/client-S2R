@@ -49,6 +49,7 @@ const ExChangeDrawer = () => {
       setTotalPages(Math.ceil(data?.total / 10))
       setHasMore(page < Math.ceil(data?.total / 10))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, data])
 
   const loadMore = async () => {

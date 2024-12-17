@@ -18,6 +18,8 @@ export default function OpenEditNote({ orderId }: { orderId: string }) {
     form.setValues({
       note: subOrder.note || '',
     })
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subOrder])
 
   const form = useForm({

@@ -8,7 +8,6 @@ import toast from 'react-hot-toast'
 
 export default function ReportModal({ reportType, resson }: { reportType: 'order' | 'product'; resson: any }) {
   const { openReportModal, toggleReportModal, subOrderId } = useOrderStore()
-  console.log(subOrderId)
 
   const form = useForm({
     initialValues: {

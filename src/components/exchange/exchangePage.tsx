@@ -41,6 +41,7 @@ const ExchangePage = () => {
           setLoading(false)
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exchangeId])
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const ExchangePage = () => {
           setLoading(false)
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exchangeIdRev])
 
   return (
