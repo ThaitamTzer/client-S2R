@@ -1,4 +1,5 @@
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { Tooltip as TooltipMantine } from '@mantine/core'
 import Image from 'next/image'
 
 type ProductData = {
@@ -36,20 +37,22 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null
 }
 
-// const CustomLegend = ({ payload }: any) => {
-//   return (
-//     <ul className="flex flex-wrap justify-center gap-4 mt-4">
-//       {payload.map((entry: any, index: number) => (
-//         <li key={`legend-${index}`} className="flex items-center gap-2">
-//           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }} />
-//           <span className="text-sm text-gray-600">
-//             {entry.payload.productName} ({entry.payload.timesAdded} lần)
-//           </span>
-//         </li>
-//       ))}
-//     </ul>
-//   )
-// }
+const CustomLegend = ({ payload }: any) => {
+  return (
+    <ul className="flex flex-wrap justify-center gap-4 mt-4">
+      {payload.map((entry: any, index: number) => (
+        <li key={`legend-${index}`} className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }} />
+          <TooltipMantine label={entry.payload.productName} position="top" withArrow>
+            <span className="text-sm text-gray-600">
+              {entry.payload.productName.split(' ').slice(0, 3).join(' ')}({entry.payload.timesAdded} lần)
+            </span>
+          </TooltipMantine>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 export default function DonutChart({ data }: DonutChartProps) {
   // Sắp xếp data theo số lần thêm vào giỏ giảm dần
@@ -83,29 +86,28 @@ export default function DonutChart({ data }: DonutChartProps) {
   return (
     <>
       {data && (
-        <div className="h-[250px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="45%"
-                innerRadius={60}
-                outerRadius={100}
-                fill="#8884d8"
-                paddingAngle={5}
-                dataKey="timesAdded"
-                nameKey="productName" // Thêm nameKey để sử dụng tên sản phẩm
-              >
-                {chartData.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={chartColors[index]} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              {/* <Legend content={<CustomLegend />} verticalAlign="bottom" align="center" /> */}
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width={400} height="88%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              innerRadius={40} // Giảm từ 60 xuống 40
+              outerRadius={80} // Giảm từ 100 xuống 80
+              fill="#8884d8"
+              cx="50%"
+              cy="45%"
+              paddingAngle={1}
+              dataKey="timesAdded"
+              nameKey="productName"
+              label
+            >
+              {chartData.map((_, index) => (
+                <Cell key={`cell-${index}`} fill={chartColors[index]} />
+              ))}
+            </Pie>
+            <Legend content={<CustomLegend />} verticalAlign="bottom" align="center" />
+            <Tooltip content={<CustomTooltip />} />
+          </PieChart>
+        </ResponsiveContainer>
       )}
     </>
   )

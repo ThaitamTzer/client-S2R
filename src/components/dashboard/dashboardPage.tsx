@@ -117,7 +117,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Tổng hợp giá trị và Biểu đồ donut */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex flex-row gap-6">
         {/* Tổng hợp các giá trị */}
         <StatsSummary data={data} />
         {/* Biểu đồ donut */}
@@ -143,12 +143,18 @@ export default function DashboardPage() {
       <div className="bg-white p-6 rounded-2xl shadow-lg">
         {selectedPoint ? (
           <>
-            <h3 className="text-xl font-semibold mb-4">Chi tiết ngày {dayjs(selectedPoint.date).format('DD/MM/YYYY')}</h3>
+            <h3 className="text-xl font-semibold mb-4">
+              Chi tiết ngày {dayjs(selectedPoint.date).format('DD/MM/YYYY')}
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <p className="font-medium mb-2 text-blue-600">Các hóa đơn đã thanh toán:</p>
                 {selectedPoint.paidUUIDs.length > 0 ? (
-                  selectedPoint.paidUUIDs.map((id) => <p key={id} className="text-gray-700">{id}</p>)
+                  selectedPoint.paidUUIDs.map((id) => (
+                    <p key={id} className="text-gray-700">
+                      {id}
+                    </p>
+                  ))
                 ) : (
                   <p className="text-gray-500">Không có hóa đơn nào</p>
                 )}
@@ -156,7 +162,11 @@ export default function DashboardPage() {
               <div>
                 <p className="font-medium mb-2 text-red-600">Các hóa đơn đã hoàn tiền:</p>
                 {selectedPoint.refundedUUIDs.length > 0 ? (
-                  selectedPoint.refundedUUIDs.map((id) => <p key={id} className="text-gray-700">{id}</p>)
+                  selectedPoint.refundedUUIDs.map((id) => (
+                    <p key={id} className="text-gray-700">
+                      {id}
+                    </p>
+                  ))
                 ) : (
                   <p className="text-gray-500">Không có hóa đơn nào</p>
                 )}
