@@ -108,7 +108,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.youtube.com"></link>
         <ColorSchemeScript />
       </head>
-      <body className={`antialiased relative ${montserrat.className}`}>
+      <body className={`antialiased relative ${montserrat.className}`} >
         <Providers>
           <Header />
           <ExChangeDrawer />
