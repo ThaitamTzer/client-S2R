@@ -55,17 +55,23 @@ export default function LeftSection({
       <div className="flex items-center justify-between w-full md:w-auto">
         <div className="flex items-center">
           <div className="w-8 md:w-14">
-            <Image src="/logo.png" width={50} height={50} alt="Share2Receive" loading="lazy" className="mr-1 p-1" />
+            <Image
+              src="/logo.png"
+              quality={60}
+              width={50}
+              height={50}
+              alt="Share2Receive"
+              loading="lazy"
+              className="mr-1 p-1"
+            />
           </div>
-          <div className="text-green-800 text-xl md:text-3xl font-semibold">
-            <Link href="/">
-              <h1>
-                Share
-                <span style={{ color: 'salmon' }}>2</span>
-                Receive
-              </h1>
-            </Link>
-          </div>
+          <Link href="/">
+            <h1 className="text-green-800 text-xl md:text-3xl font-semibold">
+              Share
+              <span style={{ color: 'salmon' }}>2</span>
+              Receive
+            </h1>
+          </Link>
         </div>
         <div className="nav ml-6 hidden md:block">
           <ul className="nav-list flex flex-row uppercase">

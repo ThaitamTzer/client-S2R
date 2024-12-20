@@ -3,15 +3,16 @@ import Image from 'next/image'
 import { Carousel } from '@mantine/carousel'
 import { Carousel as CarouselAntd } from 'antd'
 import { ProductsClient } from '@/types/users/productTypes'
-import { Suspense, lazy } from 'react'
+import { Suspense } from 'react'
 import Loading from '@/app/loading'
+import dynamic from 'next/dynamic'
 
-const UserWhosell = lazy(() => import('./userwhosell'))
-const ColorSelection = lazy(() => import('./colorselection'))
-const SizeSelection = lazy(() => import('./sizeselection'))
-const QuantitySelection = lazy(() => import('./quantityselection'))
-const ButtonSection = lazy(() => import('./buttonsection'))
-const PolicySection = lazy(() => import('./policysection'))
+const UserWhosell = dynamic(() => import('./userwhosell'), { ssr: false, loading: () => <div /> })
+const ColorSelection = dynamic(() => import('./colorselection'), { ssr: false, loading: () => <div /> })
+const SizeSelection = dynamic(() => import('./sizeselection'), { ssr: false, loading: () => <div /> })
+const QuantitySelection = dynamic(() => import('./quantityselection'), { ssr: false, loading: () => <div /> })
+const ButtonSection = dynamic(() => import('./buttonsection'), { ssr: false, loading: () => <div /> })
+const PolicySection = dynamic(() => import('./policysection'), { ssr: false, loading: () => <div /> })
 
 export default function ProductOverview({
   product,
@@ -104,8 +105,8 @@ export default function ProductOverview({
                 alt={product.productName}
                 width={600}
                 height={600}
-                loading="lazy"
-                quality={90}
+                loading="eager"
+                quality={70}
                 className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
               />
             </div>

@@ -6,8 +6,6 @@ import { useGetName } from '@/helper/getName'
 import { useExchange } from '@/zustand/exchange'
 import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
-import ProductOverview from './productOverview'
-import InforProduct from './inforProduct'
 import { notification } from 'antd'
 import { useProductClient } from '@/zustand/productClient'
 import cartService from '@/services/cart/cart.service'
@@ -28,6 +26,8 @@ const CreateExchangeModal = dynamic(() => import('../exchange/openCreateExchange
 })
 const ReportModal = dynamic(() => import('../checkout/reportModal'), { ssr: false, loading: () => <div /> })
 const AddToCard = dynamic(() => import('./addToCard'), { ssr: false, loading: () => <div /> })
+const ProductOverview = dynamic(() => import('./productOverview'), { ssr: false, loading: () => <div /> })
+const InforProduct = dynamic(() => import('./inforProduct'), { ssr: false, loading: () => <div /> })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
   const [api, contextHolder] = notification.useNotification()
@@ -92,6 +92,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
     updateQuantities()
     updateMaxQuantity()
     setCount(1) // Reset count to 1 whenever the selection changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSize, selectedColor])
 
   const handleSizeToggle = (size: string) => {
