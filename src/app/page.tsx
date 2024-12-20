@@ -21,14 +21,38 @@ const HomePageSamePrice = dynamic(() => import('@/components/homepage/HomePageSa
   ssr: false,
   loading: () => <Loading />,
 })
-const HomePageCategory = dynamic(() => import('@/components/homepage/HomePageCategory'))
-const HomePageTogetherSection = dynamic(() => import('@/components/homepage/HomePageTogetherSection'))
-const HomePageManFashion = dynamic(() => import('@/components/homepage/HomePageMaleFashion'))
-const HomePageFemale = dynamic(() => import('@/components/homepage/HomePageFemale'))
-const HomePageUnisex = dynamic(() => import('@/components/homepage/HomePageUnisex'))
-const HomePageYouLike = dynamic(() => import('@/components/homepage/HomePageYouLike'))
-const Navigation = dynamic(() => import('@/components/nav'))
-const HomePageTitle = dynamic(() => import('@/components/homepage/HomepageTitle'))
+const HomePageCategory = dynamic(() => import('@/components/homepage/HomePageCategory'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageTogetherSection = dynamic(() => import('@/components/homepage/HomePageTogetherSection'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageManFashion = dynamic(() => import('@/components/homepage/HomePageMaleFashion'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageFemale = dynamic(() => import('@/components/homepage/HomePageFemale'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageUnisex = dynamic(() => import('@/components/homepage/HomePageUnisex'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageYouLike = dynamic(() => import('@/components/homepage/HomePageYouLike'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const Navigation = dynamic(() => import('@/components/nav'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageTitle = dynamic(() => import('@/components/homepage/HomepageTitle'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 
 export const metadata: Metadata = {
   title: 'Share2Receive - Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng',

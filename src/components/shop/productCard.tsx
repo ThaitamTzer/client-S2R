@@ -70,18 +70,18 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
             <Meta title={<span className="text-lg md:text-xl">{product.productName}</span>} />
             <Meta
               title={
-                <div className="text-sm md:text-lg font-normal">
+                <span className="text-sm md:text-lg font-normal">
                   Kích thước:{' '}
                   {Array.from(new Set(product.sizeVariants.map((variant) => variant.size)))
                     .slice(0, 3)
                     .map((size, index) => (
-                      <p key={index}>
+                      <span key={index}>
                         {size}
                         {index < product.sizeVariants.slice(0, 3).length - 1 && ', '}
-                      </p>
+                      </span>
                     ))}
                   {product.sizeVariants.length > 3 && ',...'}
-                </div>
+                </span>
               }
             />
             <Meta
