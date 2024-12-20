@@ -19,6 +19,8 @@ import attendService from '@/services/attend/attend.service'
 import { useAttend } from '@/zustand/attend'
 import { useWalletStore } from '@/zustand/wallet'
 import walletService from '@/services/wallet/wallet.service'
+import { ConfigType } from '@/types/config'
+import configService from '@/services/config/config.service'
 
 type ClientValuesType = {
   loading: boolean
@@ -29,6 +31,8 @@ type ClientValuesType = {
   setBrands: (value: Brand[] | null) => void
   productsUser: Product[] | null
   isMobile: boolean | undefined
+  config: ConfigType | null
+  setConfig: (value: ConfigType | null) => void
 }
 
 const defaultProvider: ClientValuesType = {
@@ -40,6 +44,8 @@ const defaultProvider: ClientValuesType = {
   setBrands: () => null,
   productsUser: null,
   isMobile: false,
+  config: null,
+  setConfig: () => null,
 }
 
 const ClientContext = createContext(defaultProvider)
@@ -52,6 +58,7 @@ const ClientProvider = ({ children }: Props) => {
   const [categories, setCates] = useState<Category[] | null>(defaultProvider.categories)
   const [brands, setBrands] = useState<Brand[] | null>(defaultProvider.brands)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
+  const [config, setConfig] = useState<ConfigType | null>(defaultProvider.config)
   const [productsUser, setProductsUser] = useState<Product[] | null>(defaultProvider.productsUser)
   const { setCategories } = useCategory()
   const { setNotifications } = useNotificationStore()
@@ -82,6 +89,12 @@ const ClientProvider = ({ children }: Props) => {
     refreshInterval: 0,
     dedupingInterval: 10000,
     errorRetryCount: 3,
+  })
+
+  useSWR('/api/config/get-config', configService.getConfig, {
+    onSuccess: (data) => {
+      setConfig(data)
+    },
   })
 
   useSWR('/api/brand/list-brand-client', brandService.getBrands, {
@@ -139,6 +152,8 @@ const ClientProvider = ({ children }: Props) => {
     productsUser,
     setProductsUser,
     isMobile,
+    config,
+    setConfig,
   }
 
   return <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

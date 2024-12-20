@@ -2,7 +2,11 @@ import axiosClient from '@/lib/axios'
 import { Wallet } from '@/types/wallet'
 
 const walletService = {
-  getWallet: async (): Promise<Wallet> => axiosClient.get('/api/wallet/get-wallet'),
+  getWallet: async (): Promise<Wallet> =>
+    axiosClient
+      .get('/api/wallet/get-wallet')
+      .then((res: any) => res)
+      .catch((error: any) => error.response.data.message),
 
   checkoutMomo: async (point: number, successCallback?: (res: any) => void, errorCallBack?: (res: any) => void) => {
     try {

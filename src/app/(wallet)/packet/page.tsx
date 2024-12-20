@@ -11,6 +11,8 @@ import walletService from '@/services/wallet/wallet.service'
 import NavigateToMomo from '@/components/checkout/navigateToMomo'
 import { Success } from '@/services/checkout/checkout.service'
 import toast from 'react-hot-toast'
+import configService from '@/services/config/config.service'
+import { ConfigType } from '@/types/config'
 
 export default function PacketPage() {
   const [topupMethod, setTopupMethod] = useState<'package' | 'custom'>('package')
@@ -19,9 +21,16 @@ export default function PacketPage() {
   const [packets, setPackets] = useState<Packet[]>([])
   const [payUrl, setPayUrl] = useState<string>('')
   const { user } = useAuth()
+  const [configs, setConfigs] = useState<ConfigType>()
   useSWR(user ? '/api/packet/get-packet-client' : null, packetService.getPackets, {
     onSuccess: (data) => {
       setPackets(data)
+    },
+  })
+
+  useSWR(user ? '/api/configs' : null, configService.getConfig, {
+    onSuccess: (data) => {
+      setConfigs(data)
     },
   })
 
@@ -58,6 +67,8 @@ export default function PacketPage() {
       },
     )
   }
+
+  if (!packets || !configs) return null
 
   return (
     <>
@@ -98,7 +109,9 @@ export default function PacketPage() {
                         <div className="flex items-center gap-4">
                           <Image src={pkg.image} alt="diamond" width={100} height={100} />
                           <div>
-                            <p className="text-xl font-bold">{pkg.price / 1000 + pkg.promotionPoint} Kim cương</p>
+                            <p className="text-xl font-bold">
+                              {pkg.price / configs?.valueToPoint + pkg.promotionPoint} Kim cương
+                            </p>
                             <span className="text-green-500 text-md">chỉ với {pkg.price.toLocaleString()}đ</span>
                           </div>
                         </div>
@@ -151,7 +164,9 @@ export default function PacketPage() {
                   placeholder="Nhập số lượng kim cương"
                   className="max-w-md"
                 />
-                <p className="text-black">Số tiền cần thanh toán: {((customAmount || 0) * 1000).toLocaleString()}đ</p>
+                <p className="text-black">
+                  Số tiền cần thanh toán: {((customAmount || 0) * configs.valueToPoint).toLocaleString()}đ
+                </p>
               </div>
               <Radio.Group defaultValue="">
                 <Radio

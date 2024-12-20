@@ -2,6 +2,7 @@ import { TypeCategory } from '@/metadata/category'
 import { Suspense, lazy } from 'react'
 import Loading from '../loading'
 import { Metadata } from 'next'
+import Head from 'next/head'
 
 const NavigationWithBg = lazy(() => import('@/components/navWithBg'))
 
@@ -24,6 +25,8 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic'
 
+const imageUrl = 'res.cloudinary.com'
+
 export default function ShopLayout({
   children,
 }: Readonly<{
@@ -31,6 +34,9 @@ export default function ShopLayout({
 }>) {
   return (
     <Suspense fallback={<Loading />}>
+      <Head>
+        <link rel="preload" href={imageUrl} as="image" />
+      </Head>
       <NavigationWithBg navLink={TypeCategory} />
       {children}
     </Suspense>

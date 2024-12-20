@@ -6,11 +6,12 @@ import { useRef } from 'react'
 import { ProductsClient } from '@/types/users/productTypes'
 import { useMediaQuery } from '@mantine/hooks'
 import dynamic from 'next/dynamic'
+import { ConfigType } from '@/types/config'
 
 const IconifyIcon = dynamic(() => import('@/components/icons'), { ssr: false })
-const ProductCard = dynamic(() => import('@/components/shop/productCard'), { ssr: false })
+const ProductCard = dynamic(() => import('@/components/shop/productCard'), { ssr: false, loading: () => <div /> })
 
-const HomePageManFashion = ({ products }: { products: ProductsClient[] }) => {
+const HomePageManFashion = ({ products, config }: { products: ProductsClient[]; config: ConfigType }) => {
   const autoplay = useRef(Autoplay({ delay: 2000 }))
   const isDesktop = useMediaQuery('(min-width: 62em)')
 
@@ -36,7 +37,7 @@ const HomePageManFashion = ({ products }: { products: ProductsClient[] }) => {
       <div
         className="overflow-hidden relative mx-auto w-full h-full min-h-[150px] md:min-h-[500px] bg-cover bg-no-repeat md:rounded-md flex justify-between md:mt-6"
         style={{
-          backgroundImage: 'url(/images/do_nam.png)',
+          backgroundImage: `url(${config.sectionUrl_1})`,
           backgroundPosition: 'center 0px',
         }}
       >

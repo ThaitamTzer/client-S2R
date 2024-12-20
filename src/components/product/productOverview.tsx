@@ -105,7 +105,7 @@ export default function ProductOverview({
                 alt={product.productName}
                 width={600}
                 height={600}
-                loading="eager"
+                loading="lazy"
                 quality={70}
                 className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
               />
@@ -123,13 +123,16 @@ export default function ProductOverview({
                   }}
                 >
                   <Image
-                    src={imgUrl}
+                    src={mainImage} // Use mainImage state
                     alt={product.productName}
-                    width={500}
-                    height={500}
-                    loading="lazy"
+                    width={600}
+                    height={600}
+                    priority
+                    placeholder="blur"
+                    blurDataURL="/images/dummy_600x600_ffffff_cccccc.png" // Replace with actual placeholder path
+                    sizes="(max-width: 768px) 100vw, 600px"
                     quality={70}
-                    className=" absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover cursor-pointer"
+                    className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
                   />
                 </div>
               ))}

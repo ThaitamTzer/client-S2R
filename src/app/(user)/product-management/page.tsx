@@ -1,8 +1,11 @@
 import Loading from '@/app/loading'
 import { Metadata } from 'next'
-import { Suspense, lazy } from 'react'
+import dynamic from 'next/dynamic'
 
-const ProductManagement = lazy(() => import('@/components/product-management/productManagement'))
+const ProductManagement = dynamic(() => import('@/components/product-management/productManagement'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
 
 export const metadata: Metadata = {
   title: 'Quản lý sản phẩm',
@@ -10,11 +13,7 @@ export const metadata: Metadata = {
 }
 
 const ProductManagementPage = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <ProductManagement />
-    </Suspense>
-  )
+  return <ProductManagement />
 }
 
 export default ProductManagementPage

@@ -6,6 +6,7 @@ import { useRef } from 'react'
 import dynamic from 'next/dynamic'
 import IconifyIcon from '../icons'
 import { Brand } from '@/types/clientypes'
+import { ConfigType } from '@/types/config'
 
 const BrandSlider = dynamic(() => import('@/components/slider/brandSilder'), { ssr: false })
 
@@ -16,7 +17,7 @@ const priorityOrder = {
   low: 1,
 }
 
-export default function HomePageFavorate({ brands }: { brands: Brand[] }) {
+export default function HomePageFavorate({ brands, config }: { brands: Brand[]; config: ConfigType }) {
   const autoplay2 = useRef(Autoplay({ delay: 2000 }))
 
   const sortedBrands = brands?.sort((a, b) => {
@@ -57,7 +58,7 @@ export default function HomePageFavorate({ brands }: { brands: Brand[] }) {
                       <div className="absolute w-screen h-screen -top-[25%] -bottom-[10%]">
                         <div className="responsive-iframe-brand">
                           <iframe
-                            src="https://www.youtube.com/embed/i-S9dcmegZo?playlist=i-S9dcmegZo&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70"
+                            src={`https://www.youtube.com/embed/${config.videoUrl_2}?playlist=${config.videoUrl_2}&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70`}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share; loop;"
                             referrerPolicy="strict-origin-when-cross-origin"
                             loading="lazy"

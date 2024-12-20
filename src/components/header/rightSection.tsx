@@ -235,7 +235,7 @@ export default function RightSection({
                       </Text>
                       <p className="font-normal text-sm text-blue-900 flex flex-row items-center">
                         <Image src="/misc/latest.png" alt="point" width={20} height={20} />
-                        <span>{wallet?.point ? wallet.point + ' Kim cương' : 0 + 'Kim cương'}</span>{' '}
+                        <span>{wallet?.point ? wallet.point + ' Kim cương' : 0 + ' Kim cương'}</span>{' '}
                       </p>
                     </div>
                   </div>

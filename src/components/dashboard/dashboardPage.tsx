@@ -8,11 +8,11 @@ import dayjs from 'dayjs'
 import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 
-const StatsSummary = dynamic(() => import('./StatsSummary'))
-const DateFilters = dynamic(() => import('./DateFilters'))
-const LineChartDashboard = dynamic(() => import('./LineChartDashboard'))
-const DonutChart = dynamic(() => import('./DonutChart'))
-const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'))
+const StatsSummary = dynamic(() => import('./StatsSummary'), { loading: () => <p>Loading...</p> })
+const DateFilters = dynamic(() => import('./DateFilters'), { loading: () => <p>Loading...</p> })
+const LineChartDashboard = dynamic(() => import('./LineChartDashboard'), { loading: () => <p>Loading...</p> })
+const DonutChart = dynamic(() => import('./DonutChart'), { loading: () => <p>Loading...</p> })
+const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'), { loading: () => <p>Loading...</p> })
 
 type DataPoint = {
   date: string

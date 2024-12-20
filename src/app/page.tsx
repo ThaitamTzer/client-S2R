@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import Loading from './loading'
-import { fetchProducts, fetchTotalEcoOfAllUser } from '@/action/homepage'
+import { fetchConfig, fetchProducts, fetchTotalEcoOfAllUser } from '@/action/homepage'
 import { fetchBrand } from '@/action/brand'
 import { fetchCategories } from '@/action/category'
 
@@ -93,7 +93,7 @@ export default async function Home() {
   const productsFemale = await fetchProducts('female')
   const brands = await fetchBrand()
   const categories = await fetchCategories()
-
+  const configs = await fetchConfig()
   const totalWeight = await fetchTotalEcoOfAllUser()
 
   return (
@@ -102,13 +102,13 @@ export default async function Home() {
         <FormStyleUser />
         <Navigation navLink={TypeCategory} />
         <div className="mt-[105px] md:mt-0">
-          <HomePageHero />
+          <HomePageHero config={configs} />
           <HomePageTitle />
           <HomePageYouLike />
-          <HomePageManFashion products={productsMale.data} />
+          <HomePageManFashion config={configs} products={productsMale.data} />
           <HomePageFemale donus={productsFemale.data} />
-          <HomePageUnisex />
-          <HomePageFavorate brands={brands} />
+          <HomePageUnisex config={configs} />
+          <HomePageFavorate brands={brands} config={configs} />
           <HomePageSamePrice />
           <div className="container mx-auto px-2 md:px-32 text-center text-lg md:text-2xl font-medium text-green-800 uppercase mt-8">
             <h1>

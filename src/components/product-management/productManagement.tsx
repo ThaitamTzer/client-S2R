@@ -11,6 +11,8 @@ import { useSearchParams } from 'next/navigation'
 import Loading from '@/app/loading'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
+import { useWalletStore } from '@/zustand/wallet'
+import { useClient } from '@/hooks/useClient'
 
 const DataTable = lazy(() => import('@/components/product-management/dataTable'))
 const ViewProductModal = lazy(() => import('@/components/product-management/viewProduct'))
@@ -20,6 +22,8 @@ const AddAdressModal = lazy(() => import('@/components/product-management/addAdr
 
 const ProductManagement = () => {
   const param = useSearchParams()
+  const { config } = useClient()
+  const { wallet } = useWalletStore()
 
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10
@@ -29,7 +33,8 @@ const ProductManagement = () => {
 
   const { user } = useAuth()
 
-  const { toggleDeleteProductModal, openDeleteProductModal, product, setProduct } = useProductManagement()
+  const { toggleDeleteProductModal, openDeleteProductModal, product, setProduct, setOpenAddressModal } =
+    useProductManagement()
 
   const handleDeleteProduct = async () => {
     try {
@@ -45,9 +50,8 @@ const ProductManagement = () => {
         .catch(() => {
           toast.error('Xóa sản phẩm thất bại')
         })
-    } catch (error) {
+    } catch {
       toast.error('Xóa sản phẩm thất bại')
-      console.log(error)
     }
   }
 
@@ -74,6 +78,26 @@ const ProductManagement = () => {
           onOpen={openDeleteProductModal}
           onClose={toggleDeleteProductModal}
         />
+      </div>
+      <div className="flex justify-end">
+        {config?.valueToCross !== undefined && wallet.point <= config.valueToCross && (
+          <p className="text-red-500">
+            Vui lòng{' '}
+            <Link href={'/packet'} className="text-blue-500 hover:underline">
+              nạp thêm
+            </Link>{' '}
+            kim cương để thêm sản phẩm (Tối thiểu {config.valueToCross} kim cương)
+          </p>
+        )}
+        {(!user?.address || !user?.phone) && (
+          <p className="text-red-500">
+            Vui lòng{' '}
+            <span onClick={() => setOpenAddressModal(true)} className="text-blue-500 hover:underline">
+              cập nhật
+            </span>{' '}
+            thông tin địa chỉ nhận hàng và số điện thoại để thêm sản phẩm
+          </p>
+        )}
       </div>
       <div className="flex justify-end">
         {!user?.banking && (

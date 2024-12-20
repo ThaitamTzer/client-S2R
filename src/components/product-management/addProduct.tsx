@@ -6,12 +6,16 @@ import { useAddProduct } from '@/hooks/useProduct'
 import dynamic from 'next/dynamic'
 import { Stepper } from '@mantine/core'
 import { useAuth } from '@/hooks/useAuth'
+import { useWalletStore } from '@/zustand/wallet'
+import { useClient } from '@/hooks/useClient'
 
 const StepInfor = dynamic(() => import('@/components/product-management/addProduct/stepInfor'), { ssr: false })
 const StepPicture = dynamic(() => import('@/components/product-management/addProduct/stepPicture'), { ssr: false })
 
 export default function AddProduct() {
   const { user } = useAuth()
+  const { wallet } = useWalletStore()
+  const { config } = useClient()
   const {
     isDesktop,
     openAddProductModal,
@@ -39,7 +43,7 @@ export default function AddProduct() {
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>Tải ảnh lên</div>
     </button>
   )
 
@@ -49,7 +53,7 @@ export default function AddProduct() {
         size="large"
         icon={<IconPlus size={15} />}
         variant="solid"
-        disabled={!user?.banking}
+        disabled={(!user?.banking || !user?.address || !user?.phone || (config && wallet.point <= config.valueToCross)) ?? false}
         color="primary"
         onClick={handleOpenAddProductModal}
       >

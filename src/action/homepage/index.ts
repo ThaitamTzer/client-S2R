@@ -1,4 +1,5 @@
 'use server'
+import { ConfigType } from '@/types/config'
 import { ProductSClientList } from '@/types/users/productTypes'
 const BASEURL = process.env.NEXT_PUBLIC_API_URL
 
@@ -30,7 +31,19 @@ export const fetchTotalEcoOfAllUser = async () => {
 
   const data: any = await response.json()
 
-  console.log(data)
-
   return data
+}
+
+export const fetchConfig = async () => {
+  const res = await fetch(`${BASEURL}/api/configs`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-cache',
+  })
+
+  const data = await res.json()
+
+  return data as ConfigType
 }
