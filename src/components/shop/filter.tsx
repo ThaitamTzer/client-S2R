@@ -1,14 +1,21 @@
 'use client'
 
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
-import { Collapse, Checkbox } from 'antd'
+import { Collapse } from 'antd'
 import { useClient } from '@/hooks/useClient'
-import { sizes } from '@/metadata/sizeData'
-import { colorData } from '@/metadata/colorData'
-import { clothingStylesData } from '@/metadata/styleData'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { materialData } from '@/metadata/materialData'
+import dynamic from 'next/dynamic'
+
+const FillterCategory = dynamic(() => import('./fillterCollapse.tsx/category'), { ssr: false, loading: () => <div /> })
+const FillterBrand = dynamic(() => import('./fillterCollapse.tsx/brand'), { ssr: false, loading: () => <div /> })
+const FillterType = dynamic(() => import('./fillterCollapse.tsx/type'), { ssr: false, loading: () => <div /> })
+const FillterStyle = dynamic(() => import('./fillterCollapse.tsx/style'), { ssr: false, loading: () => <div /> })
+const FillterMaterial = dynamic(() => import('./fillterCollapse.tsx/material'), { ssr: false, loading: () => <div /> })
+const FillterColor = dynamic(() => import('./fillterCollapse.tsx/color'), { ssr: false, loading: () => <div /> })
+const FillterSize = dynamic(() => import('./fillterCollapse.tsx/size'), { ssr: false, loading: () => <div /> })
+const FillterPrice = dynamic(() => import('./fillterCollapse.tsx/price'), { ssr: false, loading: () => <div /> })
+const FillterStatus = dynamic(() => import('./fillterCollapse.tsx/status'), { ssr: false, loading: () => <div /> })
 
 const expandIcon = ({ isActive }: { isActive: boolean | undefined }) => {
   return isActive ? (
@@ -105,29 +112,11 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div
-            style={{
-              maxHeight: '500px',
-              overflowY: 'auto',
-            }}
-          >
-            <div className="flex flex-col gap-2">
-              {categories?.map((cate) => (
-                <Checkbox
-                  key={cate._id}
-                  className="my-2 filter_checkbox"
-                  style={{
-                    color: '#000',
-                    fontSize: '1.3rem',
-                  }}
-                  onChange={(e) => handleFilterChange(e.target.checked, 'filterCategory', cate._id)}
-                  checked={isFilterChecked('filterCategory', cate._id)}
-                >
-                  {cate.name + ` (${cate.totalProduct || 0})`}
-                </Checkbox>
-              ))}
-            </div>
-          </div>
+          <FillterCategory
+            categories={categories}
+            handleFilterChange={handleFilterChange}
+            isFilterChecked={isFilterChecked}
+          />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -137,29 +126,7 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div className="flex flex-col">
-            <div className="filter_checkbox checkbox-material display-flex flex-wrap gap-2">
-              {sizes.map((size) => (
-                <Checkbox
-                  key={size.id}
-                  value={size.value}
-                  className="card-checkbox"
-                  onChange={(e) => handleFilterChange(e.target.checked, 'filterSize', size.value)}
-                  checked={isFilterChecked('filterSize', size.value)}
-                  style={{
-                    color: '#000',
-                    fontSize: '1.3rem',
-                  }}
-                >
-                  <div className="">
-                    <div className="w-full">
-                      <p className="text-black uppercase text-color">{size.name}</p>
-                    </div>
-                  </div>
-                </Checkbox>
-              ))}
-            </div>
-          </div>
+          <FillterSize handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -169,31 +136,7 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div className="filter_color checkbox-material gap-1">
-            {colorData.map((color) => (
-              <Checkbox
-                key={color.value}
-                value={color.value}
-                onChange={(e) => handleFilterChange(e.target.checked, 'filterColor', color.value)}
-                checked={isFilterChecked('filterColor', color.value)}
-                className="card-checkbox"
-              >
-                <div className="card-content flex items-center flex-col justify-start w-full h-full">
-                  <div
-                    className="color-bg shadow-sm color rounded-full"
-                    style={{
-                      backgroundColor: `${color.color}CC`,
-                      width: '1.7rem',
-                      height: '1.7rem',
-                    }}
-                  ></div>
-                  <div className="w-full text-center">
-                    <p className="text-black color-name text-lg">{color.name}</p>
-                  </div>
-                </div>
-              </Checkbox>
-            ))}
-          </div>
+          <FillterColor handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -203,29 +146,7 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div
-            style={{
-              maxHeight: '500px',
-              overflowY: 'auto',
-            }}
-          >
-            <div className="flex flex-col gap-2 ">
-              {materialData.map((material) => (
-                <Checkbox
-                  key={material.id}
-                  className="my-2 filter_checkbox"
-                  style={{
-                    color: '#000',
-                    fontSize: '1.3rem',
-                  }}
-                  onChange={(e) => handleFilterChange(e.target.checked, 'filterMaterial', material.value)}
-                  checked={isFilterChecked('filterMaterial', material.value)}
-                >
-                  {material.name}
-                </Checkbox>
-              ))}
-            </div>
-          </div>
+          <FillterMaterial handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -247,67 +168,7 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div className="flex flex-col gap-2">
-            <Checkbox
-              onChange={(e) => handlePriceRangeChange(e.target.checked, 0, 100000)}
-              checked={isPriceRangeChecked(0, 100000)}
-              className="my-2 filter_checkbox"
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              Dưới 100k
-            </Checkbox>
-
-            <Checkbox
-              onChange={(e) => handlePriceRangeChange(e.target.checked, 100000, 200000)}
-              checked={isPriceRangeChecked(100000, 200000)}
-              className="my-2 filter_checkbox"
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              100k - 200k
-            </Checkbox>
-
-            <Checkbox
-              onChange={(e) => handlePriceRangeChange(e.target.checked, 200000, 500000)}
-              checked={isPriceRangeChecked(200000, 500000)}
-              className="my-2 filter_checkbox"
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              200k - 500k
-            </Checkbox>
-
-            <Checkbox
-              onChange={(e) => handlePriceRangeChange(e.target.checked, 500000, 1000000)}
-              checked={isPriceRangeChecked(500000, 1000000)}
-              className="my-2 filter_checkbox"
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              500k - 1tr
-            </Checkbox>
-
-            <Checkbox
-              onChange={(e) => handlePriceRangeChange(e.target.checked, 1000000, 50000000)}
-              checked={isPriceRangeChecked(1000000, 50000000)}
-              className="my-2 filter_checkbox"
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              Trên 1tr
-            </Checkbox>
-          </div>
+          <FillterPrice handlePriceRangeChange={handlePriceRangeChange} isPriceRangeChecked={isPriceRangeChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -322,30 +183,7 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div className="flex flex-col gap-2">
-            <Checkbox
-              className="my-2 filter_checkbox"
-              onChange={(e) => handleFilterChange(e.target.checked, 'filterCondition', 'used')}
-              checked={isFilterChecked('filterCondition', 'used')}
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              Sản phẩm đã qua sử dụng
-            </Checkbox>
-            <Checkbox
-              className="my-2 filter_checkbox"
-              onChange={(e) => handleFilterChange(e.target.checked, 'filterCondition', 'new')}
-              checked={isFilterChecked('filterCondition', 'new')}
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              Sản phẩm mới 100%
-            </Checkbox>
-          </div>
+          <FillterStatus handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -361,22 +199,7 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div className="flex flex-col gap-2">
-            {brands?.map((brand) => (
-              <Checkbox
-                onChange={(e) => handleFilterChange(e.target.checked, 'filterBrand', brand._id)}
-                checked={isFilterChecked('filterBrand', brand._id)}
-                key={brand._id}
-                className="my-2 filter_checkbox"
-                style={{
-                  color: '#000',
-                  fontSize: '1.3rem',
-                }}
-              >
-                {brand.name + ` (${brand.totalProduct || 0})`}
-              </Checkbox>
-            ))}
-          </div>
+          <FillterBrand brands={brands} handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
@@ -391,60 +214,14 @@ const FilterSide = () => {
             borderBottom: '1px solid #000',
           }}
         >
-          <div className="flex flex-col gap-2">
-            <Checkbox
-              className="my-2 filter_checkbox"
-              onChange={(e) => handleFilterChange(e.target.checked, 'filterType', 'barter')}
-              checked={isFilterChecked('filterType', 'barter')}
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              Sản phẩm trao đổi
-            </Checkbox>
-            <Checkbox
-              onChange={(e) => handleFilterChange(e.target.checked, 'filterType', 'sale')}
-              checked={isFilterChecked('filterType', 'sale')}
-              className="my-2 filter_checkbox"
-              style={{
-                color: '#000',
-                fontSize: '1.3rem',
-              }}
-            >
-              Sản phẩm bán
-            </Checkbox>
-          </div>
+          <FillterType handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
         <Collapse.Panel
           header={<p className="text-xl font-medium ">Theo phong cách ({countCheckedFilters('filterStyle')})</p>}
           key="9"
         >
-          <div
-            style={{
-              maxHeight: '500px',
-              overflowY: 'auto',
-            }}
-          >
-            <Checkbox.Group className="display-flex flex-col gap-3">
-              {clothingStylesData.map((style) => (
-                <Checkbox
-                  onChange={(e) => handleFilterChange(e.target.checked, 'filterStyle', style.value)}
-                  checked={isFilterChecked('filterStyle', style.value)}
-                  key={style.id}
-                  className="my-2 filter_checkbox"
-                  style={{
-                    color: '#000',
-                    fontSize: '1.3rem',
-                  }}
-                  value={style.value}
-                >
-                  {style.name}
-                </Checkbox>
-              ))}
-            </Checkbox.Group>
-          </div>
+          <FillterStyle handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
       </Collapse>
     </>

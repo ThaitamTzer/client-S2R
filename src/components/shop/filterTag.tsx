@@ -35,7 +35,7 @@ const FilterTag = () => {
     })
 
     setParamsObj(newParamsObj)
-  }, [param])
+  }, [param, setParamsObj])
 
   // Count total number of tags
   const totalTags = Object.values(paramsObj).reduce((acc, values) => acc + values.length, 0)

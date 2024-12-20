@@ -1,3 +1,5 @@
+'use server'
+
 import { ProductsClient, ProductSClientList } from '@/types/users/productTypes'
 import { forEach } from 'lodash'
 const BASEURL = process.env.NEXT_PUBLIC_API_URL

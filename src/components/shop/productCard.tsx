@@ -61,7 +61,7 @@ export default function ProductCard({ product, isLoading }: { product: ProductsC
                 loading="lazy"
                 className="object-cover w-full h-full"
                 priority={false}
-                quality={70}
+                quality={60}
               />
             </div>
           }
