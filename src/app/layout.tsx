@@ -111,7 +111,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
-        <Suspense fallback={null}>
+        <Suspense fallback={<div>Loading...</div>}>
           <Providers>
             <Header />
             <Exchange />

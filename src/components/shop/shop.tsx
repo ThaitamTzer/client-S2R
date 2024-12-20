@@ -9,6 +9,7 @@ import { ProductsClient } from '@/types/users/productTypes'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const ProductCard = dynamic(() => import('./productCard'), {
+  ssr: false,
   loading: () => <div className="animate-pulse bg-gray-200 h-full w-full rounded" />,
 })
 const FilterTag = dynamic(() => import('./filterTag'), {
@@ -19,7 +20,7 @@ const FilterSide = dynamic(() => import('./filter'), {
   ssr: false,
   loading: () => <div className="h-screen w-full bg-gray-100 animate-pulse" />,
 })
-const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false })
+const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false, loading: () => <div /> })
 
 const Shop = ({ products, total }: { products: ProductsClient[]; total: number }) => {
   const { setOpenFilterDrawer } = useUserAction()

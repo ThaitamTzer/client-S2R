@@ -20,11 +20,14 @@ import { UnstyledButton } from '@mantine/core'
 import { useOrderStore } from '@/zustand/order'
 import { RessonProduct } from '@/constants/resson'
 
-const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false })
-const ViewRatingModal = dynamic(() => import('../rating/rating'), { ssr: false })
-const CreateExchangeModal = dynamic(() => import('../exchange/openCreateExchange'), { ssr: false })
-const ReportModal = dynamic(() => import('../checkout/reportModal'), { ssr: false })
-const AddToCard = dynamic(() => import('./addToCard'), { ssr: false })
+const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false, loading: () => <div /> })
+const ViewRatingModal = dynamic(() => import('../rating/rating'), { ssr: false, loading: () => <div /> })
+const CreateExchangeModal = dynamic(() => import('../exchange/openCreateExchange'), {
+  ssr: false,
+  loading: () => <div />,
+})
+const ReportModal = dynamic(() => import('../checkout/reportModal'), { ssr: false, loading: () => <div /> })
+const AddToCard = dynamic(() => import('./addToCard'), { ssr: false, loading: () => <div /> })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
   const [api, contextHolder] = notification.useNotification()

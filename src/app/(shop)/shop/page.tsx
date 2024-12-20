@@ -21,7 +21,7 @@ interface SearchParams {
   searchKey?: string
 }
 
-const Shop = dynamic(() => import('@/components/shop/shop'), { loading: () => <Loading /> })
+const Shop = dynamic(() => import('@/components/shop/shop'), { ssr: false, loading: () => <div /> })
 const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false, loading: () => <div /> })
 
 export const metadata: Metadata = {

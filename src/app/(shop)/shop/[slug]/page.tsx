@@ -4,8 +4,11 @@ import { Suspense } from 'react'
 import Loading from '@/app/loading'
 import { fetchAllProdClient, fetchProductBySlug } from '@/action/shop'
 
-const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'))
-const ProductDetail = dynamic(() => import('@/components/product/productDetail'))
+const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false, loading: () => <div /> })
+const ProductDetail = dynamic(() => import('@/components/product/productDetail'), {
+  ssr: false,
+  loading: () => <div />,
+})
 
 export async function generateStaticParams() {
   const products = await fetchAllProdClient(1, 999)
