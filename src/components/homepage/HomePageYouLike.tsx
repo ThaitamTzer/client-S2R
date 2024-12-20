@@ -9,8 +9,10 @@ import Autoplay from 'embla-carousel-autoplay'
 import Link from 'next/link'
 import { Card } from 'antd'
 import { formatPrice } from '@/helper/format'
-import IconifyIcon from '../icons'
 import { useMediaQuery } from '@mantine/hooks'
+import dynamic from 'next/dynamic'
+
+const IconifyIcon = dynamic(() => import('@/components/icons'))
 
 const HomePageYouLike = () => {
   const { productsPropose, setProductsPropose } = useProductClient()

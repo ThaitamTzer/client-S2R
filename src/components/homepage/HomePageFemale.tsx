@@ -6,9 +6,11 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import style from '@/styles/card.module.css'
 import { ProductsClient } from '@/types/users/productTypes'
-import ProductCard from '../shop/productCard'
-import IconifyIcon from '../icons'
 import { useMediaQuery } from '@mantine/hooks'
+import dynamic from 'next/dynamic'
+
+const ProductCard = dynamic(() => import('../shop/productCard'), { ssr: false, loading: () => <div>Loading...</div> })
+const IconifyIcon = dynamic(() => import('../icons'), { ssr: false, loading: () => <div>Loading...</div> })
 
 const HomePageFemale = ({ donus }: { donus: ProductsClient[] }) => {
   const isDesktop = useMediaQuery('(min-width: 62em)')

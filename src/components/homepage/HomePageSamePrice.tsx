@@ -7,7 +7,9 @@ import Link from 'next/link'
 import useSWR from 'swr'
 import productService from '@/services/product/product.service'
 import { ProductsClient } from '@/types/users/productTypes'
-import ProductCard from '../shop/productCard'
+import dynamic from 'next/dynamic'
+
+const ProductCard = dynamic(() => import('../shop/productCard'), { ssr: false, loading: () => <div>Loading...</div> })
 
 export default function HomePageSamePrice() {
   const autoplay3 = useRef(Autoplay({ delay: 5000 }))

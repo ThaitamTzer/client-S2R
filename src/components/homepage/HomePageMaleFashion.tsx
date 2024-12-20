@@ -4,9 +4,11 @@ import Autoplay from 'embla-carousel-autoplay'
 import Link from 'next/link'
 import { useRef } from 'react'
 import { ProductsClient } from '@/types/users/productTypes'
-import ProductCard from '../shop/productCard'
-import IconifyIcon from '../icons'
 import { useMediaQuery } from '@mantine/hooks'
+import dynamic from 'next/dynamic'
+
+const IconifyIcon = dynamic(() => import('@/components/icons'), { ssr: false })
+const ProductCard = dynamic(() => import('@/components/shop/productCard'), { ssr: false })
 
 const HomePageManFashion = ({ products }: { products: ProductsClient[] }) => {
   const autoplay = useRef(Autoplay({ delay: 2000 }))

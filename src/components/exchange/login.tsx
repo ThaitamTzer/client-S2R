@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import Image from 'next/image'
 
-export const Login = ({ open, close }: { open: boolean; close: () => void }) => {
+const Login = ({ open, close }: { open: boolean; close: () => void }) => {
   interface formData {
     account: string
     password: string
@@ -40,13 +40,7 @@ export const Login = ({ open, close }: { open: boolean; close: () => void }) => 
             <div className="text-center text-3xl font-medium text-green-900">
               <h1>Đăng nhập</h1>
             </div>
-            <Form
-              form={form}
-              onFinish={onFinish}
-              layout="vertical"
-              size="large"
-              validateTrigger={'onBlur'}
-            >
+            <Form form={form} onFinish={onFinish} layout="vertical" size="large" validateTrigger={'onBlur'}>
               <Form.Item
                 name="account"
                 label="Email"
@@ -124,3 +118,5 @@ export const Login = ({ open, close }: { open: boolean; close: () => void }) => 
     </>
   )
 }
+
+export default Login

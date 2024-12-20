@@ -14,16 +14,16 @@ import '@mantine/core/styles/Menu.css'
 import '@mantine/dates/styles.css'
 import '@mantine/charts/styles.css'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
-import { lazy } from 'react'
+import { lazy, Suspense } from 'react'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
 const Chat = lazy(() => import('@/components/chat/chat'))
-const ExChangeDrawer = lazy(() => import('@/components/exchange/exchange'))
-const LoginModal = lazy(() => import('@/components/loginModal'))
-const CartDrawer = lazy(() => import('@/components/cart/cartDrawer'))
-const Attend = lazy(() => import('@/components/attend/attend'))
-const AttendCalendar = lazy(() => import('@/components/attend/attendCalendar'))
+const Exchange = lazy(() => import('@/components/exchange/exchange'))
+const LoginDynamic = lazy(() => import('@/components/loginDynamic'))
+const Cart = lazy(() => import('@/components/cart/cart'))
+const AttendDynamic = lazy(() => import('@/components/attend/attendDynamic'))
+const AttendCalendarDynamic = lazy(() => import('@/components/attend/attendCalendarDynamic'))
 const Header = lazy(() => import('@/partials/header'))
 const Footer = lazy(() => import('@/partials/footer'))
 
@@ -111,24 +111,26 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
-        <Providers>
-          <Header />
-          <ExChangeDrawer />
-          <CartDrawer />
-          <main
-            suppressHydrationWarning
-            className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
-          >
-            <LoginModal />
-            {children}
-          </main>
-          <Chat />
-          <div className="fixed top-[300px] right-0 z-50">
-            <Attend />
-          </div>
-          <AttendCalendar />
-          <Footer />
-        </Providers>
+        <Suspense fallback={null}>
+          <Providers>
+            <Header />
+            <Exchange />
+            <Cart />
+            <main
+              suppressHydrationWarning
+              className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
+            >
+              <LoginDynamic />
+              {children}
+            </main>
+            <Chat />
+            <div className="fixed top-[300px] right-0 z-50">
+              <AttendDynamic />
+            </div>
+            <AttendCalendarDynamic />
+            <Footer />
+          </Providers>
+        </Suspense>
       </body>
     </html>
   )

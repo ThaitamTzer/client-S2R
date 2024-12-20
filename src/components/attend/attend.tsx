@@ -1,13 +1,15 @@
 'use client'
 
 import Image from 'next/image'
-import MotionDiv from '../motiondiv'
 import { useAttend } from '@/zustand/attend'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { Badge } from '@mantine/core'
 import { useAuth } from '@/hooks/useAuth'
 import { Tooltip } from '@mantine/core'
+import dynamic from 'next/dynamic'
+
+const MotionDiv = dynamic(() => import('@/components/motiondiv'), { ssr: false, loading: () => <div>Loading...</div> })
 
 export default function Attend() {
   const { toggleAttendModal, attendances } = useAttend()
