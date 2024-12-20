@@ -1,7 +1,7 @@
 import { TypeCategory } from '@/metadata/category'
 import FormStyleUser from '@/components/homepage/FormStyle'
 import { Metadata } from 'next'
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import Loading from './loading'
 import { fetchProducts, fetchTotalEcoOfAllUser } from '@/action/homepage'
@@ -17,14 +17,17 @@ const HomePageFavorate = dynamic(() => import('@/components/homepage/HomePageFav
   ssr: false,
   loading: () => <Loading />,
 })
-const HomePageSamePrice = lazy(() => import('@/components/homepage/HomePageSamePrice'))
-const HomePageCategory = lazy(() => import('@/components/homepage/HomePageCategory'))
-const HomePageTogetherSection = lazy(() => import('@/components/homepage/HomePageTogetherSection'))
-const HomePageManFashion = lazy(() => import('@/components/homepage/HomePageMaleFashion'))
-const HomePageFemale = lazy(() => import('@/components/homepage/HomePageFemale'))
-const HomePageUnisex = lazy(() => import('@/components/homepage/HomePageUnisex'))
-const HomePageYouLike = lazy(() => import('@/components/homepage/HomePageYouLike'))
-const Navigation = lazy(() => import('@/components/nav'))
+const HomePageSamePrice = dynamic(() => import('@/components/homepage/HomePageSamePrice'), {
+  ssr: false,
+  loading: () => <Loading />,
+})
+const HomePageCategory = dynamic(() => import('@/components/homepage/HomePageCategory'))
+const HomePageTogetherSection = dynamic(() => import('@/components/homepage/HomePageTogetherSection'))
+const HomePageManFashion = dynamic(() => import('@/components/homepage/HomePageMaleFashion'))
+const HomePageFemale = dynamic(() => import('@/components/homepage/HomePageFemale'))
+const HomePageUnisex = dynamic(() => import('@/components/homepage/HomePageUnisex'))
+const HomePageYouLike = dynamic(() => import('@/components/homepage/HomePageYouLike'))
+const Navigation = dynamic(() => import('@/components/nav'))
 const HomePageTitle = dynamic(() => import('@/components/homepage/HomepageTitle'))
 
 export const metadata: Metadata = {

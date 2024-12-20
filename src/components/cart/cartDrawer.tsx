@@ -78,7 +78,7 @@ export default function CartDrawer() {
       <Drawer.Root
         opened={openCartDrawer}
         onClose={toggleCartDrawer}
-        size="30%"
+        size="40%"
         position="right"
         scrollAreaComponent={ScrollArea.Autosize}
         className="cgscgcjhscasjcsc"
@@ -88,7 +88,7 @@ export default function CartDrawer() {
           <Drawer.Header>
             <Drawer.Title>
               <h3 className="text-green-900 text-xl font-semibold flex flex-row items-center gap-2">
-                <IconifyIcon icon="mynaui:cart" className="text-green-900 w-10 h-10" />
+                <IconifyIcon icon="solar:cart-large-2-broken" className="text-green-900 w-10 h-10" />
                 <span className="text-green-900 text-xl font-semibold">Giỏ hàng</span>
               </h3>
             </Drawer.Title>
@@ -116,7 +116,7 @@ export default function CartDrawer() {
             </div>
           </Drawer.Body>
           {total > 0 && (
-            <div className="sticky bottom-0 left-0 w-full bg-white border-t border-gray-200 p-3">
+            <div className="sticky bottom-0 left-0 w-full bg-white border-t border-gray-200 p-3 z-30">
               <div className="flex items-center justify-center space-x-3">
                 <p>Tổng loại: {summary.totalTypes}</p>
                 <p>Tổng số lượng: {summary.totalAmount}</p>

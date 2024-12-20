@@ -1,14 +1,14 @@
-import productService from '@/services/product/product.service'
 import { notFound } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 import Loading from '@/app/loading'
+import { fetchAllProdClient, fetchProductBySlug } from '@/action/shop'
 
 const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'))
 const ProductDetail = dynamic(() => import('@/components/product/productDetail'))
 
 export async function generateStaticParams() {
-  const products = await productService.getAllProdClient(1, 999)
+  const products = await fetchAllProdClient(1, 999)
 
   if (!products) {
     return []
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = await productService.getProductBySlug(params.slug)
+  const product = await fetchProductBySlug(params.slug)
 
   if (!product) {
     return {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const product = await productService.getProductBySlug(params.slug)
+  const product = await fetchProductBySlug(params.slug)
 
   if (!product) {
     notFound()

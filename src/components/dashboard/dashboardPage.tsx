@@ -5,12 +5,14 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import 'dayjs/locale/vi'
 import dayjs from 'dayjs'
-import StatsSummary from './StatsSummary'
-import DateFilters from './DateFilters'
-import LineChartDashboard from './LineChartDashboard'
-import DonutChart from './DonutChart'
-import DashboardSkeleton from './dashboardSkeleton'
 import { useAuth } from '@/hooks/useAuth'
+import dynamic from 'next/dynamic'
+
+const StatsSummary = dynamic(() => import('./StatsSummary'))
+const DateFilters = dynamic(() => import('./DateFilters'))
+const LineChartDashboard = dynamic(() => import('./LineChartDashboard'))
+const DonutChart = dynamic(() => import('./DonutChart'))
+const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'))
 
 type DataPoint = {
   date: string

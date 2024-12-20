@@ -1,11 +1,4 @@
-'use client'
-
-import { useState } from 'react'
-import Image from 'next/image'
-
 export default function HomePageHero() {
-  const [isLoaded, setIsLoaded] = useState(false)
-
   return (
     <>
       <div className="relative mt-6 wrapper pointer-events-none">
@@ -18,30 +11,17 @@ export default function HomePageHero() {
                     <div className="relative w-full h-full">
                       <div className="absolute w-screen h-screen -top-[25%] -bottom-[10%]">
                         <div className="responsive-iframe">
-                          {!isLoaded && (
-                            <Image
-                              src={`https://img.youtube.com/vi/uyHgY2O__fY/hqdefault.jpg`}
-                              alt="Share2Receive"
-                              width={1280}
-                              height={720}
-                              loading="lazy"
-                              onLoad={() => setIsLoaded(true)}
-                            />
-                          )}
-                          {isLoaded && (
-                            <iframe
-                              frameBorder={0}
-                              src="https://www.youtube.com/embed/uyHgY2O__fY?playlist=uyHgY2O__fY&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=5&end=179?loading=lazy"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                              referrerPolicy="strict-origin-when-cross-origin"
-                              loading="lazy"
-                              width="100%"
-                              height="100%"
-                              rel="preload"
-                              title="Share2Receive"
-                            ></iframe>
-                          )}
-                          {/* <OptimizedIframe videoId="uyHgY2O__fY" title="Share2Receive" /> */}
+                          <iframe
+                            frameBorder={0}
+                            src="https://www.youtube.com/embed/uyHgY2O__fY?playlist=uyHgY2O__fY&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=5&end=179?loading=lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            loading="lazy"
+                            width="100%"
+                            height="100%"
+                            rel="preload"
+                            title="Share2Receive"
+                          ></iframe>
                         </div>
                       </div>
                     </div>

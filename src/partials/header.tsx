@@ -11,9 +11,9 @@ import { useNotificationStore } from '@/zustand/notification'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
 
-const LeftSection = dynamic(() => import('@/components/header/leftSection'), { ssr: true })
-const MiddleSection = dynamic(() => import('@/components/header/middleSection'), { ssr: false })
-const RightSection = dynamic(() => import('@/components/header/rightSection'), { ssr: false })
+const LeftSection = dynamic(() => import('@/components/header/leftSection'))
+const MiddleSection = dynamic(() => import('@/components/header/middleSection'))
+const RightSection = dynamic(() => import('@/components/header/rightSection'))
 
 export default function Header() {
   const { notifications, setNotifications } = useNotificationStore()

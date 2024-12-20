@@ -10,6 +10,7 @@ export const fetchProducts = async (filterTypeCategory: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      cache: 'no-cache',
     },
   )
 
@@ -24,6 +25,7 @@ export const fetchTotalEcoOfAllUser = async () => {
     headers: {
       'Content-Type': 'application/json',
     },
+    cache: 'no-cache',
   })
 
   const data: any = await response.json()

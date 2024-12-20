@@ -1,4 +1,5 @@
 import axiosClient from '@/lib/axios'
+import customFetch from '@/lib/customFetch'
 import { AddToCartData, Cart } from '@/types/cart'
 
 const cartService = {
@@ -19,7 +20,13 @@ const cartService = {
     }
   },
 
-  getCart: (): Promise<Cart> => axiosClient.get('/api/cart'),
+  getCart: (): Promise<Cart> =>
+    customFetch('/api/cart', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
 
   deleteCartItem: async (id: string, success?: () => void, errorMessage?: (message: string) => void) => {
     try {
@@ -31,6 +38,27 @@ const cartService = {
         }
       }
     }
+  },
+
+  updateQuantity: async (
+    id: string,
+    amount: number,
+    success?: () => void,
+    errorMessage?: (message: string) => void,
+  ) => {
+    customFetch(`/api/cart/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ amount }),
+    })
+      .then(() => success && success())
+      .catch((error) => {
+        if (errorMessage) {
+          errorMessage(error.message)
+        }
+      })
   },
 }
 
