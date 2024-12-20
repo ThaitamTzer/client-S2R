@@ -90,6 +90,7 @@ export default function RootLayout({
       lang="en"
     >
       <head>
+        <title>Share2Receive</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href={`${apiDomain}/api`} />
@@ -104,11 +105,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#16a34a" />
         <meta name="google-site-verification" content="dC_ZZ8dPqFvxMMMiFOeMIV2va5G0-K467cyjKles4lo" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/logo.png" />
         <link rel="canonical" href="https://share2receive-client.vercel.app" />
         <link rel="preconnect" href="https://www.youtube.com"></link>
         <ColorSchemeScript />
       </head>
-      <body className={`antialiased relative ${montserrat.className}`} >
+      <body className={`antialiased relative ${montserrat.className}`}>
         <Providers>
           <Header />
           <ExChangeDrawer />
