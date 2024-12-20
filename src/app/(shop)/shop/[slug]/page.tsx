@@ -5,6 +5,9 @@ import Loading from '@/app/loading'
 import { fetchAllProdClient, fetchProductBySlug } from '@/action/shop'
 
 const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false, loading: () => <div /> })
+const CodModal = dynamic(() => import('@/components/product/codModal'), { ssr: false, loading: () => <div /> })
+const RefundModal = dynamic(() => import('@/components/product/refundModal'), { ssr: false, loading: () => <div /> })
+const BuyModal = dynamic(() => import('@/components/product/buyModal'), { ssr: false, loading: () => <div /> })
 const ProductDetail = dynamic(() => import('@/components/product/productDetail'), {
   ssr: false,
   loading: () => <div />,
@@ -56,6 +59,9 @@ export default async function ProductPage({ params }: { params: { slug: string }
       <div className="container mx-auto mt-40 px-2 md:px-0 md:mt-36">
         <Breadcrumb items={breadcrumbItems} />
       </div>
+      <CodModal />
+      <RefundModal />
+      <BuyModal />
       <ProductDetail product={product} />
     </Suspense>
   )

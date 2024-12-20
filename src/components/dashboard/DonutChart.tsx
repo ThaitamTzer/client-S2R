@@ -98,7 +98,6 @@ export default function DonutChart({ data }: DonutChartProps) {
               paddingAngle={1}
               dataKey="timesAdded"
               nameKey="productName"
-              label
             >
               {chartData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={chartColors[index]} />

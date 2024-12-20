@@ -9,6 +9,10 @@ type State = {
   productToAdd: ProductsClient
   openCartDrawer: boolean
   openOrderNowModal: boolean
+
+  openCodeModal: boolean
+  openRefundModal: boolean
+  openBuyModal: boolean
 }
 
 type Actions = {
@@ -21,6 +25,10 @@ type Actions = {
   handleUniqueColors: (product: ProductsClient) => string[]
   toggleCartDrawer: () => void
   toggleOrderNowModal: () => void
+
+  toggleCodeModal: () => void
+  toggleRefundModal: () => void
+  toggleBuyModal: () => void
 }
 
 export const useProductClient = create<State & Actions>((set) => ({
@@ -31,6 +39,11 @@ export const useProductClient = create<State & Actions>((set) => ({
   productToAdd: {} as ProductsClient,
   openCartDrawer: false,
   openOrderNowModal: false,
+
+  openCodeModal: false,
+  openRefundModal: false,
+  openBuyModal: false,
+
   handleUniqueSizes: (product) => {
     return Array.from(new Set(product.sizeVariants.map((v) => v.size)))
   },
@@ -44,4 +57,8 @@ export const useProductClient = create<State & Actions>((set) => ({
   toggleAddToCardModal: () => set((state) => ({ openAddToCardModal: !state.openAddToCardModal })),
   toggleCartDrawer: () => set((state) => ({ openCartDrawer: !state.openCartDrawer })),
   toggleOrderNowModal: () => set((state) => ({ openOrderNowModal: !state.openOrderNowModal })),
+
+  toggleCodeModal: () => set((state) => ({ openCodeModal: !state.openCodeModal })),
+  toggleRefundModal: () => set((state) => ({ openRefundModal: !state.openRefundModal })),
+  toggleBuyModal: () => set((state) => ({ openBuyModal: !state.openBuyModal })),
 }))
