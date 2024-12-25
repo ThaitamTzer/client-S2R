@@ -77,6 +77,7 @@ const AuthProvider = ({ children }: Props) => {
         .catch(() => {
           setUser(null)
           Cookies.remove('jwt')
+          localStorage.clear()
           if (authConfig.onTokenExpiration === 'logout' && !pathName.includes('login')) {
             router.replace('/login')
           }
@@ -95,6 +96,8 @@ const AuthProvider = ({ children }: Props) => {
         .then(async (response) => {
           setLoading(false)
           setUser({ ...response.data.user })
+          localStorage.setItem('accessToken', response.data.accessToken)
+          localStorage.setItem('refreshToken', response.data.refreshToken)
 
           // Lưu token vào cookie với httpOnly và secure
           Cookies.set('jwt', response.data.accessToken, {
@@ -124,8 +127,9 @@ const AuthProvider = ({ children }: Props) => {
     try {
       const res = await axiosClient.post(authConfig.registerEndpoint, params)
       setUser(res.data.user)
+      localStorage.setItem('accessToken', res.data.accessToken)
+      localStorage.setItem('refreshToken', res.data.refreshToken)
       Cookies.set('jwt', JSON.stringify(res.data.user))
-      console.log('res', res.data.user)
       setLoading(false)
       router.push('/')
     } catch {
@@ -154,6 +158,8 @@ const AuthProvider = ({ children }: Props) => {
     try {
       const res = await axiosClient.get('/api/users/view-profile')
       setUser(res.data)
+      localStorage.setItem('accessToken', res.data.accessToken)
+      localStorage.setItem('refreshToken', res.data.refreshToken)
       return res.data
     } catch {
       setLoading(false)
@@ -165,11 +171,13 @@ const AuthProvider = ({ children }: Props) => {
       axiosClient.patch(authConfig.logoutEndpoint).then(() => {
         // Xóa token
         Cookies.remove('jwt')
+        localStorage.clear()
         setAllNull()
         router.push('/')
       })
     } catch {
       Cookies.remove('jwt')
+      localStorage.clear()
       setUser(null)
       router.push('/')
     }

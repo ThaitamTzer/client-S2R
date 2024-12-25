@@ -7,12 +7,16 @@ export const optionCookie = {
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 const customFetch = async (endpoint: string, options: RequestInit = {}) => {
+  const accessToken = localStorage.getItem('accessToken') || ''
+
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
     },
     credentials: 'include', // tương đương withCredentials: true
     cache: 'no-cache',
+
     ...options,
   }
 

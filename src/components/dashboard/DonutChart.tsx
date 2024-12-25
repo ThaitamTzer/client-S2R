@@ -86,15 +86,15 @@ export default function DonutChart({ data }: DonutChartProps) {
   return (
     <>
       {data && (
-        <ResponsiveContainer width={400} height="88%">
+        <ResponsiveContainer width="100%" height={400}>
           <PieChart>
             <Pie
               data={chartData}
-              innerRadius={40} // Giảm từ 60 xuống 40
-              outerRadius={80} // Giảm từ 100 xuống 80
+              innerRadius={60} // Increased from 40
+              outerRadius={120} // Increased from 80
               fill="#8884d8"
               cx="50%"
-              cy="45%"
+              cy="50%"
               paddingAngle={1}
               dataKey="timesAdded"
               nameKey="productName"

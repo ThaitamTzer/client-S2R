@@ -8,11 +8,14 @@ import dayjs from 'dayjs'
 import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 
-const StatsSummary = dynamic(() => import('./StatsSummary'), { loading: () => <p>Loading...</p> })
-const DateFilters = dynamic(() => import('./DateFilters'), { loading: () => <p>Loading...</p> })
-const LineChartDashboard = dynamic(() => import('./LineChartDashboard'), { loading: () => <p>Loading...</p> })
-const DonutChart = dynamic(() => import('./DonutChart'), { loading: () => <p>Loading...</p> })
-const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'), { loading: () => <p>Loading...</p> })
+const StatsSummary = dynamic(() => import('./StatsSummary'), { ssr: false, loading: () => <p>Loading...</p> })
+const DateFilters = dynamic(() => import('./DateFilters'), { ssr: false, loading: () => <p>Loading...</p> })
+const LineChartDashboard = dynamic(() => import('./LineChartDashboard'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+})
+const DonutChart = dynamic(() => import('./DonutChart'), { ssr: false, loading: () => <p>Loading...</p> })
+const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'), { ssr: false, loading: () => <p>Loading...</p> })
 
 type DataPoint = {
   date: string

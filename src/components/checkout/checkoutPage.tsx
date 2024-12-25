@@ -18,9 +18,11 @@ import orderService from '@/services/order/order.service'
 import { mutate } from 'swr'
 import { Descriptions } from 'antd'
 import { useCheckoutStore } from '@/zustand/checkout'
+import { useWalletStore } from '@/zustand/wallet'
 
 export default function CheckoutPage({ order }: { order: OrderById }) {
   const { getColorName } = useGetName()
+  const { wallet } = useWalletStore()
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
   const [paymentMethod, setPaymentMethod] = useState('2')
@@ -431,7 +433,7 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                       size="lg"
                       color="green"
                       value="3"
-                      disabled={order.data.totalAmount >= 50000}
+                      disabled={order.data.totalAmount >= 50000 || wallet.point < order.data.totalAmount ? true : false}
                       label={
                         <div className="flex flex-row gap-3 items-center">
                           <Image
@@ -446,6 +448,9 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
                         </div>
                       }
                     />
+                    {wallet.point < order.data.totalAmount && (
+                      <p className="text-red-500">Số kim cương của bạn không đủ để thanh toán đơn hàng này</p>
+                    )}
                   </Stack>
                 </Radio.Group>
               </div>

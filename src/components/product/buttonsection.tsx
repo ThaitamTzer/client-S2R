@@ -18,6 +18,8 @@ export default function ButtonSection({
   const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
   const { toggleAddToCardModal, setProductToAdd, toggleOrderNowModal } = useProductClient()
 
+  if (product.userId._id === user._id) return null
+
   const handleSelectChat = (item: ProductsClient) => {
     setRoomId([user?._id, item.userId._id].sort().join('_'))
     setActiveChats([
