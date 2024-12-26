@@ -22,6 +22,7 @@ export default function SideBar() {
           icon="solar:bag-4-broken"
           pathname={pathNames}
         />
+        <MenuItem href="/user-manual" label="Hướng dẫn sử dụng" icon="solar:book-2-broken" pathname={pathNames} />
       </div>
     </div>
   )

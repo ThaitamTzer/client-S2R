@@ -186,7 +186,14 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
           </div>
         </div>
         <div className="flex gap-2">
-          <ActionIcon variant="transparent" color="white" onClick={onMinimize}>
+          <ActionIcon
+            variant="transparent"
+            color="white"
+            onClick={() => {
+              onMinimize()
+              socket?.emit('leaveRoom', room)
+            }}
+          >
             <IconifyIcon icon="pepicons-pop:minus" fontSize={24} />
           </ActionIcon>
           <ActionIcon
@@ -195,6 +202,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
             onClick={() => {
               setActiveChats(activeChats.filter((chat) => chat.chatPartner._id !== userChat?.chatPartner._id))
               setLocalMessages([])
+              socket?.emit('leaveRoom', room)
               setRoom('')
             }}
           >

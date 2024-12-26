@@ -18,19 +18,24 @@ const LoginModal = () => {
   const [form] = Form.useForm()
 
   const onFinish = (values: formData) => {
-    console.log('Received values of form: ', values)
-    login(values, () => {
-      form.setFields([
-        {
-          name: 'account',
-          errors: ['Email hoặc mật khẩu không chính xác'],
-        },
-        {
-          name: 'password',
-          errors: ['Email hoặc mật khẩu không chính xác'],
-        },
-      ])
-    })
+    login(
+      values,
+      () => {
+        form.resetFields()
+      },
+      () => {
+        form.setFields([
+          {
+            name: 'account',
+            errors: ['Email hoặc mật khẩu không chính xác'],
+          },
+          {
+            name: 'password',
+            errors: ['Email hoặc mật khẩu không chính xác'],
+          },
+        ])
+      },
+    )
   }
 
   return (

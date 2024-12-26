@@ -10,18 +10,16 @@ import { useSocket } from '@/hooks/useSocket'
 import { useNotificationStore } from '@/zustand/notification'
 import dynamic from 'next/dynamic'
 import { useAuth } from '@/hooks/useAuth'
+import { mutate as getData } from 'swr'
 
 const LeftSection = dynamic(() => import('@/components/header/leftSection'), {
   ssr: false,
-  loading: () => <div>Loading...</div>,
 })
 const MiddleSection = dynamic(() => import('@/components/header/middleSection'), {
   ssr: false,
-  loading: () => <div>Loading...</div>,
 })
 const RightSection = dynamic(() => import('@/components/header/rightSection'), {
   ssr: false,
-  loading: () => <div>Loading...</div>,
 })
 
 export default function Header() {
@@ -69,8 +67,9 @@ export default function Header() {
   useEffect(() => {
     if (socket) {
       socket.on('generalNotification', (newNotification) => {
-        console.log(newNotification)
+        console.log('generalNotification', newNotification)
         mutate()
+        getData('/api/notifications')
         api.open({
           message: newNotification.title,
           description: newNotification.message,
@@ -82,6 +81,8 @@ export default function Header() {
       })
 
       socket.on('messageNotification', (newNotification) => {
+        console.log('messageNotification', newNotification)
+        getData('/api/messages/get-room')
         api.info({
           message: newNotification.title,
           description: newNotification.message,

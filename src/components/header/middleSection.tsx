@@ -12,7 +12,7 @@ export default function MiddleSection({
 }) {
   return (
     <>
-      <div className="flex-1 mx-4 mt-2 md:mt-0 md:mx-0 w-full md:w-auto">
+      <div className="flex-1 mx-4 mt-2 md:mt-0 md:mx-2 w-full md:w-auto">
         <form onSubmit={handleSearchSubmit}>
           <TextInput
             value={searchKey}

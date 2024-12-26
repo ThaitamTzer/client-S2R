@@ -173,55 +173,59 @@ export default function RightSection({
           </>
         )}
         {/* bag */}
-        <Dropdown
-          placement="bottom"
-          arrow
-          menu={{
-            items: [
-              {
-                key: '1',
-                label: <p>Đơn mua</p>,
-                onClick: () => {
-                  router.push('/orders-management')
+        {user && (
+          <Dropdown
+            placement="bottom"
+            arrow
+            menu={{
+              items: [
+                {
+                  key: '1',
+                  label: <p>Đơn mua</p>,
+                  onClick: () => {
+                    router.push('/orders-management')
+                  },
                 },
-              },
-              {
-                key: '2',
-                label: <p>Đơn bán</p>,
-                onClick: () => {
-                  router.push('/sell-management')
+                {
+                  key: '2',
+                  label: <p>Đơn bán</p>,
+                  onClick: () => {
+                    router.push('/sell-management')
+                  },
                 },
-              },
-            ],
-          }}
-        >
-          <UnstyledButton>
+              ],
+            }}
+          >
+            <UnstyledButton>
+              <IconifyIcon
+                icon="solar:bag-4-linear"
+                className="text-green-900"
+                style={{
+                  width: rem(29),
+                  height: rem(29),
+                }}
+              />
+            </UnstyledButton>
+          </Dropdown>
+        )}
+        {/* Avatar */}
+        {user && (
+          <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
             <IconifyIcon
-              icon="solar:bag-4-linear"
+              icon="carbon:ibm-data-product-exchange"
               className="text-green-900"
               style={{
-                width: rem(29),
-                height: rem(29),
+                width: rem(30),
+                height: rem(30),
               }}
             />
+            {pendingExchangeCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {pendingExchangeCount}
+              </span>
+            )}
           </UnstyledButton>
-        </Dropdown>
-        {/* Avatar */}
-        <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
-          <IconifyIcon
-            icon="carbon:ibm-data-product-exchange"
-            className="text-green-900"
-            style={{
-              width: rem(30),
-              height: rem(30),
-            }}
-          />
-          {pendingExchangeCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {pendingExchangeCount}
-            </span>
-          )}
-        </UnstyledButton>
+        )}
         {user ? (
           <div className="flex flex-row items-center gap-2">
             <Avatar src={user.avatar} alt={user.firstname} radius={rem(24)} size={rem(35)} />

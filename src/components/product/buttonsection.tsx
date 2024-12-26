@@ -18,8 +18,6 @@ export default function ButtonSection({
   const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
   const { toggleAddToCardModal, setProductToAdd, toggleOrderNowModal } = useProductClient()
 
-  if (product.userId._id === user._id) return null
-
   const handleSelectChat = (item: ProductsClient) => {
     setRoomId([user?._id, item.userId._id].sort().join('_'))
     setActiveChats([
@@ -60,6 +58,20 @@ export default function ButtonSection({
     })
     setChatUsers(chatusers.filter((u) => u.message._id !== item._id))
     mutate('/api/messages/get-room')
+  }
+
+  if (!user) {
+    return (
+      <>
+        <p className="font-semibold text-lg text-red-600">
+          Bạn cần thực hiện đăng nhập để có thể mua hàng hoặc trao đổi sản phẩm
+        </p>
+      </>
+    )
+  }
+
+  if (product.userId._id === user._id) {
+    return null
   }
 
   return (

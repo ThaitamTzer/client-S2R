@@ -66,6 +66,18 @@ const AuthProvider = ({ children }: Props) => {
   const pathName = usePathname()
   const searchParams = useSearchParams()
 
+  const accessToken = searchParams.get('accessToken')
+  const refreshToken = searchParams.get('refreshToken')
+
+  useEffect(() => {
+    if (accessToken && refreshToken) {
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
+      Cookies.set('jwt', accessToken)
+      router.replace('/')
+    }
+  }, [accessToken, refreshToken])
+
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       await axiosClient
@@ -88,12 +100,13 @@ const AuthProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Cookies.get('jwt')])
 
-  const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
+  const handleLogin = (params: LoginParams, sucessCallback?: () => void, errorCallback?: ErrCallbackType) => {
     setLoading(true)
     try {
       axiosClient
         .post(authConfig.loginEndpoint, params)
         .then(async (response) => {
+          if (sucessCallback) sucessCallback()
           setLoading(false)
           setUser({ ...response.data.user })
           localStorage.setItem('accessToken', response.data.accessToken)
@@ -107,7 +120,7 @@ const AuthProvider = ({ children }: Props) => {
           })
 
           const returnUrl = searchParams.get('returnUrl')
-          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : ''
           router.replace(redirectURL as string)
           closeModal()
         })
@@ -116,8 +129,7 @@ const AuthProvider = ({ children }: Props) => {
           toast.error('Đăng nhập thất bại')
           if (errorCallback) errorCallback(err)
         })
-    } catch (error) {
-      console.log('error', error)
+    } catch {
       setLoading(false)
     }
   }
@@ -169,7 +181,6 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogout = () => {
     try {
       axiosClient.patch(authConfig.logoutEndpoint).then(() => {
-        // Xóa token
         Cookies.remove('jwt')
         localStorage.clear()
         setAllNull()

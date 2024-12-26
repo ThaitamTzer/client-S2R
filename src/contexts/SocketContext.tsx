@@ -19,11 +19,14 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Khởi tạo kết nối socket
-    const socketInstance = io('https://share2receive-server.onrender.com', {
+    const socketInstance = io(process.env.NEXT_PUBLIC_API_URL, {
       withCredentials: true,
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
+      extraHeaders: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
     })
 
     socketInstance.on('connect', () => {
