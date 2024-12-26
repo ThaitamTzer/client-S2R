@@ -7,6 +7,7 @@ import IconifyIcon from '../icons'
 import ScrollingUp from '@/partials/up'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageTypes } from '@/types/messageTypes'
+import { useSocket } from '@/hooks/useSocket'
 
 interface ChatRoomProps {
   users: MessageTypes[]
@@ -15,10 +16,13 @@ interface ChatRoomProps {
 
 export default function FloatChatRoom({ users, onUserSelect }: ChatRoomProps) {
   const { setChatUsers, chatusers } = useUserAction()
+  const { socket } = useSocket()
 
   const handleRemoveUser = (id: string) => {
     setChatUsers(chatusers.filter((u) => u.message._id !== id))
   }
+
+  console.log(chatusers)
 
   return (
     <div className="fixed bottom-10 right-7 z-40 transition-all space-y-3">
@@ -72,7 +76,10 @@ export default function FloatChatRoom({ users, onUserSelect }: ChatRoomProps) {
                 />
                 <span
                   className="absolute -top-1 -right-1 cursor-pointer group-hover:block hidden bg-white rounded-full"
-                  onClick={() => handleRemoveUser(item.message._id)}
+                  onClick={() => {
+                    handleRemoveUser(item.message._id)
+                    socket?.emit('leaveRoom', item.message.roomId)
+                  }}
                 >
                   <IconifyIcon
                     icon="flowbite:close-circle-solid"

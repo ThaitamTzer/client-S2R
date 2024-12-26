@@ -3,6 +3,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useUserAction } from '@/zustand/user'
+import { mutate } from 'swr'
 
 const FloatChatRoom = dynamic(() => import('./floatChatRoom'), { ssr: false })
 const ChatBox = dynamic(() => import('./chatBox'), { ssr: false })
@@ -30,6 +31,7 @@ const Chat = () => {
   }
 
   const handleMinimizeChat = (user: any) => {
+    mutate('/api/messages/get-room')
     setActiveChats(activeChats.filter((chat) => chat.message._id !== user.message._id))
     setChatUsers([...chatusers, user])
   }

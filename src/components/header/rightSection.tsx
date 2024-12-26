@@ -27,7 +27,7 @@ export default function RightSection({
   const { logout, user } = useAuth()
   const { toogleExchangeModal, listExchangeRev } = useExchange()
   const { openModal } = useLoginModal()
-  const { setOpenChatDropdown } = useUserAction()
+  const { setOpenChatDropdown, rooms } = useUserAction()
   const { toggleCartDrawer } = useProductClient()
   const { cartItems } = useCart()
   const { wallet } = useWalletStore()
@@ -36,6 +36,8 @@ export default function RightSection({
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
   const pendingExchangeCount =
     listExchangeRev?.filter((exchange) => exchange.allExchangeStatus === 'pending').length || 0
+
+  const unreadMessage = rooms?.reduce((total, room) => total + (room.unreadCount || 0), 0) || 0
 
   return (
     <>
@@ -121,7 +123,7 @@ export default function RightSection({
               offset={0}
             >
               <Menu.Target>
-                <UnstyledButton onClick={() => setOpenChatDropdown(true)}>
+                <UnstyledButton onClick={() => setOpenChatDropdown(true)} className="relative">
                   <IconifyIcon
                     icon="mynaui:chat"
                     className="text-green-900"
@@ -130,6 +132,11 @@ export default function RightSection({
                       height: rem(29),
                     }}
                   />
+                  {unreadMessage > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadMessage}
+                    </span>
+                  )}
                 </UnstyledButton>
               </Menu.Target>
               <Menu.Dropdown>

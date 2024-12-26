@@ -3,22 +3,27 @@
 import { Menu, Avatar } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
 import { MessageTypes } from '@/types/messageTypes'
+import { mutate } from 'swr'
 
 export default function ChatDropdown() {
   const { setActiveChats, rooms, activeChats, setRoomId, chatusers, setChatUsers } = useUserAction()
 
   const handleSelectChat = (item: MessageTypes) => {
+    mutate('/api/messages/get-room')
     const isInActiveChats = activeChats.some((chat) => chat.chatPartner._id === item.chatPartner._id)
     const isInChatUsers = chatusers.some((chat) => chat.chatPartner._id === item.chatPartner._id)
 
     if (!isInActiveChats && !isInChatUsers) {
       setActiveChats([...activeChats, item])
+      mutate('/api/messages/get-room')
     } else if (isInChatUsers) {
       setChatUsers(chatusers.filter((chat) => chat.chatPartner._id !== item.chatPartner._id))
       setActiveChats([...activeChats, item])
+      mutate('/api/messages/get-room')
     } else {
       const filteredChats = activeChats.filter((chat) => chat.chatPartner._id !== item.chatPartner._id)
       setActiveChats([...filteredChats, item])
+      mutate('/api/messages/get-room')
     }
 
     setRoomId([item.message.myId, item.chatPartner._id].sort().join('_'))
@@ -34,6 +39,11 @@ export default function ChatDropdown() {
               <p className="text-sm font-semibold">{item.chatPartner.firstname + ' ' + item.chatPartner.lastname}</p>
               <p className="text-xs text-gray-600">{item.message?.content}</p>
             </div>
+            {item.unreadCount > 0 && (
+              <div className="ml-auto bg-blue-500 text-white text-xs rounded-full px-[11px] py-1">
+                {item.unreadCount}
+              </div>
+            )}
           </div>
         </Menu.Item>
       ))}

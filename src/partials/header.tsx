@@ -67,7 +67,6 @@ export default function Header() {
   useEffect(() => {
     if (socket) {
       socket.on('generalNotification', (newNotification) => {
-        console.log('generalNotification', newNotification)
         mutate()
         getData('/api/notifications')
         api.open({
@@ -81,7 +80,6 @@ export default function Header() {
       })
 
       socket.on('messageNotification', (newNotification) => {
-        console.log('messageNotification', newNotification)
         getData('/api/messages/get-room')
         api.info({
           message: newNotification.title,
