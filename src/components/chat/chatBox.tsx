@@ -16,19 +16,18 @@ interface ChatBoxProps {
   userChat: MessageTypes
   roomId: string
   onMinimize: () => void
+  index: number
 }
 
 import { debounce } from 'lodash'
 import { useCallback, useMemo } from 'react'
-import dynamic from 'next/dynamic'
 import { MessageTypes } from '@/types/messageTypes'
+import MessageItem from './messageItem'
 
-const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
-
-
-export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) {
+export default function ChatBox({ userChat, roomId, onMinimize, index }: ChatBoxProps) {
   const { setActiveChats, activeChats } = useUserAction()
   const [localMessages, setLocalMessages] = useState<any[]>([])
+  const [userChatMount] = useState<MessageTypes | null>(userChat)
   const [messageInput, setMessageInput] = useState('')
   const [showEmoji, setShowEmoji] = useState(false)
   const [imagePreview, { open: openImagePreview, close: closeImagePreview }] = useDisclosure(false)
@@ -38,11 +37,13 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
   const [isLoading, setIsLoading] = useState(true)
   const [room, setRoom] = useState(roomId)
 
+  console.log(`${index} - ${userChatMount}`)
+
   const { user } = useAuth()
   const { socket } = useSocket()
 
   useEffect(() => {
-    if (!user || !userChat?.chatPartner) return
+    if (!user || !userChatMount?.chatPartner) return
 
     if (socket) {
       setIsLoading(true)
@@ -64,7 +65,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
         socket.off('receiveMessage')
       }
     }
-  }, [user, userChat, socket, room])
+  }, [user, userChatMount, socket, room])
 
   const debouncedScrollToBottom = useMemo(
     () =>
@@ -90,7 +91,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
 
       const message = {
         senderId: user?._id,
-        receiverId: userChat?.chatPartner?._id,
+        receiverId: userChatMount?.chatPartner?._id,
         content: messageInput.trim() || null,
         file: file,
         fileName: file ? file.name : null,
@@ -106,7 +107,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
       setMessageInput('')
       mutate('/api/messages/get-room')
     },
-    [messageInput, socket, user?._id, userChat?.chatPartner?._id],
+    [messageInput, socket, user?._id, userChatMount?.chatPartner?._id],
   )
 
   const handleMessageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +151,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
         }
       }
     },
-    [socket, user?._id, userChat?.chatPartner?._id],
+    [socket, user?._id, userChatMount?.chatPartner?._id],
   )
 
   const handleEmojiSelect = useCallback(
@@ -168,22 +169,24 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
         key={message._id || index}
         message={message}
         user={user}
-        chatPartner={userChat}
+        chatPartner={userChatMount}
         onImageClick={(image: string) => {
           setSelectedImage(image)
           openImagePreview()
         }}
       />
     ))
-  }, [localMessages, user, userChat, openImagePreview])
+  }, [localMessages, user, userChatMount, openImagePreview])
 
   return (
-    <Paper className="fixed bottom-0 z-max w-[330px] max-w-[330px] h-[455px] rounded-t-lg shadow-2xl">
+    <Paper id={roomId} className="fixed bottom-0 z-max w-[330px] max-w-[330px] h-[455px] rounded-t-lg shadow-2xl">
       <div className="h-14 bg-green-700 rounded-t-lg px-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar src={userChat?.chatPartner?.avatar} size="md" radius="xl" />
+          <Avatar src={userChatMount?.chatPartner?.avatar} size="md" radius="xl" />
           <div className="text-white">
-            <p className="font-semibold">{userChat?.chatPartner?.firstname + ' ' + userChat?.chatPartner?.lastname}</p>
+            <p className="font-semibold">
+              {userChatMount?.chatPartner?.firstname + ' ' + userChatMount?.chatPartner?.lastname}
+            </p>
             <p className="text-sm">Đang hoạt động</p>
           </div>
         </div>

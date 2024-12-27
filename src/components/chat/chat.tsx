@@ -69,8 +69,9 @@ const Chat = () => {
             }}
           >
             <ChatBox
+              key={user.message.roomId}
+              index={index}
               roomId={user.message.roomId}
-              key={user.chatPartner._id}
               userChat={user}
               onMinimize={() => handleMinimizeChat(user)}
             />
