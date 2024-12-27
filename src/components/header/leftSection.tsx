@@ -12,22 +12,26 @@ import { useAuth } from '@/hooks/useAuth'
 import { useExchange } from '@/zustand/exchange'
 import { useLoginModal } from '@/zustand/loginModal'
 import { NotificationType } from '@/types/notificationType'
+import { useUserAction } from '@/zustand/user'
+import dynamic from 'next/dynamic'
+
+const ChatDropdown = dynamic(() => import('@/components/chat/chatDropdown'), { ssr: false })
 
 const items: MenuProps['items'] = [
   {
     key: '1',
     label: (
-      <>
-        <p>Đơn mua</p>
-      </>
+      <Link prefetch href={'/orders-management'}>
+        Đơn mua
+      </Link>
     ),
   },
   {
     key: '2',
     label: (
-      <>
-        <p>Đơn bán</p>
-      </>
+      <Link prefetch href={'/sell-management'}>
+        Đơn bán
+      </Link>
     ),
   },
 ]
@@ -35,20 +39,21 @@ const items: MenuProps['items'] = [
 export default function LeftSection({
   notifications,
   handleViewNotification,
-  api,
 }: {
   notifications: NotificationType[]
   handleViewNotification: (notificationId: string, event: React.MouseEvent) => void
-  api: any
 }) {
   const pathName = usePathname()
   const { logout, user } = useAuth()
   const { toogleExchangeModal, listExchangeRev } = useExchange()
   const { openModal } = useLoginModal()
+  const { setOpenChatDropdown, rooms } = useUserAction()
+  const isMobile = window.innerWidth < 768
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
   const pendingExchangeCount =
     listExchangeRev?.filter((exchange) => exchange.allExchangeStatus === 'pending').length || 0
+  const unreadMessage = rooms?.reduce((total, room) => total + (room.unreadCount || 0), 0) || 0
 
   return (
     <>
@@ -105,14 +110,7 @@ export default function LeftSection({
               })}
             >
               <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
-                <IconifyIcon
-                  icon="carbon:ibm-data-product-exchange"
-                  className="text-green-900"
-                  style={{
-                    width: rem(29),
-                    height: rem(29),
-                  }}
-                />
+                <IconifyIcon icon="carbon:ibm-data-product-exchange" className="text-green-900 md:text-2xl" />
                 {pendingExchangeCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {pendingExchangeCount}
@@ -129,23 +127,9 @@ export default function LeftSection({
                 <Menu.Target>
                   <UnstyledButton className="relative">
                     {unreadCount > 0 ? (
-                      <IconifyIcon
-                        icon="iconamoon:notification-fill"
-                        className="text-green-900"
-                        style={{
-                          width: rem(29),
-                          height: rem(29),
-                        }}
-                      />
+                      <IconifyIcon icon="iconamoon:notification-fill" className="text-green-900 md:text-2xl" />
                     ) : (
-                      <IconifyIcon
-                        icon="iconamoon:notification-light"
-                        className="text-green-900"
-                        style={{
-                          width: rem(29),
-                          height: rem(29),
-                        }}
-                      />
+                      <IconifyIcon icon="iconamoon:notification-light" className="text-green-900 md:text-2xl" />
                     )}
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -190,37 +174,58 @@ export default function LeftSection({
                 </Menu.Dropdown>
               </Menu>
             </div>
-            <Dropdown placement="bottom" arrow menu={{ items }}>
-              <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
-                <IconifyIcon
-                  icon="solar:bag-4-linear"
-                  className="text-green-900"
-                  style={{
-                    width: rem(29),
-                    height: rem(29),
-                  }}
-                />
-              </UnstyledButton>
-            </Dropdown>
-            <UnstyledButton onClick={() => api.info({ message: 'Chức năng đang phát triển' })}>
-              <IconifyIcon
-                icon="mynaui:chat"
-                className="text-green-900"
-                style={{
-                  width: rem(29),
-                  height: rem(29),
-                }}
-              />
-            </UnstyledButton>
+            {user && (
+              <>
+                <Dropdown placement="bottom" arrow menu={{ items }}>
+                  <UnstyledButton>
+                    <IconifyIcon icon="solar:bag-4-linear" className="text-green-900 md:text-2xl" />
+                  </UnstyledButton>
+                </Dropdown>
+                <Menu
+                  shadow="md"
+                  width={isMobile ? 300 : 400}
+                  closeOnItemClick={true}
+                  position="bottom"
+                  onClose={() => setOpenChatDropdown(false)}
+                  withArrow
+                  offset={0}
+                >
+                  <Menu.Target>
+                    <UnstyledButton onClick={() => setOpenChatDropdown(true)} className="relative">
+                      <IconifyIcon icon="mynaui:chat" className="text-green-900 md:text-2xl" />
+                      {unreadMessage > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                          {unreadMessage}
+                        </span>
+                      )}
+                    </UnstyledButton>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Label>
+                      <p className="text-md md:text-2xl font-bold text-black">Tin nhắn</p>
+                    </Menu.Label>
+                    <ChatDropdown />
+                  </Menu.Dropdown>
+                </Menu>
+              </>
+            )}
 
             {!user ? (
-              <Avatar size={rem(30)} onClick={() => openModal()} color="#2b8a3e" />
+              // <Avatar size={rem(30)} onClick={() => openModal()} color="#2b8a3e" />
+              <div className="flex items-center gap-2" onClick={() => openModal()}>
+                <p className="text-xs font-medium text-green-900">Đăng nhập/Đăng ký</p>
+              </div>
             ) : (
               <>
                 <Menu shadow="md" width={250}>
                   <Menu.Target>
                     <div className="flex items-center cursor-pointer">
-                      <Avatar src={user.avatar} alt={user.firstname} radius={rem(24)} size={rem(30)} />
+                      <Avatar
+                        src={user.avatar}
+                        alt={user.firstname}
+                        radius={rem(24)}
+                        size={isMobile ? rem(24) : rem(40)}
+                      />
                     </div>
                   </Menu.Target>
                   <Menu.Dropdown>

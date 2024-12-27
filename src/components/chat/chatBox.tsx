@@ -37,8 +37,6 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
   const [isLoading, setIsLoading] = useState(true)
   const [room, setRoom] = useState(roomId)
 
-  console.log(activeChats)
-
   const { user } = useAuth()
   const { socket } = useSocket()
 

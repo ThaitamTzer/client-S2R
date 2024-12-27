@@ -1,6 +1,7 @@
 'use client'
 import { createContext, useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
+import { useAuth } from '@/hooks/useAuth'
 
 interface SocketContextType {
   socket: Socket | null
@@ -16,16 +17,23 @@ const SocketContext = createContext<SocketContextType>({
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
+  const { user } = useAuth()
 
   useEffect(() => {
     // Khởi tạo kết nối socket
+
+    if (!user) {
+      return
+    }
+    const accessToken = localStorage.getItem('accessToken')
+
     const socketInstance = io(process.env.NEXT_PUBLIC_API_URL, {
       withCredentials: true,
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       extraHeaders: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
 
@@ -45,7 +53,7 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       socketInstance.disconnect()
     }
-  }, [])
+  }, [user])
 
   return <SocketContext.Provider value={{ socket, isConnected }}>{children}</SocketContext.Provider>
 }

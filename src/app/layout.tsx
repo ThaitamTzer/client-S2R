@@ -15,6 +15,7 @@ import '@mantine/dates/styles.css'
 import '@mantine/charts/styles.css'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 import { lazy, Suspense } from 'react'
+import Navigation from '@/components/mobile/navigation'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
@@ -120,6 +121,7 @@ export default function RootLayout({
               suppressHydrationWarning
               className={`relative mt-16 h-full min-h-screen scroll-smooth ${montserrat.className}`}
             >
+              <Navigation />
               <LoginDynamic />
               {children}
             </main>

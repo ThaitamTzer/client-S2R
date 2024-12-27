@@ -8,6 +8,8 @@ import { mutate } from 'swr'
 export default function ChatDropdown() {
   const { setActiveChats, rooms, activeChats, setRoomId, chatusers, setChatUsers } = useUserAction()
 
+  const isMobile = window.innerWidth < 768
+
   const handleSelectChat = (item: MessageTypes) => {
     mutate('/api/messages/get-room')
     const isInActiveChats = activeChats.some((chat) => chat.chatPartner._id === item.chatPartner._id)
@@ -34,13 +36,13 @@ export default function ChatDropdown() {
       {rooms?.map((item) => (
         <Menu.Item key={item.message._id} onClick={() => handleSelectChat(item)}>
           <div className="flex flex-row items-center">
-            <Avatar src={item.chatPartner.avatar} size="lg" radius="xl" />
-            <div className="ml-3">
+            <Avatar src={item.chatPartner.avatar} size={isMobile ? 'md' : 'lg'} radius="xl" />
+            <div className="ml-2 md:ml-3">
               <p className="text-sm font-semibold">{item.chatPartner.firstname + ' ' + item.chatPartner.lastname}</p>
               <p className="text-xs text-gray-600">{item.message?.content}</p>
             </div>
             {item.unreadCount > 0 && (
-              <div className="ml-auto bg-blue-500 text-white text-xs rounded-full px-[11px] py-1">
+              <div className="ml-auto bg-blue-500 text-white text-xs truncate rounded-full px-[11px] py-1">
                 {item.unreadCount}
               </div>
             )}

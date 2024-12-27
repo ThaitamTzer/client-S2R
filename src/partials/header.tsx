@@ -137,7 +137,7 @@ export default function Header() {
         <div className="main-nav md:container mx-auto px-4 py-2 pt-3 md:pt-0 md:py-0 md:px-24">
           <div className="flex flex-col md:flex-row justify-between items-center ">
             {/* Left section: Logo and Navigation have mobile in there */}
-            <LeftSection api={api} handleViewNotification={handleViewNotification} notifications={notifications} />
+            <LeftSection handleViewNotification={handleViewNotification} notifications={notifications} />
 
             {/* Middle section: Search bar */}
             <MiddleSection handleSearchSubmit={handleSearchSubmit} searchKey={searchKey} setSearchKey={setSearchKey} />
