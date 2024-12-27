@@ -12,7 +12,7 @@ import IconifyIcon from '../icons'
 import { useSearchParams } from 'next/navigation'
 
 export default function ViewDetail({ opened, onClose, sell }: { opened: boolean; onClose: () => void; sell: Sell }) {
-  const { getColorName, getOrderPaymentName } = useGetName()
+  const { getColorName, getOrderPaymentName, getShippingServiceName } = useGetName()
   const searchParams = useSearchParams()
 
   const page = Number(searchParams.get('page')) || 1
@@ -81,9 +81,19 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
             <p className="text-sm font-medium">Trạng thái thanh toán</p>
             <p className="text-sm">{getOrderPaymentName(sell?.orderId?.paymentStatus) || '-'}</p>
           </div>
+          {sell?.requestRefund && (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Trạng thái đơn hàng</p>
+              <p className="text-sm">Đơn hàng đang có yêu cầu hủy</p>
+            </div>
+          )}
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Địa chỉ giao hàng</p>
             <p className="text-sm">{sell?.orderId?.address || '-'}</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">Phương thức vận chuyển</p>
+            <p className="text-sm">{getShippingServiceName(sell?.shippingService)}</p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Số điện thoại</p>
@@ -114,10 +124,12 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium">Tổng giá trị đơn hàng</p>
-          <p className="text-sm">{formatPrice(sell.subTotal)} đ</p>
+          <p className="text-sm">{formatPrice(sell.subTotal + sell.shippingFee)} đ</p>
         </div>
-        {(sell?.status !== 'canceled' && sell?.status !== 'completed' && sell?.orderId?.paymentStatus === 'paid') ||
-          (sell?.orderId?.paymentStatus === 'PayPickup' && (
+        {(sell?.orderId?.paymentStatus === 'paid' || sell?.orderId?.paymentStatus === 'PayPickup') &&
+          sell?.status !== 'canceled' &&
+          sell?.status !== 'delivered' &&
+          !sell?.requestRefund && (
             <div className="flex flex-col gap-2">
               <p className="text-sm font-medium">Cập nhật trạng thái đơn hàng</p>
               <Select data={availableStatuses} value={status} onChange={(value) => setStatus(value || '')} />
@@ -131,8 +143,7 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
                 Cập nhật
               </Button>
             </div>
-          ))}
-
+          )}
         <div className="flex flex-col gap-2 w-full">
           <p className="text-sm font-medium">Sản phẩm</p>
           {sell?.products?.map((product) => (
@@ -163,6 +174,9 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
                 </div>
                 <p className="text-sm">
                   <span className="font-medium">Giá:</span> {formatPrice(product.price)} đ
+                </p>
+                <p className="text-sm">
+                  <span className="font-medium">Phí ship:</span> {formatPrice(sell?.shippingFee)} đ
                 </p>
               </div>
             </div>

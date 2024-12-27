@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import orderService from '@/services/order/order.service'
 import { Sell } from '@/types/sellType'
 import { useState } from 'react'
-import ViewDetail from './viewDetail'
+import dynamic from 'next/dynamic'
 import { useSellColumns } from './column'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { debounce } from 'lodash'
@@ -12,6 +12,8 @@ import { DataTable } from 'mantine-datatable'
 import { TextInput } from '@mantine/core'
 import { useOrderStore } from '@/zustand/order'
 import 'dayjs/locale/vi'
+
+const ViewDetail = dynamic(() => import('@/components/sell-management/viewDetail'), { ssr: false })
 
 const PAGE_SIZE = [10, 25, 50, 100]
 

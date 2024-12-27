@@ -1,6 +1,8 @@
-import ReportModal from '@/components/checkout/reportModal'
-import SellPage from '@/components/sell-management/sell'
 import { RessonOrder } from '@/constants/resson'
+import dynamic from 'next/dynamic'
+
+const SellPage = dynamic(() => import('@/components/sell-management/sell'), { ssr: false })
+const ReportModal = dynamic(() => import('@/components/checkout/reportModal'), { ssr: false })
 
 export default function SellManagement() {
   return (
