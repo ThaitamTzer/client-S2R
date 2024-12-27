@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useUserAction } from '@/zustand/user'
 import { mutate } from 'swr'
 
-const FloatChatRoom = dynamic(() => import('./floatChatRoom'), { ssr: false })
-const ChatBox = dynamic(() => import('./chatBox'), { ssr: false })
+const FloatChatRoom = dynamic(() => import('./floatChatRoom'))
+const ChatBox = dynamic(() => import('./chatBox'))
 
 const MAX_CHAT_BOXES = 3
 const CHAT_BOX_WIDTH = 330
