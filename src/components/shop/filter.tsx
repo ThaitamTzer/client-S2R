@@ -88,11 +88,6 @@ const FilterSide = () => {
     return currentStartPrice === startPrice.toString() && currentEndPrice === endPrice.toString()
   }
 
-  const countCheckedFilters = (filterKey: string) => {
-    const filterValues = param.getAll(filterKey)
-    return filterValues.length
-  }
-
   return (
     <>
       <Collapse
@@ -106,7 +101,7 @@ const FilterSide = () => {
         expandIcon={({ isActive }) => expandIcon({ isActive })}
       >
         <Collapse.Panel
-          header={<p className="text-xl font-medium">Theo danh mục ({countCheckedFilters('filterCategory')})</p>}
+          header={<p className="text-xl font-medium">Theo danh mục </p>}
           key="1"
           style={{
             borderBottom: '1px solid #000',
@@ -120,7 +115,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={<p className="text-xl font-medium">Theo kích thước ({countCheckedFilters('filterSize')}) </p>}
+          header={<p className="text-xl font-medium">Theo kích thước </p>}
           key="2"
           style={{
             borderBottom: '1px solid #000',
@@ -130,7 +125,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={<p className="text-xl font-medium">Theo màu sắc ({countCheckedFilters('filterColor')})</p>}
+          header={<p className="text-xl font-medium">Theo màu sắc </p>}
           key="3"
           style={{
             borderBottom: '1px solid #000',
@@ -140,7 +135,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={<p className="text-xl font-medium">Theo chất liệu ({countCheckedFilters('filterMaterial')})</p>}
+          header={<p className="text-xl font-medium">Theo chất liệu </p>}
           key="7"
           style={{
             borderBottom: '1px solid #000',
@@ -150,19 +145,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo giá bán (
-              {isPriceRangeChecked(0, 100000) ||
-              isPriceRangeChecked(100000, 200000) ||
-              isPriceRangeChecked(200000, 500000) ||
-              isPriceRangeChecked(500000, 1000000) ||
-              isPriceRangeChecked(1000000, Number.MAX_VALUE)
-                ? 1
-                : 0}
-              )
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo giá bán</p>}
           key="4"
           style={{
             borderBottom: '1px solid #000',
@@ -172,12 +155,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo tình trạng (
-              {isFilterChecked('filterCondition', 'used') || isFilterChecked('filterCondition', 'new') ? 1 : 0})
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo tình trạng </p>}
           key="5"
           style={{
             borderBottom: '1px solid #000',
@@ -190,7 +168,7 @@ const FilterSide = () => {
           header={
             <>
               <div>
-                <p className="text-xl font-medium">Theo thương hiệu ({countCheckedFilters('filterBrand')})</p>
+                <p className="text-xl font-medium">Theo thương hiệu </p>
               </div>
             </>
           }
@@ -203,12 +181,7 @@ const FilterSide = () => {
         </Collapse.Panel>
 
         <Collapse.Panel
-          header={
-            <p className="text-xl font-medium">
-              Theo loại sản phẩm (
-              {isFilterChecked('filterType', 'barter') || isFilterChecked('filterType', 'sale') ? 1 : 0})
-            </p>
-          }
+          header={<p className="text-xl font-medium">Theo loại sản phẩm</p>}
           key="8"
           style={{
             borderBottom: '1px solid #000',
@@ -217,10 +190,7 @@ const FilterSide = () => {
           <FillterType handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
 
-        <Collapse.Panel
-          header={<p className="text-xl font-medium ">Theo phong cách ({countCheckedFilters('filterStyle')})</p>}
-          key="9"
-        >
+        <Collapse.Panel header={<p className="text-xl font-medium ">Theo phong cách </p>} key="9">
           <FillterStyle handleFilterChange={handleFilterChange} isFilterChecked={isFilterChecked} />
         </Collapse.Panel>
       </Collapse>

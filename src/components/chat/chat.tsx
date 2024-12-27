@@ -13,7 +13,6 @@ const CHAT_BOX_WIDTH = 330
 const CHAT_BOX_MARGIN = 20
 
 const Chat = () => {
-  
   const { activeChats, setActiveChats, setChatUsers, chatusers } = useUserAction()
 
   const handleUserSelect = (user: any) => {
@@ -40,12 +39,15 @@ const Chat = () => {
   // Tính toán vị trí cho mỗi chatbox
   const getChatBoxPosition = (index: number) => {
     const totalWidth = CHAT_BOX_WIDTH + CHAT_BOX_MARGIN
-    const baseRight = 430 // Vị trí right ban đầu
-    return baseRight + totalWidth * index
+    const baseRight = 430
+    return {
+      right: baseRight + totalWidth * index,
+      zIndex: 1000 - index,
+    }
   }
 
   return (
-    <div className="fixed z-50">
+    <div className="fixed z-50 bottom-0 right-0">
       <FloatChatRoom users={chatusers} onUserSelect={handleUserSelect} />
       <AnimatePresence>
         {activeChats.map((user, index) => (
@@ -61,9 +63,9 @@ const Chat = () => {
             }}
             style={{
               position: 'fixed',
-              right: getChatBoxPosition(index),
+              right: getChatBoxPosition(index).right,
               bottom: 0,
-              zIndex: 50 - index, // Đảm bảo chatbox phía trước có z-index cao hơn
+              zIndex: getChatBoxPosition(index).zIndex,
             }}
           >
             <ChatBox
