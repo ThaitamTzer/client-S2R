@@ -9,6 +9,7 @@ export default function ChatDropdown() {
   const { setActiveChats, rooms, activeChats, setRoomId, chatusers, setChatUsers } = useUserAction()
 
   const isMobile = window.innerWidth < 768
+  
 
   const handleSelectChat = (item: MessageTypes) => {
     mutate('/api/messages/get-room')

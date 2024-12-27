@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Avatar, Image as MantineImage } from '@mantine/core'
 
 const MessageItem = memo(({ message, user, chatPartner, onImageClick }: any) => {
+  
   const isOwnMessage = message.senderId === user?._id || message.senderId._id === user?._id
 
   return (

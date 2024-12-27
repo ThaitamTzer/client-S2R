@@ -25,6 +25,7 @@ import { MessageTypes } from '@/types/messageTypes'
 
 const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
 
+
 export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) {
   const { setActiveChats, activeChats } = useUserAction()
   const [localMessages, setLocalMessages] = useState<any[]>([])

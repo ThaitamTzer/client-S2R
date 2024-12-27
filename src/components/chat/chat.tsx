@@ -13,6 +13,7 @@ const CHAT_BOX_WIDTH = 330
 const CHAT_BOX_MARGIN = 20
 
 const Chat = () => {
+  
   const { activeChats, setActiveChats, setChatUsers, chatusers } = useUserAction()
 
   const handleUserSelect = (user: any) => {
