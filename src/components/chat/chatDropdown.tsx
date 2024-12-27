@@ -6,10 +6,14 @@ import { MessageTypes } from '@/types/messageTypes'
 import { mutate } from 'swr'
 
 export default function ChatDropdown() {
-  const { setActiveChats, rooms, activeChats, setRoomId, chatusers, setChatUsers } = useUserAction()
+  const setActiveChats = useUserAction((state) => state.setActiveChats)
+  const setRoomId = useUserAction((state) => state.setRoomId)
+  const chatusers = useUserAction((state) => state.chatusers)
+  const activeChats = useUserAction((state) => state.activeChats)
+  const setChatUsers = useUserAction((state) => state.setChatUsers)
+  const rooms = useUserAction((state) => state.rooms)
 
   const isMobile = window.innerWidth < 768
-  
 
   const handleSelectChat = (item: MessageTypes) => {
     mutate('/api/messages/get-room')

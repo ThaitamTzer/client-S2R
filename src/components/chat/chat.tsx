@@ -13,7 +13,10 @@ const CHAT_BOX_WIDTH = 330
 const CHAT_BOX_MARGIN = 20
 
 const Chat = () => {
-  const { activeChats, setActiveChats, setChatUsers, chatusers } = useUserAction()
+  const activeChats = useUserAction((state) => state.activeChats)
+  const setActiveChats = useUserAction((state) => state.setActiveChats)
+  const setChatUsers = useUserAction((state) => state.setChatUsers)
+  const chatusers = useUserAction((state) => state.chatusers)
 
   const handleUserSelect = (user: any) => {
     if (activeChats.length >= MAX_CHAT_BOXES) {
@@ -70,7 +73,6 @@ const Chat = () => {
           >
             <ChatBox
               key={user.message.roomId}
-              index={index}
               roomId={user.message.roomId}
               userChat={user}
               onMinimize={() => handleMinimizeChat(user)}

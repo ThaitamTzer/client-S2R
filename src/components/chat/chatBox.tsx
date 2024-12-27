@@ -16,7 +16,6 @@ interface ChatBoxProps {
   userChat: MessageTypes
   roomId: string
   onMinimize: () => void
-  index: number
 }
 
 import { debounce } from 'lodash'
@@ -24,8 +23,9 @@ import { useCallback, useMemo } from 'react'
 import { MessageTypes } from '@/types/messageTypes'
 import MessageItem from './messageItem'
 
-export default function ChatBox({ userChat, roomId, onMinimize, index }: ChatBoxProps) {
-  const { setActiveChats, activeChats } = useUserAction()
+export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) {
+  const activeChats = useUserAction((state) => state.activeChats)
+  const setActiveChats = useUserAction((state) => state.setActiveChats)
   const [localMessages, setLocalMessages] = useState<any[]>([])
   const [userChatMount] = useState<MessageTypes | null>(userChat)
   const [messageInput, setMessageInput] = useState('')
@@ -36,8 +36,6 @@ export default function ChatBox({ userChat, roomId, onMinimize, index }: ChatBox
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [room, setRoom] = useState(roomId)
-
-  console.log(`${index} - ${userChatMount}`)
 
   const { user } = useAuth()
   const { socket } = useSocket()
