@@ -55,7 +55,7 @@ const Chat = () => {
       <AnimatePresence>
         {activeChats.map((user, index) => (
           <motion.div
-            key={user.chatPartner._id}
+            key={user.message.roomId}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}

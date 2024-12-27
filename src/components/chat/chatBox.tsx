@@ -20,19 +20,14 @@ interface ChatBoxProps {
 
 import { debounce } from 'lodash'
 import { useCallback, useMemo } from 'react'
+import dynamic from 'next/dynamic'
 import { MessageTypes } from '@/types/messageTypes'
-import MessageItem from './messageItem'
 
-// Add this type definition at the top
-interface MessagesState {
-  [roomId: string]: any[];
-}
+const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
 
 export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) {
-  const activeChats = useUserAction((state) => state.activeChats)
-  const setActiveChats = useUserAction((state) => state.setActiveChats)
-  const [messagesMap, setMessagesMap] = useState<MessagesState>({});
-  const [userChatMount] = useState<MessageTypes | null>(userChat)
+  const { setActiveChats, activeChats } = useUserAction()
+  const [localMessages, setLocalMessages] = useState<any[]>([])
   const [messageInput, setMessageInput] = useState('')
   const [showEmoji, setShowEmoji] = useState(false)
   const [imagePreview, { open: openImagePreview, close: closeImagePreview }] = useDisclosure(false)
@@ -46,35 +41,29 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
   const { socket } = useSocket()
 
   useEffect(() => {
-    if (!user || !userChatMount?.chatPartner) return
-
+    if (!user || !userChat?.chatPartner) return
+  
     if (socket) {
       setIsLoading(true)
       socket.emit('joinRoom', room)
       mutate('/api/messages/get-room')
-
+  
       socket.on('previousMessages', (messages) => {
-        setMessagesMap(prev => ({
-          ...prev,
-          [room]: messages
-        }));
-        setIsLoading(false);
+        setLocalMessages(messages)
+        setIsLoading(false)
       })
-
+  
       socket.on('receiveMessage', (message) => {
-        setMessagesMap(prev => ({
-          ...prev,
-          [room]: [...(prev[room] || []), message]
-        }));
-        mutate('/api/messages/get-room');
+        setLocalMessages((prev) => [...prev, message])
+        mutate('/api/messages/get-room')
       })
-
+  
       return () => {
         socket.off('previousMessages')
         socket.off('receiveMessage')
       }
     }
-  }, [user, userChatMount, socket, room])
+  }, [user, userChat, socket, room])
 
   const debouncedScrollToBottom = useMemo(
     () =>
@@ -92,7 +81,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
   useEffect(() => {
     debouncedScrollToBottom()
     return () => debouncedScrollToBottom.cancel()
-  }, [messagesMap, room, debouncedScrollToBottom])
+  }, [localMessages, debouncedScrollToBottom])
 
   const handleSendMessage = useCallback(
     async (file: any | null) => {
@@ -100,7 +89,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
 
       const message = {
         senderId: user?._id,
-        receiverId: userChatMount?.chatPartner?._id,
+        receiverId: userChat?.chatPartner?._id,
         content: messageInput.trim() || null,
         file: file,
         fileName: file ? file.name : null,
@@ -112,14 +101,11 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
         socket.emit('sendMessage', message)
       }
 
-      setMessagesMap(prev => ({
-        ...prev,
-        [room]: [...(prev[room] || []), { ...message, isTemp: true }]
-      }));
-      setMessageInput('');
-      mutate('/api/messages/get-room');
+      setLocalMessages((prev) => [...prev, { ...message, isTemp: true }])
+      setMessageInput('')
+      mutate('/api/messages/get-room')
     },
-    [messageInput, socket, user?._id, userChatMount?.chatPartner?._id, room],
+    [messageInput, socket, user?._id, userChat?.chatPartner?._id],
   )
 
   const handleMessageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,11 +138,8 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
             socket.emit('sendMessage', message)
           }
 
-          setMessagesMap(prev => ({
-            ...prev,
-            [room]: [...(prev[room] || []), { ...message, isTemp: true }]
-          }));
-          mutate('/api/messages/get-room');
+          setLocalMessages((prev) => [...prev, { ...message, isTemp: true }])
+          mutate('/api/messages/get-room')
         }
 
         reader.readAsDataURL(file)
@@ -166,7 +149,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
         }
       }
     },
-    [socket, user?._id, userChatMount?.chatPartner?._id],
+    [socket, user?._id, userChat?.chatPartner?._id],
   )
 
   const handleEmojiSelect = useCallback(
@@ -179,30 +162,27 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
   )
 
   const memoizedMessages = useMemo(() => {
-    const messages = messagesMap[room] || [];
-    return messages.map((message: any, index: number) => (
+    return localMessages.map((message: any, index: number) => (
       <MessageItem
         key={message._id || index}
         message={message}
         user={user}
-        chatPartner={userChatMount}
+        chatPartner={userChat}
         onImageClick={(image: string) => {
           setSelectedImage(image)
           openImagePreview()
         }}
       />
     ))
-  }, [messagesMap, room, user, userChatMount, openImagePreview])
+  }, [localMessages, user, userChat, openImagePreview])
 
   return (
-    <Paper id={roomId} className="fixed bottom-0 z-max w-[330px] max-w-[330px] h-[455px] rounded-t-lg shadow-2xl">
+    <Paper className="fixed bottom-0 z-max w-[330px] max-w-[330px] h-[455px] rounded-t-lg shadow-2xl">
       <div className="h-14 bg-green-700 rounded-t-lg px-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar src={userChatMount?.chatPartner?.avatar} size="md" radius="xl" />
+          <Avatar src={userChat?.chatPartner?.avatar} size="md" radius="xl" />
           <div className="text-white">
-            <p className="font-semibold">
-              {userChatMount?.chatPartner?.firstname + ' ' + userChatMount?.chatPartner?.lastname}
-            </p>
+            <p className="font-semibold">{userChat?.chatPartner?.firstname + ' ' + userChat?.chatPartner?.lastname}</p>
             <p className="text-sm">Đang hoạt động</p>
           </div>
         </div>
@@ -222,13 +202,9 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
             color="white"
             onClick={() => {
               setActiveChats(activeChats.filter((chat) => chat.chatPartner._id !== userChat?.chatPartner._id))
-              setMessagesMap(prev => {
-                const newMap = { ...prev };
-                delete newMap[room];
-                return newMap;
-              });
-              socket?.emit('leaveRoom', room);
-              setRoom('');
+              setLocalMessages([])
+              socket?.emit('leaveRoom', room)
+              setRoom('')
             }}
           >
             <IconifyIcon icon="material-symbols:close" fontSize={24} />
@@ -242,7 +218,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
             <div className="flex justify-center items-center h-[300px]">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700" />
             </div>
-          ) : (!messagesMap[room] || messagesMap[room].length === 0) ? (
+          ) : localMessages.length === 0 ? (
             <div className="flex justify-center items-center h-[300px] text-gray-500 text-center px-4">
               Hãy gửi tin nhắn để bắt đầu cuộc trò chuyện
             </div>
