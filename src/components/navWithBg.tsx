@@ -10,29 +10,37 @@ import { usePathname, useParams, useSearchParams } from 'next/navigation'
 const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const scrollThreshold = 5
   const pathname = usePathname()
   const params = useParams()
-
   const searchParams = useSearchParams()
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        // Scrolling down
-        setShowHeader(false)
-      } else {
-        // Scrolling up
+      const currentScrollY = window.scrollY
+
+      // Always show nav when at top
+      if (currentScrollY <= 0) {
         setShowHeader(true)
+        return
       }
-      setLastScrollY(window.scrollY)
+
+      // Only hide/show nav if scroll amount exceeds threshold
+      if (Math.abs(currentScrollY - lastScrollY) > scrollThreshold) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down & not at top
+          setShowHeader(false)
+        } else {
+          // Scrolling up
+          setShowHeader(true)
+        }
+        setLastScrollY(currentScrollY)
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [lastScrollY, pathname, params])
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
 
   const isActive = (linkPath: string) => {
     // Tách path và search params của link
@@ -57,40 +65,34 @@ const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
   }
 
   return (
-    <>
-      <nav
-        className={clsx(
-          'fixed top-0 z-modal bg-green-100 text-green-700 text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
-          {
-            '-translate-y-0': !showHeader,
-            'translate-y-[102px]': showHeader,
-            'md:translate-y-16': showHeader,
-          },
-        )}
-      >
-        <div className="container px-1 md:px-44">
-          <ul className="flex flex-row">
-            {navLink.map((link) => (
-              <Link key={link.href} href={link.href}>
-                <li
-                  key={link.href}
-                  className="p-0 md:text-xl md:px-4 md:py-3 cursor-pointer hover:bg-green-200 hover:text-green-800 px-1 py-3 text-xs font-medium"
+    <nav
+      className={clsx(
+        'fixed top-0 z-40 bg-green-100 text-green-700 text-lg font-medium w-full transition-all duration-300 ease-in-out',
+        {
+          '-translate-y-full shadow-none': !showHeader,
+          'translate-y-[102px] md:translate-y-16 shadow-md': showHeader,
+        }
+      )}
+    >
+      <div className="container px-1 md:px-44">
+        <ul className="flex flex-row">
+          {navLink.map((link) => (
+            <Link key={link.href} href={link.href}>
+              <li className="p-0 md:text-xl md:px-4 md:py-3 cursor-pointer hover:bg-green-200 hover:text-green-800 px-1 py-3 text-xs font-medium">
+                <p
+                  className={clsx(
+                    'before:none before:left-0 before:right-0 before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[1px] md:before:h-[3px] before:bg-green-900 relative',
+                    { 'before:absolute text-green-800': isActive(link.href) }
+                  )}
                 >
-                  <p
-                    className={clsx(
-                      'before:none before:left-0 before:right-0  before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[1px] md:before:h-[3px]  before:bg-green-900 relative',
-                      { 'before:absolute text-green-800': isActive(link.href) },
-                    )}
-                  >
-                    {link.label}
-                  </p>
-                </li>
-              </Link>
-            ))}
-          </ul>
-        </div>
-      </nav>
-    </>
+                  {link.label}
+                </p>
+              </li>
+            </Link>
+          ))}
+        </ul>
+      </div>
+    </nav>
   )
 }
 

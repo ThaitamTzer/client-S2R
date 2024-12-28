@@ -15,27 +15,28 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setShowHeader(false)
-        setShowBg(true)
-      } else {
-        setShowHeader(true)
-      }
-      setLastScrollY(window.scrollY)
-    }
+      const currentScrollY = window.scrollY
 
-    const handleScrollTop = () => {
-      if (pathname === '/' && window.scrollY === 0) {
-        setShowBg(false)
+      if (currentScrollY === 0 && pathname === '/') {
+        setShowBg(false) // Xóa nền khi ở đầu trang
+        setShowHeader(true) // Hiển thị header
+      } else {
+        if (currentScrollY > lastScrollY) {
+          // Kéo xuống
+          setShowHeader(false)
+          setShowBg(true)
+        } else {
+          // Kéo lên
+          setShowHeader(true)
+        }
       }
+      setLastScrollY(currentScrollY)
     }
 
     window.addEventListener('scroll', handleScroll)
-    window.addEventListener('scroll', handleScrollTop)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('scroll', handleScrollTop)
     }
   }, [lastScrollY, pathname])
 
