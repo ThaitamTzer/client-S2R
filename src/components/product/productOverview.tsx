@@ -112,7 +112,7 @@ export default function ProductOverview({
             </div>
           </div>
           <div className="w-full md:hidden">
-            <CarouselAntd arrows autoplay>
+            <CarouselAntd arrows>
               {product.imgUrls.map((imgUrl, index) => (
                 <div
                   key={index}
@@ -123,7 +123,7 @@ export default function ProductOverview({
                   }}
                 >
                   <Image
-                    src={mainImage} // Use mainImage state
+                    src={imgUrl} // Use mainImage state
                     alt={product.productName}
                     width={600}
                     height={600}

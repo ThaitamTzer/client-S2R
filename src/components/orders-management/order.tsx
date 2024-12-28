@@ -18,6 +18,7 @@ const PAGE_SIZE = [10, 25, 50, 100]
 export default function OrderManagement() {
   const [orders, setOrders] = useState<Orders>()
   const columns = useOrderColumns()
+  const isMobile = window.innerWidth < 768
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -70,14 +71,14 @@ export default function OrderManagement() {
         <h2>Đơn hàng của tôi</h2>
       </div>
       <div className="mt-5 bg-white p-2 shadow-lg rounded-md">
-        <div className="flex flex-1 justify-between mb-2 gap-3">
+        <div className="flex flex-1 flex-col md:flex-row justify-between mb-2 gap-3">
           <div className="flex items-center">
             <h2 className="text-xl font-semibold">Danh sách đơn hàng</h2>
           </div>
 
           <TextInput
             placeholder="Tìm kiếm"
-            style={{ width: '40%' }}
+            style={{ width: isMobile ? '100%' : '40%' }}
             onChange={(e) => {
               setInputValue(e.target.value) // Cập nhật giá trị ô input
               debouncedSearch(e.target.value) // Thực hiện debounce và cập nhật URL
@@ -85,7 +86,7 @@ export default function OrderManagement() {
             value={inputValue}
           />
         </div>
-        <div className="flex flex-1 justify-start mb-3 gap-4">
+        <div className="flex flex-1 flex-col md:flex-row justify-start mb-3 gap-4">
           <Select
             label="Trạng thái thanh toán"
             data={[

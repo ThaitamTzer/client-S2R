@@ -25,6 +25,7 @@ export default function CartDrawer() {
   const router = useRouter()
   const { user } = useAuth()
   const [api, contextHolder] = notification.useNotification()
+  const isMobile = window.innerWidth < 768
 
   const { mutate } = useSWR(user ? '/api/cart' : null, cartService.getCart, {
     onSuccess: (data) => {
@@ -78,18 +79,17 @@ export default function CartDrawer() {
       <Drawer.Root
         opened={openCartDrawer}
         onClose={toggleCartDrawer}
-        size="40%"
+        size={isMobile ? 'md' : '40%'}
         position="right"
         scrollAreaComponent={ScrollArea.Autosize}
-        className="cgscgcjhscasjcsc"
       >
         <Drawer.Overlay />
         <Drawer.Content>
           <Drawer.Header>
             <Drawer.Title>
               <h3 className="text-green-900 text-xl font-semibold flex flex-row items-center gap-2">
-                <IconifyIcon icon="solar:cart-large-2-broken" className="text-green-900 w-10 h-10" />
-                <span className="text-green-900 text-xl font-semibold">Giỏ hàng</span>
+                <IconifyIcon icon="solar:cart-large-2-broken" className="text-green-900 w-5 h-5 md:w-10 md:h-10" />
+                <span className="text-green-900 text-sm  md:text-xl md:font-semibold">Giỏ hàng</span>
               </h3>
             </Drawer.Title>
             <Drawer.CloseButton />
@@ -117,7 +117,7 @@ export default function CartDrawer() {
           </Drawer.Body>
           {total > 0 && (
             <div className="sticky bottom-0 left-0 w-full bg-white border-t border-gray-200 p-3 z-30">
-              <div className="flex items-center justify-center space-x-3">
+              <div className="flex items-center justify-center space-x-3 text-xs md:text-base">
                 <p>Tổng loại: {summary.totalTypes}</p>
                 <p>Tổng số lượng: {summary.totalAmount}</p>
                 <p>Tổng tiền: {formatPrice(summary.totalPrice)}đ</p>

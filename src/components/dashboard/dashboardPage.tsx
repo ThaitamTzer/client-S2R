@@ -8,14 +8,13 @@ import dayjs from 'dayjs'
 import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 
-const StatsSummary = dynamic(() => import('./StatsSummary'), { ssr: false, loading: () => <p>Loading...</p> })
-const DateFilters = dynamic(() => import('./DateFilters'), { ssr: false, loading: () => <p>Loading...</p> })
+const StatsSummary = dynamic(() => import('./StatsSummary'), { ssr: false })
+const DateFilters = dynamic(() => import('./DateFilters'), { ssr: false })
 const LineChartDashboard = dynamic(() => import('./LineChartDashboard'), {
   ssr: false,
-  loading: () => <p>Loading...</p>,
 })
-const DonutChart = dynamic(() => import('./DonutChart'), { ssr: false, loading: () => <p>Loading...</p> })
-const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'), { ssr: false, loading: () => <p>Loading...</p> })
+const DonutChart = dynamic(() => import('./DonutChart'), { ssr: false })
+const DashboardSkeleton = dynamic(() => import('./dashboardSkeleton'), { ssr: false })
 
 type DataPoint = {
   date: string
@@ -97,12 +96,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Tổng quan */}
-      <div className="bg-white p-6 rounded-2xl shadow-lg flex items-center justify-between">
+      <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold">Tổng quan</h2>
           <p className="text-md text-gray-500">
             {startDateDisplay && endDateDisplay
-              ? `Từ ${dayjs(startDateDisplay).format('DD/MM/YYYY')} đến ${dayjs(endDateDisplay).format('DD/MM/YYYY')}`
+              ? `Từ ${dayjs(startDateDisplay).format('DD/MM/YYYY')} đến ${dayjs(endDateDisplay).endOf('month').format('DD/MM/YYYY')}`
               : 'Tất cả thời gian'}
           </p>
         </div>
@@ -122,7 +121,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Tổng hợp giá trị và Biểu đồ donut */}
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
         {/* Tổng hợp các giá trị */}
         <StatsSummary data={data} />
         {/* Biểu đồ donut */}

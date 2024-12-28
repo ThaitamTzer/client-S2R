@@ -27,6 +27,7 @@ export default function Header() {
   const [api, contextHolder] = notification.useNotification()
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const scrollThreshold = 5 // Minimum scroll amount to trigger header hide
   const [searchKey, setSearchKey] = useState('')
   const router = useRouter() // Using the router to handle navigation
   const { socket } = useSocket()
@@ -49,19 +50,29 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setShowHeader(false) // Scrolling down
-      } else {
-        setShowHeader(true) // Scrolling up
+      const currentScrollY = window.scrollY
+
+      // Always show header when at top
+      if (currentScrollY <= 0) {
+        setShowHeader(true)
+        return
       }
-      setLastScrollY(window.scrollY)
+
+      // Only hide/show header if scroll amount exceeds threshold
+      if (Math.abs(currentScrollY - lastScrollY) > scrollThreshold) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down & not at top
+          setShowHeader(false)
+        } else {
+          // Scrolling up
+          setShowHeader(true)
+        }
+        setLastScrollY(currentScrollY)
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
 
   useEffect(() => {
@@ -129,10 +140,13 @@ export default function Header() {
       {contextHolder}
       <header
         id="header"
-        className={clsx('fixed top-0 z-50 bg-white w-full transition-transform duration-300', {
-          '-translate-y-full': !showHeader,
-          'translate-y-0': showHeader,
-        })}
+        className={clsx(
+          'fixed top-0 z-50 bg-white w-full transition-all duration-300 ease-in-out',
+          {
+            '-translate-y-full shadow-none': !showHeader,
+            'translate-y-0 shadow-md': showHeader,
+          }
+        )}
       >
         <div className="main-nav md:container mx-auto px-4 py-2 pt-3 md:pt-0 md:py-0 md:px-24">
           <div className="flex flex-col md:flex-row justify-between items-center ">

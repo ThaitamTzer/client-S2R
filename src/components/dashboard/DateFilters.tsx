@@ -30,7 +30,7 @@ const DateFilters = memo(
     const router = useRouter()
 
     return (
-      <div className="w-[800px] flex flex-row gap-2">
+      <div className="md:w-[800px] flex flex-col md:flex-row gap-2">
         <Select
           data={[
             {
@@ -122,10 +122,11 @@ const DateFilters = memo(
                 value={dateToValue}
                 onChange={(date) => {
                   setDateToValue(date)
-                  const formattedDate = date ? dayjs(date).format('YYYY-MM') : ''
+                  // Get last day of selected month
+                  const lastDayOfMonth = date ? dayjs(date).endOf('month').format('YYYY-MM-DD') : ''
                   const query = new URLSearchParams({
                     startDate: startDate,
-                    endDate: formattedDate,
+                    endDate: lastDayOfMonth,
                     viewBy: viewBy,
                   }).toString()
                   router.push(`/dashboard?${query}`, { scroll: false })

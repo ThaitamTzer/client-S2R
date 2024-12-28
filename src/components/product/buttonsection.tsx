@@ -76,7 +76,7 @@ export default function ButtonSection({
 
   return (
     <>
-      <div className="flex flex-row">
+      <div className="flex flex-row w-full flex-1">
         {product.type === 'barter' && (
           <>
             <Button
@@ -88,8 +88,8 @@ export default function ButtonSection({
                 padding: '8px 16px',
                 borderRadius: '20px',
                 marginRight: '16px',
-                width: '300px',
                 height: '55px',
+                width: '100%',
                 fontSize: '16px',
                 fontWeight: 'bold',
                 backgroundColor: '#b2e5be',
@@ -108,8 +108,8 @@ export default function ButtonSection({
                 padding: '8px 16px',
                 borderRadius: '20px',
                 marginRight: '16px',
-                width: '300px',
                 height: '55px',
+                width: '100%',
                 fontSize: '16px',
                 fontWeight: 'bold',
                 backgroundColor: '#179d49',
@@ -123,8 +123,8 @@ export default function ButtonSection({
         )}
 
         {product.type === 'sale' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-row gap-3">
+          <div className="flex flex-1 flex-col gap-3">
+            <div className="flex flex-row flex-1 gap-3 w-full">
               <Button
                 onClick={() => {
                   setProductToAdd(product)
@@ -133,7 +133,7 @@ export default function ButtonSection({
                 style={{
                   padding: '8px 16px',
                   borderRadius: '20px',
-                  width: '200px',
+                  width: '100%',
                   height: '55px',
                   fontSize: '16px',
                   fontWeight: 'bold',
@@ -154,7 +154,7 @@ export default function ButtonSection({
                 style={{
                   padding: '8px 16px',
                   borderRadius: '20px',
-                  width: '200px',
+                  width: '100%',
                   height: '55px',
                   fontSize: '16px',
                   fontWeight: 'bold',

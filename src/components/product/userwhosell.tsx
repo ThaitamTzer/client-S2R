@@ -29,31 +29,44 @@ export default function UserWhosell({ product }: { product: ProductsClient }) {
         </div>
       </div>
       {product?.userId?.averageRating !== null && (
-        <div className="flex flex-row items-center md:gap-1">
-          <p className="text-sm md:text-lg">Đánh giá của người bán: </p>
-          {product?.userId?.averageRating > 0 && (
-            <>
-              <p className="text-sm md:text-lg ml-2">{product?.userId?.averageRating?.toFixed(2)} / 5 </p>
-              <IconifyIcon icon="fluent-emoji-flat:star" className="md:w-6 md:h-6 w-4 h-4" />
-            </>
+        <>
+          <div className="flex flex-row items-center md:gap-1">
+            <p className="text-sm md:text-lg">Đánh giá của người bán: </p>
+            {product?.userId?.averageRating > 0 && (
+              <>
+                <p className="text-sm md:text-lg ml-2">{product?.userId?.averageRating?.toFixed(2)} / 5 </p>
+                <IconifyIcon icon="fluent-emoji-flat:star" className="md:w-6 md:h-6 w-4 h-4" />
+              </>
+            )}
+            {product?.userId?.numberOfRating > 0 ? (
+              <>
+                <p className="text-sm md:text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
+                <p
+                  className="text-sm hidden md:block md:text-lg hover:underline cursor-pointer"
+                  onClick={() => {
+                    toggleRatingModal()
+                    setUserId(product.userId._id)
+                  }}
+                >
+                  Xem thêm
+                </p>
+              </>
+            ) : (
+              <p className="text-sm md:text-lg ml-2">Chưa có đánh giá</p>
+            )}
+          </div>
+          {product?.userId?.numberOfRating > 0 && (
+            <p
+              className="text-sm md:hidden text-green-900 underline md:text-lg hover:underline cursor-pointer"
+              onClick={() => {
+                toggleRatingModal()
+                setUserId(product.userId._id)
+              }}
+            >
+              Xem thêm đánh giá
+            </p>
           )}
-          {product?.userId?.numberOfRating > 0 ? (
-            <>
-              <p className="text-sm md:text-lg ml-2">({product?.userId?.numberOfRating} đánh giá)</p>
-              <p
-                className="text-sm md:text-lg hover:underline cursor-pointer"
-                onClick={() => {
-                  toggleRatingModal()
-                  setUserId(product.userId._id)
-                }}
-              >
-                Xem thêm
-              </p>
-            </>
-          ) : (
-            <p className="text-sm md:text-lg ml-2">Chưa có đánh giá</p>
-          )}
-        </div>
+        </>
       )}
     </>
   )

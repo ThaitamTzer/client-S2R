@@ -3,24 +3,27 @@
 import ratingService from '@/services/rating/rating.service'
 import useRatingStore from '@/zustand/rating'
 import { Divider, Modal } from '@mantine/core'
-import useSWR from 'swr'
 import { Avatar } from '@mantine/core'
 import IconifyIcon from '../icons'
 import { formatDate } from '../product-management/column'
+import { RatingType } from '@/types/rating'
+import { useEffect, useState } from 'react'
 
 export default function ViewRatingModal() {
-  const { openRatingModal, toggleRatingModal, userId } = useRatingStore()
+  const { openRatingModal, toggleRatingModal, userId, setUserId } = useRatingStore()
+  const [ratingData, setRatingData] = useState<RatingType[]>()
 
-  const { data: ratingData } = useSWR(
-    '/api/rating/get-list-detail-rating',
-    () => ratingService.getRatingByUserId(userId),
-    {
-      revalidateOnMount: true,
-    },
-  )
+  useEffect(() => {
+    if (!userId) return
+    ratingService.getRatingByUserId(userId).then((res) => {
+      setRatingData(res)
+    })
+  }, [userId])
 
   const handleClose = () => {
     toggleRatingModal()
+    setRatingData([])
+    setUserId('')
   }
 
   return (

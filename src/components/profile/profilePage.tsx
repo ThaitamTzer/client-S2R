@@ -289,7 +289,7 @@ const Profile = () => {
                   />
                 </Form.Item>
                 <Form.Item name="address">
-                  <div className="w-full flex gap-3">
+                  <div className="w-full flex flex-wrap gap-3">
                     <Form.Item
                       label="Tỉnh/Thành phố"
                       name="province"

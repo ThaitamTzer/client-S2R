@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Suspense, lazy } from 'react'
+import { Suspense } from 'react'
 import { Alert } from '@/components/product-management/tabs/alert'
 import { useProductManagement } from '@/zustand/productManagement'
 import productService from '@/services/product/product.service'
@@ -13,12 +13,19 @@ import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import { useWalletStore } from '@/zustand/wallet'
 import { useClient } from '@/hooks/useClient'
+import dynamic from 'next/dynamic'
 
-const DataTable = lazy(() => import('@/components/product-management/dataTable'))
-const ViewProductModal = lazy(() => import('@/components/product-management/viewProduct'))
-const EditProduct = lazy(() => import('@/components/product-management/editProduct'))
-const AddProduct = lazy(() => import('@/components/product-management/addProduct'))
-const AddAdressModal = lazy(() => import('@/components/product-management/addAdressModal'))
+const DataTable = dynamic(() => import('@/components/product-management/dataTable'), { ssr: false, suspense: true })
+const ViewProductModal = dynamic(() => import('@/components/product-management/viewProduct'), {
+  ssr: false,
+  suspense: true,
+})
+const EditProduct = dynamic(() => import('@/components/product-management/editProduct'), { ssr: false, suspense: true })
+const AddProduct = dynamic(() => import('@/components/product-management/addProduct'), { ssr: false, suspense: true })
+const AddAdressModal = dynamic(() => import('@/components/product-management/addAdressModal'), {
+  ssr: false,
+  suspense: true,
+})
 
 const ProductManagement = () => {
   const param = useSearchParams()

@@ -53,7 +53,9 @@ export default function AddProduct() {
         size="large"
         icon={<IconPlus size={15} />}
         variant="solid"
-        disabled={(!user?.banking || !user?.address || !user?.phone || (config && wallet.point <= config.valueToCross)) ?? false}
+        disabled={
+          (!user?.banking || !user?.address || !user?.phone || (config && wallet.point <= config.valueToCross)) ?? false
+        }
         color="primary"
         onClick={handleOpenAddProductModal}
       >

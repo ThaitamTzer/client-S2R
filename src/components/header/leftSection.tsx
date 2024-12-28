@@ -4,7 +4,7 @@ import { Avatar, Menu, rem, Text, UnstyledButton, ScrollArea } from '@mantine/co
 import { Dropdown, MenuProps } from 'antd'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { IconSettings, IconTruck, IconLogout } from '@tabler/icons-react'
+import { IconSettings, IconTruck, IconLogout, IconClipboardData } from '@tabler/icons-react'
 import Image from 'next/image'
 import IconifyIcon from '@/components/icons'
 import { usePathname } from 'next/navigation'
@@ -14,6 +14,8 @@ import { useLoginModal } from '@/zustand/loginModal'
 import { NotificationType } from '@/types/notificationType'
 import { useUserAction } from '@/zustand/user'
 import dynamic from 'next/dynamic'
+import { useCart } from '@/zustand/cart'
+import { useProductClient } from '@/zustand/productClient'
 
 const ChatDropdown = dynamic(() => import('@/components/chat/chatDropdown'), { ssr: false })
 
@@ -45,9 +47,11 @@ export default function LeftSection({
 }) {
   const pathName = usePathname()
   const { logout, user } = useAuth()
-  const { toogleExchangeModal, listExchangeRev } = useExchange()
+  const { listExchangeRev } = useExchange()
   const { openModal } = useLoginModal()
+  const { toggleCartDrawer } = useProductClient()
   const { setOpenChatDropdown, rooms } = useUserAction()
+  const { cartItems } = useCart()
   const isMobile = window.innerWidth < 768
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
@@ -109,14 +113,16 @@ export default function LeftSection({
                 hidden: !user,
               })}
             >
-              <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
-                <IconifyIcon icon="carbon:ibm-data-product-exchange" className="text-green-900 md:text-2xl" />
-                {pendingExchangeCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {pendingExchangeCount}
-                  </span>
-                )}
-              </UnstyledButton>
+              <Link href="/exchange-management?tab=receiver" className="flex items-center">
+                <UnstyledButton className="relative">
+                  <IconifyIcon icon="carbon:ibm-data-product-exchange" className="text-green-900 md:text-2xl" />
+                  {pendingExchangeCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {pendingExchangeCount}
+                    </span>
+                  )}
+                </UnstyledButton>
+              </Link>
             </div>
             <div
               className={clsx('flex items-center', {
@@ -209,9 +215,25 @@ export default function LeftSection({
                 </Menu>
               </>
             )}
+            {user && (
+              <>
+                {/* cart */}
+                <UnstyledButton onClick={toggleCartDrawer} className="relative">
+                  {cartItems.length > 0 ? (
+                    <>
+                      <IconifyIcon icon="mynaui:cart-solid" className="text-green-900 md:text-2xl" />
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {cartItems.length}
+                      </span>
+                    </>
+                  ) : (
+                    <IconifyIcon icon="mynaui:cart" className="text-green-900 md:text-2xl" />
+                  )}
+                </UnstyledButton>
+              </>
+            )}
 
             {!user ? (
-              // <Avatar size={rem(30)} onClick={() => openModal()} color="#2b8a3e" />
               <div className="flex items-center gap-2" onClick={() => openModal()}>
                 <p className="text-xs font-medium text-green-900">Đăng nhập/Đăng ký</p>
               </div>
@@ -229,23 +251,60 @@ export default function LeftSection({
                     </div>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Link href="/profile">
-                      <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
-                        Thông tin tài khoản
+                    <Menu.Dropdown>
+                      <Link href="/packet">
+                        <Menu.Item
+                          leftSection={
+                            <IconifyIcon
+                              icon="hugeicons:wallet-add-01"
+                              style={{
+                                height: rem(14),
+                                width: rem(14),
+                              }}
+                            />
+                          }
+                        >
+                          Nạp kim cương
+                        </Menu.Item>
+                      </Link>
+                      <Link href="/transaction-management">
+                        <Menu.Item
+                          leftSection={
+                            <IconifyIcon
+                              icon="solar:history-broken"
+                              style={{
+                                height: rem(14),
+                                width: rem(14),
+                              }}
+                            />
+                          }
+                        >
+                          Lịch sử giao dịch
+                        </Menu.Item>
+                      </Link>
+                      <Link href="/profile">
+                        <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
+                          Thông tin tài khoản
+                        </Menu.Item>
+                      </Link>
+                      <Link href="/orders-management">
+                        <Menu.Item leftSection={<IconClipboardData style={{ width: rem(14), height: rem(14) }} />}>
+                          Đơn hàng của tôi
+                        </Menu.Item>
+                      </Link>
+                      <Link href="/product-management">
+                        <Menu.Item leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}>
+                          Quản lý sản phẩm
+                        </Menu.Item>
+                      </Link>
+                      <Menu.Item
+                        onClick={() => logout()}
+                        color="red"
+                        leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                      >
+                        Đăng xuất
                       </Menu.Item>
-                    </Link>
-                    <Link href="/product-management">
-                      <Menu.Item leftSection={<IconTruck style={{ width: rem(14), height: rem(14) }} />}>
-                        Quản lý sản phẩm
-                      </Menu.Item>
-                    </Link>
-                    <Menu.Item
-                      onClick={() => logout()}
-                      color="red"
-                      leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-                    >
-                      Đăng xuất
-                    </Menu.Item>
+                    </Menu.Dropdown>
                   </Menu.Dropdown>
                 </Menu>
               </>

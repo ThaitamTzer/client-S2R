@@ -21,6 +21,7 @@ export default function SellPage() {
   const [sells, setSells] = useState<Sell[]>()
   const columns = useSellColumns()
   const { toggleDetailModal, openDetailModal, sell, setSell } = useOrderStore()
+  const isMobile = window.innerWidth < 768
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -80,14 +81,14 @@ export default function SellPage() {
           <h2>Quản lý đơn bán</h2>
         </div>
         <div className="mt-5 bg-white p-2 shadow-lg rounded-md">
-          <div className="flex flex-1 justify-between mb-2 gap-3">
+          <div className="flex flex-1 flex-col md:flex-row justify-between mb-2 gap-3">
             <div className="flex items-center">
               <h2 className="text-xl font-semibold">Danh sách đơn bán</h2>
             </div>
 
             <TextInput
               placeholder="Tìm kiếm"
-              style={{ width: '40%' }}
+              style={{ width: isMobile ? '100%' : '40%' }}
               onChange={(e) => {
                 setInputValue(e.target.value) // Cập nhật giá trị ô input
                 debouncedSearch(e.target.value) // Thực hiện debounce và cập nhật URL

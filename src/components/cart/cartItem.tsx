@@ -23,9 +23,9 @@ export default function CartItem({
   }
 
   return (
-    <div className="cart_item flex flex-col md:flex-row gap-4 p-4 border rounded-lg shadow-md">
+    <div className="cart_item flex flex-row gap-4 p-4 border rounded-sm md:rounded-lg shadow-md">
       {/* Image */}
-      <div className="cart-item_image flex-shrink-0 w-[120px] h-[160px] relative rounded-md overflow-hidden">
+      <div className="cart-item_image flex-shrink-0 w-[50px] h-[50px] md:w-[120px] md:h-[160px] relative rounded-md overflow-hidden">
         <Image
           src={item.productId.imgUrls[0]}
           alt={item.productId.productName}
@@ -38,22 +38,24 @@ export default function CartItem({
       </div>
 
       {/* Info */}
-      <div className="cart-item_info flex flex-col flex-grow gap-2 max-w-[400px]">
+      <div className="cart-item_info flex flex-col flex-grow gap-2 max-w-[200px] md:max-w-[400px]">
         {/* Product Name */}
-        <h3 className="text-gray-800 text-lg font-semibold truncate max-h-[60px]">{item.productId.productName}</h3>
+        <h3 className="text-gray-800 text-sm md:text-lg font-medium md:font-semibold truncate max-h-[60px]">
+          {item.productId.productName}
+        </h3>
 
         {/* Price */}
-        <p className="text-gray-700 text-base font-medium">{formatPrice(item.total)}đ</p>
+        <p className="text-gray-700 text-sm md:text-base font-medium">{formatPrice(item.total)}đ</p>
 
         {/* Details */}
-        <div className="flex flex-wrap gap-4 text-sm text-gray-600 font-medium">
+        <div className="flex flex-wrap gap-4 text-xs md:text-sm text-gray-600 font-medium">
           <p>Kích thước: {item.size}</p>
           <p>Màu sắc: {getColorName(item.color)}</p>
         </div>
 
         {/* Quantity Control */}
         <div className="flex items-center gap-4">
-          <p className="text-gray-700">Số lượng:</p>
+          <p className="text-gray-700 text-sm md:text-base">Số lượng:</p>
           <NumberInput
             value={amount}
             onChange={(value) => handleChangeAmount(Number(value))}
