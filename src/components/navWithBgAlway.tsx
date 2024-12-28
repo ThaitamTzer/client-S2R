@@ -10,46 +10,53 @@ import { usePathname, useParams, useSearchParams } from 'next/navigation'
 const NavigationWithBgAlways = ({ navLink }: { navLink: navLink }) => {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const scrollThreshold = 5
   const pathname = usePathname()
   const params = useParams()
-
   const searchParams = useSearchParams()
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        // Scrolling down
-        setShowHeader(false)
-      } else {
-        // Scrolling up
-        setShowHeader(true)
+      const currentScrollY = window.scrollY
+
+      // Only hide/show the header if the scroll distance exceeds the threshold
+      if (Math.abs(currentScrollY - lastScrollY) > scrollThreshold) {
+        if (currentScrollY > lastScrollY) {
+          // Scrolling down
+          setShowHeader(false)
+        } else {
+          // Scrolling up
+          setShowHeader(true)
+        }
+        setLastScrollY(currentScrollY)
       }
-      setLastScrollY(window.scrollY)
     }
 
-    window.addEventListener('scroll', handleScroll)
-
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [lastScrollY, pathname, params])
 
   const isActive = (linkPath: string) => {
-    // Luôn trả về true nếu path là /checkout/[orderId]
+    // Always return true if the path starts with /checkout/
     if (linkPath.startsWith('/checkout/')) {
       return true
     }
 
-    // Giữ nguyên logic cũ cho các trường hợp khác
+    // Split path and query string
     const [basePath, searchString] = linkPath.split('?')
+
+    // Check if base path matches
     if (pathname !== basePath) return false
+
+    // If there's no query string, compare just the path
     if (!searchString) return !searchParams.toString()
 
+    // Compare query parameters
     const linkParams = new URLSearchParams(searchString)
-    const currentParams = searchParams
-
     for (const [key, value] of Array.from(linkParams.entries())) {
-      if (currentParams.get(key) !== value) return false
+      if (searchParams.get(key) !== value) return false
     }
 
     return true
@@ -59,10 +66,10 @@ const NavigationWithBgAlways = ({ navLink }: { navLink: navLink }) => {
     <>
       <nav
         className={clsx(
-          'fixed top-0 z-modal bg-green-100 text-green-700 text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
+          'fixed top-0 z-modal bg-green-100 text-green-700 text-lg font-medium w-full transition-transform duration-300 ease-in-out overflow-hidden',
           {
-            '-translate-y-0': !showHeader,
-            'translate-y-[102px]': showHeader,
+            '-translate-y-full': !showHeader, // Hide header when scrolling down
+            'translate-y-[102px]': showHeader, // Show header when scrolling up
             'md:translate-y-16': showHeader,
           },
         )}
@@ -76,7 +83,7 @@ const NavigationWithBgAlways = ({ navLink }: { navLink: navLink }) => {
               >
                 <p
                   className={clsx(
-                    'before:none before:left-0 before:right-0  before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[1px] md:before:h-[3px]  before:bg-green-900 relative',
+                    'before:none before:left-0 before:right-0 before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[1px] md:before:h-[3px] before:bg-green-900 relative',
                     { 'before:absolute text-green-800': isActive(navLink.href) },
                   )}
                 >
