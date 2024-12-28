@@ -5,14 +5,13 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { navLink } from '@/types/navTypes'
-import { usePathname, useParams, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const scrollThreshold = 5
   const pathname = usePathname()
-  const params = useParams()
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -71,7 +70,7 @@ const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
         {
           '-translate-y-full shadow-none': !showHeader,
           'translate-y-[102px] md:translate-y-16 shadow-md': showHeader,
-        }
+        },
       )}
     >
       <div className="container px-1 md:px-44">
@@ -82,7 +81,7 @@ const NavigationWithBg = ({ navLink }: { navLink: navLink[] }) => {
                 <p
                   className={clsx(
                     'before:none before:left-0 before:right-0 before:-bottom-3 before:mx-auto before:my-0 before:rounded-sm before:h-[1px] md:before:h-[3px] before:bg-green-900 relative',
-                    { 'before:absolute text-green-800': isActive(link.href) }
+                    { 'before:absolute text-green-800': isActive(link.href) },
                   )}
                 >
                   {link.label}
