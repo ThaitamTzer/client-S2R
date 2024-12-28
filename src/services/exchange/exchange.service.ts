@@ -31,8 +31,23 @@ const exChangeService = {
   },
 
   // ** Approve exchange
-  approve: async (id: string, status: 'pending' | 'accepted' | 'rejected' | 'completed' | 'canceled') => {
-    axiClient.patch(`/api/Exchange/approve-exchange/${id}?status=${status}`)
+  approve: async (
+    id: string,
+    status: 'pending' | 'accepted' | 'rejected' | 'completed' | 'canceled',
+    sucessCallBack?: (res: any) => void,
+    errorCallBack?: (res: any) => void,
+  ) => {
+    try {
+      return await axiClient.patch(`/api/Exchange/approve-exchange/${id}?status=${status}`).then((res) => {
+        if (sucessCallBack) {
+          sucessCallBack(res)
+        }
+      })
+    } catch (error: any) {
+      if (errorCallBack) {
+        errorCallBack(error.response.data.message)
+      }
+    }
   },
 
   // ** Update exchange

@@ -2,16 +2,15 @@
 import { useExchange } from '@/zustand/exchange'
 import exChangeService from '@/services/exchange/exchange.service'
 import { Tabs } from 'antd'
-import { ViewExchangeModal } from './requestertable/viewExchange'
 import toast from 'react-hot-toast'
 import { useEffect } from 'react'
-import { ViewExchangeModalRev } from './receivertable/viewExchangeRev'
-import { Suspense, lazy } from 'react'
-import Loading from '@/app/loading'
+import dynamic from 'next/dynamic'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 
-const TableDataReq = lazy(() => import('./requestertable/tableDataReq'))
-const TableDataRev = lazy(() => import('./receivertable/tableDataRev'))
+const TableDataReq = dynamic(() => import('./requestertable/tableDataReq'), { ssr: false })
+const TableDataRev = dynamic(() => import('./receivertable/tableDataRev'), { ssr: false })
+const ViewExchangeModal = dynamic(() => import('./requestertable/viewExchange'), { ssr: false })
+const ViewExchangeModalRev = dynamic(() => import('./receivertable/viewExchangeRev'), { ssr: false })
 
 const ExchangePage = () => {
   const { setExchange, exchangeId, setLoading, setExchangeRev, exchangeIdRev } = useExchange()
@@ -78,20 +77,12 @@ const ExchangePage = () => {
             {
               key: 'requester',
               label: 'Yêu cầu trao đổi của bạn',
-              children: (
-                <Suspense fallback={<Loading />}>
-                  <TableDataReq />
-                </Suspense>
-              ),
+              children: <TableDataReq />,
             },
             {
               key: 'receiver',
               label: 'Yêu cầu trao đổi từ người khác',
-              children: (
-                <Suspense fallback={<Loading />}>
-                  <TableDataRev />
-                </Suspense>
-              ),
+              children: <TableDataRev />,
             },
           ]}
         />

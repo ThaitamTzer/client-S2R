@@ -194,7 +194,7 @@ export default function CreateExchangeModal() {
             <Stepper.Step label="Chọn các thay đổi" description="Chọn size màu và số lượng">
               <div>
                 <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} items-start gap-3`}>
-                  <div className={`relative ${isMobile ? 'w-full' : 'w-[100px]'} h-[120px] my-2 overflow-hidden`}>
+                  <div className={`relative ${isMobile ? 'w-full' : 'w-[120px]'} h-[120px] my-2 overflow-hidden`}>
                     <Image
                       src={productSelected?.imgUrls?.[0]}
                       alt={productSelected?.productName}
