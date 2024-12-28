@@ -51,8 +51,7 @@ const Navigation = dynamic(() => import('@/components/nav'), {
   loading: () => <Loading />,
 })
 const HomePageTitle = dynamic(() => import('@/components/homepage/HomepageTitle'), {
-  ssr: false,
-  loading: () => <Loading />,
+  ssr: true,
 })
 
 export const metadata: Metadata = {
