@@ -14,6 +14,7 @@ import toast from 'react-hot-toast'
 import confetti from 'canvas-confetti'
 import configService from '@/services/config/config.service'
 import { ConfigType } from '@/types/config'
+import { useMediaQuery } from '@mantine/hooks'
 
 // Setup dayjs plugins
 dayjs.extend(utc)
@@ -24,6 +25,8 @@ export default function AttendCalendar() {
   const { toggleAttendModal, openAttendModal, attendances, setAttendances } = useAttend()
   const [claimedRewards, setClaimedRewards] = useState<string[]>([])
   const [config, setConfig] = useState<ConfigType>()
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   useEffect(() => {
     configService.getConfig().then((res) => {
       setConfig(res)
@@ -57,14 +60,14 @@ export default function AttendCalendar() {
         return {
           disabled: true,
           variant: 'light',
-          children: 'Quá hạn',
+          children: isMobile ? 'Hết hạn' : 'Đã hết hạn',
           color: 'gray',
         }
       case 'claimed':
         return {
           disabled: true,
           variant: 'light',
-          children: 'Đã điểm danh',
+          children: isMobile ? 'Đã nhận' : 'Đã điểm danh',
           color: 'green',
         }
       case 'available':
@@ -72,13 +75,13 @@ export default function AttendCalendar() {
           disabled: false,
           variant: 'gradient',
           gradient: { from: 'indigo', to: 'cyan' },
-          children: 'Điểm danh',
+          children: isMobile ? 'Nhận' : 'Điểm danh',
         }
       default:
         return {
           disabled: true,
           variant: 'light',
-          children: 'Chưa đến ngày',
+          children: isMobile ? 'Chưa' : 'Chưa đến hạn',
           color: 'blue',
         }
     }
@@ -172,7 +175,7 @@ export default function AttendCalendar() {
 
                 <h2 className="text-2xl font-bold text-white mb-6">Điểm Danh Hàng Ngày</h2>
 
-                <div className="grid grid-cols-4 gap-6">
+                <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-6">
                   {attendances.map((attendance, index) => {
                     const status = getAttendanceStatus(attendance.date, attendance.isAttendance)
                     const buttonProps = getButtonProps(status)
@@ -183,7 +186,7 @@ export default function AttendCalendar() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="relative group w-[190px]"
+                        className="relative group w-[100px] md:w-[190px]"
                       >
                         <div
                           className="relative bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/20 
@@ -193,7 +196,7 @@ export default function AttendCalendar() {
                             className="absolute -top-2 -right-2 z-10"
                             color={status === 'claimed' ? 'green' : status === 'expired' ? 'gray' : 'blue'}
                           >
-                            Ngày {attendance.date}
+                            {isMobile ? `${attendance.date}` : `Ngày ${attendance.date}`}
                           </Badge>
 
                           <div className="relative">
@@ -206,27 +209,29 @@ export default function AttendCalendar() {
                               className="rounded-md mb-2"
                             />
 
-                            <div
-                              className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm
+                            {!isMobile && (
+                              <div
+                                className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm
                                 border border-white/20 flex items-center gap-2"
-                            >
-                              {/* <IconifyIcon icon="material-symbols:diamond" className="text-blue-400 animate-pulse" /> */}
-                              <Image
-                                src="/misc/latest.png"
-                                alt="point"
-                                width={27}
-                                height={27}
-                                className="animate-pulse"
-                              />
-                              <Text className="text-white font-semibold">+{config?.valueToPromotion} </Text>
-                            </div>
+                              >
+                                <Image
+                                  src="/misc/latest.png"
+                                  alt="point"
+                                  width={27}
+                                  height={27}
+                                  className="animate-pulse"
+                                />
+                                <Text className="text-white font-semibold">+{config?.valueToPromotion} </Text>
+                              </div>
+                            )}
                           </div>
 
                           <Button
                             fullWidth
                             className="mt-2"
                             style={{
-                              fontSize: '14px',
+                              fontSize: isMobile ? '12px' : '14px',
+                              padding: isMobile ? '4px 8px' : '12px 16px',
                             }}
                             onClick={() => handleClaimReward(attendance.date)}
                             {...buttonProps}

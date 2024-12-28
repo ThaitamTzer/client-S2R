@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { IconSettings, IconTruck, IconLogout, IconClipboardData } from '@tabler/icons-react'
 import IconifyIcon from '@/components/icons'
 import { useAuth } from '@/hooks/useAuth'
-import { useExchange } from '@/zustand/exchange'
+// import { useExchange } from '@/zustand/exchange'
 import { useLoginModal } from '@/zustand/loginModal'
 import { NotificationType } from '@/types/notificationType'
 import { useUserAction } from '@/zustand/user'
@@ -25,7 +25,7 @@ export default function RightSection({
   handleViewNotification: (notificationId: string, event: React.MouseEvent) => void
 }) {
   const { logout, user } = useAuth()
-  const { toogleExchangeModal, listExchangeRev } = useExchange()
+  // const { toogleExchangeModal } = useExchange()
   const { openModal } = useLoginModal()
   const { setOpenChatDropdown, rooms } = useUserAction()
   const { toggleCartDrawer } = useProductClient()
@@ -34,8 +34,8 @@ export default function RightSection({
   const router = useRouter()
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
-  const pendingExchangeCount =
-    listExchangeRev?.filter((exchange) => exchange.allExchangeStatus === 'pending').length || 0
+  // const pendingExchangeCount =
+  //   listExchangeRev?.filter((exchange) => exchange.allExchangeStatus === 'pending').length || 0
 
   const unreadMessage = rooms?.reduce((total, room) => total + (room.unreadCount || 0), 0) || 0
 
@@ -217,20 +217,22 @@ export default function RightSection({
         )}
         {/* Avatar */}
         {user && (
-          <UnstyledButton onClick={() => toogleExchangeModal()} className="relative">
-            <IconifyIcon
-              icon="carbon:ibm-data-product-exchange"
-              className="text-green-900"
-              style={{
-                width: rem(30),
-                height: rem(30),
-              }}
-            />
-            {pendingExchangeCount > 0 && (
+          <UnstyledButton className="relative">
+            <Link href={'/exchange-management'} prefetch>
+              <IconifyIcon
+                icon="carbon:ibm-data-product-exchange"
+                className="text-green-900"
+                style={{
+                  width: rem(30),
+                  height: rem(30),
+                }}
+              />
+            </Link>
+            {/* {pendingExchangeCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {pendingExchangeCount}
               </span>
-            )}
+            )} */}
           </UnstyledButton>
         )}
         {user ? (

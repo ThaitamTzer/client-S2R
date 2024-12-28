@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'auto'
 
 const imageUrl = 'res.cloudinary.com'
 

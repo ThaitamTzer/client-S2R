@@ -12,6 +12,7 @@ import { fetchCategories } from '@/action/category'
 const HomePageHero = dynamic(() => import('@/components/homepage/HomepageHero'), {
   ssr: false,
   loading: () => <Loading />,
+  loader: () => import('@/components/homepage/HomepageHero'),
 })
 const HomePageFavorate = dynamic(() => import('@/components/homepage/HomePageFavorite'), {
   ssr: false,

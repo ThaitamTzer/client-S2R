@@ -7,9 +7,7 @@ import { useEffect, useState } from 'react'
 import { Badge } from '@mantine/core'
 import { useAuth } from '@/hooks/useAuth'
 import { Tooltip } from '@mantine/core'
-import dynamic from 'next/dynamic'
-
-const MotionDiv = dynamic(() => import('@/components/motiondiv'), { ssr: false, loading: () => <div>Loading...</div> })
+import { motion } from 'framer-motion'
 
 export default function Attend() {
   const { toggleAttendModal, attendances } = useAttend()
@@ -35,7 +33,8 @@ export default function Attend() {
   if (!user || isAttendance) return null
 
   return (
-    <MotionDiv
+    <motion.div
+      className="w-20 h-20 md:w-24 md:h-24 "
       initial={{ opacity: 0, y: 100 }}
       animate={{
         opacity: 1,
@@ -62,9 +61,9 @@ export default function Attend() {
           {!isAttendance ? (
             <Badge className="absolute top-2 right-3 z-10 h-3 w-3 p-0" radius="xl" color="red" variant="filled" />
           ) : null}
-          <Image src="/misc/gift.png" alt="logo" width={100} height={100} />
+          <Image src="/misc/gift.png" alt="logo" width={100} height={100} className="w-full h-full" />
         </div>
       </Tooltip>
-    </MotionDiv>
+    </motion.div>
   )
 }

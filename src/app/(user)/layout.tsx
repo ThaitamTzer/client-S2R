@@ -12,7 +12,7 @@ import { lazy } from 'react'
 
 const NavigationProfile = lazy(() => import('@/components/navProfile'))
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'auto'
 
 const { Content, Sider } = Layout
 
