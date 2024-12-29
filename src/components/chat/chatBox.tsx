@@ -5,24 +5,22 @@ import { useDisclosure } from '@mantine/hooks'
 import IconifyIcon from '../icons'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
-import { useRef, useState } from 'react'
-import { useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react'
 import { useUserAction } from '@/zustand/user'
 import { useAuth } from '@/hooks/useAuth'
 import { useSocket } from '@/hooks/useSocket'
 import { mutate } from 'swr'
+import clsx from 'clsx'
+import { debounce } from 'lodash'
+import dynamic from 'next/dynamic'
+import { MessageTypes } from '@/types/messageTypes'
+
+const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
 
 interface ChatBoxProps {
   userChat: MessageTypes
   roomId: string
 }
-
-import { debounce } from 'lodash'
-import { useCallback, useMemo } from 'react'
-import dynamic from 'next/dynamic'
-import { MessageTypes } from '@/types/messageTypes'
-
-const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
 
 export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
   const { setActiveChats, activeChats } = useUserAction()
@@ -35,9 +33,22 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [room, setRoom] = useState(roomId)
+  const isMobile = window.innerWidth < 768
 
   const { user } = useAuth()
   const { socket } = useSocket()
+
+  useEffect(() => {
+    if (!socket) return
+
+    socket.on('connect', () => {
+      socket.emit('joinRoom', room)
+    })
+
+    return () => {
+      socket.off('connect')
+    }
+  }, [socket, room])
 
   useEffect(() => {
     if (!user || !userChat?.chatPartner) return
@@ -176,8 +187,21 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
   }, [localMessages, user, userChat, openImagePreview])
 
   return (
-    <Paper className="fixed bottom-0 z-max w-[330px] max-w-[330px] h-[455px] rounded-t-lg shadow-2xl">
-      <div className="h-14 bg-green-700 rounded-t-lg px-4 flex items-center justify-between">
+    <Paper
+      className={clsx(
+        'fixed z-[9999] shadow-2xl bg-white flex flex-col',
+        isMobile
+          ? 'top-0 left-0 right-0 bottom-0 rounded-none'
+          : 'bottom-0 md:w-[330px] md:max-w-[330px] md:h-[455px] rounded-t-lg',
+      )}
+    >
+      {/* Header */}
+      <div
+        className={clsx(
+          'h-14 bg-green-700 md:rounded-t-lg px-4 flex items-center justify-between flex-shrink-0',
+          'sticky top-0 z-10', // Đảm bảo header luôn hiển thị
+        )}
+      >
         <div className="flex items-center gap-3">
           <Avatar src={userChat?.chatPartner?.avatar} size="md" radius="xl" />
           <div className="text-white">
@@ -185,16 +209,6 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
           </div>
         </div>
         <div className="flex gap-2">
-          {/* <ActionIcon
-            variant="transparent"
-            color="white"
-            onClick={() => {
-              onMinimize()
-              socket?.emit('leaveRoom', room)
-            }}
-          >
-            <IconifyIcon icon="pepicons-pop:minus" fontSize={24} />
-          </ActionIcon> */}
           <ActionIcon
             variant="transparent"
             color="white"
@@ -210,7 +224,8 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
         </div>
       </div>
 
-      <ScrollArea h={340} w={330} px="md" pb="md" ref={scrollAreaRef}>
+      {/* Scrollable Messages */}
+      <ScrollArea className="flex-1 px-4 pb-4 overflow-auto" ref={scrollAreaRef}>
         <div className="space-y-4">
           {isLoading ? (
             <div className="flex justify-center items-center h-[300px]">
@@ -226,12 +241,11 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
         </div>
       </ScrollArea>
 
-      <div className="absolute bottom-0 w-full p-3 bg-white border-t">
+      {/* Input Area */}
+      <div className="flex-shrink-0 p-3 bg-white border-t">
         <div className="flex items-center justify-between w-full gap-2">
           <TextInput
-            style={{
-              width: '100%',
-            }}
+            className="flex-1"
             value={messageInput}
             onChange={handleMessageChange}
             onKeyDown={(e) => {
@@ -241,6 +255,9 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
           />
           <div className="flex gap-2">
             <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleImageUpload} />
+            <ActionIcon variant="transparent" color="gray">
+              <IconifyIcon icon="material-symbols:send" onClick={() => handleSendMessage(null)} />
+            </ActionIcon>
             <ActionIcon
               variant="transparent"
               color="gray"
@@ -257,7 +274,10 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
           </div>
         </div>
         {showEmoji && (
-          <div className="absolute bottom-14 right-0" onClick={(e) => e.stopPropagation()}>
+          <div
+            className={clsx('absolute w-full left-0', isMobile ? 'bottom-16' : 'bottom-14')}
+            onClick={(e) => e.stopPropagation()}
+          >
             <Picker
               data={data}
               onEmojiSelect={handleEmojiSelect}
@@ -269,7 +289,8 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
         )}
       </div>
 
-      <Modal opened={imagePreview} onClose={closeImagePreview} size="lg" centered>
+      {/* Image Preview Modal */}
+      <Modal opened={imagePreview} onClose={closeImagePreview} size={isMobile ? '100%' : 'lg'} centered>
         <MantineImage src={selectedImage} alt="Preview" fit="contain" />
       </Modal>
     </Paper>

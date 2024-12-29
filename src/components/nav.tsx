@@ -64,7 +64,7 @@ const Navigation = ({ navLink }: { navLink: navLink[] }) => {
     <>
       <nav
         className={clsx(
-          'fixed top-0 z-modal text-green-500 text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
+          'fixed top-0 z-50 text-green-500 text-lg font-medium w-full transition-transform duration-300 overflow-hidden',
           {
             '-translate-y-0': !showHeader,
             'translate-y-[102px]': showHeader,
