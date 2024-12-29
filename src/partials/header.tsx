@@ -94,7 +94,12 @@ export default function Header() {
         getData('/api/messages/get-room')
         api.info({
           message: newNotification.title,
-          description: newNotification.message,
+          description: (
+            <div className="flex flex-row items-center">
+              <p>{newNotification.receiver}: </p>
+              <p>{newNotification.message}</p>
+            </div>
+          ),
           showProgress: true,
           pauseOnHover: true,
           duration: 5,
@@ -140,13 +145,10 @@ export default function Header() {
       {contextHolder}
       <header
         id="header"
-        className={clsx(
-          'fixed top-0 z-50 bg-white w-full transition-all duration-300 ease-in-out',
-          {
-            '-translate-y-full shadow-none': !showHeader,
-            'translate-y-0 shadow-md': showHeader,
-          }
-        )}
+        className={clsx('fixed top-0 z-50 bg-white w-full transition-all duration-300 ease-in-out', {
+          '-translate-y-full shadow-none': !showHeader,
+          'translate-y-0 shadow-md': showHeader,
+        })}
       >
         <div className="main-nav md:container mx-auto px-4 py-2 pt-3 md:pt-0 md:py-0 md:px-24">
           <div className="flex flex-col md:flex-row justify-between items-center ">

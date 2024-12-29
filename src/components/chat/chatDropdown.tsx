@@ -4,8 +4,10 @@ import { Menu, Avatar } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
 import { MessageTypes } from '@/types/messageTypes'
 import { mutate } from 'swr'
+import { useSocket } from '@/hooks/useSocket'
 
 export default function ChatDropdown() {
+  const { socket } = useSocket()
   const setActiveChats = useUserAction((state) => state.setActiveChats)
   const setRoomId = useUserAction((state) => state.setRoomId)
   const chatusers = useUserAction((state) => state.chatusers)
@@ -17,23 +19,24 @@ export default function ChatDropdown() {
 
   const handleSelectChat = (item: MessageTypes) => {
     mutate('/api/messages/get-room')
-    const isInActiveChats = activeChats.some((chat) => chat.chatPartner._id === item.chatPartner._id)
-    const isInChatUsers = chatusers.some((chat) => chat.chatPartner._id === item.chatPartner._id)
 
-    if (!isInActiveChats && !isInChatUsers) {
-      setActiveChats([...activeChats, item])
-      mutate('/api/messages/get-room')
-    } else if (isInChatUsers) {
-      setChatUsers(chatusers.filter((chat) => chat.chatPartner._id !== item.chatPartner._id))
-      setActiveChats([...activeChats, item])
-      mutate('/api/messages/get-room')
-    } else {
-      const filteredChats = activeChats.filter((chat) => chat.chatPartner._id !== item.chatPartner._id)
-      setActiveChats([...filteredChats, item])
-      mutate('/api/messages/get-room')
+    // Leave current room if exists
+    if (activeChats.length > 0) {
+      const currentRoom = activeChats[0].message.roomId
+      socket?.emit('leaveRoom', currentRoom)
+      setChatUsers([...chatusers, ...activeChats])
     }
 
-    setRoomId([item.message.myId, item.chatPartner._id].sort().join('_'))
+    // Set new chat as the only active chat
+    setActiveChats([item])
+
+    // Remove selected chat from chatusers if present
+    setChatUsers(chatusers.filter((chat) => chat.chatPartner._id !== item.chatPartner._id))
+
+    // Join new room
+    const newRoomId = [item.message.myId, item.chatPartner._id].sort().join('_')
+    setRoomId(newRoomId)
+    socket?.emit('joinRoom', newRoomId)
   }
 
   return (

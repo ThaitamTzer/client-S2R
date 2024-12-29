@@ -15,7 +15,6 @@ import { mutate } from 'swr'
 interface ChatBoxProps {
   userChat: MessageTypes
   roomId: string
-  onMinimize: () => void
 }
 
 import { debounce } from 'lodash'
@@ -25,7 +24,7 @@ import { MessageTypes } from '@/types/messageTypes'
 
 const MessageItem = dynamic(() => import('./messageItem'), { ssr: false })
 
-export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) {
+export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
   const { setActiveChats, activeChats } = useUserAction()
   const [localMessages, setLocalMessages] = useState<any[]>([])
   const [messageInput, setMessageInput] = useState('')
@@ -42,22 +41,22 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
 
   useEffect(() => {
     if (!user || !userChat?.chatPartner) return
-  
+
     if (socket) {
       setIsLoading(true)
       socket.emit('joinRoom', room)
       mutate('/api/messages/get-room')
-  
+
       socket.on('previousMessages', (messages) => {
         setLocalMessages(messages)
         setIsLoading(false)
       })
-  
+
       socket.on('receiveMessage', (message) => {
         setLocalMessages((prev) => [...prev, message])
         mutate('/api/messages/get-room')
       })
-  
+
       return () => {
         socket.off('previousMessages')
         socket.off('receiveMessage')
@@ -183,11 +182,10 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
           <Avatar src={userChat?.chatPartner?.avatar} size="md" radius="xl" />
           <div className="text-white">
             <p className="font-semibold">{userChat?.chatPartner?.firstname + ' ' + userChat?.chatPartner?.lastname}</p>
-            <p className="text-sm">Đang hoạt động</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <ActionIcon
+          {/* <ActionIcon
             variant="transparent"
             color="white"
             onClick={() => {
@@ -196,7 +194,7 @@ export default function ChatBox({ userChat, roomId, onMinimize }: ChatBoxProps) 
             }}
           >
             <IconifyIcon icon="pepicons-pop:minus" fontSize={24} />
-          </ActionIcon>
+          </ActionIcon> */}
           <ActionIcon
             variant="transparent"
             color="white"
