@@ -30,7 +30,6 @@ export default function ProductOverview({
   maxQuantity,
   totalQuantity,
   onCreateExchange,
-  user,
   classes,
   setCount,
 }: {
@@ -50,7 +49,6 @@ export default function ProductOverview({
   totalQuantity: number
   onCreateExchange: () => void
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any | null
   classes: Record<string, string>
   setCount: (count: number) => void
 }) {
@@ -181,7 +179,7 @@ export default function ProductOverview({
                   totalQuantity={totalQuantity}
                 />
                 {/* Button section */}
-                <ButtonSection product={product} user={user} onCreateExchange={onCreateExchange} />
+                <ButtonSection product={product} onCreateExchange={onCreateExchange} />
                 {/* Mô tả vận chuyển */}
                 <PolicySection />
                 <UserWhosell product={product} />

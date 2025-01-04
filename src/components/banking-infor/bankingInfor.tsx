@@ -45,7 +45,7 @@ export default function BankingInfor() {
       <ModalUpdateBanking banking={banking} />
       <div className="container px-1 md:px-10 mx-auto">
         <div className="title text-black text-2xl font-semibold">
-          <h2>Thông tin thanh toán</h2>
+          <h2>Thông tin ngân hàng</h2>
         </div>
         {user?.banking ? (
           <>

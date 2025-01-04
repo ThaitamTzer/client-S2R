@@ -5,16 +5,17 @@ import IconifyIcon from '../icons'
 import { useUserAction } from '@/zustand/user'
 import { useProductClient } from '@/zustand/productClient'
 import { mutate } from 'swr'
+import { useAuth } from '@/hooks/useAuth'
+import Link from 'next/link'
 export default function ButtonSection({
   product,
-  user,
   onCreateExchange,
 }: {
   product: ProductsClient
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any
   onCreateExchange: () => void
 }) {
+  const { user } = useAuth()
   const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
   const { toggleAddToCardModal, setProductToAdd, toggleOrderNowModal } = useProductClient()
 
@@ -80,7 +81,7 @@ export default function ButtonSection({
         {product.type === 'barter' && (
           <>
             <Button
-              disabled={!user || user._id === product.userId._id}
+              disabled={!user || user._id === product.userId._id || !user.address}
               onClick={() => {
                 handleSelectChat(product)
               }}
@@ -100,7 +101,7 @@ export default function ButtonSection({
             </Button>
 
             <Button
-              disabled={!user}
+              disabled={!user || !user.address}
               onClick={onCreateExchange}
               variant="outlined"
               type="primary"
@@ -130,6 +131,7 @@ export default function ButtonSection({
                   setProductToAdd(product)
                   toggleAddToCardModal()
                 }}
+                disabled={!user || !user.address}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '20px',
@@ -149,6 +151,7 @@ export default function ButtonSection({
                   setProductToAdd(product)
                   toggleOrderNowModal()
                 }}
+                disabled={!user || !user.address}
                 variant="outlined"
                 type="primary"
                 style={{
@@ -224,6 +227,15 @@ export default function ButtonSection({
           </>
         )}
       </div>
+      {!user?.address && (
+        <p className="font-semibold text-lg text-red-600">
+          Bạn cần thực hiện{' '}
+          <Link className="underline" href={'/profile'}>
+            cập nhật
+          </Link>{' '}
+          địa chỉ trước khi mua hàng
+        </p>
+      )}
     </>
   )
 }

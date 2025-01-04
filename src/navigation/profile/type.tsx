@@ -46,7 +46,7 @@ export const useProfileLinks = () => {
           icon: <IconifyIcon icon="solar:card-outline" style={{ fontSize: '1.5rem', color: '#000' }} />,
           label: (
             <Link href="/banking-infor" className="text-sm md:text-lg font-thin">
-              Thông tin thanh toán
+              Thông tin ngân hàng
             </Link>
           ),
         },

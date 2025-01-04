@@ -68,7 +68,7 @@ export type AuthValuesType = {
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType) => void
   login: (params: LoginParams, sucessCalback?: () => void, errorCallback?: ErrCallbackType) => void
-  register: (params: RegisterParams) => Promise<void>
+  register: (params: RegisterParams, sucessCalback?: () => void, errorCallback?: ErrCallbackType) => void
   forgetPassword: (params: { email: string }) => Promise<void>
   resetPassword: (params: { code: string; newPassword: string }) => Promise<void>
   getProfile: () => Promise<void>

@@ -40,7 +40,7 @@ const cartService = {
     errorMessage?: (message: string) => void,
   ) => {
     axiosClient
-      .put(`/api/cart/${id}`, { amount })
+      .patch(`/api/cart/${id}`, { amount })
       .then(() => success && success())
       .catch((error: any) => {
         if (error) {

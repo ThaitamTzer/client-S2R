@@ -6,7 +6,7 @@ import PurchasedPage from '@/components/checkout/purchasedPage'
 import orderService from '@/services/order/order.service'
 import { OrderById } from '@/types/orderTypes'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import Loading from '@/app/loading'
 import Link from 'next/link'
@@ -15,6 +15,8 @@ import OpenEditShippingMethod from '@/components/checkout/openEditShippingMethod
 import OpenEditNote from '@/components/checkout/openEditNote'
 import ReportModal from '@/components/checkout/reportModal'
 import { RessonOrder } from '@/constants/resson'
+import { useAuth } from '@/hooks/useAuth'
+import { useOrderStore } from '@/zustand/order'
 const NavigationWithBgAlways = dynamic(() => import('@/components/navWithBgAlway'), {
   ssr: false,
 })
@@ -26,8 +28,10 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
   }
 
   const [order, setOrder] = useState<OrderById | undefined>()
+  const { setAddress, setPhone } = useOrderStore()
+  const { user } = useAuth()
 
-  const { isLoading } = useSWR(['/order/id', params.orderId], () => orderService.getOrderById(params.orderId), {
+  const { isLoading, mutate } = useSWR(['/order/id', params.orderId], () => orderService.getOrderById(params.orderId), {
     onSuccess(data) {
       if (data) {
         setOrder(data)
@@ -43,6 +47,28 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     revalidateOnFocus: true,
     revalidateOnMount: true,
   })
+
+  console.log(user)
+  console.log(order)
+
+  useEffect(() => {
+    // Kiểm tra nếu user có địa chỉ và số điện thoại, và order chưa có địa chỉ hoặc số điện thoại
+    if (user?.address && user?.phone && (order?.data.address === null || !order?.data.phone === null)) {
+      orderService.updateAddressOrder(
+        params.orderId,
+        {
+          address: user?.address,
+          phone: user?.phone,
+          type: 'momo_wallet',
+        },
+        () => {
+          setAddress(user.address)
+          setPhone(user.phone)
+          mutate()
+        },
+      )
+    }
+  }, [user, order, params.orderId, setAddress, setPhone, mutate])
 
   if (isLoading) return <Loading />
 

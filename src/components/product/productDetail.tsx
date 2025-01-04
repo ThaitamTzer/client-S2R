@@ -4,7 +4,6 @@ import classes from '@/styles/product.module.css'
 import { useEffect, useState } from 'react'
 import { useGetName } from '@/helper/getName'
 import { useExchange } from '@/zustand/exchange'
-import { useAuth } from '@/hooks/useAuth'
 import dynamic from 'next/dynamic'
 import { notification } from 'antd'
 import { useProductClient } from '@/zustand/productClient'
@@ -167,8 +166,6 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
     )
   }
 
-  const { user } = useAuth()
-
   if (product)
     return (
       <>
@@ -237,7 +234,6 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
             maxQuantity={maxQuantity}
             totalQuantity={totalQuantity}
             onCreateExchange={onCreateExchange}
-            user={user}
             classes={classes}
             setCount={setCount}
           />

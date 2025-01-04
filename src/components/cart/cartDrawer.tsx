@@ -31,6 +31,15 @@ export default function CartDrawer() {
     onSuccess: (data) => {
       setCartItems(data.data)
       setTotal(data.data.length)
+      // setSummary(data.summary)
+    },
+    revalidateOnMount: true,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  useSWR(user ? 'totalPrice' : null, cartService.getCart, {
+    onSuccess: (data) => {
       setSummary(data.summary)
     },
     revalidateOnMount: true,

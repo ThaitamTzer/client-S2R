@@ -40,8 +40,12 @@ export default function Footer() {
             <div className="w-full sm:w-auto">
               <h3 className="text-base md:text-lg font-semibold mb-4">Hỗ trợ khách hàng</h3>
               <ul className="space-y-3 text-sm md:text-base">
-                <li>Hướng dẫn mua hàng</li>
-                <li>Hình thức thanh toán</li>
+                <li>
+                  <Link href={'/user-manual'}>Hướng dẫn mua hàng</Link>
+                </li>
+                <li>
+                  <Link href="/user-manual">Hình thức thanh toán</Link>
+                </li>
                 <li>
                   <Link href={'/purchase-donation-conditions'}>Điều kiện cho tặng</Link>
                 </li>

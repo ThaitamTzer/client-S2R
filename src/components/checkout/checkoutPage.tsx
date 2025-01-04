@@ -2,14 +2,14 @@
 
 import { OrderById } from '@/types/orderTypes'
 import IconifyIcon from '../icons'
-import { useEffect, useState } from 'react'
-import { useOrderStore } from '@/zustand/order'
+import { useState } from 'react'
+// import { useOrderStore } from '@/zustand/order'
 import NavigateToMomo from './navigateToMomo'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth } from '@/hooks/useAuth'
-import orderService from '@/services/order/order.service'
-import { mutate } from 'swr'
+// import { useAuth } from '@/hooks/useAuth'
+// import orderService from '@/services/order/order.service'
+// import { mutate } from 'swr'
 import dynamic from 'next/dynamic'
 
 const ProductPayment = dynamic(() => import('./detail/productPayment'), { ssr: false })
@@ -19,27 +19,28 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
   const [paymentMethod, setPaymentMethod] = useState('2')
-  const { setAddress, setPhone } = useOrderStore()
+  // const { setAddress, setPhone } = useOrderStore()
   const [payUrl, setPayUrl] = useState('')
-  const { user } = useAuth()
+  // const { user } = useAuth()
 
-  useEffect(() => {
-    if (user?.address && user?.phone && !order.data.address && !order.data.phone) {
-      orderService.updateAddressOrder(
-        order.data._id,
-        {
-          address: user?.address || '',
-          phone: user?.phone || '',
-          type: 'momo_wallet',
-        },
-        () => {
-          setAddress(user?.address || '')
-          setPhone(user?.phone || '')
-          mutate(['/order/id', order.data._id])
-        },
-      )
-    }
-  }, [user, order, setAddress, setPhone])
+  // useEffect(() => {
+  //   if (user?.address && user?.phone && !order.data.address && !order.data.phone) {
+  //     console.log('update address')
+  //     orderService.updateAddressOrder(
+  //       order.data._id,
+  //       {
+  //         address: user?.address || '',
+  //         phone: user?.phone || '',
+  //         type: 'momo_wallet',
+  //       },
+  //       () => {
+  //         setAddress(user?.address || '')
+  //         setPhone(user?.phone || '')
+  //         mutate(['/order/id', order.data._id])
+  //       },
+  //     )
+  //   }
+  // }, [user])
 
   return (
     <>

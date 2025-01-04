@@ -7,6 +7,10 @@ import { Tooltip, UnstyledButton, NumberInput } from '@mantine/core'
 import Image from 'next/image'
 import IconifyIcon from '../icons'
 import { useState } from 'react'
+import { debounce } from 'lodash'
+import cartService from '@/services/cart/cart.service'
+import toast from 'react-hot-toast'
+import { mutate } from 'swr'
 
 export default function CartItem({
   item,
@@ -17,9 +21,30 @@ export default function CartItem({
 }) {
   const { getColorName } = useGetName()
   const [amount, setAmount] = useState<number>(item.amount)
+  const [loading, setLoading] = useState(false)
+
+  // Debounced function to update quantity
+  const updateQuantity = debounce((newAmount: number) => {
+    setLoading(true)
+    cartService.updateQuantity(
+      item._id,
+      newAmount,
+      () => {
+        mutate('totalPrice') // Revalidate cart data
+        setLoading(false)
+        toast.success('Cập nhật số lượng thành công')
+      },
+      (message) => {
+        setLoading(false)
+        toast.error(message || 'Cập nhật số lượng thất bại')
+        setAmount(item.amount) // Khôi phục số lượng cũ nếu cập nhật thất bại
+      },
+    )
+  }, 300) // Debounce 300ms
 
   const handleChangeAmount = (value: number) => {
     setAmount(value)
+    updateQuantity(value) // Gọi hàm debounce khi thay đổi số lượng
   }
 
   return (
@@ -39,21 +64,17 @@ export default function CartItem({
 
       {/* Info */}
       <div className="cart-item_info flex flex-col flex-grow gap-2 max-w-[200px] md:max-w-[400px]">
-        {/* Product Name */}
         <h3 className="text-gray-800 text-sm md:text-lg font-medium md:font-semibold truncate max-h-[60px]">
           {item.productId.productName}
         </h3>
 
-        {/* Price */}
         <p className="text-gray-700 text-sm md:text-base font-medium">{formatPrice(item.total)}đ</p>
 
-        {/* Details */}
         <div className="flex flex-wrap gap-4 text-xs md:text-sm text-gray-600 font-medium">
           <p>Kích thước: {item.size}</p>
           <p>Màu sắc: {getColorName(item.color)}</p>
         </div>
 
-        {/* Quantity Control */}
         <div className="flex items-center gap-4">
           <p className="text-gray-700 text-sm md:text-base">Số lượng:</p>
           <NumberInput
@@ -63,6 +84,7 @@ export default function CartItem({
             max={99}
             step={1}
             size="sm"
+            disabled={loading}
             styles={{
               input: { width: 60, textAlign: 'center' },
             }}

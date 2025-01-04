@@ -2,7 +2,7 @@ import Loading from '@/app/loading'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
-const BankingInfor = dynamic(() => import('@/components/banking-infor/bankingInfor'))
+const BankingInfor = dynamic(() => import('@/components/banking-infor/bankingInfor'), { ssr: false })
 
 export default function BankingInforPage() {
   return (

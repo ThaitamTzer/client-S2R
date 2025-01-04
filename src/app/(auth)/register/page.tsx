@@ -19,19 +19,22 @@ const RegisterPage = () => {
   const router = useRouter()
 
   const onFinish = (values: formData) => {
-    register(values)
-      .then(() => {
+    register(
+      values,
+      () => {
         router.push('/')
         toast.success('Đăng ký thành công')
-      })
-      .catch(() => {
+      },
+      () => {
+        toast.error('Đăng ký thất bại')
         form.setFields([
           {
             name: 'email',
             errors: ['Email đã tồn tại'],
           },
         ])
-      })
+      },
+    )
   }
 
   return (

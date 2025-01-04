@@ -20,10 +20,6 @@ export default function AddAdressModal() {
   const [selectedWard, setSelectedWard] = useState<any>(null)
   const { getProfile, user } = useAuth()
 
-  const addressParts = user?.address.split(', ').reverse()
-
-  console.log(addressParts)
-
   useEffect(() => {
     provinceService.getAllProvinces().then((res) => setProvinces(res))
     // eslint-disable-next-line react-hooks/exhaustive-deps

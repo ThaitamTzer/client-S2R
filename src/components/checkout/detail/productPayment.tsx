@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Radio, Stack } from '@mantine/core'
 import { useWalletStore } from '@/zustand/wallet'
 import dynamic from 'next/dynamic'
+import { useClient } from '@/hooks/useClient'
 
 const ProductInfor = dynamic(() => import('./productInfor'), { ssr: false })
 const InforPayment = dynamic(() => import('./inforPayment'), { ssr: false })
@@ -21,6 +22,11 @@ export default function ProductPayment({
   setPayUrl: (value: string) => void
 }) {
   const { wallet } = useWalletStore()
+  const { config } = useClient()
+
+  const enablePoint =
+    order.data.totalAmount >= 50000 || wallet.point < order.data.totalAmount / (config?.valueToPoint ?? 1)
+
   return (
     <div className="md:w-2/3 w-full flex flex-col gap-4 ">
       {/* Sản phẩm thanh toán */}
@@ -75,7 +81,7 @@ export default function ProductPayment({
                 size="lg"
                 color="green"
                 value="3"
-                disabled={order.data.totalAmount >= 50000 || wallet.point < order.data.totalAmount ? true : false}
+                disabled={enablePoint ? true : false}
                 label={
                   <div className="flex flex-row gap-3 items-start">
                     <Image
@@ -91,8 +97,11 @@ export default function ProductPayment({
                   </div>
                 }
               />
-              {wallet.point < order.data.totalAmount && (
+              {wallet.point < order.data.totalAmount / (config?.valueToPoint ?? 1) && (
                 <p className="text-red-500">Số kim cương của bạn không đủ để thanh toán đơn hàng này</p>
+              )}
+              {order.data.totalAmount >= 50000 && (
+                <p className="text-red-500">Đơn hàng trên 50.000đ không thể thanh toán bằng kim cương</p>
               )}
             </Stack>
           </Radio.Group>

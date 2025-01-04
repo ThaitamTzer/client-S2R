@@ -76,7 +76,7 @@ const AuthProvider = ({ children }: Props) => {
       Cookies.set('jwt', accessToken)
       router.replace('/')
     }
-  }, [accessToken, refreshToken])
+  }, [accessToken, refreshToken, router])
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
@@ -134,19 +134,25 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  const handleRegister = async (params: RegisterParams) => {
+  const handleRegister = (params: RegisterParams, sucessCalback?: () => void, errorCallback?: ErrCallbackType) => {
     setLoading(true)
     try {
-      const res = await axiosClient.post(authConfig.registerEndpoint, params)
-      setUser(res.data.user)
-      localStorage.setItem('accessToken', res.data.accessToken)
-      localStorage.setItem('refreshToken', res.data.refreshToken)
-      Cookies.set('jwt', JSON.stringify(res.data.user))
-      setLoading(false)
-      router.push('/')
+      axiosClient
+        .post(authConfig.registerEndpoint, params)
+        .then(async (res) => {
+          if (sucessCalback) sucessCalback()
+          setUser(res.data.user)
+          localStorage.setItem('accessToken', res.data.accessToken)
+          localStorage.setItem('refreshToken', res.data.refreshToken)
+          Cookies.set('jwt', JSON.stringify(res.data.user))
+          setLoading(false)
+        })
+        .catch((error: any) => {
+          setLoading(false)
+          if (errorCallback) errorCallback(error)
+        })
     } catch {
       setLoading(false)
-      toast.error('Đăng ký thất bại')
     }
   }
 
@@ -170,8 +176,6 @@ const AuthProvider = ({ children }: Props) => {
     try {
       const res = await axiosClient.get('/api/users/view-profile')
       setUser(res.data)
-      localStorage.setItem('accessToken', res.data.accessToken)
-      localStorage.setItem('refreshToken', res.data.refreshToken)
       return res.data
     } catch {
       setLoading(false)

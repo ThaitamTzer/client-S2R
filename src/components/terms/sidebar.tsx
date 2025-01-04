@@ -6,9 +6,9 @@ export default function SideBar() {
   const pathNames = usePathname()
 
   return (
-    <div className="flex flex-1 flex-col items-start justify-center gap-10 container">
+    <div className="flex flex-1 flex-col items-start justify-center md:gap-10 container">
       <h1 className="text-2xl font-semibold">Các chính sách của Share2Receive</h1>
-      <div className="flex flex-col w-full mt-4">
+      <div className="flex flex-col w-full md:mt-4">
         <MenuItem href="/terms-condition" label="Điều khoản" icon="solar:book-broken" pathname={pathNames} />
         <MenuItem
           href="/privacy-policy"

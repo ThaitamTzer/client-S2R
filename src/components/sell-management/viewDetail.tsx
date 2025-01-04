@@ -129,6 +129,7 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
         {(sell?.orderId?.paymentStatus === 'paid' || sell?.orderId?.paymentStatus === 'PayPickup') &&
           sell?.status !== 'canceled' &&
           sell?.status !== 'delivered' &&
+          sell?.status !== 'completed' &&
           !sell?.requestRefund && (
             <div className="flex flex-col gap-2">
               <p className="text-sm font-medium">Cập nhật trạng thái đơn hàng</p>
@@ -144,6 +145,7 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
               </Button>
             </div>
           )}
+
         <div className="flex flex-col gap-2 w-full">
           <p className="text-sm font-medium">Sản phẩm</p>
           {sell?.products?.map((product) => (

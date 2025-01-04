@@ -265,7 +265,15 @@ const Profile = () => {
                   <Input disabled />
                 </Form.Item>
                 <div className="w-full flex gap-3">
-                  <Form.Item className="w-full" label="Số điện thoại" name="phone">
+                  <Form.Item
+                    className="w-full"
+                    label="Số điện thoại"
+                    name="phone"
+                    rules={[
+                      { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                      { pattern: /^[0-9]{10}$/, message: 'Số điện thoại không hợp lệ!' },
+                    ]}
+                  >
                     <Input placeholder="Số điện thoại" />
                   </Form.Item>
                   <Form.Item label="Ngày sinh" name="dateOfBirth" className="w-full">
