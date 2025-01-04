@@ -4,7 +4,7 @@ export default function TermsCondition() {
       <h1 className="text-2xl font-semibold">Điều khoản</h1>
       <p className="text-lg">
         Share2Receive là nền tảng (dịch vụ trực tuyến) hỗ trợ cho tặng và thu mua quần áo đã qua sử dụng được phát triển
-        bởi công ty cổ phần RE . Ngoài việc hỗ trợ bằng các công cụ công nghệ trực tuyến, chúng tôi không tham gia vào
+        bởi Share2Receive . Ngoài việc hỗ trợ bằng các công cụ công nghệ trực tuyến, chúng tôi không tham gia vào
         quá trình trực tiếp sử dụng của Khách hàng. Các Khách hàng đồng ý sử dụng Share2Receive là nền tảng cho tặng và
         thu mua sẽ mặc nhiên đồng ý với điều khoản sử dụng (Term of Services) này.
       </p>

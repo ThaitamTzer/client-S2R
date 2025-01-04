@@ -50,7 +50,6 @@ export const UpdateFormStyle = () => {
         console.log('Validation failed:', info)
       })
   }
-
   const onFinishStep2 = () => {
     // Validate fields for Step 2 (color and material), then move to the next step without sending a request
     form

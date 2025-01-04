@@ -18,7 +18,7 @@ export default function SideBar() {
         />
         <MenuItem
           href="/purchase-donation-conditions"
-          label="Điều khoản cho tặng"
+          label="Điều khoản góp đồ thời trang"
           icon="solar:bag-4-broken"
           pathname={pathNames}
         />

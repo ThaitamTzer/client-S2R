@@ -68,10 +68,18 @@ export default function Footer() {
             <div className="w-full sm:w-auto">
               <h3 className="text-base md:text-lg font-semibold mb-4">Kết nối với chúng tôi</h3>
               <div className="flex gap-4">
-                <Image src="/images/facebook-footer.png" alt="facebook" width={35} height={35} loading="lazy" />
-                <Image src="/images/instagram-footer.png" alt="instagram" width={35} height={35} loading="lazy" />
-                <Image src="/images/tiktok-footer.png" alt="tiktok" width={35} height={35} loading="lazy" />
-                <Image src="/images/youtube-footer.png" alt="youtube" width={35} height={35} loading="lazy" />
+                <Link target="_blank" href={'https://www.facebook.com/profile.php?id=61571482800754'}>
+                  <Image src="/images/facebook-footer.png" alt="facebook" width={35} height={35} loading="lazy" />
+                </Link>
+                <Link target="_blank" href={'https://www.instagram.com/p/DEVApUcyFk7eWEwybG_Zemue1v9N-aEiz3dG9U0/'}>
+                  <Image src="/images/instagram-footer.png" alt="instagram" width={35} height={35} loading="lazy" />
+                </Link>
+                <Link target="_blank" href={'https://www.tiktok.com/@share2receive'}>
+                  <Image src="/images/tiktok-footer.png" alt="tiktok" width={35} height={35} loading="lazy" />
+                </Link>
+                <Link target="_blank" href={'https://www.youtube.com/channel/UCcJd6KtZPp_gG79KE0Nxe0g'}>
+                  <Image src="/images/youtube-footer.png" alt="youtube" width={35} height={35} loading="lazy" />
+                </Link>
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ const navLinks: navLink[] = [
   },
   {
     href: '/purchase-donation-conditions',
-    label: 'Điều khoản mua hàng và quyên góp',
+    label: 'Điều khoản góp đồ thời trang',
   },
 ]
 
