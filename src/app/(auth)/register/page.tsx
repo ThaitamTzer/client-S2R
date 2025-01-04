@@ -105,10 +105,15 @@ const RegisterPage = () => {
                         required: true,
                         message: 'Mật khẩu không được để trống',
                       },
+                      {
+                        min: 8,
+                        message: 'Mật khẩu phải có ít nhất 8 ký tự',
+                      },
                     ]}
                   >
                     <Input.Password size="large" placeholder="Nhập vào mật khẩu" />
                   </Form.Item>
+
                   <Form.Item>
                     <Button type="primary" htmlType="submit" className="w-full" size="large">
                       Đăng ký
