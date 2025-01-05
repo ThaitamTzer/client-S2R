@@ -120,7 +120,7 @@ const AuthProvider = ({ children }: Props) => {
           })
 
           const returnUrl = searchParams.get('returnUrl')
-          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : ''
+          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
           router.replace(redirectURL as string)
           closeModal()
         })

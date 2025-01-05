@@ -19,29 +19,7 @@ export default function CheckoutPage({ order }: { order: OrderById }) {
   const searchParams = useSearchParams()
   const callback = searchParams.get('callback')
   const [paymentMethod, setPaymentMethod] = useState('2')
-  // const { setAddress, setPhone } = useOrderStore()
   const [payUrl, setPayUrl] = useState('')
-  // const { user } = useAuth()
-
-  // useEffect(() => {
-  //   if (user?.address && user?.phone && !order.data.address && !order.data.phone) {
-  //     console.log('update address')
-  //     orderService.updateAddressOrder(
-  //       order.data._id,
-  //       {
-  //         address: user?.address || '',
-  //         phone: user?.phone || '',
-  //         type: 'momo_wallet',
-  //       },
-  //       () => {
-  //         setAddress(user?.address || '')
-  //         setPhone(user?.phone || '')
-  //         mutate(['/order/id', order.data._id])
-  //       },
-  //     )
-  //   }
-  // }, [user])
-
   return (
     <>
       <NavigateToMomo payUrl={payUrl} setPayUrl={setPayUrl} />

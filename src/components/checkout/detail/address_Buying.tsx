@@ -39,10 +39,11 @@ export default function AddressBuying({ order, paymentMethod, setPayUrl }: Order
           <p className="md:text-xl text-base font-semibold">
             {order.data.userId.firstname + ' ' + order.data.userId.lastname}
           </p>
-          {order.data.address && order.data.phone ? (
+
+          {order.data.phone && <p className="md:text-xl text-base">{order.data.phone}</p>}
+          {order.data.address && <p className="md:text-xl text-base text-wrap max-w-full">{order.data.address}</p>}
+          {order.data.address && order.data.phone && (
             <>
-              <p className="md:text-xl text-base">{order.data.phone}</p>
-              <p className="md:text-xl text-base text-wrap max-w-full">{order.data.address}</p>
               <div className="flex flex-row justify-end ">
                 <span
                   onClick={() => {
@@ -57,7 +58,9 @@ export default function AddressBuying({ order, paymentMethod, setPayUrl }: Order
                 </span>
               </div>
             </>
-          ) : (
+          )}
+
+          {!order.data.address && (
             <>
               <Button
                 type="button"
@@ -71,6 +74,23 @@ export default function AddressBuying({ order, paymentMethod, setPayUrl }: Order
                 }}
               >
                 Nhập địa chỉ nhận hàng
+              </Button>
+            </>
+          )}
+          {!order.data.phone && (
+            <>
+              <Button
+                type="button"
+                style={{
+                  backgroundColor: '#16a34a',
+                  color: '#fff',
+                }}
+                onClick={() => {
+                  toggleChangeAddressModal()
+                  setIdOrder(order.data._id)
+                }}
+              >
+                Nhập số điện thoại
               </Button>
             </>
           )}
@@ -108,9 +128,8 @@ export default function AddressBuying({ order, paymentMethod, setPayUrl }: Order
           </Button>
         </>
       )}
-      {(!order.data.address || !order.data.phone) && (
-        <p className="text-red-500 text-center">Vui lòng điền địa chỉ nhận hàng</p>
-      )}
+      {!order.data.address && <p className="text-red-500 text-center">Vui lòng điền địa chỉ nhận hàng</p>}
+      {!order.data.phone && <p className="text-red-500 text-center">Vui lòng điền số điện thoại</p>}
     </div>
   )
 }

@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Form, Button, Input } from 'antd'
 import { useAuth } from '@/hooks/useAuth'
+import toast from 'react-hot-toast'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 interface formData {
   account: string
@@ -12,20 +14,33 @@ interface formData {
 const LoginPage = () => {
   const [form] = Form.useForm()
   const { login } = useAuth()
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const onFinish = (values: formData) => {
-    login(values, () => {
-      form.setFields([
-        {
-          name: 'account',
-          errors: ['Email hoặc mật khẩu không chính xác!'],
-        },
-        {
-          name: 'password',
-          errors: ['Email hoặc mật khẩu không chính xác!'],
-        },
-      ])
-    })
+    login(
+      values,
+      () => {
+        toast.success('Đăng nhập thành công!')
+        const returnUrl = searchParams.get('returnUrl')
+
+        if (!returnUrl) {
+          router.push('/')
+        }
+      },
+      () => {
+        form.setFields([
+          {
+            name: 'account',
+            errors: ['Email hoặc mật khẩu không chính xác!'],
+          },
+          {
+            name: 'password',
+            errors: ['Email hoặc mật khẩu không chính xác!'],
+          },
+        ])
+      },
+    )
   }
 
   return (

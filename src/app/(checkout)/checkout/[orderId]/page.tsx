@@ -48,12 +48,9 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     revalidateOnMount: true,
   })
 
-  console.log(user)
-  console.log(order)
-
   useEffect(() => {
     // Kiểm tra nếu user có địa chỉ và số điện thoại, và order chưa có địa chỉ hoặc số điện thoại
-    if (user?.address && user?.phone && (order?.data.address === null || !order?.data.phone === null)) {
+    if (user?.address || (user?.phone && (order?.data.address === null || !order?.data.phone === null))) {
       orderService.updateAddressOrder(
         params.orderId,
         {
@@ -94,7 +91,7 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
   return (
     <>
       <NavigationWithBgAlways navLink={navLinks} />
-      <ChangeAddressModal />
+      <ChangeAddressModal order={order} />
       <OpenEditShippingMethod orderId={params.orderId} />
       <OpenEditNote orderId={params.orderId} />
       <ReportModal reportType="order" resson={RessonOrder} />

@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
-const Profile = dynamic(() => import('@/components/profile/profilePage'))
+const Profile = dynamic(() => import('@/components/profile/profilePage'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'Thông tin tài khoản',
