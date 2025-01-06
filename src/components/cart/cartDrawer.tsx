@@ -31,7 +31,7 @@ export default function CartDrawer() {
     onSuccess: (data) => {
       setCartItems(data.data)
       setTotal(data.data.length)
-      // setSummary(data.summary)
+      setSummary(data.summary)
     },
     revalidateOnMount: true,
     revalidateOnFocus: false,
