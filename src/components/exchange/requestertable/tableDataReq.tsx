@@ -85,7 +85,7 @@ export default function TableDataReq() {
   })
 
   const { isLoading } = useSWR(
-    ['exchanges', page, limit, ...filterUserIds],
+    ['exchanges', page, limit, ...filterUserIds, 'requester'],
     () => exChangeService.getAll(page, limit, filterUserIds.join(','), 'requester'),
     {
       onSuccess: (data) => {

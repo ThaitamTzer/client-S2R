@@ -5,6 +5,7 @@ import { Modal } from '@mantine/core'
 
 export default function BuyModal() {
   const { openBuyModal, toggleBuyModal } = useProductClient()
+  const isMobile = window.innerWidth < 768
 
   return (
     <Modal
@@ -12,7 +13,7 @@ export default function BuyModal() {
       onClose={toggleBuyModal}
       centered
       title={<h1 className="text-3xl text-green-800">Các chích sách mua bán, trao đổi, quyên góp</h1>}
-      size="70%"
+      size={isMobile ? '100%' : 'xl'}
     >
       <div className="p-5">
         <p className="text-base font-medium whitespace-pre-wrap">{`1. Đăng tin sản phẩm

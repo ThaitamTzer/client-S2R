@@ -55,7 +55,7 @@ export default function TableDataRev() {
     const filterParams = currentFilters.map((id) => `filterUserId=${id}`).join('&')
 
     const queryString = `page=${newPage}&limit=${newLimit}${filterParams ? '&' + filterParams : ''}`
-    router.push(`/exchange-management?${queryString}`, { scroll: false })
+    router.push(`/exchange-management?tab=receiver&${queryString}`, { scroll: false })
   }
 
   useSWR('forAllUsersRev', () => exChangeService.getAll(1, 100, ''), {
@@ -67,7 +67,7 @@ export default function TableDataRev() {
       const uniqueUsers = new Map()
 
       data?.data
-        .filter((user) => user.role === 'requester')
+        .filter((user) => user.role === 'receiver')
         .forEach((user) => {
           const receiverId = user.receiverId._id
           // Chỉ thêm vào Map nếu chưa tồn tại
@@ -85,7 +85,7 @@ export default function TableDataRev() {
   })
 
   const { isLoading } = useSWR(
-    ['exchangesRev', page, limit, ...filterUserIds],
+    ['exchangesRev', page, limit, ...filterUserIds, 'receiver'],
     () => exChangeService.getAll(page, limit, filterUserIds.join(','), 'receiver'),
     {
       onSuccess: (data) => {

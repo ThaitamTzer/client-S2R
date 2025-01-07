@@ -82,10 +82,6 @@ export const fetchAllProdClient = async (
       cache: 'no-cache',
     })
 
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`)
-    }
-
     const data: ProductSClientList = await res.json()
 
     return data

@@ -5,6 +5,7 @@ import { Modal } from '@mantine/core'
 
 export default function CodModal() {
   const { openCodeModal, toggleCodeModal } = useProductClient()
+  const isMobile = window.innerWidth < 768
 
   return (
     <Modal
@@ -12,7 +13,7 @@ export default function CodModal() {
       onClose={toggleCodeModal}
       centered
       title={<h1 className="text-3xl text-green-800">Các quy tắc COD</h1>}
-      size="xl"
+      size={isMobile ? '100%' : 'xl'}
     >
       <div className="p-5">
         <p className="text-base font-medium whitespace-pre-wrap">{`Dịch vụ thanh toán khi nhận hàng chỉ khả dụng khi tổng số tiền từ 0đ đến 5.000.000đ sau khi giảm giá. Không cần chịu phí COD.

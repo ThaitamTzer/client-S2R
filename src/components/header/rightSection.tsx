@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { IconSettings, IconTruck, IconLogout, IconClipboardData } from '@tabler/icons-react'
 import IconifyIcon from '@/components/icons'
 import { useAuth } from '@/hooks/useAuth'
+import { mutate } from 'swr'
 // import { useExchange } from '@/zustand/exchange'
 import { useLoginModal } from '@/zustand/loginModal'
 import { NotificationType } from '@/types/notificationType'
@@ -34,9 +35,6 @@ export default function RightSection({
   const router = useRouter()
 
   const unreadCount = notifications?.filter((notification) => !notification.isViewed).length || 0
-  // const pendingExchangeCount =
-  //   listExchangeRev?.filter((exchange) => exchange.allExchangeStatus === 'pending').length || 0
-
   const unreadMessage = rooms?.reduce((total, room) => total + (room.unreadCount || 0), 0) || 0
 
   return (
@@ -44,7 +42,7 @@ export default function RightSection({
       <div className="hidden space-x-3 w-full md:w-auto md:flex items-center">
         {/* notification */}
         {user && (
-          <Menu shadow="md" width={300} closeOnItemClick={false}>
+          <Menu shadow="md" width={300} closeOnItemClick={false} onClose={() => mutate('/notifications')}>
             <Menu.Target>
               <UnstyledButton className="relative">
                 {unreadCount > 0 ? (
@@ -228,11 +226,6 @@ export default function RightSection({
                 }}
               />
             </Link>
-            {/* {pendingExchangeCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {pendingExchangeCount}
-              </span>
-            )} */}
           </UnstyledButton>
         )}
         {user ? (

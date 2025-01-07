@@ -134,10 +134,14 @@ export default function Header() {
 
   const handleViewNotification = async (notificationId: string, event: React.MouseEvent) => {
     event.stopPropagation()
-    notificationService.updateNotification(notificationId)
-    setTimeout(() => {
-      mutate()
-    }, 1000)
+
+    // Immediately update UI
+    useNotificationStore.getState().updateSingleNotification(notificationId)
+
+    // Make API call in background
+    setTimeout(async () => {
+      notificationService.updateNotification(notificationId)
+    }, 500)
   }
 
   return (
