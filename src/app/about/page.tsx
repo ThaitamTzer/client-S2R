@@ -1,10 +1,10 @@
-import Map from "@/components/about/map";
+import Map from '@/components/about/map'
 
 export default function About() {
   return (
     <>
       <div
-        className="w-full relative bg-gray-800 rounded-lg pt-[15%] "
+        className="w-full relative bg-gray-800 rounded-lg pt-[15%] md:mt-0 mt-5"
         style={{
           backgroundImage: 'url(/images/about-bg.jpg)',
           backgroundSize: 'cover',
@@ -13,9 +13,9 @@ export default function About() {
       ></div>
       <div className="mt-7">
         <div className="flex flex-1 justify-center">
-          <h1 className="text-3xl font-semibold text-green-800">Giới thiệu về Share2Receive</h1>
+          <h1 className="md:text-3xl text-lg font-semibold text-green-800">Giới thiệu về Share2Receive</h1>
         </div>
-        <div className="flex flex-1 justify-center mt-5 flex-col gap-5 text-xl px-28">
+        <div className="flex flex-1 justify-center mt-5 flex-col gap-5 md:text-xl text-lg md:px-28 px-4">
           <p>Câu chuyện bắt đầu từ đại dịch COVID-19</p>
           <p>
             &quot;Tôi gần như ở nhà suốt cả năm nay vì COVID-19. Vì vậy, tôi quyết định dọn dẹp lại cả nhà và bỏ đi một
@@ -41,12 +41,12 @@ export default function About() {
       </div>
       <div className="mt-7">
         <div className="flex flex-1 justify-center">
-          <h1 className="text-3xl font-semibold text-green-800">Thông tin về công ty</h1>
+          <h1 className="md:text-3xl text-lg font-semibold text-green-800">Thông tin về công ty</h1>
         </div>
-        <div className="flex flex-1 justify-center mt-5 flex-col gap-5 text-xl px-28">
+        <div className="flex flex-1 justify-center mt-5 flex-col gap-5 md:text-xl text-lg md:px-28 px-4">
           <p>Địa chỉ đăng ký kinh doanh: 15, Đường số 6, Phường 15, Quận gò vấp, Thành phố Hồ Chí Minh, Việt Nam.</p>
         </div>
-        
+
         <Map />
       </div>
     </>

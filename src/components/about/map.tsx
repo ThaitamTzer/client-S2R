@@ -1,9 +1,9 @@
 'use client'
 export default function Map() {
   return (
-    <div className="flex flex-1 flex-col justify-center mt-5 px-48 gap-10">
+    <div className="flex flex-1 flex-col justify-center mt-5 md:px-48 px-4 gap-10">
       <div className="flex flex-1 justify-center">
-        <h1 className="text-3xl font-semibold text-green-800">Văn phòng Share2Receive</h1>
+        <h1 className="md:text-3xl text-lg font-semibold text-green-800">Văn phòng Share2Receive</h1>
       </div>
       <iframe
         width="100%"
