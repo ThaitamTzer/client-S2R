@@ -82,6 +82,7 @@ export const UpdateFormStyle = () => {
       setSelectedColors(user.userStyle.color || [])
       setSelectedZodiac(user.userStyle.zodiacSign || null)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.userStyle])
 
   const onFinishSurvey = () => {

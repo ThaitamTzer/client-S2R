@@ -153,6 +153,7 @@ export default function ChangeAddressModal({ order }: { order: OrderById }) {
         address: '',
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phone, address])
 
   const handleClose = () => {

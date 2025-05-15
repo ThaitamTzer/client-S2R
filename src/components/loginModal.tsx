@@ -117,7 +117,7 @@ const LoginModal = () => {
               <div className="border-t border border-gray-400 flex-grow"></div>
             </div>
             <div className="login-with-google my-2">
-              <Link href="https://share2receive-server.onrender.com/api/auth/google">
+              <Link href={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}>
                 <button className="w-fit bg-white border px-6 py-4 rounded-md flex items-center justify-center">
                   <Image src={'/images/gmail-icon.png'} alt="Google" width={30} height={30} loading="lazy" />
                   <span className="ml-3">Đăng nhập với Google</span>

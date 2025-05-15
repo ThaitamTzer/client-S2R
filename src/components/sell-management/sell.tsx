@@ -85,7 +85,6 @@ export default function SellPage() {
             <div className="flex items-center">
               <h2 className="text-xl font-semibold">Danh sách đơn bán</h2>
             </div>
-
             <TextInput
               placeholder="Tìm kiếm"
               style={{ width: isMobile ? '100%' : '40%' }}
@@ -111,7 +110,6 @@ export default function SellPage() {
                 }}
                 clearable
               />
-
               <DateInput
                 label="Đến ngày"
                 placeholder="Chọn ngày kết thúc"

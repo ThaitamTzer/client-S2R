@@ -116,7 +116,7 @@ const LoginPage = () => {
             </div>
             <div className="login-with-gg">
               <Link
-                href="https://share2receive-server.onrender.com/api/auth/google"
+                href={`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`}
                 className="bg-white w-full md:w-1/2 mx-auto px-6 py-4 rounded-md border block"
               >
                 <div className="flex items-center justify-center">
