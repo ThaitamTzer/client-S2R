@@ -35,7 +35,10 @@ export default function HomePageSamePrice() {
       ),
     {
       onSuccess(data) {
-        setSamePrice(data?.data)
+        setSamePrice(data?.data ?? [])
+      },
+      onError(error) {
+        console.log(error)
       },
     },
   )

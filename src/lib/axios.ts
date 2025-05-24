@@ -14,7 +14,7 @@ const axiosClient = axios.create({
   },
   responseEncoding: 'utf8',
   responseType: 'json',
-  timeout: 15000, // 15 seconds
+  timeout: 30000, // 30 seconds
   timeoutErrorMessage: 'Request timeout',
   withCredentials: true,
 })
@@ -76,6 +76,10 @@ axiosClient.interceptors.response.use(
   (res) => res.data,
   (err) => {
     if (!err.response) {
+      if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+        console.warn('Request timeout, returning null')
+        return null
+      }
       console.error('Không kết nối được server – Network Error:', err.message)
     }
     return Promise.reject(err)

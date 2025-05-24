@@ -15,7 +15,7 @@ const productService = {
     searchKey?: string,
     sortField?: string,
     sortOrder?: string,
-  ): Promise<ProductType> => {
+  ): Promise<ProductType | null> => {
     const params = {
       ...(page && { page }),
       ...(limit && { limit }),
@@ -23,11 +23,16 @@ const productService = {
       ...(sortField && { sortField }),
       ...(sortOrder && { sortOrder }),
     }
-    const res: ProductType = await axiosClient.get('/api/product/list-product-of-user', {
-      params,
-    })
+    try {
+      const res: ProductType = await axiosClient.get('/api/product/list-product-of-user', {
+        params,
+      })
 
-    return res
+      return res
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   },
 
   getAllProdClient: async (
@@ -45,7 +50,7 @@ const productService = {
     filterStyle?: string[],
     filterTypeCategory?: string[],
     searchKey?: string,
-  ): Promise<ProductSClientList> => {
+  ): Promise<ProductSClientList | null> => {
     const params = {
       ...(page && { page }),
       ...(limit && { limit }),
@@ -62,11 +67,16 @@ const productService = {
       ...(filterTypeCategory && { filterTypeCategory }),
       ...(searchKey && { searchKey }),
     }
-    const res: ProductSClientList = await axiosClient.get('/api/product/list-product-for-client', {
-      params,
-    })
+    try {
+      const res: ProductSClientList = await axiosClient.get('/api/product/list-product-for-client', {
+        params,
+      })
 
-    return res
+      return res
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   },
 
   // ** Get a product by id

@@ -25,7 +25,7 @@ export default function RelatedProduct({ categoryId }: { categoryId: string }) {
           undefined,
           undefined,
         )
-        setProducts(response.data)
+        setProducts(response?.data ?? [])
       } catch (error) {
         console.error('Lỗi khi tải sản phẩm liên quan:', error)
       }

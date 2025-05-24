@@ -78,6 +78,12 @@ const ClientProvider = ({ children }: Props) => {
       setCategories(data)
       setLoading(false)
     },
+    onError: (error) => {
+      console.log(error)
+      setLoading(false)
+      setCates(null)
+      setCategories(null)
+    },
   })
 
   useSWR(user ? '/api/messages/get-room' : null, messageService.getRooms, {
@@ -89,11 +95,21 @@ const ClientProvider = ({ children }: Props) => {
     refreshInterval: 0,
     dedupingInterval: 10000,
     errorRetryCount: 3,
+    onError: (error) => {
+      console.log(error)
+      setLoading(false)
+      setRooms([])
+    },
   })
 
   useSWR('/api/config/get-config', configService.getConfig, {
     onSuccess: (data) => {
       setConfig(data)
+    },
+    onError: (error) => {
+      console.log(error)
+      setLoading(false)
+      setConfig(null)
     },
   })
 
@@ -105,6 +121,11 @@ const ClientProvider = ({ children }: Props) => {
       setBrands(data)
       setLoading(false)
     },
+    onError: (error) => {
+      console.log(error)
+      setLoading(false)
+      setBrands([])
+    },
   })
 
   useSWR(user ? 'productsUser' : null, () => productService.getAllProductUser(1, 999, '', '', ''), {
@@ -112,7 +133,7 @@ const ClientProvider = ({ children }: Props) => {
       setLoading(true)
     },
     onSuccess: (data) => {
-      setProductsUser(data?.data)
+      setProductsUser(data?.data ?? null)
       setLoading(false)
     },
     revalidateOnFocus: false,
@@ -120,6 +141,11 @@ const ClientProvider = ({ children }: Props) => {
     refreshInterval: 0,
     dedupingInterval: 10000,
     errorRetryCount: 3,
+    onError: (error) => {
+      console.log(error)
+      setLoading(false)
+      setProductsUser(null)
+    },
   })
 
   useEffect(() => {
