@@ -22,10 +22,10 @@ const FilterSide = dynamic(() => import('./filter'), {
 })
 const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false, loading: () => <div /> })
 
-const Shop = ({ products, total }: { products: ProductsClient[]; total: number }) => {
+const Shop = ({ products, total }: { products: ProductsClient[] | null; total: number }) => {
   const { setOpenFilterDrawer } = useUserAction()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [data, setData] = useState<ProductsClient[]>(products)
+  const [data, setData] = useState<ProductsClient[] | null>(products)
 
   const container = {
     hidden: { opacity: 0 },
@@ -47,7 +47,9 @@ const Shop = ({ products, total }: { products: ProductsClient[]; total: number }
     setCurrentPage(newPage)
 
     await fetchAllProdClient(newPage).then((res) => {
-      setData([...data, ...res.data])
+      if (res) {
+        setData([...(data ?? []), ...res.data])
+      }
     })
   }
 

@@ -1,7 +1,7 @@
 import { ConfigType } from '@/types/config'
 import Link from 'next/link'
 
-const HomePageUnisex = ({ config }: { config: ConfigType }) => {
+const HomePageUnisex = ({ config }: { config: ConfigType | null }) => {
   return (
     <>
       <div className="relative mt-5 md:mt-10">
@@ -23,7 +23,7 @@ const HomePageUnisex = ({ config }: { config: ConfigType }) => {
             <div
               className="w-full min-h-[405px] md:h-[680px] bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url(${config.sectionUrl_2})`,
+                backgroundImage: `url(${config?.sectionUrl_2})`,
               }}
             ></div>
           </Link>

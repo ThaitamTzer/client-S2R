@@ -17,7 +17,7 @@ const priorityOrder = {
   low: 1,
 }
 
-export default function HomePageFavorate({ brands, config }: { brands: Brand[]; config: ConfigType }) {
+export default function HomePageFavorate({ brands, config }: { brands: Brand[] | null; config: ConfigType | null }) {
   const autoplay2 = useRef(Autoplay({ delay: 2000 }))
 
   const sortedBrands = brands?.sort((a, b) => {
@@ -58,7 +58,7 @@ export default function HomePageFavorate({ brands, config }: { brands: Brand[]; 
                       <div className="absolute w-screen h-screen -top-[25%] -bottom-[10%]">
                         <div className="responsive-iframe-brand">
                           <iframe
-                            src={`https://www.youtube.com/embed/${config.videoUrl_2}?playlist=${config.videoUrl_2}&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70`}
+                            src={`https://www.youtube.com/embed/${config?.videoUrl_2}?playlist=${config?.videoUrl_2}&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&start=10&end=70`}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share; loop;"
                             referrerPolicy="strict-origin-when-cross-origin"
                             loading="lazy"

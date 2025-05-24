@@ -102,13 +102,13 @@ export default async function Home() {
         <FormStyleUser />
         <Navigation navLink={TypeCategory} />
         <div className="mt-[105px] md:mt-0">
-          <HomePageHero config={configs} />
+          <HomePageHero config={configs ?? null} />
           <HomePageTitle />
           <HomePageYouLike />
-          <HomePageManFashion config={configs} products={productsMale.data} />
-          <HomePageFemale donus={productsFemale.data} />
-          <HomePageUnisex config={configs} />
-          <HomePageFavorate brands={brands} config={configs} />
+          <HomePageManFashion config={configs} products={productsMale?.data ?? []} />
+          <HomePageFemale donus={productsFemale?.data ?? []} />
+          <HomePageUnisex config={configs ?? null} />
+          <HomePageFavorate brands={brands} config={configs ?? null} />
           <HomePageSamePrice />
           <div className="container mx-auto px-2 md:px-32 text-center text-lg md:text-2xl font-medium text-green-800 uppercase mt-8">
             <h1>

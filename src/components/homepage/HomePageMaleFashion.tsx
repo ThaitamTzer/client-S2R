@@ -11,11 +11,11 @@ import { ConfigType } from '@/types/config'
 const IconifyIcon = dynamic(() => import('@/components/icons'), { ssr: false })
 const ProductCard = dynamic(() => import('@/components/shop/productCard'), { ssr: false, loading: () => <div /> })
 
-const HomePageManFashion = ({ products, config }: { products: ProductsClient[]; config: ConfigType }) => {
+const HomePageManFashion = ({ products, config }: { products: ProductsClient[] | null; config: ConfigType | null }) => {
   const autoplay = useRef(Autoplay({ delay: 2000 }))
   const isDesktop = useMediaQuery('(min-width: 62em)')
 
-  const shouldAutoplay = products?.length > 4
+  const shouldAutoplay = products?.length && products.length > 4
 
   return (
     <div className="relative container mx-auto pt-3 md:px-24 md:pt-10">
@@ -37,7 +37,7 @@ const HomePageManFashion = ({ products, config }: { products: ProductsClient[]; 
       <div
         className="overflow-hidden relative mx-auto w-full h-full min-h-[150px] md:min-h-[500px] bg-cover bg-no-repeat md:rounded-md flex justify-between md:mt-6"
         style={{
-          backgroundImage: `url(${config.sectionUrl_1})`,
+          backgroundImage: `url(${config?.sectionUrl_1})`,
           backgroundPosition: 'center 0px',
         }}
       >
@@ -48,7 +48,7 @@ const HomePageManFashion = ({ products, config }: { products: ProductsClient[]; 
                 <div className="slider">
                   <Carousel
                     withIndicators={false}
-                    withControls={isDesktop ? (products.length > 3 ? true : false) : false}
+                    withControls={isDesktop ? (products?.length && products.length > 3 ? true : false) : false}
                     height={isDesktop ? 510 : 430}
                     translate="yes"
                     slideGap={{
@@ -61,7 +61,7 @@ const HomePageManFashion = ({ products, config }: { products: ProductsClient[]; 
                     onMouseEnter={shouldAutoplay ? autoplay.current.stop : undefined}
                     onMouseLeave={shouldAutoplay ? autoplay.current.reset : undefined}
                   >
-                    {products.map((item) => (
+                    {products?.map((item) => (
                       <>
                         <Carousel.Slide>
                           <ProductCard product={item} isLoading={false} />

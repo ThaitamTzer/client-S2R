@@ -28,6 +28,7 @@ const nextConfig = {
       transform: 'lodash/{{member}}',
     },
   },
+  staticPageGenerationTimeout: 120, // Tăng timeout lên 120 giây
   // webpack(config) {
   //   // Kiểm tra tree-shaking
   //   config.optimization.usedExports = true

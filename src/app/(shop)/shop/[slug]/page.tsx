@@ -14,7 +14,7 @@ const ProductDetail = dynamic(() => import('@/components/product/productDetail')
 })
 
 export async function generateStaticParams() {
-  const products = await fetchAllProdClient(1, 999)
+  const products = await fetchAllProdClient(1, 50)
 
   if (!products) {
     return []
