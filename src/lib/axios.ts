@@ -75,14 +75,19 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
   (res) => res.data,
   (err) => {
-    if (!err.response) {
-      if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
-        console.warn('Request timeout, returning null')
-        return null
+    try {
+      if (!err.response) {
+        if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+          console.warn('Request timeout, returning null')
+          return null
+        }
+        console.error('Không kết nối được server – Network Error:', err.message)
       }
-      console.error('Không kết nối được server – Network Error:', err.message)
+      return Promise.reject(err)
+    } catch (error) {
+      console.error('Error in axios interceptor:', error)
+      return null
     }
-    return Promise.reject(err)
   },
 )
 
