@@ -87,6 +87,9 @@ const ProductManagement = () => {
         />
       </div>
       <div className="flex justify-end">
+        {(!config?.userCan.userCanDonate || !config?.userCan.userCanExchange || !config?.userCan.userCanSell) && (
+          <p className="text-red-500">Tính năng Thêm sản phẩm tạm thời không khả dụng</p>
+        )}
         {config?.valueToCross !== undefined && wallet.point <= config.valueToCross && (
           <p className="text-red-500">
             Vui lòng{' '}

@@ -12,4 +12,17 @@ export type ConfigType = {
   createdAt: string
   updatedAt: string
   valueToCross: number
+  paymentMethod: {
+    momoPayment: boolean
+    bonusPayment: boolean
+    CODPayment: boolean
+    _id: string
+  }
+  userCan: {
+    userCanBuy: boolean
+    userCanSell: boolean
+    userCanExchange: boolean
+    userCanDonate: boolean
+    _id: string
+  }
 }

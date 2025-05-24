@@ -47,15 +47,27 @@ export default function AddProduct() {
     </button>
   )
 
+  const userCondition = () => {
+    if (user?.banking || user?.address || user?.phone || (config && wallet.point <= config.valueToCross)) {
+      return true
+    }
+    return false
+  }
+
+  const userCanAdd = () => {
+    if (config?.userCan.userCanSell || config?.userCan.userCanExchange || config?.userCan.userCanDonate) {
+      return true
+    }
+    return false
+  }
+
   return (
     <>
       <Button
         size="large"
         icon={<IconPlus size={15} />}
         variant="solid"
-        disabled={
-          (!user?.banking || !user?.address || !user?.phone || (config && wallet.point <= config.valueToCross)) ?? false
-        }
+        disabled={!userCondition() || !userCanAdd()}
         color="primary"
         onClick={handleOpenAddProductModal}
       >

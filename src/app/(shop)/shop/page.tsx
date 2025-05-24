@@ -36,8 +36,8 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
   ]
 
   const productData = await fetchAllProdClient(
-    searchParams.page ? Number(searchParams.page) : 1,
-    searchParams.limit ? Number(searchParams.limit) : 50,
+    1,
+    searchParams.limit ? Number(searchParams.limit) : 10,
     searchParams.filterCategory ? searchParams.filterCategory?.toString().split(',') : undefined,
     searchParams.filterBrand ? searchParams.filterBrand.toString().split(',') : undefined,
     searchParams.filterStartPrice ? Number(searchParams.filterStartPrice) : undefined,

@@ -1,12 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { Divider } from 'antd'
-import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useUserAction } from '@/zustand/user'
 import IconifyIcon from '../icons'
 import { ProductsClient } from '@/types/users/productTypes'
 import { motion, AnimatePresence } from 'framer-motion'
+import { fetchAllProdClient } from '@/action/shop'
 
 const ProductCard = dynamic(() => import('./productCard'), {
   ssr: false,
@@ -24,9 +24,8 @@ const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false, loadi
 
 const Shop = ({ products, total }: { products: ProductsClient[]; total: number }) => {
   const { setOpenFilterDrawer } = useUserAction()
-  const param = useSearchParams()
-  const router = useRouter()
-  const [currentPage, setCurrentPage] = useState<number>(param.get('page') ? Number(param.get('page')) : 1)
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [data, setData] = useState<ProductsClient[]>(products)
 
   const container = {
     hidden: { opacity: 0 },
@@ -43,14 +42,13 @@ const Shop = ({ products, total }: { products: ProductsClient[]; total: number }
     show: { opacity: 1, y: 0 },
   }
 
-  const handleLoadMore = () => {
+  const handleLoadMore = async () => {
     const newPage = currentPage + 1
     setCurrentPage(newPage)
 
-    const currentParams = new URLSearchParams(param.toString())
-    currentParams.set('page', newPage.toString())
-
-    router.push(`/shop?page=${newPage}`)
+    await fetchAllProdClient(newPage).then((res) => {
+      setData([...data, ...res.data])
+    })
   }
 
   return (
@@ -91,7 +89,7 @@ const Shop = ({ products, total }: { products: ProductsClient[]; total: number }
                     animate="show"
                     layout
                   >
-                    {products?.map((product, index) => (
+                    {data?.map((product, index) => (
                       <motion.div
                         layout
                         layoutId={product._id}
@@ -115,11 +113,11 @@ const Shop = ({ products, total }: { products: ProductsClient[]; total: number }
                   </motion.div>
                 </AnimatePresence>
 
-                {products && products.length < total && (
+                {data && data.length < total && (
                   <motion.div className="text-center mt-5" layout>
                     <button
                       onClick={handleLoadMore}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Hiển thị thêm
                     </button>

@@ -7,6 +7,7 @@ import { useProductClient } from '@/zustand/productClient'
 import { mutate } from 'swr'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
+import { useClient } from '@/hooks/useClient'
 export default function ButtonSection({
   product,
   onCreateExchange,
@@ -18,6 +19,7 @@ export default function ButtonSection({
   const { user } = useAuth()
   const { setRoomId, setActiveChats, setChatPartner, setChatUsers, RoomId, chatusers } = useUserAction()
   const { toggleAddToCardModal, setProductToAdd, toggleOrderNowModal } = useProductClient()
+  const { config } = useClient()
 
   const handleSelectChat = (item: ProductsClient) => {
     setRoomId([user?._id, item.userId._id].sort().join('_'))
@@ -101,7 +103,7 @@ export default function ButtonSection({
             </Button>
 
             <Button
-              disabled={!user || !user.address}
+              disabled={!user || !user.address || !config?.userCan.userCanExchange}
               onClick={onCreateExchange}
               variant="outlined"
               type="primary"
@@ -117,7 +119,7 @@ export default function ButtonSection({
                 color: '#fff',
               }}
             >
-              Trao đổi ngay
+              Trao đổi ngay {config?.userCan.userCanExchange ? '' : ' (Không khả dụng)'}
             </Button>
             {!user && <p className="text-sm text-red-500">Đăng nhập để tạo yêu cầu trao đổi</p>}
           </>
@@ -131,7 +133,7 @@ export default function ButtonSection({
                   setProductToAdd(product)
                   toggleAddToCardModal()
                 }}
-                disabled={!user || !user.address}
+                disabled={!user || !user.address || !config?.userCan.userCanBuy}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '20px',
@@ -143,7 +145,7 @@ export default function ButtonSection({
                   color: '#179d49',
                 }}
               >
-                Thêm vào giỏ hàng
+                Thêm vào giỏ hàng {config?.userCan.userCanBuy ? '' : ' (Không khả dụng)'}
               </Button>
 
               <Button
@@ -151,7 +153,7 @@ export default function ButtonSection({
                   setProductToAdd(product)
                   toggleOrderNowModal()
                 }}
-                disabled={!user || !user.address}
+                disabled={!user || !user.address || !config?.userCan.userCanBuy}
                 variant="outlined"
                 type="primary"
                 style={{
@@ -165,7 +167,7 @@ export default function ButtonSection({
                   color: '#fff',
                 }}
               >
-                Mua ngay
+                Mua ngay {config?.userCan.userCanBuy ? '' : ' (Không khả dụng)'}
               </Button>
             </div>
             <Button
@@ -210,6 +212,7 @@ export default function ButtonSection({
             <Button
               variant="outlined"
               type="primary"
+              disabled={!user || !user.address || !config?.userCan.userCanDonate}
               style={{
                 padding: '8px 16px',
                 borderRadius: '20px',
@@ -222,7 +225,7 @@ export default function ButtonSection({
                 color: '#fff',
               }}
             >
-              Liên hệ ngay
+              Liên hệ ngay {config?.userCan.userCanDonate ? '' : ' (Không khả dụng)'}
             </Button>
           </>
         )}

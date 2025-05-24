@@ -24,6 +24,7 @@ const getBase64 = (file: FileType): Promise<string> =>
 export const useAddProduct = () => {
   const isDesktop = useMediaQuery('(min-width: 62em)')
   const param = useSearchParams()
+  const { config } = useClient()
 
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10
@@ -31,11 +32,15 @@ export const useAddProduct = () => {
   const sortField = param.get('sortField') || ''
   const sortOrder = param.get('sortOrder') || ''
 
+  const userCan = config?.userCan
+
   const { categories, loading, brands } = useClient()
   const { openAddProductModal, toggleAddProductModal } = useProductManagement()
   const [form] = Form.useForm()
   const [activeStep, setActiveStep] = useState(0)
-  const [typeCheck, setTypeCheck] = useState('sale')
+  const [typeCheck, setTypeCheck] = useState(
+    userCan?.userCanSell ? 'sale' : userCan?.userCanDonate ? 'donate' : userCan?.userCanExchange ? 'barter' : '',
+  )
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])

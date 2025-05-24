@@ -7,6 +7,7 @@ import { colorData } from '@/metadata/colorData'
 import { materialData } from '@/metadata/materialData'
 import { clothingStylesData } from '@/metadata/styleData'
 import { Brand, Category } from '@/types/clientypes'
+import { useClient } from '@/hooks/useClient'
 
 export default function StepInfor({
   form,
@@ -29,6 +30,8 @@ export default function StepInfor({
   toggleAddProductModal: any
   onFinishCreate: any
 }) {
+  const { config } = useClient()
+
   return (
     <Form
       form={form}
@@ -260,9 +263,15 @@ export default function StepInfor({
               setTypeCheck(e.target.value)
             }}
           >
-            <Radio value="sale">Bán</Radio>
-            <Radio value="barter">Trao đổi</Radio>
-            <Radio value="donate">Quyên góp</Radio>
+            <Radio disabled={!config?.userCan.userCanSell} value="sale">
+              Bán {config?.userCan.userCanSell ? '' : ' (Không khả dụng)'}
+            </Radio>
+            <Radio disabled={!config?.userCan.userCanExchange} value="barter">
+              Trao đổi {config?.userCan.userCanExchange ? '' : ' (Không khả dụng)'}
+            </Radio>
+            <Radio disabled={!config?.userCan.userCanDonate} value="donate">
+              Quyên góp {config?.userCan.userCanDonate ? '' : ' (Không khả dụng)'}
+            </Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}>

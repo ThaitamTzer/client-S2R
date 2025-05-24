@@ -7,6 +7,7 @@ import { Product } from '@/types/users/productTypes'
 import { Grid } from '@mantine/core'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
 import { Form, Button, Select, Radio, Input } from 'antd'
+import { useClient } from '@/hooks/useClient'
 
 export default function TabInformation({
   form,
@@ -33,6 +34,8 @@ export default function TabInformation({
   brands: any
   disabled?: any
 }) {
+  const { config } = useClient()
+
   return (
     <>
       <Form
@@ -293,9 +296,15 @@ export default function TabInformation({
               }}
               defaultValue={product.type}
             >
-              <Radio value="sale">Bán</Radio>
-              <Radio value="barter">Trao đổi</Radio>
-              <Radio value="donate">Quyên góp</Radio>
+              <Radio disabled={!config?.userCan.userCanSell} value="sale">
+                Bán
+              </Radio>
+              <Radio disabled={!config?.userCan.userCanExchange} value="barter">
+                Trao đổi
+              </Radio>
+              <Radio disabled={!config?.userCan.userCanDonate} value="donate">
+                Quyên góp
+              </Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item

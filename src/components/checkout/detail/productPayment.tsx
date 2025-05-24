@@ -24,8 +24,12 @@ export default function ProductPayment({
   const { wallet } = useWalletStore()
   const { config } = useClient()
 
-  const enablePoint =
-    order.data.totalAmount >= 50000 || wallet.point < order.data.totalAmount / (config?.valueToPoint ?? 1)
+  const enablePoint = () => {
+    if (order.data.totalAmount >= 50000 || wallet.point < order.data.totalAmount / (config?.valueToPoint ?? 1)) {
+      return true
+    }
+    return false
+  }
 
   return (
     <div className="md:w-2/3 w-full flex flex-col gap-4 ">
@@ -41,6 +45,7 @@ export default function ProductPayment({
                 size="lg"
                 color="green"
                 value="1"
+                disabled={!config?.paymentMethod.CODPayment}
                 label={
                   <div className="flex flex-row gap-3 items-start">
                     <Image
@@ -53,6 +58,7 @@ export default function ProductPayment({
                       quality={70}
                     />
                     <p className="text-sm md:text-lg font-semibold">Thanh toán khi nhận hàng</p>
+                    {config?.paymentMethod.CODPayment ? '' : ' (Không khả dụng)'}
                   </div>
                 }
               />
@@ -60,6 +66,7 @@ export default function ProductPayment({
                 size="lg"
                 color="green"
                 value="2"
+                disabled={!config?.paymentMethod.momoPayment}
                 label={
                   <div className="flex flex-row gap-3 items-start">
                     <Image
@@ -73,6 +80,7 @@ export default function ProductPayment({
                     />
                     <p className="text-sm md:text-lg font-semibold">
                       Cổng thanh toán điện tử MOMO (QR code, Visa, Mastercard, JCB)
+                      {config?.paymentMethod.momoPayment ? '' : ' (Không khả dụng)'}
                     </p>
                   </div>
                 }
@@ -81,7 +89,7 @@ export default function ProductPayment({
                 size="lg"
                 color="green"
                 value="3"
-                disabled={enablePoint ? true : false}
+                disabled={!config?.paymentMethod.bonusPayment || enablePoint()}
                 label={
                   <div className="flex flex-row gap-3 items-start">
                     <Image
@@ -94,14 +102,19 @@ export default function ProductPayment({
                       quality={70}
                     />
                     <p className="text-sm md:text-lg font-semibold">Thanh toán bằng kim cương</p>
+                    {config?.paymentMethod.bonusPayment ? '' : ' (Không khả dụng)'}
                   </div>
                 }
               />
-              {wallet.point < order.data.totalAmount / (config?.valueToPoint ?? 1) && (
-                <p className="text-red-500">Số kim cương của bạn không đủ để thanh toán đơn hàng này</p>
-              )}
-              {order.data.totalAmount >= 50000 && (
-                <p className="text-red-500">Đơn hàng trên 50.000đ không thể thanh toán bằng kim cương</p>
+              {config?.paymentMethod.bonusPayment && (
+                <>
+                  {wallet.point < order.data.totalAmount / (config?.valueToPoint ?? 1) && (
+                    <p className="text-red-500">Số kim cương của bạn không đủ để thanh toán đơn hàng này</p>
+                  )}
+                  {order.data.totalAmount >= 50000 && (
+                    <p className="text-red-500">Đơn hàng trên 50.000đ không thể thanh toán bằng kim cương</p>
+                  )}
+                </>
               )}
             </Stack>
           </Radio.Group>

@@ -4,7 +4,7 @@
 import { useClient } from '@/hooks/useClient'
 import { Form, GetProp, UploadFile, UploadProps, Modal, Tabs } from 'antd'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useProductManagement } from '@/zustand/productManagement'
 import toast from 'react-hot-toast'
 import productService from '@/services/product/product.service'
@@ -37,7 +37,7 @@ export default function EditProduct() {
   const sortField = param.get('sortField') || ''
   const sortOrder = param.get('sortOrder') || ''
 
-  const { categories, loading, brands } = useClient()
+  const { categories, loading, brands, config } = useClient()
 
   const [form] = Form.useForm()
 
@@ -46,6 +46,19 @@ export default function EditProduct() {
   const [typeCheck, setTypeCheck] = useState('sale')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [productId, setProductId] = useState('')
+
+  const userCan = useMemo(() => {
+    if (product.type === 'sale' && config?.userCan.userCanSell) {
+      return 'sale'
+    }
+    if (product.type === 'barter' && config?.userCan.userCanExchange) {
+      return 'barter'
+    }
+    if (product.type === 'donate' && config?.userCan.userCanDonate) {
+      return 'donate'
+    }
+    return ''
+  }, [product, config])
 
   useEffect(() => {
     if (product) {
@@ -60,7 +73,7 @@ export default function EditProduct() {
         categoryId: product.categoryId,
         brandId: product.brandId,
         description: product.description,
-        type: product.type,
+        type: userCan,
         price: product.price,
         weight: product.weight,
         tags: product.tags?.join(' '),
@@ -84,7 +97,7 @@ export default function EditProduct() {
 
       form.setFieldsValue({ images: formattedFileList })
     }
-  }, [product, form]) // The form is reset whenever the product or form changes
+  }, [product, form, userCan]) // The form is reset whenever the product or form changes
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
