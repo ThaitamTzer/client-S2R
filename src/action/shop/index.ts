@@ -87,7 +87,7 @@ export const fetchAllProdClient = async (
     return data
   } catch (error) {
     console.error('Failed to fetch products:', error)
-    throw error
+    return null
   }
 }
 
@@ -102,7 +102,7 @@ export const fetchProductBySlug = async (slug: string) => {
     })
 
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`)
+      return null
     }
 
     const data = await res.json()
@@ -110,6 +110,6 @@ export const fetchProductBySlug = async (slug: string) => {
     return data.data as ProductsClient
   } catch (error) {
     console.error('Failed to fetch product:', error)
-    throw error
+    return null
   }
 }
