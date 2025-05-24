@@ -116,7 +116,7 @@ export default async function Home() {
               &#45; Nền tảng trao đổi đồ dùng thời trang, giúp tủ đồ gọn gàng
             </h1>
           </div>
-          <HomePageCategory categories={categories} totalWeight={totalWeight.totalWeight} />
+          <HomePageCategory categories={categories ?? []} totalWeight={totalWeight?.totalWeight ?? 0} />
           <HomePageTogetherSection />
         </div>
       </Suspense>

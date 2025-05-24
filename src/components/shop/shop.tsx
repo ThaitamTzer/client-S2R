@@ -46,11 +46,15 @@ const Shop = ({ products, total }: { products: ProductsClient[] | null; total: n
     const newPage = currentPage + 1
     setCurrentPage(newPage)
 
-    await fetchAllProdClient(newPage).then((res) => {
-      if (res) {
-        setData([...(data ?? []), ...res.data])
-      }
-    })
+    await fetchAllProdClient(newPage)
+      .then((res) => {
+        if (res) {
+          setData([...(data ?? []), ...res.data])
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (

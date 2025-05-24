@@ -73,17 +73,12 @@ axiosClient.interceptors.request.use(
 )
 
 axiosClient.interceptors.response.use(
-  (response) => response.data,
-  async (error) => {
-    const prevReq = error.config
-
-    if (error.response?.status === 401 && !prevReq._retry) {
-      prevReq._retry = true
-      Cookies.remove('jwt')
-      localStorage.clear()
+  (res) => res.data,
+  (err) => {
+    if (!err.response) {
+      console.error('Không kết nối được server – Network Error:', err.message)
     }
-
-    return Promise.reject(error)
+    return Promise.reject(err)
   },
 )
 

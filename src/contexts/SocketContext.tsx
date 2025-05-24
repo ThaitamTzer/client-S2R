@@ -20,11 +20,17 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth()
 
   useEffect(() => {
-    // Khởi tạo kết nối socket
-
+    // Nếu chưa đăng nhập → đảm bảo ngắt mọi kết nối hiện có
     if (!user) {
+      if (socket) {
+        socket.disconnect()
+        setSocket(null)
+        setIsConnected(false)
+      }
       return
     }
+
+    // Đã có user ⇒ tiến hành khởi tạo socket
     const accessToken = localStorage.getItem('accessToken')
 
     const socketInstance = io(process.env.NEXT_PUBLIC_API_URL, {
@@ -45,7 +51,12 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     socketInstance.on('disconnect', () => {
       setIsConnected(false)
       console.log('Disconnected from socket')
-      // Không cần phải tự reconnect lại ở đây vì socket.io đã tự động reconnect
+    })
+
+    // Bắt lỗi kết nối (thường gặp khi server down/CORS)
+    socketInstance.on('connect_error', (error) => {
+      console.error('Socket connect_error:', error.message)
+      setIsConnected(false)
     })
 
     setSocket(socketInstance)
@@ -53,6 +64,7 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       socketInstance.disconnect()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   return <SocketContext.Provider value={{ socket, isConnected }}>{children}</SocketContext.Provider>
