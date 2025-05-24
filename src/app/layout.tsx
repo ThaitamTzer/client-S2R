@@ -15,6 +15,7 @@ import '@mantine/dates/styles.css'
 import '@mantine/charts/styles.css'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 import { lazy, Suspense } from 'react'
+import Loading from './loading'
 // import Navigation from '@/components/mobile/navigation'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
@@ -112,7 +113,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`antialiased relative ${montserrat.className}`}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading />}>
           <Providers>
             <Header />
             <Exchange />
