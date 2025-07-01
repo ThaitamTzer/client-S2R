@@ -6,6 +6,11 @@ export function middleware(request: NextRequest) {
   const resetPasswordAllowed = request.cookies.get('resetPasswordAllowed')?.value
   const isAuthPage = ['/login', '/register', '/forgot-password'].includes(request.nextUrl.pathname)
 
+  // Luôn cho phép truy cập trang lỗi
+  if (request.nextUrl.pathname === '/502') {
+    return NextResponse.next()
+  }
+
   // Kiểm tra trang reset-password
   if (request.nextUrl.pathname === '/reset-password') {
     if (!resetPasswordAllowed) {

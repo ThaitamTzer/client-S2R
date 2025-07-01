@@ -1,7 +1,6 @@
 'use client'
 import { Category, Brand } from '@/types/clientypes'
-import { createContext, useEffect, useState } from 'react'
-import useSWR from 'swr'
+import { createContext, useEffect, useState, useCallback } from 'react'
 import categoryService from '@/services/category/category.service'
 import brandService from '@/services/brand/brand.service'
 import { useCategory } from '@/zustand/category'
@@ -21,6 +20,8 @@ import { useWalletStore } from '@/zustand/wallet'
 import walletService from '@/services/wallet/wallet.service'
 import { ConfigType } from '@/types/config'
 import configService from '@/services/config/config.service'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 type ClientValuesType = {
   loading: boolean
@@ -33,6 +34,8 @@ type ClientValuesType = {
   isMobile: boolean | undefined
   config: ConfigType | null
   setConfig: (value: ConfigType | null) => void
+  error: string | null
+  refetchAll: () => Promise<void>
 }
 
 const defaultProvider: ClientValuesType = {
@@ -46,6 +49,8 @@ const defaultProvider: ClientValuesType = {
   isMobile: false,
   config: null,
   setConfig: () => null,
+  error: null,
+  refetchAll: async () => {},
 }
 
 const ClientContext = createContext(defaultProvider)
@@ -54,12 +59,33 @@ type Props = {
   children: React.ReactNode
 }
 
+// Helper function để xử lý kết quả từ Promise.allSettled
+const handleSettledResults = (results: PromiseSettledResult<any>[], labels: string[]) => {
+  const errors: string[] = []
+  const data: any[] = []
+  let allFailed = true
+
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      data[index] = result.value
+      allFailed = false
+    } else {
+      errors.push(`Lỗi khi tải ${labels[index]}: ${result.reason?.message || 'Không xác định'}`)
+      data[index] = null
+    }
+  })
+
+  return { data, errors, allFailed }
+}
+
 const ClientProvider = ({ children }: Props) => {
   const [categories, setCates] = useState<Category[] | null>(defaultProvider.categories)
   const [brands, setBrands] = useState<Brand[] | null>(defaultProvider.brands)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const [config, setConfig] = useState<ConfigType | null>(defaultProvider.config)
   const [productsUser, setProductsUser] = useState<Product[] | null>(defaultProvider.productsUser)
+  const [error, setError] = useState<string | null>(null)
+
   const { setCategories } = useCategory()
   const { setNotifications } = useNotificationStore()
   const { setListExchangeRev } = useExchange()
@@ -67,106 +93,139 @@ const ClientProvider = ({ children }: Props) => {
   const { setRooms } = useUserAction()
   const { setWallet } = useWalletStore()
   const { user } = useAuth()
+  const router = useRouter()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  useSWR('/api/category/list-category-client', categoryService.gellClientCategories, {
-    onLoadingSlow: () => {
-      setLoading(true)
-    },
-    onSuccess: (data) => {
-      setCates(data)
-      setCategories(data)
-      setLoading(false)
-    },
-    onError: (error) => {
-      console.log(error)
-      setLoading(false)
-      setCates(null)
-      setCategories(null)
-    },
-  })
+  // Fetch dữ liệu chung (không cần auth)
+  const fetchPublicData = useCallback(async () => {
+    setLoading(true)
+    setError(null)
 
-  useSWR(user ? '/api/messages/get-room' : null, messageService.getRooms, {
-    onSuccess: (data) => {
-      setRooms(data)
-    },
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    refreshInterval: 0,
-    dedupingInterval: 10000,
-    errorRetryCount: 3,
-    onError: (error) => {
-      console.log(error)
-      setLoading(false)
-      setRooms([])
-    },
-  })
+    try {
+      const results = await Promise.allSettled([
+        categoryService.gellClientCategories(),
+        brandService.getBrands(),
+        configService.getConfig(),
+      ])
 
-  useSWR('/api/config/get-config', configService.getConfig, {
-    onSuccess: (data) => {
-      setConfig(data)
-    },
-    onError: (error) => {
-      console.log(error)
-      setLoading(false)
-      setConfig(null)
-    },
-  })
+      const { data, errors, allFailed } = handleSettledResults(results, ['danh mục', 'thương hiệu', 'cấu hình'])
 
-  useSWR('/api/brand/list-brand-client', brandService.getBrands, {
-    onLoadingSlow: () => {
-      setLoading(true)
-    },
-    onSuccess: (data) => {
-      setBrands(data)
-      setLoading(false)
-    },
-    onError: (error) => {
-      console.log(error)
-      setLoading(false)
-      setBrands([])
-    },
-  })
+      // Nếu tất cả đều lỗi, chuyển đến trang 502
+      if (allFailed) {
+        router.push('/502')
+        return
+      }
 
-  useSWR(user ? 'productsUser' : null, () => productService.getAllProductUser(1, 999, '', '', ''), {
-    onLoadingSlow: () => {
-      setLoading(true)
-    },
-    onSuccess: (data) => {
-      setProductsUser(data?.data ?? null)
-      setLoading(false)
-    },
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    refreshInterval: 0,
-    dedupingInterval: 10000,
-    errorRetryCount: 3,
-    onError: (error) => {
-      console.log(error)
-      setLoading(false)
-      setProductsUser(null)
-    },
-  })
+      // Set data even if some requests failed
+      if (data[0]) {
+        setCates(data[0])
+        setCategories(data[0])
+      }
+      if (data[1]) {
+        setBrands(data[1])
+      }
+      if (data[2]) {
+        setConfig(data[2])
+      }
 
+      // Show errors if any
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          toast.error(err)
+        })
+        setError(errors.join('\n'))
+      }
+    } catch {
+      const errorMessage = 'Lỗi không xác định khi tải dữ liệu công khai'
+      setError(errorMessage)
+      toast.error(errorMessage)
+      router.push('/502')
+    } finally {
+      setLoading(false)
+    }
+  }, [setCategories, router])
+
+  // Fetch dữ liệu cần auth
+  const fetchUserData = useCallback(async () => {
+    if (!user) return
+
+    setLoading(true)
+
+    try {
+      const results = await Promise.allSettled([
+        productService.getAllProductUser(1, 999, '', '', ''),
+        notificationService.getNotifications(),
+        exChangeService.getAll(1, 10, '', 'receiver'),
+        messageService.getRooms(),
+        attendService.getAttend(),
+        walletService.getWallet(),
+      ])
+
+      const { data, errors, allFailed } = handleSettledResults(results, [
+        'sản phẩm',
+        'thông báo',
+        'trao đổi',
+        'tin nhắn',
+        'điểm danh',
+        'ví',
+      ])
+
+      // Nếu tất cả đều lỗi, chuyển đến trang 502
+      if (allFailed) {
+        router.push('/502')
+        return
+      }
+
+      // Set data even if some requests failed
+      if (data[0]) {
+        setProductsUser(data[0]?.data ?? null)
+      }
+      if (data[1]) {
+        setNotifications(data[1])
+      }
+      if (data[2]) {
+        setListExchangeRev(data[2]?.data || [])
+      }
+      if (data[3]) {
+        setRooms(data[3] || [])
+      }
+      if (data[4]) {
+        setAttendances(data[4]?.data?.attendances || [])
+      }
+      if (data[5]) {
+        setWallet(data[5])
+      }
+
+      // Show errors if any
+      if (errors.length > 0) {
+        errors.forEach((err) => {
+          toast.error(err)
+        })
+      }
+    } catch {
+      toast.error('Không thể tải dữ liệu người dùng')
+      router.push('/502')
+    } finally {
+      setLoading(false)
+    }
+  }, [user, setNotifications, setListExchangeRev, setRooms, setAttendances, setWallet, router])
+
+  // Refetch all data
+  const refetchAll = useCallback(async () => {
+    await Promise.all([fetchPublicData(), user ? fetchUserData() : Promise.resolve()])
+  }, [fetchPublicData, fetchUserData, user])
+
+  // Initial fetch public data
+  useEffect(() => {
+    fetchPublicData()
+  }, [fetchPublicData])
+
+  // Fetch user data when user changes
   useEffect(() => {
     if (user) {
-      notificationService.getNotifications().then((data) => {
-        setNotifications(data)
-      })
-      exChangeService.getAll(1, 10, '', 'receiver').then((data) => {
-        setListExchangeRev(data?.data)
-      })
-      messageService.getRooms().then((data) => {
-        setRooms(data)
-      })
-      attendService.getAttend().then((data) => {
-        setAttendances(data.data.attendances)
-      })
-      walletService.getWallet().then((data) => {
-        setWallet(data)
-      })
+      fetchUserData()
     }
-  }, [user, setNotifications, setListExchangeRev, setRooms, setAttendances, setWallet])
+  }, [user, fetchUserData])
 
   const value = {
     loading,
@@ -176,10 +235,11 @@ const ClientProvider = ({ children }: Props) => {
     brands,
     setBrands,
     productsUser,
-    setProductsUser,
     isMobile,
     config,
     setConfig,
+    error,
+    refetchAll,
   }
 
   return <ClientContext.Provider value={value}>{children}</ClientContext.Provider>
