@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Input, Form, Button, Select, Upload, Avatar } from 'antd'
 import { UpdateProfile } from '@/types/users/userTypes'
 import { useAuth } from '@/hooks/useAuth'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import userService from '@/services/users/user.service'
 import toast from 'react-hot-toast'
 import MyDatePicker from '@/components/DatePicker'
@@ -124,7 +124,7 @@ const Profile = () => {
               address: handleGetAddress(),
               email: res.email,
               description: res.description,
-              dateOfBirth: moment(res.dateOfBirth),
+              dateOfBirth: dayjs(res.dateOfBirth),
             })
           }
         })
@@ -220,7 +220,7 @@ const Profile = () => {
                   email: user?.email || '',
                   gender: user?.gender || 'none',
                   description: user?.description || '',
-                  dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth) : undefined,
+                  dateOfBirth: user?.dateOfBirth ? dayjs(user.dateOfBirth) : undefined,
                 }}
               >
                 <div className="w-full flex flex-col md:flex-row md:gap-3">

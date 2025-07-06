@@ -6,13 +6,11 @@ import { Providers } from '@/providers/providers'
 import './globals.css'
 import './layout.css'
 import '@/styles/style.css'
-import '@mantine/core/styles/global.css'
+import '@mantine/core/styles.css'
 import '@mantine/carousel/styles.css'
-import '@mantine/core/styles.layer.css'
-import 'mantine-datatable/styles.layer.css'
-import '@mantine/core/styles/Menu.css'
 import '@mantine/dates/styles.css'
 import '@mantine/charts/styles.css'
+import 'mantine-datatable/styles.layer.css'
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 import { lazy, Suspense } from 'react'
 import Loading from './loading'
@@ -20,14 +18,17 @@ import Loading from './loading'
 
 const apiDomain = process.env.NEXT_PUBLIC_API_URL
 
+// Critical components - load immediately
+const Header = lazy(() => import('@/partials/header'))
+const Footer = lazy(() => import('@/partials/footer'))
+
+// Non-critical components - load with lower priority
 const Chat = lazy(() => import('@/components/chat/chat'))
 const Exchange = lazy(() => import('@/components/exchange/exchange'))
 const LoginDynamic = lazy(() => import('@/components/loginDynamic'))
 const Cart = lazy(() => import('@/components/cart/cart'))
 const AttendDynamic = lazy(() => import('@/components/attend/attendDynamic'))
 const AttendCalendarDynamic = lazy(() => import('@/components/attend/attendCalendarDynamic'))
-const Header = lazy(() => import('@/partials/header'))
-const Footer = lazy(() => import('@/partials/footer'))
 
 const montserrat = Montserrat({
   subsets: ['latin', 'vietnamese'],
