@@ -1,7 +1,7 @@
 'use client'
 
 // ** React Imports
-import { createContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useEffect, useState, ReactNode, useMemo, useCallback } from 'react'
 import Cookies from 'js-cookie'
 
 // ** Next Import
@@ -51,16 +51,6 @@ const AuthProvider = ({ children }: Props) => {
   const { closeModal } = useLoginModal()
   const { setNotifications } = useNotificationStore()
 
-  const setAllNull = () => {
-    setUser(null)
-    setProducts([])
-    setExchanges([])
-    setListExchange([])
-    setExchangesRev([])
-    setListExchangeRev([])
-    setNotifications([])
-  }
-
   // ** Hooks
   const router = useRouter()
   const pathName = usePathname()
@@ -68,6 +58,17 @@ const AuthProvider = ({ children }: Props) => {
 
   const accessToken = searchParams.get('accessToken')
   const refreshToken = searchParams.get('refreshToken')
+
+  // Memoize the setAllNull function to prevent unnecessary re-renders
+  const setAllNull = useCallback(() => {
+    setUser(null)
+    setProducts([])
+    setExchanges([])
+    setListExchange([])
+    setExchangesRev([])
+    setListExchangeRev([])
+    setNotifications([])
+  }, [setProducts, setExchanges, setListExchange, setExchangesRev, setListExchangeRev, setNotifications])
 
   useEffect(() => {
     if (accessToken && refreshToken) {
@@ -100,7 +101,8 @@ const AuthProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Cookies.get('jwt')])
 
-  const handleLogin = (params: LoginParams, sucessCallback?: () => void, errorCallback?: ErrCallbackType) => {
+  // Memoize the login function to prevent unnecessary re-renders
+  const handleLogin = useCallback((params: LoginParams, sucessCallback?: () => void, errorCallback?: ErrCallbackType) => {
     setLoading(true)
     try {
       axiosClient
@@ -132,9 +134,10 @@ const AuthProvider = ({ children }: Props) => {
     } catch {
       setLoading(false)
     }
-  }
+  }, [router, searchParams, closeModal])
 
-  const handleRegister = (params: RegisterParams, sucessCalback?: () => void, errorCallback?: ErrCallbackType) => {
+  // Memoize the register function
+  const handleRegister = useCallback((params: RegisterParams, sucessCalback?: () => void, errorCallback?: ErrCallbackType) => {
     setLoading(true)
     try {
       axiosClient
@@ -154,25 +157,26 @@ const AuthProvider = ({ children }: Props) => {
     } catch {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const handleForgetPassword = async (params: { email: string }) => {
+  // Memoize other functions
+  const handleForgetPassword = useCallback(async (params: { email: string }) => {
     try {
       await axiosClient.post('/api/auth/forgot-password', params)
     } catch {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const handleResetPassword = async (params: { code: string; newPassword: string }) => {
+  const handleResetPassword = useCallback(async (params: { code: string; newPassword: string }) => {
     try {
       await axiosClient.put('/api/auth/reset-password', params)
     } catch {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const getProfile = async () => {
+  const getProfile = useCallback(async () => {
     try {
       const res = await axiosClient.get('/api/users/view-profile')
       setUser(res.data)
@@ -180,9 +184,9 @@ const AuthProvider = ({ children }: Props) => {
     } catch {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     try {
       axiosClient.patch(authConfig.logoutEndpoint).then(() => {
         Cookies.remove('jwt')
@@ -196,9 +200,10 @@ const AuthProvider = ({ children }: Props) => {
       setUser(null)
       router.push('/')
     }
-  }
+  }, [router, setAllNull])
 
-  const values = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const values = useMemo(() => ({
     user,
     loading,
     setUser,
@@ -209,7 +214,7 @@ const AuthProvider = ({ children }: Props) => {
     forgetPassword: handleForgetPassword,
     resetPassword: handleResetPassword,
     getProfile: getProfile,
-  }
+  }), [user, loading, handleLogin, handleLogout, handleRegister, handleForgetPassword, handleResetPassword, getProfile])
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
 }

@@ -9,7 +9,13 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "analyze": "ANALYZE=true next build",
+    "analyze:server": "BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser next build",
+    "build:analyze": "npm run build && npm run analyze",
+    "perf:audit": "lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json --chrome-flags='--headless'",
+    "perf:dev": "next dev --turbo"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
