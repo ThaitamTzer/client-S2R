@@ -1,9 +1,8 @@
 'use client'
 import { useForm } from '@mantine/form'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import bankService from '@/services/bank/bank.service'
-import { Banking } from '@/services/order/order.service'
 import Image from 'next/image'
 import { Button, TextInput } from '@mantine/core'
 import { useUserAction } from '@/zustand/user'
@@ -14,15 +13,9 @@ export default function BankingInfor() {
   const { setOpenUpdateBanking } = useUserAction()
   const { user } = useAuth()
 
-  useSWR('list-banking', bankService.listBanking, {
-    onSuccess: (data) => {
-      setBanking(data.data)
-    },
-  })
+  const { data } = useSWR('list-banking', bankService.listBanking)
 
-  const [banking, setBanking] = useState<Banking[]>([])
-
-  const filterBanking = banking.filter((bank) => bank.short_name === user?.banking?.bankingName)
+  const filterBanking = data?.data.filter((bank) => bank.short_name === user?.banking?.bankingName)
 
   const form = useForm({
     validateInputOnChange: true,
@@ -42,7 +35,7 @@ export default function BankingInfor() {
 
   return (
     <>
-      <ModalUpdateBanking banking={banking} />
+      <ModalUpdateBanking banking={data?.data || []} />
       <div className="container px-1 md:px-10 mx-auto">
         <div className="title text-black text-2xl font-semibold">
           <h2>Thông tin ngân hàng</h2>
@@ -53,7 +46,7 @@ export default function BankingInfor() {
               <div className="card bg-white shadow-2xl rounded-md w-full h-auto">
                 <div className="form p-3 md:p-8 flex flex-col gap-3">
                   {/* Card Banking UI */}
-                  {filterBanking.map((bank) => (
+                  {filterBanking?.map((bank) => (
                     <div key={bank.id}>
                       <div className="flex flex-col gap-2">
                         <p className="text-md font-medium text-black flex items-center gap-2">

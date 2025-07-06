@@ -15,6 +15,7 @@ const nextConfig = {
       'api.httzip.com',
       'api.vietqr.io',
       'img.youtube.com',
+      'www.shinhancard.com',
     ],
   },
   optimizeFonts: true,
