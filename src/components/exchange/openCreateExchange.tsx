@@ -107,7 +107,6 @@ export default function CreateExchangeModal() {
         },
         note: values.note,
       }
-      console.log(newData)
       // Call API to create exchange
       exChangeService
         .create(newData)

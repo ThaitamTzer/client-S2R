@@ -109,8 +109,6 @@ export const Receiver = ({ exchange }: { exchange: Exchange }) => {
       })
   }
 
-  console.log(exchange)
-
   return (
     <>
       <div className="flex flex-col gap-5 w-full md:max-w-[500px]">

@@ -14,7 +14,6 @@ interface ChatRoomProps {
   onUserSelect: (user: MessageTypes) => void
 }
 
-
 export default function FloatChatRoom({ users, onUserSelect }: ChatRoomProps) {
   const { setChatUsers, chatusers } = useUserAction()
   const { socket } = useSocket()
@@ -22,8 +21,6 @@ export default function FloatChatRoom({ users, onUserSelect }: ChatRoomProps) {
   const handleRemoveUser = (id: string) => {
     setChatUsers(chatusers.filter((u) => u.message._id !== id))
   }
-
-  console.log(chatusers)
 
   return (
     <div className="fixed bottom-10 right-7 z-40 transition-all space-y-3">

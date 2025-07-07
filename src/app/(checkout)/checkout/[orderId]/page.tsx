@@ -35,7 +35,6 @@ export default function CheckoutPageId({ params }: { params: { orderId: string }
     onSuccess(data) {
       if (data) {
         setOrder(data)
-        console.log(data)
       }
     },
     compare(a, b) {

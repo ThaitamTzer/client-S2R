@@ -27,8 +27,6 @@ const HomePageYouLike = () => {
 
   const autoplay = useRef(Autoplay({ delay: 2000 }))
 
-  console.log(productsPropose)
-
   if (!productsPropose || productsPropose.length === 0) {
     return <></>
   }
