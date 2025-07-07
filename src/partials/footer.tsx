@@ -29,7 +29,7 @@ export default function Footer() {
 
               <div className="flex items-start gap-3">
                 <IconifyIcon className="text-xl md:text-2xl mt-1" icon="ic:outline-mail" />
-                <span className="text-sm md:text-base">share2recieve.support@gmail.com</span>
+                <span className="text-sm md:text-base">share2receiveshop@gmail.com</span>
               </div>
             </div>
           </div>
