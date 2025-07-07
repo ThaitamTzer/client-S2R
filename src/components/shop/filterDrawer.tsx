@@ -6,7 +6,6 @@ import FilterSide from './filter'
 
 export default function FilterDrawer() {
   const { openFilterDrawer, setOpenFilterDrawer } = useUserAction()
-  console.log(openFilterDrawer)
 
   const onClose = () => {
     setOpenFilterDrawer(false)

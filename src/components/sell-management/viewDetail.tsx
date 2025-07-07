@@ -62,8 +62,6 @@ export default function ViewDetail({ opened, onClose, sell }: { opened: boolean;
     )
   }
 
-  console.log(sell)
-
   if (!sell) return null
   return (
     <Modal title="Chi tiết đơn hàng" size="xl" centered opened={opened} onClose={onClose} zIndex={300}>

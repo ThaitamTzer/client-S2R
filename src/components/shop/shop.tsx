@@ -1,12 +1,12 @@
 'use client'
-import { useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Divider } from 'antd'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/navigation'
 import { useUserAction } from '@/zustand/user'
 import IconifyIcon from '../icons'
 import { ProductsClient } from '@/types/users/productTypes'
 import { motion, AnimatePresence } from 'framer-motion'
-import { fetchAllProdClient } from '@/action/shop'
 
 const ProductCard = dynamic(() => import('./productCard'), {
   ssr: false,
@@ -22,39 +22,126 @@ const FilterSide = dynamic(() => import('./filter'), {
 })
 const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false, loading: () => <div /> })
 
-const Shop = ({ products, total }: { products: ProductsClient[] | null; total: number }) => {
-  const { setOpenFilterDrawer } = useUserAction()
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [data, setData] = useState<ProductsClient[] | null>(products)
+interface SearchParams {
+  page?: string
+  limit?: string
+  filterCategory?: string
+  filterBrand?: string
+  filterStartPrice?: string
+  filterEndPrice?: string
+  filterSize?: string
+  filterColor?: string
+  filterMaterial?: string
+  filterCondition?: string
+  filterType?: string
+  filterStyle?: string
+  filterTypeCategory?: string
+  searchKey?: string
+}
 
+interface ShopProps {
+  products: ProductsClient[] | null
+  total: number
+  currentPage: number
+  limit: number
+  searchParams: SearchParams
+}
+
+const Shop = ({ products, total, currentPage, limit, searchParams }: ShopProps) => {
+  const { setOpenFilterDrawer } = useUserAction()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const totalPages = Math.ceil(total / limit)
+  const hasNextPage = currentPage < totalPages
+  const hasPrevPage = currentPage > 1
+
+  // Tạo URL mới khi thay đổi page
+  const createPageUrl = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams()
+
+      // Thêm tất cả search params hiện tại
+      Object.entries(searchParams).forEach(([key, value]) => {
+        if (value && key !== 'page') {
+          params.set(key, value)
+        }
+      })
+
+      // Set page mới
+      params.set('page', page.toString())
+      params.set('limit', limit.toString())
+
+      return `/shop?${params.toString()}`
+    },
+    [searchParams, limit],
+  )
+
+  // Navigation handlers
+  const handleNextPage = useCallback(() => {
+    if (hasNextPage && !isLoading) {
+      setIsLoading(true)
+      router.push(createPageUrl(currentPage + 1))
+    }
+  }, [hasNextPage, isLoading, currentPage, createPageUrl, router])
+
+  const handlePrevPage = useCallback(() => {
+    if (hasPrevPage && !isLoading) {
+      setIsLoading(true)
+      router.push(createPageUrl(currentPage - 1))
+    }
+  }, [hasPrevPage, isLoading, currentPage, createPageUrl, router])
+
+  const handlePageClick = useCallback(
+    (page: number) => {
+      if (page !== currentPage && !isLoading) {
+        setIsLoading(true)
+        router.push(createPageUrl(page))
+      }
+    },
+    [currentPage, isLoading, createPageUrl, router],
+  )
+
+  // Reset loading state khi products thay đổi
+  useEffect(() => {
+    setIsLoading(false)
+  }, [products])
+
+  // Animation variants
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.03,
       },
     },
   }
 
   const item = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     show: { opacity: 1, y: 0 },
   }
 
-  const handleLoadMore = async () => {
-    const newPage = currentPage + 1
-    setCurrentPage(newPage)
+  // Tạo danh sách page numbers để hiển thị
+  const getPageNumbers = () => {
+    const pages = []
+    const maxPagesToShow = 5
 
-    await fetchAllProdClient(newPage)
-      .then((res) => {
-        if (res) {
-          setData([...(data ?? []), ...res.data])
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      const start = Math.max(1, currentPage - 2)
+      const end = Math.min(totalPages, start + maxPagesToShow - 1)
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i)
+      }
+    }
+
+    return pages
   }
 
   return (
@@ -85,7 +172,13 @@ const Shop = ({ products, total }: { products: ProductsClient[] | null; total: n
           </div>
           <div className="w-full md:w-[75%] h-full md:ml-5">
             <div className="container mx-auto px-2 md:px-5 mb-10">
-              <p className="text-xl font-semibold">{total} Kết quả</p>
+              <div className="flex justify-between items-center mb-4">
+                <p className="text-xl font-semibold">{total} Kết quả</p>
+                <p className="text-sm text-gray-600">
+                  Trang {currentPage} / {totalPages}
+                </p>
+              </div>
+
               <motion.div className="container mx-auto mt-3" layout>
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -95,7 +188,7 @@ const Shop = ({ products, total }: { products: ProductsClient[] | null; total: n
                     animate="show"
                     layout
                   >
-                    {data?.map((product, index) => (
+                    {products?.map((product, index) => (
                       <motion.div
                         layout
                         layoutId={product._id}
@@ -104,10 +197,10 @@ const Shop = ({ products, total }: { products: ProductsClient[] | null; total: n
                         animate="show"
                         exit={{ opacity: 0, y: -20 }}
                         transition={{
-                          duration: 0.5,
-                          delay: index * 0.1,
+                          duration: 0.3,
+                          delay: index < 20 ? index * 0.05 : 0,
                           layout: {
-                            duration: 0.3,
+                            duration: 0.2,
                           },
                         }}
                         className="w-[48%] md:w-[24%] h-[420px] md:h-[500px]"
@@ -119,14 +212,67 @@ const Shop = ({ products, total }: { products: ProductsClient[] | null; total: n
                   </motion.div>
                 </AnimatePresence>
 
-                {data && data.length < total && (
-                  <motion.div className="text-center mt-5" layout>
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <motion.div className="flex justify-center items-center mt-8 space-x-2" layout>
+                    {/* Previous Button */}
                     <button
-                      onClick={handleLoadMore}
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={handlePrevPage}
+                      disabled={!hasPrevPage || isLoading}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        hasPrevPage && !isLoading
+                          ? 'bg-green-500 hover:bg-green-600 text-white'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
                     >
-                      Hiển thị thêm
+                      ← Trước
                     </button>
+
+                    {/* Page Numbers */}
+                    {getPageNumbers().map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageClick(page)}
+                        disabled={isLoading}
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                          page === currentPage
+                            ? 'bg-green-600 text-white'
+                            : isLoading
+                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+
+                    {/* Next Button */}
+                    <button
+                      onClick={handleNextPage}
+                      disabled={!hasNextPage || isLoading}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        hasNextPage && !isLoading
+                          ? 'bg-green-500 hover:bg-green-600 text-white'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      Sau →
+                    </button>
+                  </motion.div>
+                )}
+
+                {/* Loading indicator */}
+                {isLoading && (
+                  <motion.div className="flex justify-center items-center mt-4" layout>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+                    <span className="ml-2 text-gray-600">Đang tải...</span>
+                  </motion.div>
+                )}
+
+                {/* No results message */}
+                {products && products.length === 0 && (
+                  <motion.div className="text-center mt-8 py-8" layout>
+                    <p className="text-gray-500 text-lg">Không tìm thấy sản phẩm nào phù hợp với tiêu chí tìm kiếm</p>
                   </motion.div>
                 )}
               </motion.div>

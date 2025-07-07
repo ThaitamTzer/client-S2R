@@ -61,6 +61,3 @@ export const useUserAction = create<State & Actions>((set) => ({
   setMessageHistory: (messageHistory) => set({ messageHistory }),
   setOpenUpdateBanking: (open) => set({ openUpdateBanking: open }),
 }))
-
-
-

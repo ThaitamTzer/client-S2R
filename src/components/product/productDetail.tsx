@@ -159,9 +159,10 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
         toast.success('Đặt hàng thành công!, chuyển hướng đến trang thanh toán')
         router.push(`/checkout/${res.order._id}`)
       },
-      (message) => {
-        toast.error('Đã có lỗi xảy ra vui lòng thử lại!')
-        console.log(message)
+      () => {
+        toast.error('Đã có lỗi xảy ra vui lòng thử lại!', {
+          duration: 3000,
+        })
       },
     )
   }

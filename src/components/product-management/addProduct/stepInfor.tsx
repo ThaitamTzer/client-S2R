@@ -291,7 +291,6 @@ export default function StepInfor({
             {
               validator: (_, value = '') => {
                 const numericPrice = Number(value.replace(/\D/g, ''))
-                console.log(numericPrice)
                 if (numericPrice > 5000000) {
                   return Promise.reject(new Error('Giá sản phẩm không được vượt quá 5 triệu!'))
                 }

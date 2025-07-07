@@ -220,7 +220,6 @@
 
         if (senderId && recipientId) {
           socket.emit('joinRoom', roomId)
-          console.log(`User ${senderId} joined room ${roomId}`)
         } else {
           alert('Please enter both Your ID and Recipient ID')
         }

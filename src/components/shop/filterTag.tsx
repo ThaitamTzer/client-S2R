@@ -57,6 +57,10 @@ const FilterTag = () => {
       {/* Filter tags */}
       <div className="flex flex-wrap gap-2">
         {Object.entries(paramsObj).map(([key, values]) => {
+          if (key === 'page' || key === 'limit') {
+            return null
+          }
+
           // Combine 'filterStartPrice' and 'filterEndPrice' into one tag
           if (key === 'filterStartPrice' && paramsObj.filterEndPrice) {
             const startPrice = paramsObj.filterStartPrice[0]

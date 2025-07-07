@@ -88,6 +88,7 @@ export const fetchAllProdClient = async (
 
     clearTimeout(timeoutId)
     const data: ProductSClientList = await res.json()
+
     return data
   } catch (error) {
     console.error('Failed to fetch products:', error)

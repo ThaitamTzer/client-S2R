@@ -32,8 +32,6 @@ const ProductManagement = () => {
   const { config } = useClient()
   const { wallet } = useWalletStore()
 
-  console.log('config', config)
-
   const page = Number(param.get('page')) || 1
   const limit = Number(param.get('limit')) || 10
   const searchKey = param.get('searchKey') || ''
