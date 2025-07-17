@@ -38,10 +38,10 @@ const HomePageFemale = dynamic(() => import('@/components/homepage/HomePageFemal
   ssr: false,
   loading: () => <Loading />,
 })
-const HomePageUnisex = dynamic(() => import('@/components/homepage/HomePageUnisex'), {
-  ssr: false,
-  loading: () => <Loading />,
-})
+// const HomePageUnisex = dynamic(() => import('@/components/homepage/HomePageUnisex'), {
+//   ssr: false,
+//   loading: () => <Loading />,
+// })
 const HomePageYouLike = dynamic(() => import('@/components/homepage/HomePageYouLike'), {
   ssr: false,
   loading: () => <Loading />,
@@ -107,7 +107,7 @@ export default async function Home() {
           <HomePageYouLike />
           <HomePageManFashion config={configs} products={productsMale?.data ?? []} />
           <HomePageFemale donus={productsFemale?.data ?? []} />
-          <HomePageUnisex config={configs ?? null} />
+          {/* <HomePageUnisex config={configs ?? null} /> */}
           <HomePageFavorate brands={brands} config={configs ?? null} />
           <HomePageSamePrice />
           <div className="container mx-auto px-2 md:px-32 text-center text-lg md:text-2xl font-medium text-green-800 uppercase mt-8">

@@ -16,11 +16,12 @@ const nextConfig = {
       'api.vietqr.io',
       'img.youtube.com',
       'www.shinhancard.com',
+      'thumbs.dreamstime.com',
+      'lh3.googleusercontent.com',
     ],
   },
   optimizeFonts: true,
   swcMinify: true,
-  // Bật tree shaking cho các module
   modularizeImports: {
     '@mui/icons-material': {
       transform: '@mui/icons-material/{{member}}',
@@ -29,12 +30,7 @@ const nextConfig = {
       transform: 'lodash/{{member}}',
     },
   },
-  staticPageGenerationTimeout: 120, // Tăng timeout lên 120 giây
-  // webpack(config) {
-  //   // Kiểm tra tree-shaking
-  //   config.optimization.usedExports = true
-  //   return config
-  // },
+  staticPageGenerationTimeout: 120,
 }
 
 export default nextConfig

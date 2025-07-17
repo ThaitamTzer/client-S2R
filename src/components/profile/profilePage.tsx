@@ -71,7 +71,7 @@ const Profile = () => {
 
   const handleProvinceChange = (value: string) => {
     setDistricts(null)
-    setProvince(null)
+    setWard(null)
     form.setFieldsValue({
       district: null,
       ward: null,
@@ -82,7 +82,7 @@ const Profile = () => {
   }
 
   const handleDistrictChange = (value: string) => {
-    setDistricts(null)
+    setWard(null)
     form.setFieldsValue({
       ward: null,
     })
@@ -101,17 +101,33 @@ const Profile = () => {
   }
 
   const handleGetAddress = () => {
-    if (form.getFieldValue('street')) {
-      return `${form.getFieldValue('street')}, ${ward?.name}, ${districts?.name}, ${province?.name}`
+    const street = form.getFieldValue('street')
+    const wardName = ward?.name
+    const districtName = districts?.name
+    const provinceName = province?.name
+
+    if (!wardName || !districtName || !provinceName) {
+      return ''
     }
-    return `${ward?.name}, ${districts?.name}, ${province?.name}`
+
+    if (street) {
+      return `${street}, ${wardName}, ${districtName}, ${provinceName}`
+    }
+    return `${wardName}, ${districtName}, ${provinceName}`
   }
 
   const onFinish = (values: UpdateProfile) => {
     setLoading(true)
     try {
+      const address = handleGetAddress()
+      if (!address) {
+        toast.error('Vui lòng chọn đầy đủ thông tin địa chỉ!')
+        setLoading(false)
+        return
+      }
+
       userService
-        .updateProfile({ ...values, address: handleGetAddress() })
+        .updateProfile({ ...values, address })
         .then((res) => {
           getProfile()
           setLoading(false)
@@ -121,7 +137,6 @@ const Profile = () => {
               firstname: res.firstname,
               lastname: res.lastname,
               phone: res.phone,
-              address: handleGetAddress(),
               email: res.email,
               description: res.description,
               dateOfBirth: moment(res.dateOfBirth),
@@ -328,11 +343,13 @@ const Profile = () => {
                         placeholder="Chọn quận huyện"
                         showSearch
                         optionFilterProp="label"
-                        value={province ? undefined : null}
-                        options={province?.districts.map((district: any) => ({
-                          value: district.code,
-                          label: district.name,
-                        }))}
+                        disabled={!province}
+                        options={
+                          province?.districts?.map((district: any) => ({
+                            value: district.code,
+                            label: district.name,
+                          })) || []
+                        }
                         onChange={handleDistrictChange}
                       />
                     </Form.Item>
@@ -346,11 +363,13 @@ const Profile = () => {
                         placeholder="Chọn phường xã"
                         showSearch
                         optionFilterProp="label"
-                        value={districts ? undefined : null}
-                        options={districts?.wards.map((ward: any) => ({
-                          value: ward.code,
-                          label: ward.name,
-                        }))}
+                        disabled={!districts}
+                        options={
+                          districts?.wards?.map((ward: any) => ({
+                            value: ward.code,
+                            label: ward.name,
+                          })) || []
+                        }
                         onChange={handleWardChange}
                       />
                     </Form.Item>

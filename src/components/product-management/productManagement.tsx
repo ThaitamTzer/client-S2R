@@ -69,22 +69,22 @@ const ProductManagement = () => {
         <ViewProductModal />
         <AddAdressModal />
       </Suspense>
-      <div className="title text-black text-2xl font-semibold">
+      <div className="title text-black text-2xl font-semibold flex justify-between items-center">
         <h2>Quản lý sản phẩm</h2>
-      </div>
-      <div className="flex justify-end">
-        <Suspense fallback={<Loading />}>
-          <AddProduct />
-        </Suspense>
-        <Alert
-          title="Xác nhận xóa"
-          content="Bạn có chắc chắn muốn xóa sản phẩm này không?"
-          nameOk="Xóa"
-          nameCancel="Hủy"
-          onSubmit={handleDeleteProduct}
-          onOpen={openDeleteProductModal}
-          onClose={toggleDeleteProductModal}
-        />
+        <div className="flex justify-end">
+          <Suspense fallback={<Loading />}>
+            <AddProduct />
+          </Suspense>
+          <Alert
+            title="Xác nhận xóa"
+            content="Bạn có chắc chắn muốn xóa sản phẩm này không?"
+            nameOk="Xóa"
+            nameCancel="Hủy"
+            onSubmit={handleDeleteProduct}
+            onOpen={openDeleteProductModal}
+            onClose={toggleDeleteProductModal}
+          />
+        </div>
       </div>
       <div className="flex justify-end">
         {!config?.userCan?.userCanDonate && !config?.userCan?.userCanExchange && !config?.userCan?.userCanSell && (

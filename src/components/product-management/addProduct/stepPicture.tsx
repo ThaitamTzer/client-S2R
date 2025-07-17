@@ -47,8 +47,8 @@ export default function StepPicture({
                 toast.error('Chỉ được phép upload ảnh định dạng JPG hoặc PNG!')
                 return Upload.LIST_IGNORE
               }
-              if (file.size > 2 * 1024 * 1024) {
-                toast.error('Hình ảnh không được vượt quá 2MB!')
+              if (file.size > 35 * 1024 * 1024) {
+                toast.error('Hình ảnh không được vượt quá 35MB!')
                 return Upload.LIST_IGNORE
               }
               return true // Cho phép upload nếu đạt điều kiện
