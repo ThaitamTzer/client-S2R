@@ -56,7 +56,7 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
     if (socket) {
       setIsLoading(true)
       socket.emit('joinRoom', room)
-      mutate('/api/messages/get-room')
+      mutate('/api/messages/get-room/' + user._id)
 
       socket.on('previousMessages', (messages) => {
         setLocalMessages(messages)
@@ -65,7 +65,7 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
 
       socket.on('receiveMessage', (message) => {
         setLocalMessages((prev) => [...prev, message])
-        mutate('/api/messages/get-room')
+        mutate(`/api/messages/get-room/${user?._id}`)
       })
 
       return () => {
@@ -113,7 +113,7 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
 
       setLocalMessages((prev) => [...prev, { ...message, isTemp: true }])
       setMessageInput('')
-      mutate('/api/messages/get-room')
+      mutate(`/api/messages/get-room/${user?._id}`)
     },
     [messageInput, socket, user?._id, userChat?.chatPartner?._id],
   )
@@ -149,7 +149,7 @@ export default function ChatBox({ userChat, roomId }: ChatBoxProps) {
           }
 
           setLocalMessages((prev) => [...prev, { ...message, isTemp: true }])
-          mutate('/api/messages/get-room')
+          mutate(`/api/messages/get-room/${user?._id}`)
         }
 
         reader.readAsDataURL(file)

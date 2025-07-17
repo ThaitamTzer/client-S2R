@@ -22,6 +22,7 @@ import { ConfigType } from '@/types/config'
 import configService from '@/services/config/config.service'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import useSWR from 'swr'
 
 type ClientValuesType = {
   loading: boolean
@@ -36,6 +37,7 @@ type ClientValuesType = {
   setConfig: (value: ConfigType | null) => void
   error: string | null
   refetchAll: () => Promise<void>
+  refetchRooms?: () => Promise<void>
 }
 
 const defaultProvider: ClientValuesType = {
@@ -51,6 +53,7 @@ const defaultProvider: ClientValuesType = {
   setConfig: () => null,
   error: null,
   refetchAll: async () => {},
+  refetchRooms: async () => {},
 }
 
 const ClientContext = createContext(defaultProvider)
@@ -95,6 +98,16 @@ const ClientProvider = ({ children }: Props) => {
   const { user } = useAuth()
   const router = useRouter()
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  useSWR(user ? `/api/messages/get-room/${user._id}` : null, () => messageService.getRooms(), {
+    revalidateOnFocus: true,
+    revalidateIfStale: true,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+    onSuccess: (data) => {
+      setRooms(data || [])
+    },
+  })
 
   // Fetch dữ liệu chung (không cần auth)
   const fetchPublicData = useCallback(async () => {
@@ -156,7 +169,6 @@ const ClientProvider = ({ children }: Props) => {
         productService.getAllProductUser(1, 999, '', '', ''),
         notificationService.getNotifications(),
         exChangeService.getAll(1, 10, '', 'receiver'),
-        messageService.getRooms(),
         attendService.getAttend(),
         walletService.getWallet(),
       ])
@@ -187,13 +199,10 @@ const ClientProvider = ({ children }: Props) => {
         setListExchangeRev(data[2]?.data || [])
       }
       if (data[3]) {
-        setRooms(data[3] || [])
+        setAttendances(data[3]?.data?.attendances || [])
       }
       if (data[4]) {
-        setAttendances(data[4]?.data?.attendances || [])
-      }
-      if (data[5]) {
-        setWallet(data[5])
+        setWallet(data[4])
       }
 
       // Show errors if any
@@ -208,12 +217,30 @@ const ClientProvider = ({ children }: Props) => {
     } finally {
       setLoading(false)
     }
-  }, [user, setNotifications, setListExchangeRev, setRooms, setAttendances, setWallet, router])
+  }, [user, setNotifications, setListExchangeRev, setAttendances, setWallet, router])
 
   // Refetch all data
   const refetchAll = useCallback(async () => {
     await Promise.all([fetchPublicData(), user ? fetchUserData() : Promise.resolve()])
   }, [fetchPublicData, fetchUserData, user])
+
+  // Refetch rooms
+  const refetchRooms = useCallback(async () => {
+    if (!user) return
+    setLoading(true)
+
+    try {
+      const res = await messageService.getRooms()
+      setRooms(res || [])
+    } catch (error: any) {
+      toast.error(error.message || 'Không thể tải phòng chat', {
+        duration: 5000,
+        position: 'top-right',
+      })
+    } finally {
+      setLoading(false)
+    }
+  }, [user, setRooms])
 
   // Initial fetch public data
   useEffect(() => {
@@ -240,6 +267,7 @@ const ClientProvider = ({ children }: Props) => {
     setConfig,
     error,
     refetchAll,
+    refetchRooms,
   }
 
   return <ClientContext.Provider value={value}>{children}</ClientContext.Provider>

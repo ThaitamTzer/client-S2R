@@ -86,7 +86,7 @@ const ProductManagement = () => {
           />
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex flex-col justify-end items-end">
         {!config?.userCan?.userCanDonate && !config?.userCan?.userCanExchange && !config?.userCan?.userCanSell && (
           <p className="text-red-500">Tính năng Thêm sản phẩm tạm thời không khả dụng</p>
         )}

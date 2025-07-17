@@ -5,8 +5,6 @@ import { notification } from 'antd'
 import { ScrollArea, Drawer, Divider, Button } from '@mantine/core'
 import useSWR from 'swr'
 import cartService from '@/services/cart/cart.service'
-import { useCart } from '@/zustand/cart'
-import { useState } from 'react'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
@@ -20,28 +18,19 @@ const CartItem = dynamic(() => import('./cartItem'), { ssr: false })
 
 export default function CartDrawer() {
   const { openCartDrawer, toggleCartDrawer } = useProductClient()
-  const { setCartItems, cartItems, setSummary, summary } = useCart()
-  const [total, setTotal] = useState(0)
+  // const { setCartItems, cartItems, setSummary, summary } = useCart()
+  // const [total, setTotal] = useState(0)
   const router = useRouter()
   const { user } = useAuth()
   const [api, contextHolder] = notification.useNotification()
   const isMobile = window.innerWidth < 768
 
-  const { mutate } = useSWR(user ? '/api/cart' : null, cartService.getCart, {
-    onSuccess: (data) => {
-      setCartItems(data.data)
-      setTotal(data.data.length)
-      setSummary(data.summary)
-    },
-    revalidateOnMount: true,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  })
-
-  useSWR(user ? 'totalPrice' : null, cartService.getCart, {
-    onSuccess: (data) => {
-      setSummary(data.summary)
-    },
+  const { mutate, data } = useSWR(user ? `/api/cart/${user._id}` : null, cartService.getCart, {
+    // onSuccess: (data) => {
+    //   setCartItems(data.data)
+    //   setTotal(data.data.length)
+    //   setSummary(data.summary)
+    // },
     revalidateOnMount: true,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -71,7 +60,7 @@ export default function CartDrawer() {
         toast.success('Đặt hàng thành công')
         toggleCartDrawer()
         router.push(`/checkout/${res.order._id}`)
-        await Promise.all(cartItems.map((item) => cartService.deleteCartItem(item._id)))
+        await Promise.all((data?.data ?? []).map((item) => cartService.deleteCartItem(item._id)))
         mutate()
       },
       (message) => {
@@ -106,15 +95,16 @@ export default function CartDrawer() {
           <Divider mb="md" />
           <Drawer.Body>
             <div className="container mx-auto p-1 w-full flex flex-col space-y-3">
-              {total > 0 &&
-                cartItems.map((item) => (
+              {data?.data &&
+                data?.data?.length > 0 &&
+                data.data.map((item) => (
                   <>
                     <CartItem key={item._id} item={item} handleDeleteCartItem={handleDeleteCartItem} />
                     <Divider />
                   </>
                 ))}
 
-              {cartItems.length === 0 && (
+              {data?.data && data.data.length === 0 && (
                 <div className="flex flex-col justify-center items-center w-full h-full">
                   <div className="w-[200px] h-[200px] flex items-center justify-start">
                     <Image src="/empty-cart.svg" alt="empty-cart" width={200} height={200} />
@@ -124,12 +114,12 @@ export default function CartDrawer() {
               )}
             </div>
           </Drawer.Body>
-          {total > 0 && (
+          {data?.data && data.data.length > 0 && (
             <div className="sticky bottom-0 left-0 w-full bg-white border-t border-gray-200 p-3 z-30">
               <div className="flex items-center justify-center space-x-3 text-xs md:text-base">
-                <p>Tổng loại: {summary.totalTypes}</p>
-                <p>Tổng số lượng: {summary.totalAmount}</p>
-                <p>Tổng tiền: {formatPrice(summary.totalPrice)}đ</p>
+                <p>Tổng loại: {data?.summary.totalTypes}</p>
+                <p>Tổng số lượng: {data?.summary.totalAmount}</p>
+                <p>Tổng tiền: {formatPrice(data?.summary.totalPrice || 0)}đ</p>
               </div>
               <Divider my="md" />
               <Button onClick={handleSubmit} type="submit" className="w-full bg-green-900 text-white">

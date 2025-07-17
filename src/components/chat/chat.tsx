@@ -28,7 +28,7 @@ const Chat = () => {
   // }
 
   // const handleMinimizeChat = (user: any) => {
-  //   mutate('/api/messages/get-room')
+  //   mutate(`/api/messages/get-room/${user?._id}`)
   //   setActiveChats([]) // Clear active chats
   //   setChatUsers([...chatusers, user]) // Add minimized chat back to users
   // }

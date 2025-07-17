@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import IconifyIcon from '../icons'
 import { ActionIcon, Button, Badge, Text } from '@mantine/core'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
@@ -13,8 +13,8 @@ import attendService from '@/services/attend/attend.service'
 import toast from 'react-hot-toast'
 import confetti from 'canvas-confetti'
 import configService from '@/services/config/config.service'
-import { ConfigType } from '@/types/config'
 import { useMediaQuery } from '@mantine/hooks'
+import useSWR from 'swr'
 
 // Setup dayjs plugins
 dayjs.extend(utc)
@@ -24,14 +24,13 @@ dayjs.tz.setDefault('Asia/Ho_Chi_Minh')
 export default function AttendCalendar() {
   const { toggleAttendModal, openAttendModal, attendances, setAttendances } = useAttend()
   const [claimedRewards, setClaimedRewards] = useState<string[]>([])
-  const [config, setConfig] = useState<ConfigType>()
+  // const [config, setConfig] = useState<ConfigType>()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  useEffect(() => {
-    configService.getConfig().then((res) => {
-      setConfig(res)
-    })
-  }, [])
+  const { data } = useSWR('/api/config/attend', configService.getConfig, {
+    revalidateOnMount: true,
+    revalidateOnFocus: true,
+  })
 
   const getCurrentDate = () => {
     return dayjs().tz('Asia/Ho_Chi_Minh').format('YYYY/MM/DD')
@@ -221,7 +220,7 @@ export default function AttendCalendar() {
                                   height={27}
                                   className="animate-pulse"
                                 />
-                                <Text className="text-white font-semibold">+{config?.valueToPromotion} </Text>
+                                <Text className="text-white font-semibold">+{data?.valueToPromotion} </Text>
                               </div>
                             )}
                           </div>

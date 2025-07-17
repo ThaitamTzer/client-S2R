@@ -219,7 +219,7 @@ export default function LeftSection({
               <>
                 {/* cart */}
                 <UnstyledButton onClick={toggleCartDrawer} className="relative">
-                  {cartItems.length > 0 ? (
+                  {cartItems?.length > 0 ? (
                     <>
                       <IconifyIcon icon="mynaui:cart-solid" className="text-green-900 md:text-2xl" />
                       <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">

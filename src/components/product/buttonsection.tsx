@@ -60,7 +60,7 @@ export default function ButtonSection({
       unreadCount: 0,
     })
     setChatUsers(chatusers.filter((u) => u.message._id !== item._id))
-    mutate('/api/messages/get-room')
+    mutate(`/api/messages/get-room/${user?._id}`)
   }
 
   if (!user) {

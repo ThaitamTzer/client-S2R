@@ -16,6 +16,7 @@ import IconifyIcon from '../icons'
 import { UnstyledButton } from '@mantine/core'
 import { useOrderStore } from '@/zustand/order'
 import { RessonProduct } from '@/constants/resson'
+import { useAuth } from '@/hooks/useAuth'
 
 const RelatedProduct = dynamic(() => import('./relatedProduct'), { ssr: false, loading: () => <div /> })
 const ViewRatingModal = dynamic(() => import('../rating/rating'), { ssr: false, loading: () => <div /> })
@@ -29,6 +30,7 @@ const ProductOverview = dynamic(() => import('./productOverview'), { ssr: false,
 const InforProduct = dynamic(() => import('./inforProduct'), { ssr: false, loading: () => <div /> })
 
 export default function ProductDetail({ product }: { product: ProductsClient }) {
+  const { user } = useAuth()
   const [api, contextHolder] = notification.useNotification()
   const [count, setCount] = useState(1)
   const [mainImage, setMainImage] = useState(product.imgUrls[0]) // New state for the main image
@@ -134,7 +136,7 @@ export default function ProductDetail({ product }: { product: ProductsClient }) 
       data,
       () => {
         toast.success('Đã thêm sản phẩm vào giỏ hàng!')
-        mutate('/api/cart')
+        mutate(`/api/cart/${user?._id}`)
         close()
         setSelectedColor('')
         setSelectedSize('')

@@ -150,7 +150,7 @@ export default function RightSection({
           <>
             {/* cart */}
             <UnstyledButton onClick={toggleCartDrawer} className="relative">
-              {cartItems.length > 0 ? (
+              {cartItems?.length > 0 ? (
                 <>
                   <IconifyIcon
                     icon="mynaui:cart-solid"
@@ -161,7 +161,7 @@ export default function RightSection({
                     }}
                   />
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartItems.length}
+                    {cartItems?.length > 99 ? '99+' : cartItems?.length || 0}
                   </span>
                 </>
               ) : (

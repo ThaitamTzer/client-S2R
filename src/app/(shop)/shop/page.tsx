@@ -7,17 +7,17 @@ import { Suspense } from 'react'
 interface SearchParams {
   page?: string
   limit?: string
-  filterCategory?: string
-  filterBrand?: string
+  filterCategory?: string | string[]
+  filterBrand?: string | string[]
   filterStartPrice?: string
   filterEndPrice?: string
-  filterSize?: string
-  filterColor?: string
-  filterMaterial?: string
-  filterCondition?: string
-  filterType?: string
-  filterStyle?: string
-  filterTypeCategory?: string
+  filterSize?: string | string[]
+  filterColor?: string | string[]
+  filterMaterial?: string | string[]
+  filterCondition?: string | string[]
+  filterType?: string | string[]
+  filterStyle?: string | string[]
+  filterTypeCategory?: string | string[]
   searchKey?: string
 }
 
@@ -39,16 +39,23 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
   const currentPage = searchParams.page ? parseInt(searchParams.page) : 1
   const limit = searchParams.limit ? parseInt(searchParams.limit) : 50
 
+  // Helper function to safely parse filter parameters
+  const parseFilterParam = (param: string | string[] | undefined): string[] | undefined => {
+    if (!param) return undefined
+    if (Array.isArray(param)) return param
+    return param.split(',')
+  }
+
   // Parse filter arrays từ URL string
-  const filterCategory = searchParams.filterCategory ? searchParams.filterCategory.split(',') : undefined
-  const filterBrand = searchParams.filterBrand ? searchParams.filterBrand.split(',') : undefined
-  const filterSize = searchParams.filterSize ? searchParams.filterSize.split(',') : undefined
-  const filterColor = searchParams.filterColor ? searchParams.filterColor.split(',') : undefined
-  const filterMaterial = searchParams.filterMaterial ? searchParams.filterMaterial.split(',') : undefined
-  const filterCondition = searchParams.filterCondition ? searchParams.filterCondition.split(',') : undefined
-  const filterType = searchParams.filterType ? searchParams.filterType.split(',') : undefined
-  const filterStyle = searchParams.filterStyle ? searchParams.filterStyle.split(',') : undefined
-  const filterTypeCategory = searchParams.filterTypeCategory ? searchParams.filterTypeCategory.split(',') : undefined
+  const filterCategory = parseFilterParam(searchParams.filterCategory)
+  const filterBrand = parseFilterParam(searchParams.filterBrand)
+  const filterSize = parseFilterParam(searchParams.filterSize)
+  const filterColor = parseFilterParam(searchParams.filterColor)
+  const filterMaterial = parseFilterParam(searchParams.filterMaterial)
+  const filterCondition = parseFilterParam(searchParams.filterCondition)
+  const filterType = parseFilterParam(searchParams.filterType)
+  const filterStyle = parseFilterParam(searchParams.filterStyle)
+  const filterTypeCategory = parseFilterParam(searchParams.filterTypeCategory)
 
   // Parse price filters
   const filterStartPrice = searchParams.filterStartPrice ? parseInt(searchParams.filterStartPrice) : undefined

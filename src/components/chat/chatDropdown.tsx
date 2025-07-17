@@ -5,6 +5,7 @@ import { useUserAction } from '@/zustand/user'
 import { MessageTypes } from '@/types/messageTypes'
 import { mutate } from 'swr'
 import { useSocket } from '@/hooks/useSocket'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function ChatDropdown() {
   const { socket } = useSocket()
@@ -14,11 +15,11 @@ export default function ChatDropdown() {
   const activeChats = useUserAction((state) => state.activeChats)
   const setChatUsers = useUserAction((state) => state.setChatUsers)
   const rooms = useUserAction((state) => state.rooms)
-
+  const { user } = useAuth()
   const isMobile = window.innerWidth < 768
 
   const handleSelectChat = (item: MessageTypes) => {
-    mutate('/api/messages/get-room')
+    mutate(`/api/messages/get-room/${user?._id}`)
 
     // Leave current room if exists
     if (activeChats.length > 0) {

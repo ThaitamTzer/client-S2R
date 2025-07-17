@@ -91,9 +91,9 @@ export default function Header() {
       })
 
       socket.on('messageNotification', (newNotification) => {
-        getData('/api/messages/get-room')
+        getData(`/api/messages/get-room/${user?._id}`)
         api.info({
-          message: newNotification.title,
+          message: `${newNotification.title}`,
           description: (
             <div className="flex flex-row items-center">
               <p>{newNotification.receiver}: </p>
@@ -120,7 +120,7 @@ export default function Header() {
         mutate()
       })
     }
-  }, [socket, mutate, api])
+  }, [socket, mutate, api, user])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = (event: any) => {

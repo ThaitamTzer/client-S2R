@@ -25,17 +25,17 @@ const FilterDrawer = dynamic(() => import('./filterDrawer'), { ssr: false, loadi
 interface SearchParams {
   page?: string
   limit?: string
-  filterCategory?: string
-  filterBrand?: string
+  filterCategory?: string | string[]
+  filterBrand?: string | string[]
   filterStartPrice?: string
   filterEndPrice?: string
-  filterSize?: string
-  filterColor?: string
-  filterMaterial?: string
-  filterCondition?: string
-  filterType?: string
-  filterStyle?: string
-  filterTypeCategory?: string
+  filterSize?: string | string[]
+  filterColor?: string | string[]
+  filterMaterial?: string | string[]
+  filterCondition?: string | string[]
+  filterType?: string | string[]
+  filterStyle?: string | string[]
+  filterTypeCategory?: string | string[]
   searchKey?: string
 }
 

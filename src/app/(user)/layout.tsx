@@ -62,6 +62,7 @@ export default function UsersLayout({
   const selectedKey = pathname.split('/')[1] || 'profile'
   const profileLinks = useProfileLinks()
   const [openDrawer, setOpenDrawer] = useState(false)
+  const isLoading = !user
 
   useEffect(() => {
     if (isDesktop) {
@@ -78,7 +79,9 @@ export default function UsersLayout({
         <div className="infor flex flex-col justify-start items-start">
           <p className="text-sm md:text-lg">Tài khoản</p>
           <p className="text-sm md:text-lg">Share2Receive của</p>
-          <h2 className="text-left text-xl md:text-2xl font-semibold">{user?.firstname + ' ' + user?.lastname}</h2>
+          <h2 className="text-left text-xl md:text-2xl font-semibold">
+            {isLoading ? 'Đang tải...' : user?.firstname + ' ' + user?.lastname}
+          </h2>
         </div>
       </div>
       <Menu
