@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ColorSchemeScript } from '@mantine/core'
 import { Montserrat } from 'next/font/google'
 import { Providers } from '@/providers/providers'
+import { Analytics } from '@vercel/analytics/next'
 
 import './globals.css'
 import './layout.css'
@@ -118,6 +119,7 @@ export default function RootLayout({
               {/* <Navigation /> */}
               <LoginDynamic />
               {children}
+              <Analytics />
             </main>
             <Chat />
             <div className="fixed top-[300px] right-0 z-50">
