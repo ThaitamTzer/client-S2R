@@ -87,6 +87,12 @@ export const fetchAllProdClient = async (
     })
 
     clearTimeout(timeoutId)
+
+    if (!res.ok) {
+      console.error('Failed to fetch products:', `HTTP error! status: ${res.status}`)
+      return null
+    }
+
     const data: ProductSClientList = await res.json()
 
     return data

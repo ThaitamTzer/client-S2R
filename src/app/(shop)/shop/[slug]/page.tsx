@@ -4,6 +4,9 @@ import { Suspense } from 'react'
 import Loading from '@/app/loading'
 import { fetchAllProdClient, fetchProductBySlug } from '@/action/shop'
 
+// Force dynamic rendering - prevents build-time API calls
+export const dynamic = 'force-dynamic'
+
 const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false, loading: () => <div /> })
 const CodModal = dynamic(() => import('@/components/product/codModal'), { ssr: false, loading: () => <div /> })
 const RefundModal = dynamic(() => import('@/components/product/refundModal'), { ssr: false, loading: () => <div /> })
@@ -14,15 +17,20 @@ const ProductDetail = dynamic(() => import('@/components/product/productDetail')
 })
 
 export async function generateStaticParams() {
-  const products = await fetchAllProdClient(1, 50)
+  try {
+    const products = await fetchAllProdClient(1, 50)
 
-  if (!products) {
+    if (!products || !products.data) {
+      return []
+    }
+
+    return products.data.map((product) => ({
+      slug: product.slug,
+    }))
+  } catch (error) {
+    console.error('Failed to generate static params:', error)
     return []
   }
-
-  return products.data.map((product) => ({
-    slug: product.slug,
-  }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
