@@ -23,9 +23,8 @@ export const Alert = ({
       width={400}
       title={title}
       open={onOpen}
-      onClose={onClose}
-      onOk={onSubmit}
       onCancel={onClose}
+      onOk={onSubmit}
       footer={() => (
         <>
           <Button onClick={onClose}>{nameCancel}</Button>
