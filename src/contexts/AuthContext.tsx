@@ -98,7 +98,7 @@ const AuthProvider = ({ children }: Props) => {
 
     initAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Cookies.get('jwt')])
+  }, [Cookies.get('jwt'), router, pathName])
 
   const handleLogin = (params: LoginParams, sucessCallback?: () => void, errorCallback?: ErrCallbackType) => {
     setLoading(true)

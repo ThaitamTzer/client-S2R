@@ -83,7 +83,7 @@ export const UpdateFormStyle = () => {
       setSelectedZodiac(user.userStyle.zodiacSign || null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.userStyle])
+  }, [user?.userStyle, form])
 
   const onFinishSurvey = () => {
     // Trigger form submission only when all steps are complete (i.e., Step 3 is finished)

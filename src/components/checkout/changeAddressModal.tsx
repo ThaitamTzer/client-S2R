@@ -19,15 +19,6 @@ export default function ChangeAddressModal({ order }: { order: OrderById }) {
   const [districts, setDistricts] = useState<any | null>(null)
   const [wards, setWards] = useState<any | null>(null)
 
-  useEffect(() => {
-    if (user) {
-      form.setValues({
-        phone: user?.phone || '',
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
-
   const form = useForm({
     initialValues: {
       phone: user?.phone || '',
@@ -63,6 +54,15 @@ export default function ChangeAddressModal({ order }: { order: OrderById }) {
       },
     },
   })
+
+  useEffect(() => {
+    if (user) {
+      form.setValues({
+        phone: user?.phone || '',
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, form])
 
   const formPhone = useForm({
     initialValues: {
